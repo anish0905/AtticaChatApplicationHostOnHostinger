@@ -6,7 +6,7 @@ import UploadImageModal from "./Pages/UploadImageModal";
 import { useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { BASE_URL } from "../../constants";
-
+import {  useNavigate } from "react-router-dom";
 const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -17,6 +17,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
   const messagesEndRef = useRef(null);
   const adminId = localStorage.getItem("AdminId");
 
+  const navigate = useNavigate();
   const { selectedGroupName: paramsGroupName, selectedGrade: paramsGrade } = useParams();
 
   const selectedGroupName = propsGroupName || paramsGroupName;
@@ -157,10 +158,14 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
 
           {selectedGroupName && selectedGrade && (
             <div className="flex flex-col flex-1 bg-[#f6f5fb]">
-              <div className="bg-[#ffffff] text-[#5443c3] text-2xl p-4 flex gap-2">
-                <span><IoArrowBack /></span>
-                <h1>{selectedGroupName}</h1>
-                <p>(Grade: {selectedGrade})</p>
+              <div className="text-[#ffffff] bg-[#5443c3] text-2xl p-4 flex gap-2 items-center justify-between">
+              <span onClick={() => navigate(-1)} className="cursor-pointer">
+                  <IoArrowBack />
+                </span>
+                <div className="flex flex-row">
+                  <h1>{selectedGroupName}</h1>
+                  <p>(Grade: {selectedGrade})</p>
+                </div>
               </div>
 
               <div

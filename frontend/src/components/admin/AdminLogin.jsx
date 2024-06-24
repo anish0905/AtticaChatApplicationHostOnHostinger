@@ -32,7 +32,7 @@ const AdminLogin = () => {
       localStorage.setItem("token", response.data.accessToken);
       localStorage.setItem("AdminId", email);
       localStorage.setItem("CurrentUserId", response.data.data._id);
-      navigate("/admin/dashboard");
+      navigate("/admindashboard");
     } catch (err) {
       setLoading(false);
       setError(err.response?.data?.message || "Login failed");
