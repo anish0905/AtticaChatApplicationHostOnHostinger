@@ -28,6 +28,10 @@ import SuperAdmin from "./components/SuperAdmin/SuperAdmin";
 import SuperAdminGroupList from "./components/SuperAdmin/SuperAdminGroupList";
 import SuperAdminLiveChat from "./components/SuperAdmin/SuperAdminLiveChat";
 import AdminDashboard from "./components/DashboardComponents/AdminDashboard";
+import DigitalMarketingTeamLogin from "./components/digitalMarketing/DigitalMarketingTeamLogin";
+import DigitalMarketingSideBar from "./components/digitalMarketing/DigitalMarketingSideBar";
+import DigitalToDigitalTamChat from "./components/digitalMarketing/DigitalToDigitalTamChat";
+ 
 // import AdminRegistration from "./components/admin/AdminRegistration";
 
 const App = () => {
@@ -40,6 +44,10 @@ const App = () => {
             <Route path="/adminlogin" element={<AdminLogin/>} />
             <Route path="/kitkat" element={<SuperAdminLogin/>} />
             <Route path="/empgroupchat" element={<EmpGroupChat/>}/>
+
+            <Route path="/DigitalTeamLogin" element={<DigitalMarketingTeamLogin/>} />
+            <Route path="/DigitalSideBar" element={<DigitalMarketingSideBar/>} />
+            <Route path="/DigitalMarketingChatToDigitalMarketing" element={<DigitalToDigitalTamChat />} />
 
             {/* <Route path="/adminRegistration" element={<AdminRegistration/>}/> */}
             <Route element={<AuthRequired/>}>

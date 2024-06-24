@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logo from "../assests/logo-removebg.png";
 
 const FirstPage = () => {
@@ -127,12 +127,12 @@ const FirstPage = () => {
             >
               Security/CCTV
             </button>
-            <button
+            <Link to={"/DigitalTeamLogin"}
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              // onClick={handleBillingTeamManagerLogin}
+            
             >
               Digital Marketing
-            </button>
+            </Link>
           </div>
         </div>
       </div>

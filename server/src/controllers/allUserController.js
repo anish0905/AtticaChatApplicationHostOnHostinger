@@ -57,7 +57,7 @@ exports.loginUser = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ token, message: "Logged in successfully" });
+    res.status(200).json({ token, message: "Logged in successfully", _id:user._id });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -89,5 +89,15 @@ exports.getUsersCountByRole = async (req, res) => {
     res.status(200).json(userCounts);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+
+exports.getAllDigitalTeams = async function (req, res) {
+  try {
+    const users = await User.find({ role: "Digital Marketing" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
   }
 };
