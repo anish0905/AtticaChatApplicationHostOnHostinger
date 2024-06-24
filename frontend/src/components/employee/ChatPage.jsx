@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { AiOutlineSearch } from "react-icons/ai";
+import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
 import { IoIosDocument } from "react-icons/io";
 import { FaPaperclip } from "react-icons/fa";
 import EmployeeSidebar from "./EmployeeSidebar";
@@ -8,6 +8,7 @@ import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
+import ForwardMessageModalEmp from './ForwardMessageModalEmp';
 
 
 
@@ -30,6 +31,10 @@ function ChatPage() {
   const [isMobileView, setIsMobileView] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [playNotificationSound] = useSound(notificationSound);
+  const [hoveredMessage, setHoveredMessage] = useState(null);
+  const [showDropdown, setShowDropdown] = useState(null);
+  const [forwardMessage, setForwardMessage] = useState(null);
+  const [showForwardModal, setShowForwardModal] = useState(false);
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -191,6 +196,36 @@ function ChatPage() {
     }
   }, [messages]);
 
+  const handleHover = (index) => {
+    setHoveredMessage(index);
+  };
+
+  const handleDropdownClick = (index) => {
+    setShowDropdown(showDropdown === index ? null : index);
+  };
+
+  const handleReply = (message) => {
+    setNewMessage(`Replying to: ${message.content.text}`);
+  };
+
+  const handleForward = (message) => {
+    console.log(message);
+    setForwardMessage(message);
+    setShowForwardModal(true);
+    setShowDropdown(null);
+  };
+
+  const handleForwardMessage = () => {
+
+    setShowForwardModal(false);
+    setShowDropdown(null);
+  };
+
+  const handleCancelForward = () => {
+    setShowForwardModal(false);
+  };
+
+
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
       <EmployeeSidebar />
@@ -208,14 +243,17 @@ function ChatPage() {
             </button>
           </div>
           <div className="flex-grow overflow-y-auto p-4 flex flex-col">
-            {messages.map((message) => (
+            {messages.map((message,index) => (
               <div
                 key={message._id}
-                className={`mb-4 p-4 rounded-lg max-w-[70%] ${
+                className={`mb-4 p-4 rounded-lg max-w-[70%] relative ${
                   message.sender === loggedInUserId
                     ? "bg-blue-200 self-end"
                     : "bg-gray-200 self-start"
                 }`}
+
+                onMouseEnter={() => handleHover(index)}
+                onMouseLeave={() => setHoveredMessage(null)}
               >
                 {message.content && message.content.text && (
                   <p className="font-bold">{message.content.text}</p>
@@ -246,6 +284,30 @@ function ChatPage() {
                 <span className="text-xs text-gray-500">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
+              
+                {hoveredMessage === index && (
+                    <AiOutlineDown
+                      className="absolute top-2 right-2 cursor-pointer"
+                      onClick={() => handleDropdownClick(index)}
+                    />
+                  )}
+            
+                  {showDropdown === index && (
+                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleReply(message)}
+                      >
+                        Reply
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleForward(message)}
+                      >
+                        Forward
+                      </button>
+                    </div>
+                  )}
               </div>
             ))}
             <div ref={messagesEndRef} />
@@ -334,6 +396,14 @@ function ChatPage() {
     </div>
   </div>
 )}
+{showForwardModal && (
+        <ForwardMessageModalEmp
+          users={users}
+          forwardMessage={forwardMessage}
+          onForward={handleForwardMessage}
+          onCancel={handleCancelForward}
+        />
+      )}
     </div>
   );
 }
