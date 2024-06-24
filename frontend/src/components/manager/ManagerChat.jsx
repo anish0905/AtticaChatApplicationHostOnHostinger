@@ -240,27 +240,27 @@ function ManagerChat() {
   };
 
   return (
-    <div className="flex h-screen">
+    <div>
       <GPSTracker managerId={loggedInUserId} />
 
-      <div className="w-full bg-gray-100 p-4 flex">
-        <div>
-          <h1 className="text-2xl font-bold mb-4">All Billing Team</h1>
+      <div className="flex flex-col lg:flex-row h-screen">
+        <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
+          <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Billing Team</h1>
           <div className="relative mb-4">
             <input
               type="text"
               value={userSearchQuery}
               onChange={(e) => setUserSearchQuery(e.target.value)}
-              className="w-4/5 p-2 text-sm text-gray-700 bg-gray-200 rounded pl-10"
+              className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
               placeholder="Search by name..."
             />
-            <AiOutlineSearch className="absolute top-3 left-3 text-gray-500" />
+            <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
           </div>
-          <div className="h-[90%] overflow-y-auto">
+          <div className="h-5/6 overflow-y-auto">
             {filteredUsers.map((user) => (
-              <div key={user._id} className="mb-4">
+              <div key={user._id}>
                 <div
-                  className="w-full h-auto font-medium rounded-md bg-indigo-200 mb-4 text-2xl block items-center p-4 cursor-pointer"
+                 className="w-full h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
                   onClick={() => handleClick(user._id, user.name)}
                 >
                   <h1>{user.name}</h1>
@@ -270,7 +270,7 @@ function ManagerChat() {
                       unreadUser.data.map((message) => (
                         <div
                           key={message._id}
-                          className="text-green-400 flex justify-between items-center content-center gap-5"
+                           className="text-orange-600 flex justify-between items-center content-center gap-5 mt-2"
                           onClick={() => handleShowMessage(user._id)}
                         >
                           {!showMessages[user._id] ? (
@@ -308,8 +308,8 @@ function ManagerChat() {
           </div>
         </div>
 
-        <div className="w-4/5 p-4">
-          <div className="flex justify-between items-center content-center mb-4">
+        <div className="w-full lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
+          <div className="flex justify-between items-center content-center p-4 bg-white text-[#5443c3]">
             <h1 className="text-2xl font-bold">Chat with {recipientName}</h1>
             <Link
               to="/"
@@ -318,16 +318,17 @@ function ManagerChat() {
               <BiLogOut />
             </Link>
           </div>
-          <div className="flex flex-col h-4/5 overflow-y-auto mb-4">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col">
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`p-2 rounded-md mb-2 max-w-xs relative ${message.sender === loggedInUserId
-                    ? "bg-blue-100 self-end"
-                    : "bg-gray-200 self-start"
-                  }`}
+                className={`flex ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2 `}
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
+              >
+                <div
+                className={`w-1/3 p-2 rounded-md ${message.sender === loggedInUserId ?  "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl"
+                  }`}
               >
                 {message.content && message.content.text && (
                   <p className="text-sm">{message.content.text}</p>
@@ -344,18 +345,18 @@ function ManagerChat() {
                     href={message.content.document}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
+                     className="text-orange-600 hover:underline"
                   >
-                    <IoIosDocument className="text-2xl" />
+                    <IoIosDocument className="text-9xl" />
                   </a>
                 )}
                 {message.content && message.content.video && (
-                  <video controls className="max-w-xs">
+                  <video controls className="max-w-xs text-orange-600 hover:underline">
                     <source src={message.content.video} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 )}
-                <span className="text-xs text-gray-500 block">
+                <span className="text-xs text-orange-600">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
                 {hoveredMessage === index && (
@@ -365,7 +366,7 @@ function ManagerChat() {
                   />
                 )}
                 {showDropdown === index && (
-                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                  <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
                     <button
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => handleReply(message)}
@@ -380,16 +381,17 @@ function ManagerChat() {
                     </button>
                   </div>
                 )}
+                </div>
               </div>
             ))}
             <div ref={messagesEndRef} />
           </div>
-          <div className="flex justify-center items-center w-full">
+          <div className="flex items-center p-4 bg-[#f6f5fb] w-full">
             <input
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              className="w-full p-2 text-sm text-gray-700 bg-gray-200"
+              className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
               placeholder="Type a message..."
             />
             <input
@@ -398,14 +400,14 @@ function ManagerChat() {
               className="hidden"
               id="file-upload"
             />
-            <label htmlFor="file-upload" className="cursor-pointer p-2">
+            {/* <label htmlFor="file-upload" className="cursor-pointer p-2">
               <span className="bg-gray-200 hover:bg-gray-300 p-2 rounded">
                 Attach
               </span>
-            </label>
+            </label> */}
             <button
               onClick={handleSendMessage}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
               Send
             </button>
@@ -424,7 +426,7 @@ function ManagerChat() {
                         .filter((sms) => sms.sender === selectedSender)
                         .map((sms) => (
                           <div key={sms.id} className="relative border border-gray-200 rounded-lg p-2 mb-2 shadow-sm">
-                            <div className="flex items-center  mb-1 gap-5">
+                            <div className="flex items-center gap-5 mb-1">
                               <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
                               <h1 className="text-xl font-bold text-green-600 text-center">
                                 {selectedSenderName}

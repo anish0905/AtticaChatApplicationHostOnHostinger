@@ -52,6 +52,9 @@ const AdminLogin = () => {
             className="object-cover w-full max-w-md h-auto rounded-full"
           />
         </div>
+
+
+
         <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
           <div className="text-center mb-6">
             <img
@@ -64,6 +67,7 @@ const AdminLogin = () => {
               Sign in to continue with Attica Chat Portal.
             </p>
           </div>
+
           <div className="w-full max-w-md">
             <form onSubmit={handleSubmit}>
               <div className="mb-4">
