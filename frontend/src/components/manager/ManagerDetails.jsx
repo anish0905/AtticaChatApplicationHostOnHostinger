@@ -3,6 +3,9 @@ import axios from "axios";
 import { BASE_URL } from "../../constants";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { FaEdit } from "react-icons/fa";
+import { RiDeleteBin5Line } from "react-icons/ri";
+
 const Modal = ({ show, onClose, manager, onUpdate }) => {
   const [formData, setFormData] = useState({ ...manager });
 
@@ -216,13 +219,13 @@ const ManagerDetails = () => {
                     onClick={() => handleEdit(manager)}
                     className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    Edit
+                    <FaEdit />
                   </button>
                   <button
                     onClick={() => handleDelete(manager._id)}
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                   >
-                    Delete
+                   <RiDeleteBin5Line />
                   </button>
                 </td>
               </tr>
