@@ -326,7 +326,7 @@ function AdminEmpChat() {
                       )}
                       {message.document && (
                         <a
-                          href={message.document}
+                          href={message.content.document}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-500"
@@ -334,7 +334,7 @@ function AdminEmpChat() {
                           View Document
                         </a>
                       )}
-                      {message.video && (
+                      {message.content.video && (
                         <video controls className="max-w-xs mt-2">
                           <source src={message.video} type="video/mp4" />
                           Your browser does not support the video tag.

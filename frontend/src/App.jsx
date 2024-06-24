@@ -29,6 +29,9 @@ import SuperAdminGroupList from "./components/SuperAdmin/SuperAdminGroupList";
 import SuperAdminLiveChat from "./components/SuperAdmin/SuperAdminLiveChat";
 import AdminDashboard from "./components/DashboardComponents/AdminDashboard";
 // import AdminRegistration from "./components/admin/AdminRegistration";
+import AccountsLogin from "./components/accounts/AccountsLogin";
+// import SoftwareLogin from './components/software/SoftwareLogin'
+import HrLogin from "./components/Hr/HrLogin";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
@@ -57,6 +60,9 @@ const App = () => {
             <Route path="/adminToadmin" element={<AdmintoAdmin/>} />
             <Route path="/admindashboard" element={<AdminDashboard />} />
               <Route path="/atticDashboard" element={<AtticDashboard/>} />
+            <Route path="/accounts" element={<AccountsLogin/>}/>
+            {/* <Route path='/software' element={<SoftwareLogin/>}/> */}
+            <Route path="/hr" element={<HrLogin/>}/>
              
               {isSuperAdminLoggedIn ? (
             <>
