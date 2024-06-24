@@ -4,6 +4,9 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants";
+import back15 from "../../assests/back15.png";
+import babusirr from "../../assests/babusirr.png";
+import logo from "../../assests/logo.png";
 
 const BillingTeamManagerLogin = () => {
   const [email, setEmail] = useState("");
@@ -29,19 +32,42 @@ const BillingTeamManagerLogin = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-            Login
+    <div
+    className="flex items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-6 lg:p-8"
+    style={{ backgroundImage: `url(${back15})` }}
+  >
+    <div className="flex flex-col lg:flex-row items-center justify-center w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
+    <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+          <img
+            src={babusirr}
+            alt="Babusir"
+            className="object-cover w-full max-w-md h-auto rounded-full"
+          />
+        </div>
+
+
+
+
+    <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
+      <div className="text-center mb-6">
+      <img
+              src={logo}
+              alt="Chatvia Logo"
+              className="mx-auto mb-4 w-48 h-16 sm:w-72 sm:h-32"
+            />
+          <h2 className="text-2xl font-semibold">
+            Billing Team Login
           </h2>
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-        </div>
-        <form className="mt-8 space-y-6" onSubmit={handleLogin}>
+          </div>
+
+
+          <div className="w-full max-w-md">
+        <form onSubmit={handleLogin}>
           <input type="hidden" name="remember" defaultValue="true" />
-          <div className="rounded-md shadow-sm -space-y-px">
-            <div>
-              <label htmlFor="email-address" className="sr-only">
+      
+            <div className="mb-4">
+              <label htmlFor="email-address" className="block text-gray-700">
                 Email address
               </label>
               <input
@@ -50,14 +76,14 @@ const BillingTeamManagerLogin = () => {
                 type="email"
                 autoComplete="email"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                className="block w-full mt-2 p-2 border border-gray-300 rounded"
                 placeholder="Email address"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div>
-              <label htmlFor="password" className="sr-only">
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-gray-700">
                 Password
               </label>
               <input
@@ -66,22 +92,22 @@ const BillingTeamManagerLogin = () => {
                 type="password"
                 autoComplete="current-password"
                 required
-                className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                 className="block w-full mt-2 p-2 border border-gray-300 rounded"
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-          </div>
+     
 
           <div>
             <button
               type="submit"
-              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              className="w-full bg-purple-500 text-white p-2 rounded hover:bg-[#7269ef]"
             >
               <span className="absolute left-0 inset-y-0 flex items-center pl-3">
                 {/* Heroicon name: lock-closed */}
-                <svg
+                {/* <svg
                   className="h-5 w-5 text-indigo-500 group-hover:text-indigo-400"
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 20 20"
@@ -98,13 +124,22 @@ const BillingTeamManagerLogin = () => {
                     d="M4 8V7a5 5 0 0110 0v1h2a1 1 0 011 1v8a1 1 0 01-1 1H4a1 1 0 01-1-1v-8a1 1 0 011-1h2zm3-1v1h4V7a3 3 0 00-6 0z"
                     clipRule="evenodd"
                   />
-                </svg>
+                </svg> */}
               </span>
               Sign in
             </button>
           </div>
         </form>
-      </div>
+        </div>
+        <div className="text-center mt-6 text-gray-600 text-sm">
+            <p>
+              © 2024 attic's ChatApp Crafted with{" "}
+              <span className="text-red-500">❤</span> by attica gold
+            </p>
+          </div>
+     
+    </div>
+     </div>
     </div>
   );
 };
