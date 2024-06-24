@@ -112,16 +112,14 @@ const ManagerDetails = () => {
 
   const handleDelete = async (managerId) => {
     try {
-      if (
-        window.confirm("Are you sure? The data will be deleted permanently.")
-      ) {
-        await axios.delete(
-          `${BASE_URL}/api/manager/deleteManagerById/${managerId}`
-        );
+      if (window.confirm("Are you sure? The data will be deleted permanently.")) {
+        await axios.delete(`${BASE_URL}/api/manager/deleteManagerById/${managerId}`);
         setManagers(managers.filter((manager) => manager._id !== managerId));
+        toast.success('Manager deleted successfully');
       }
     } catch (error) {
       console.error("Error deleting manager", error);
+      toast.error('Failed to delete manager');
     }
   };
 
@@ -133,11 +131,13 @@ const ManagerDetails = () => {
       );
       setManagers(
         managers.map((manager) =>
-          manager._id === updatedManager._id ? res.data : manager
+          manager._id === updatedManager._id ? res.data.updatedManager : manager
         )
       );
+      toast.success('Manager details updated successfully');
     } catch (error) {
       console.error("Error updating manager", error);
+      toast.error('Failed to update manager');
     }
   };
 
