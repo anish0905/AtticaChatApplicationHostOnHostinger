@@ -268,24 +268,24 @@ function AdmintoAdmin() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-    <Sidebar />
- <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
-   <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
-   <div className="relative mb-4">
-     <input
-       type="text"
-       value={adminSearchQuery}
-       onChange={(e) => setAdminSearchQuery(e.target.value)}
-       className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
-       placeholder="Search by email..."
-     />
-     <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
-   </div>
+      <Sidebar />
+      <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
+        <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
+        <div className="relative mb-4">
+          <input
+            type="text"
+            value={adminSearchQuery}
+            onChange={(e) => setAdminSearchQuery(e.target.value)}
+            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+            placeholder="Search by email..."
+          />
+          <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
+        </div>
         <div className="h-5/6 overflow-y-auto">
           {filteredAdmins.map((admin) => (
             <div key={admin._id}>
               <div
-                 className="w-full h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
+                className="w-full h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
                 onClick={() => handleClick(admin._id, admin.email)}
               >
                 <h1>{admin.email}</h1>
@@ -295,7 +295,7 @@ function AdmintoAdmin() {
                     unreadUser.data.map((message) => (
                       <div
                         key={message._id}
-                       className="text-orange-600 flex justify-between items-center content-center gap-5 mt-2"
+                        className="text-orange-600 flex justify-between items-center content-center gap-5 mt-2"
                         onClick={() => handleShowMessage(admin._id)}
                       >
                         {!showMessages[admin._id] ? (
@@ -334,16 +334,16 @@ function AdmintoAdmin() {
             <BiLogOut />
           </Link>
         </div>
-        <div className="flex-grow overflow-y-auto p-4 flex flex-col">
+        <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2 `}
+              className={`flex relative ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2  `}
               onMouseEnter={() => handleHover(index)}
               onMouseLeave={() => handleLeave()}
             >
               <div
-                className={`w-1/3 p-2 rounded-md ${message.sender === loggedInUserId ?  "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl"
+                className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                   }`}
               >
                 {message.content && message.content.text && (
@@ -359,13 +359,13 @@ function AdmintoAdmin() {
                     href={message.content.document}
                     target="_blank"
                     rel="noopener noreferrer"
-  className="text-orange-600 hover:underline"
+                    className="text-orange-600 hover:underline"
                   >
                     <IoIosDocument className="text-9xl" />
                   </a>
                 )}
                 {message.content && message.content.video && (
-             <video controls className="max-w-xs text-orange-600 hover:underline">
+                  <video controls className="max-w-xs text-orange-600 hover:underline">
                     <source src={message.content.video} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
@@ -417,7 +417,7 @@ function AdmintoAdmin() {
             className="hidden"
             id="file-upload"
           />
-         
+
           <button
             onClick={handleSendMessage}
             className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

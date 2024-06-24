@@ -10,7 +10,7 @@ const ForwardMessageModalAmintoAmin = ({
   onCancel,
   forwardMessage,
 }) => {
-  console.log(users[0].email);
+  // console.log(users[0].email);
   // console.log(" forwardMessage", forwardMessage._id);
   const [selectedUsers, setSelectedUsers] = useState([]);
 
