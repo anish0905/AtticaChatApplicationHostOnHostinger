@@ -11,5 +11,7 @@ router.post("/login", authController.loginUser);
 // Route to get user count by role
 router.get("/counts/by-role", authController.getUsersCountByRole);
 router.get("/getAllDigitalMarketingTeam", authController.getAllDigitalTeams);
+router.get("/getbyId/:id", authController.getById)
+router.get("/delete", authController.deleteById)
 
 module.exports = router;

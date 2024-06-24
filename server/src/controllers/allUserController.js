@@ -101,3 +101,24 @@ exports.getAllDigitalTeams = async function (req, res) {
     res.status(500).send(err);
   }
 };
+
+
+exports.getById = async function (req, res) {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+    res.json(user);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.deleteById = async function (req, res) {
+  try {
+    const user = await User.findByIdAndDelete(req.params.id);
+    res.json(user);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+

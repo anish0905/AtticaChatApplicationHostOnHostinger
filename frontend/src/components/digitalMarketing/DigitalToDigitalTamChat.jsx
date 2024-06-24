@@ -149,7 +149,7 @@ function DigitalToDigitalTamChat() {
         setSelectedSender(senderId);
         setShowPopSms(true);
         const empDetails = await axios.get(
-          `${BASE_URL}/api/employee/a/${senderId}`
+          `${BASE_URL}/api/allUser/getbyId/${senderId}`
         );
         setSelectedSenderName(empDetails.data.name);
 

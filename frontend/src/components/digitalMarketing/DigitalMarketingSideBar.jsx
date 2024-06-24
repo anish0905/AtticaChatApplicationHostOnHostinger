@@ -34,7 +34,7 @@ const DigitalMarketingSideBar = () => {
       </div>
       
       <div className="flex flex-row lg:flex-col gap-[10px] sm:gap-[10px] md:gap-[10px] lg:gap-[40px] relative">
-        <div 
+        {/* <div 
           onClick={handleGroup} 
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/empgroupchat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
         >
@@ -42,7 +42,7 @@ const DigitalMarketingSideBar = () => {
           <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-white text-black text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Group Chat
           </span>
-        </div>
+        </div> */}
         <div 
           onClick={handleChat} 
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/chat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
@@ -54,7 +54,7 @@ const DigitalMarketingSideBar = () => {
         </div>
         
         <Link 
-          to="/empToadmin" 
+          to="/DigitalMarketingToAdminChat" 
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/empToadmin") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
         >
           <RiContactsLine />

@@ -31,6 +31,7 @@ import AdminDashboard from "./components/DashboardComponents/AdminDashboard";
 import DigitalMarketingTeamLogin from "./components/digitalMarketing/DigitalMarketingTeamLogin";
 import DigitalMarketingSideBar from "./components/digitalMarketing/DigitalMarketingSideBar";
 import DigitalToDigitalTamChat from "./components/digitalMarketing/DigitalToDigitalTamChat";
+import DigitalMarketingToAdminChat from "./components/digitalMarketing/DigitalMarketingToAdminChat";
  
 // import AdminRegistration from "./components/admin/AdminRegistration";
 
@@ -48,6 +49,7 @@ const App = () => {
             <Route path="/DigitalTeamLogin" element={<DigitalMarketingTeamLogin/>} />
             <Route path="/DigitalSideBar" element={<DigitalMarketingSideBar/>} />
             <Route path="/DigitalMarketingChatToDigitalMarketing" element={<DigitalToDigitalTamChat />} />
+            <Route path="/DigitalMarketingToAdminChat" element={<DigitalMarketingToAdminChat/>} />
 
             {/* <Route path="/adminRegistration" element={<AdminRegistration/>}/> */}
             <Route element={<AuthRequired/>}>
