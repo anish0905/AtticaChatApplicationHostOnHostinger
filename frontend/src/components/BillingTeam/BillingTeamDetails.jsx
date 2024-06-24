@@ -157,7 +157,7 @@ const BillingTeamDetails = () => {
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap flex space-x-2">
                     <button
                       onClick={() => handleEdit(employee)}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 sm:px-4 rounded"
+                      className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-2 sm:px-4 rounded"
                     >
                       <FaEdit />
                     </button>

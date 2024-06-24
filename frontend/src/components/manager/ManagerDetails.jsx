@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../constants";
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Modal = ({ show, onClose, manager, onUpdate }) => {
   const [formData, setFormData] = useState({ ...manager });
 
@@ -26,9 +27,9 @@ const Modal = ({ show, onClose, manager, onUpdate }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4">Edit Manager Details</h2>
+        <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Edit Manager Details</h2>
         <form>
           {[
             { label: "Manager ID", name: "manager_Id", type: "text" },
@@ -49,7 +50,7 @@ const Modal = ({ show, onClose, manager, onUpdate }) => {
           ].map((field, index) => (
             <div className="mb-4" key={index}>
               <label
-                className="block text-gray-700 text-sm font-bold mb-2"
+                className="block text-[#5443c3] text-sm font-bold mb-2"
                 htmlFor={field.name}
               >
                 {field.label}
@@ -68,7 +69,7 @@ const Modal = ({ show, onClose, manager, onUpdate }) => {
             <button
               type="button"
               onClick={handleUpdate}
-              className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
               Update
             </button>
@@ -141,78 +142,79 @@ const ManagerDetails = () => {
   };
 
   return (
-    <div className="w-full p-6 bg-gray-100 rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-4">Manager Details</h1>
-      <div className="overflow-x-auto">
+    <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
+    <ToastContainer />
+    <div className="flex-1 overflow-x-auto overflow-y-hidden">
+      <div className="h-full overflow-y-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-[#5443c3] sticky top-0">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Manager ID
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Manager Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Manager Email
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Manager Phone
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Branch City
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Branch State
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Branch Pincode
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Branch Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Branch Address
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
             {managers.map((manager) => (
               <tr key={manager._id}>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                   {manager.manager_Id}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                   {manager.manager_name}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                   {manager.manager_email}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                   {manager.manager_phone}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                   {manager.branch_city}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                   {manager.branch_state}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                   {manager.branch_pincode}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                   {manager.branch_name}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap">
+                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                   {manager.branch_address}
                 </td>
                 <td className="py-4 px-4 whitespace-nowrap flex">
                   <button
                     onClick={() => handleEdit(manager)}
-                    className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   >
                     Edit
                   </button>
@@ -227,6 +229,7 @@ const ManagerDetails = () => {
             ))}
           </tbody>
         </table>
+      </div>
       </div>
       {selectedManager && (
         <Modal

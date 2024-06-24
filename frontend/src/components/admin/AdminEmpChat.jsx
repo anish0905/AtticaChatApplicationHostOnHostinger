@@ -10,7 +10,7 @@ import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
 import ForwardMessageModalAdminToEmp from "../admin/Pages/ForwardMessageModalAdminToEmp";
-
+import { IoSendSharp } from "react-icons/io5";
 function AdminEmpChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -110,7 +110,19 @@ function AdminEmpChat() {
   };
 
   // Function to handle file attachment change
-
+  const handleAttachmentChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => {
+        setAttachment({
+          url: reader.result,
+          type: file.type,
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   // Filtered list of users based on search query
   const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
@@ -314,14 +326,17 @@ function AdminEmpChat() {
                       </a>
                     )}
                     {message.video && (
-                      <video controls className="max-w-xs mt-2">
+                      <video controls className= "max-w-xs text-orange-600 hover:underline">
                         <source src={message.video} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
                     )}
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-orange-500">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
+                
+                
+                
                 {
                   hoveredMessage === index &&
                 
@@ -354,25 +369,31 @@ function AdminEmpChat() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input */}
-          <div className="p-4 border-t flex  justify-center content-center items-center">
-            <input
-              type="text"
-              placeholder="Type your message..."
-              className="border rounded w-[80%] p-2"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-            />
-            <div className="flex items-center ">
-              <button
-                className="bg-blue-500 text-white px-4 py-2 rounded ml-2"
-                onClick={handleSendMessage}
-              >
-                Send
-              </button>
-            </div>
-          </div>
+          <div className="flex items-center p-4 bg-[#f6f5fb] w-full">
+          <input
+            type="text"
+            value={newMessage}
+            onChange={(e) => setNewMessage(e.target.value)}
+            className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
+            placeholder="Type a message"
+          />
+           <button
+            onClick={handleSendMessage}
+            className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            <IoSendSharp />
+          </button>
+          <input
+            type="file"
+            onChange={handleAttachmentChange}
+            className="hidden"
+            id="file-upload"
+          />
+          <AdminFileUploadModel sender={loggedInUserId} recipient={recipient} />
+         
         </div>
+      </div>
+
       </div>
 
       {/* Pop SMS Modal */}
