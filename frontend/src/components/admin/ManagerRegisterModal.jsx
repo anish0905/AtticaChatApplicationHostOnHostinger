@@ -53,24 +53,27 @@ const ManagerRegisterModal = () => {
   };
 
   return (
-    <div className="lg:flex block">
-      <Sidebar />
-      <div className="flex-1 p-6">
-        <div className="flex items-center mb-4 flex-col">
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded h-8 mr-2"
-          >
-            Open Manager Registration Form
-          </button>
-          <ManagerDetails />
-        </div>
+    <div className="lg:flex block bg-[#f6f5fb]">
+    <Sidebar />
+    <div className="flex-1 p-6">
+      <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
+        <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">
+        Manager Details
+        </h1>
+        <button
+          onClick={() => setIsModalOpen(true)}
+          className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
+        >
+          Open Manager Registration Form
+        </button>
+      </div>
+        <ManagerDetails />
         {isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-lg mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto">
-              <h2 className="text-2xl font-bold mb-4 text-[#5816bc]">
-                Register Manager
-              </h2>
+              <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
+              <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-lg mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto">
+                <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">
+                  Register for Manager
+                </h2>
               {error && <div className="text-red-500 mb-4">{error}</div>}
               <form onSubmit={handleSubmit} className="w-full">
                 {[
@@ -112,7 +115,7 @@ const ManagerRegisterModal = () => {
                 ].map((field, index) => (
                   <div className="mb-4" key={index}>
                     <label
-                      className="block text-gray-700 text-sm font-bold mb-2"
+                           className="block text-[#5443c3] text-sm font-bold mb-2"
                       htmlFor={field.name}
                     >
                       {field.label}
@@ -131,13 +134,14 @@ const ManagerRegisterModal = () => {
                 <div className="flex justify-between">
                   <button
                     type="submit"
-                    className="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-105"
+                    className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                   
                   >
-                    Submit
+                  Register
                   </button>
                   <button
                     onClick={() => setIsModalOpen(false)}
-                    className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-105"
+                     className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                     type="button"
                   >
                     Cancel

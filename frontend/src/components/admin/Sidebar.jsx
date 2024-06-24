@@ -14,7 +14,9 @@ import { RiBillLine } from "react-icons/ri";
 import { GiPerson } from "react-icons/gi";
 import { FcBusinessman } from "react-icons/fc";
 import { FcSurvey } from "react-icons/fc";
-
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import { TbMessageForward } from "react-icons/tb";
+import { BiSolidMessageCheck } from "react-icons/bi";
 const Sidebar = () => {
   const navigate = useNavigate();
   const [showEmployeeOptions, setShowEmployeeOptions] = useState(false);
@@ -52,7 +54,7 @@ const Sidebar = () => {
           }`}
         >
           <MdDashboard className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Dashboard
           </span>
         </div>
@@ -66,7 +68,7 @@ const Sidebar = () => {
           }`}
         >
           <GrChatOption className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Group Chat
           </span>
         </div>
@@ -80,31 +82,31 @@ const Sidebar = () => {
               : "bg-[#fffefd]"
           }`}
         >
-          <MdGroups className="text-lg md:text-2xl lg:text-3xl" />
+          <PersonAddIcon className="text-lg md:text-2xl lg:text-3xl" />
           <span
-            className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className="absolute lg:bottom-auto lg:left-full mt-48 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
             style={{ display: showEmployeeOptions ? "block" : "none" }}
           >
             <div
               onClick={() => handleNavigation("/register")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 hover:text-xl"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
             >
-              <FcManager className="bg-white rounded-full mr-2" />
-              <span>Employee Registration</span>
+              <FcManager className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <span className="my-2">Employee Registration</span>
             </div>
             <div
               onClick={() => handleNavigation("/billingTeamRegister")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 hover:text-xl"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
             >
-              <FcSurvey className="bg-white rounded-full mr-2" />
-              <span>Billing Team Registration</span>
+              <FcSurvey className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <span className="my-2">Billing Team Registration</span>
             </div>
             <div
               onClick={() => handleNavigation("/managerRegister")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 hover:text-xl"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
             >
-              <FcBusinessman className="bg-white rounded-full mr-2" />
-              <span>Manager Registration</span>
+              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <span className="my-2">Manager Registration</span>
             </div>
           </span>
         </div>
@@ -117,8 +119,8 @@ const Sidebar = () => {
               : "bg-[#fffefd]"
           }`}
         >
-          <SiLivechat className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <TbMessageForward  className="text-lg md:text-2xl lg:text-3xl" />
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Live Chat
           </span>
         </div>
@@ -132,7 +134,7 @@ const Sidebar = () => {
           }`}
         >
           <BsChatSquareDots className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Employee
           </span>
         </Link>
@@ -145,8 +147,8 @@ const Sidebar = () => {
               : "bg-[#fffefd]"
           }`}
         >
-          <BsChatSquareDots className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <BiSolidMessageCheck  className="text-lg md:text-2xl lg:text-3xl" />
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Admin
           </span>
         </Link>
@@ -157,7 +159,7 @@ const Sidebar = () => {
         className="group relative flex items-center bg-[#fffefd] rounded-full p-2 md:p-4 lg:p-5 cursor-pointer"
       >
         <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
-        <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Logout
         </span>
       </div>
@@ -166,3 +168,6 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
+
+
