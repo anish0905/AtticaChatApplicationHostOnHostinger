@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // Registration logic
 exports.registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -36,10 +36,10 @@ exports.registerUser = async (req, res) => {
 // Login logic
 exports.loginUser = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password} = req.body;
 
     // Find user by email
-    const user = await User.findOne({ email });
+    const user = await User.findOne($and[{ email },{role:""}]);
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
@@ -89,6 +89,62 @@ exports.getUsersCountByRole = async (req, res) => {
     res.status(200).json(userCounts);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+exports.loginAccountant = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find user by email and role
+    const user = await User.findOne({ email, role: "Accountant" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Create JWT token
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret", // Replace with a secure key
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token, message: "Accountant logged in successfully", _id: user._id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+exports.loginSoftware = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email, role: "Software" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret",
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token, message: "Software logged in successfully", _id: user._id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
 

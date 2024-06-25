@@ -37,6 +37,7 @@ import DigitalMarketingToAdminChat from "./components/digitalMarketing/DigitalMa
 import AccountsLogin from "./components/accounts/AccountsLogin";
 // import SoftwareLogin from './components/software/SoftwareLogin'
 import HrLogin from "./components/Hr/HrLogin";
+import DigitalMarketingReg from "./components/admin/Pages/DigitalMarketingReg";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
@@ -53,6 +54,7 @@ const App = () => {
             <Route path="/DigitalSideBar" element={<DigitalMarketingSideBar/>} />
             <Route path="/DigitalMarketingChatToDigitalMarketing" element={<DigitalToDigitalTamChat />} />
             <Route path="/DigitalMarketingToAdminChat" element={<DigitalMarketingToAdminChat/>} />
+            <Route path="/DigitalMarketingReg" element={<DigitalMarketingReg />} />
 
             {/* <Route path="/adminRegistration" element={<AdminRegistration/>}/> */}
             <Route element={<AuthRequired/>}>

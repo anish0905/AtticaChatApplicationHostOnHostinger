@@ -7,6 +7,8 @@ router.post("/register", authController.registerUser);
 
 // User login
 router.post("/login", authController.loginUser);
+router.post("/acc/login", authController.loginAccountant);
+
 
 // Route to get user count by role
 router.get("/counts/by-role", authController.getUsersCountByRole);
