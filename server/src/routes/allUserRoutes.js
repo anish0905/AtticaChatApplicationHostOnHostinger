@@ -6,8 +6,15 @@ const authController = require("../controllers/allUserController");
 router.post("/register", authController.registerUser);
 
 // User login
-router.post("/login", authController.loginUser);
+router.post("/digital/login", authController.loginDigitalMarketing);
 router.post("/acc/login", authController.loginAccountant);
+router.post("/software/login", authController.loginSoftware);
+router.post("/Hr/login", authController.loginHR)
+router.post("/callcenter/login", authController.loginCallCenter);
+router.post("/virtualTeam/login", authController.loginVirtualTeam);
+router.post("/monitoring/login", authController.loginMonitoringTeam);
+router.post("/Security/login", authController.loginSecurity);
+router.post("/bouncers/login", authController.loginBouncers);
 
 
 // Route to get user count by role
