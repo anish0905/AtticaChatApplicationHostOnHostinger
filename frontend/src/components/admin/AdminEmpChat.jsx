@@ -248,6 +248,8 @@ function AdminEmpChat() {
               <BiLogOut size={25} />
             </Link> */}
           </div>
+
+          {/* ------------------------------------------------- */}
           <div className="relative mb-4">
             <input
               type="text"
@@ -261,6 +263,10 @@ function AdminEmpChat() {
               className="absolute top-3 left-3 text-gray-500 text-2xl"
             />
           </div>
+
+
+
+
           <div className="flex-1 overflow-y-auto">
             <ul>
               {filteredUsers.map((user, index) => (
@@ -278,6 +284,8 @@ function AdminEmpChat() {
             </ul>
           </div>
         </div>
+
+
 
 
         {/* Chat Area */}
