@@ -34,7 +34,7 @@ import DigitalMarketingToAdminChat from "./components/digitalMarketing/DigitalMa
  
 // import AdminRegistration from "./components/admin/AdminRegistration";
 import AccountsLogin from "./components/accounts/AccountsLogin";
-// import SoftwareLogin from './components/software/SoftwareLogin'
+import SoftwareLogin from './components/software/SoftwareLogin'
 import HrLogin from "./components/Hr/HrLogin";
 
 const App = () => {
@@ -70,7 +70,7 @@ const App = () => {
             <Route path="/admindashboard" element={<AdminDashboard />} />
               <Route path="/atticDashboard" element={<AtticDashboard/>} />
             <Route path="/accounts" element={<AccountsLogin/>}/>
-            {/* <Route path='/software' element={<SoftwareLogin/>}/> */}
+            <Route path='/software' element={<SoftwareLogin/>}/>
             <Route path="/hr" element={<HrLogin/>}/>
              
               {isSuperAdminLoggedIn ? (
