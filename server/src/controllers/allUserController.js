@@ -439,3 +439,45 @@ exports.getById = async function (req, res) {
 };
 
 
+exports.updateById = async function (req, res) {
+  const { email, password, name } = req.body;
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ message: "Invalid user ID", success: false });
+  }
+
+  try {
+    const updateData = { email, name };
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      updateData.password = await bcrypt.hash(password, salt);
+    }
+
+    const updatedUserDetails = await User.findByIdAndUpdate(
+      { _id: id },
+      updateData,
+      {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+      }
+    ).select("-password");
+
+    if (!updatedUserDetails) {
+      return res.status(404).json({ message: "User not found", success: false });
+    }
+
+    res.status(200).json({
+      message: "User updated successfully",
+      success: true,
+      data: updatedUserDetails,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message, success: false });
+  }
+};
+
+
+

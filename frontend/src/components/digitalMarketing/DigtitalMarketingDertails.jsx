@@ -115,8 +115,8 @@ const DigitalMarketingDetails = () => {
 
   const handleUpdate = async (updatedDigitalMarketingTeam) => {
     try {
-      const res = await axios.put(
-        `${BASE_URL}/api/DigitalMarketingTeam/updateDigitalMarketingTeamById/${updatedDigitalMarketingTeam._id}`,
+      const res = await axios.patch(
+        `${BASE_URL}/api/allUser/update/${updatedDigitalMarketingTeam._id}`,
         updatedDigitalMarketingTeam
       );
       setDigitalMarketingTeams(
@@ -124,6 +124,7 @@ const DigitalMarketingDetails = () => {
           team._id === updatedDigitalMarketingTeam._id ? res.data.updatedDigitalMarketingTeam : team
         )
       );
+      window.location.reload(); // Fixed reload method
       toast.success('Digital Marketing Team details updated successfully');
     } catch (error) {
       console.error("Error updating Digital Marketing Team", error);
@@ -157,13 +158,13 @@ const DigitalMarketingDetails = () => {
               {digitalMarketingTeams.map((team) => (
                 <tr key={team._id}>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                    {team._id}
+                    {team?._id}
                   </td>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                    {team.name}
+                    {team?.name}
                   </td>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                    {team.email}
+                    {team?.email}
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap flex">
                     <button
