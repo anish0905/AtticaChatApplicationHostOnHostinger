@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../constants";
@@ -8,12 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
-const Modal = ({ show, onClose, DigitalMarketingTeam, onUpdate }) => {
-  const [formData, setFormData] = useState({ ...DigitalMarketingTeam });
+const Modal = ({ show, onClose, digitalMarketingTeam, onUpdate }) => {
+  const [formData, setFormData] = useState({ ...digitalMarketingTeam });
 
   useEffect(() => {
-    setFormData({ ...DigitalMarketingTeam });
-  }, [DigitalMarketingTeam]);
+    setFormData({ ...digitalMarketingTeam });
+  }, [digitalMarketingTeam]);
 
   if (!show) return null;
 
@@ -28,7 +26,6 @@ const Modal = ({ show, onClose, DigitalMarketingTeam, onUpdate }) => {
   const handleUpdate = () => {
     onUpdate(formData);
     onClose();
-    window.location.reload();
   };
 
   return (
@@ -37,21 +34,9 @@ const Modal = ({ show, onClose, DigitalMarketingTeam, onUpdate }) => {
         <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Edit Digital Marketing Team Details</h2>
         <form>
           {[
-            { label: "Digital Marketing Team ID", name: "Digital Marketing Team_Id", type: "text" },
-            { label: "Digital Marketing Team Name", name: "Digital Marketing Team_name", type: "text" },
-            { label: "Digital Marketing Team Email", name: "Digital Marketing Team_email", type: "email" },
-            {
-              label: "Digital Marketing Team Password",
-              name: "Digital Marketing Team_password",
-              type: "password",
-            },
-            { label: "Digital Marketing Team Phone", name: "Digital Marketing Team_phone", type: "text" },
-            { label: "Digital Marketing Team Address", name: "Digital Marketing Team_address", type: "text" },
-            { label: "Branch City", name: "branch_city", type: "text" },
-            { label: "Branch State", name: "branch_state", type: "text" },
-            { label: "Branch Pincode", name: "branch_pincode", type: "text" },
-            { label: "Branch Name", name: "branch_name", type: "text" },
-            { label: "Branch Address", name: "branch_address", type: "text" },
+            { label: "Digital Marketing Team Name", name: "name", type: "text" },
+            { label: "Digital Marketing Team Email", name: "email", type: "email" },
+            { label: "Digital Marketing Team Password", name: "password", type: "password" }
           ].map((field, index) => (
             <div className="mb-4" key={index}>
               <label
@@ -92,8 +77,8 @@ const Modal = ({ show, onClose, DigitalMarketingTeam, onUpdate }) => {
   );
 };
 
-const DigtitalMarketingDertails = () => {
-  const [DigitalMarketingTeams, setDigitalMarketingTeams] = useState([]);
+const DigitalMarketingDetails = () => {
+  const [digitalMarketingTeams, setDigitalMarketingTeams] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedDigitalMarketingTeam, setSelectedDigitalMarketingTeam] = useState(null);
 
@@ -110,16 +95,16 @@ const DigtitalMarketingDertails = () => {
     fetchDigitalMarketingTeams();
   }, []);
 
-  const handleEdit = (DigitalMarketingTeam) => {
-    setSelectedDigitalMarketingTeam(DigitalMarketingTeam);
+  const handleEdit = (digitalMarketingTeam) => {
+    setSelectedDigitalMarketingTeam(digitalMarketingTeam);
     setShowModal(true);
   };
 
-  const handleDelete = async (DigitalMarketingTeamId) => {
+  const handleDelete = async (digitalMarketingTeamId) => {
     try {
       if (window.confirm("Are you sure? The data will be deleted permanently.")) {
-        await axios.delete(`${BASE_URL}/api/Digital Marketing Team/deleteDigital Marketing TeamById/${DigitalMarketingTeamId}`);
-        setDigitalMarketingTeams(DigitalMarketingTeams.filter((DigitalMarketingTeam) => DigitalMarketingTeam._id !== DigitalMarketingTeamId));
+        await axios.delete(`${BASE_URL}/api/allUser/delete/${digitalMarketingTeamId}`);
+        setDigitalMarketingTeams(digitalMarketingTeams.filter((team) => team._id !== digitalMarketingTeamId));
         toast.success('Digital Marketing Team deleted successfully');
       }
     } catch (error) {
@@ -131,12 +116,12 @@ const DigtitalMarketingDertails = () => {
   const handleUpdate = async (updatedDigitalMarketingTeam) => {
     try {
       const res = await axios.put(
-        `${BASE_URL}/api/DigitalMarketingTeam/updateDigitalMarketingeamById/${updatedDigitalMarketingTeam._id}`,
+        `${BASE_URL}/api/DigitalMarketingTeam/updateDigitalMarketingTeamById/${updatedDigitalMarketingTeam._id}`,
         updatedDigitalMarketingTeam
       );
       setDigitalMarketingTeams(
-        DigitalMarketingTeams.map((DigitalMarketingTeam) =>
-          DigitalMarketingTeam._id === updatedDigitalMarketingTeam._id ? res.data.updatedDigitalMarketingTeam : DigitalMarketingTeam
+        digitalMarketingTeams.map((team) =>
+          team._id === updatedDigitalMarketingTeam._id ? res.data.updatedDigitalMarketingTeam : team
         )
       );
       toast.success('Digital Marketing Team details updated successfully');
@@ -148,99 +133,63 @@ const DigtitalMarketingDertails = () => {
 
   return (
     <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
-    <ToastContainer />
-    <div className="flex-1 overflow-x-auto overflow-y-hidden">
-      <div className="h-full overflow-y-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-[#5443c3] sticky top-0">
-             <tr>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                ID
-              </th> 
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Name
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Email
-              </th>
-              {/* <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                 Phone NO
-              </th> */}
-              {/* <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch City
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch State
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch Pincode
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch Name
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch Address
-              </th> */}
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-            {DigitalMarketingTeams.map((DigitalMarketingTeam) => (
-              <tr key={DigitalMarketingTeam._id}>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.DigitalMarketingTeam_Id}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.DigitalMarketingTeam_name}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.DigitalMarketingTeam_email}
-                </td>
-                {/* <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.DigitalMarketingTeam_phone}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.branch_city}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.branch_state}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.branch_pincode}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.branch_name}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.branch_address}
-                </td> */}
-                <td className="py-4 px-4 whitespace-nowrap flex">
-                  <button
-                    onClick={() => handleEdit(DigitalMarketingTeam)}
-                    className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(DigitalMarketingTeam._id)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                   <RiDeleteBin5Line />
-                  </button>
-                </td>
+      <ToastContainer />
+      <div className="flex-1 overflow-x-auto overflow-y-hidden">
+        <div className="h-full overflow-y-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-[#5443c3] sticky top-0">
+              <tr>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  ID
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
+              {digitalMarketingTeams.map((team) => (
+                <tr key={team._id}>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {team._id}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {team.name}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {team.email}
+                  </td>
+                  <td className="py-4 px-4 whitespace-nowrap flex">
+                    <button
+                      onClick={() => handleEdit(team)}
+                      className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(team._id)}
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      <RiDeleteBin5Line />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       {selectedDigitalMarketingTeam && (
         <Modal
           show={showModal}
           onClose={() => setShowModal(false)}
-          Digital Marketing Team={selectedDigitalMarketingTeam}
+          digitalMarketingTeam={selectedDigitalMarketingTeam}
           onUpdate={handleUpdate}
         />
       )}
@@ -248,4 +197,4 @@ const DigtitalMarketingDertails = () => {
   );
 };
 
-export default DigtitalMarketingDertails;
+export default DigitalMarketingDetails;

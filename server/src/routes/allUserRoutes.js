@@ -38,6 +38,6 @@ router.get("/getAllSecurityTeam", authController.getAllSecurity);
 
 
 router.get("/getbyId/:id", authController.getById)
-router.get("/delete", authController.deleteById)
+router.delete("/delete/:id", authController.deleteById)
 
 module.exports = router;
