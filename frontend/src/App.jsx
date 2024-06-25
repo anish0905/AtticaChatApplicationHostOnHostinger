@@ -36,6 +36,8 @@ import DigitalMarketingToAdminChat from "./components/digitalMarketing/DigitalMa
 import AccountsLogin from "./components/accounts/AccountsLogin";
 import SoftwareLogin from './components/software/SoftwareLogin'
 import HrLogin from "./components/Hr/HrLogin";
+import DigitalMarketingReg from "./components/admin/Pages/DigitalMarketingReg";
+import AccountsReg from "./components/admin/Pages/AcountsReg";
 import VirtualTeamLogin from "./components/virtualTeam/VirtualTeamLogin";
 import MonitoringTeamLogin from "./components/monitoring/MonitoringTeamLogin";
 import BouncersLogin from "./components/bouncers/BouncersLogin";
@@ -56,6 +58,8 @@ const App = () => {
             <Route path="/DigitalSideBar" element={<DigitalMarketingSideBar/>} />
             <Route path="/DigitalMarketingChatToDigitalMarketing" element={<DigitalToDigitalTamChat />} />
             <Route path="/DigitalMarketingToAdminChat" element={<DigitalMarketingToAdminChat/>} />
+            <Route path="/DigitalMarketingReg" element={<DigitalMarketingReg />} />
+            <Route path="/AccountsReg" element={<AccountsReg />} />
 
             {/* <Route path="/adminRegistration" element={<AdminRegistration/>}/> */}
             <Route element={<AuthRequired/>}>

@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // Registration logic
 exports.registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password,role } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -33,33 +33,32 @@ exports.registerUser = async (req, res) => {
   }
 };
 
-// Login logic
-exports.loginUser = async (req, res) => {
+
+exports.getUsersCountByRole = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    // Aggregate users by role and count the number of users in each role
+    const userCounts = await User.aggregate([
+      {
+        $group: {
+          _id: "$role",
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0, // Exclude the default _id field
+          role: "$_id", // Rename _id to role
+          count: 1, // Include the count field
+        },
+      },
+      {
+        $sort: { count: -1 }, // Optional: Sort by count in descending order
+      },
+    ]);
 
-    // Find user by email
-    const user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
-
-    // Compare password
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
-    }
-
-    // Create JWT token
-    const token = jwt.sign(
-      { userId: user._id, role: user.role },
-      "your_jwt_secret", // Replace with a secure key
-      { expiresIn: "1h" }
-    );
-
-    res.status(200).json({ token, message: "Logged in successfully", _id:user._id });
+    res.status(200).json(userCounts);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: error.message });
   }
 };
 
@@ -92,6 +91,251 @@ exports.getUsersCountByRole = async (req, res) => {
   }
 };
 
+//login
+
+exports.loginDigitalMarketing = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find user by email and role
+    const user = await User.findOne({ email, role: "Digital Marketing" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Create JWT token
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret", // Replace with a secure key
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token, message: "Digital Marketing logged in successfully", _id: user._id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+exports.loginAccountant = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find user by email and role
+    const user = await User.findOne({ email, role: "Accountant" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Create JWT token
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret", // Replace with a secure key
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token, message: "Accountant logged in successfully", _id: user._id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+exports.loginSoftware = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email, role: "Software" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret",
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token, message: "Software logged in successfully", _id: user._id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.loginHR = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email, role: "HR" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret",
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token, message: "HR logged in successfully", _id: user._id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.loginCallCenter = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email, role: "CallCenter" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret",
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token, message: "CallCenter logged in successfully", _id: user._id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+
+exports.loginVirtualTeam = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email, role: "VirtualTeam" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret",
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token, message: "VirtualTeam logged in successfully", _id: user._id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.loginMonitoringTeam = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email, role: "MonitoringTeam" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret",
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token, message: "MonitoringTeam logged in successfully", _id: user._id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.loginBouncers= async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email, role: "Bouncers/Driver" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret",
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token, message: "MonitoringTeam logged in successfully", _id: user._id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.loginSecurity = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email, role: "Security/CCTV" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret",
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({ token, message: "Security/CCTV logged in successfully", _id: user._id });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
 
 exports.getAllDigitalTeams = async function (req, res) {
   try {
@@ -102,11 +346,76 @@ exports.getAllDigitalTeams = async function (req, res) {
   }
 };
 
-
-exports.getById = async function (req, res) {
+exports.getAllAccountant = async function (req, res) {
   try {
-    const user = await User.findById(req.params.id).select("-password");
-    res.json(user);
+    const users = await User.find({ role: "Accountant" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllSoftware = async function (req, res) {
+  try {
+    const users = await User.find({ role: "Software" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllCallCenter = async function (req, res) {
+  try {
+    const users = await User.find({ role: "CallCenter" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllVirtualTeam = async function (req, res) {
+  try {
+    const users = await User.find({ role: "VirtualTeam" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllMonitoringTeam = async function (req, res) {
+  try {
+    const users = await User.find({ role: "MonitoringTeam" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllBouncers = async function (req, res) {
+  try {
+    const users = await User.find({ role: "Bouncers" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllSecurity = async function (req, res) {
+  try {
+    const users = await User.find({ role: "Security" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+
+
+
+exports.getAllHR = async function (req, res) {
+  try {
+    const users = await User.find({ role: "HR" }).select("-password");
+    res.json(users);
   } catch (err) {
     res.status(500).send(err);
   }
@@ -120,5 +429,55 @@ exports.deleteById = async function (req, res) {
     res.status(500).send(err);
   }
 };
+exports.getById = async function (req, res) {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
+    res.json(user);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+
+exports.updateById = async function (req, res) {
+  const { email, password, name } = req.body;
+  const { id } = req.params;
+
+  if (!id) {
+    return res.status(400).json({ message: "Invalid user ID", success: false });
+  }
+
+  try {
+    const updateData = { email, name };
+
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      updateData.password = await bcrypt.hash(password, salt);
+    }
+
+    const updatedUserDetails = await User.findByIdAndUpdate(
+      { _id: id },
+      updateData,
+      {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+      }
+    ).select("-password");
+
+    if (!updatedUserDetails) {
+      return res.status(404).json({ message: "User not found", success: false });
+    }
+
+    res.status(200).json({
+      message: "User updated successfully",
+      success: true,
+      data: updatedUserDetails,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message, success: false });
+  }
+};
+
 
 
