@@ -346,11 +346,76 @@ exports.getAllDigitalTeams = async function (req, res) {
   }
 };
 
-
-exports.getById = async function (req, res) {
+exports.getAllAccountant = async function (req, res) {
   try {
-    const user = await User.findById(req.params.id).select("-password");
-    res.json(user);
+    const users = await User.find({ role: "Accountant" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllSoftware = async function (req, res) {
+  try {
+    const users = await User.find({ role: "Software" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllCallCenter = async function (req, res) {
+  try {
+    const users = await User.find({ role: "CallCenter" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllVirtualTeam = async function (req, res) {
+  try {
+    const users = await User.find({ role: "VirtualTeam" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllMonitoringTeam = async function (req, res) {
+  try {
+    const users = await User.find({ role: "MonitoringTeam" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllBouncers = async function (req, res) {
+  try {
+    const users = await User.find({ role: "Bouncers" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+exports.getAllSecurity = async function (req, res) {
+  try {
+    const users = await User.find({ role: "Security" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+
+
+
+
+exports.getAllHR = async function (req, res) {
+  try {
+    const users = await User.find({ role: "HR" }).select("-password");
+    res.json(users);
   } catch (err) {
     res.status(500).send(err);
   }
@@ -359,6 +424,14 @@ exports.getById = async function (req, res) {
 exports.deleteById = async function (req, res) {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
+    res.json(user);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+exports.getById = async function (req, res) {
+  try {
+    const user = await User.findById(req.params.id).select("-password");
     res.json(user);
   } catch (err) {
     res.status(500).send(err);
