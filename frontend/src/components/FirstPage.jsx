@@ -21,6 +21,19 @@ const FirstPage = () => {
     navigate("/BillingTeamManagerLogin");
   };
 
+  const handleAccountsLogin=()=>{
+    navigate('/accounts')
+  }
+
+  const handleSoftwareLogin=()=>{
+    navigate('/software')
+  }
+
+  const handleHrLogin=()=>{
+    navigate('/hr')
+  }
+
+
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-[#824ece] overflow-hidden">
       {/* Bubble Design */}
@@ -81,25 +94,25 @@ const FirstPage = () => {
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              // onClick={handleBillingTeamManagerLogin}
+              onClick={ handleAccountsLogin}
             >
               Accounts
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              // onClick={handleBillingTeamManagerLogin}
+              onClick={handleSoftwareLogin}
             >
               Software
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              // onClick={handleBillingTeamManagerLogin}
+                onClick={handleHrLogin}
             >
               HR
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              // onClick={handleBillingTeamManagerLogin}
+               onClick={handleBillingTeamManagerLogin}
             >
               Call Center
             </button>

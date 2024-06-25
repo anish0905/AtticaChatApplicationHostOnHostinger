@@ -106,7 +106,7 @@ const GroupsList = () => {
       try {
         const { group, grade } = groupToDelete;
         const response = await fetch(
-          `${BASE_URL}/api/groups/${group}/${grade}`,
+         ` ${BASE_URL}/api/groups/${group}/${grade}`,
           {
             method: "DELETE",
             headers: {

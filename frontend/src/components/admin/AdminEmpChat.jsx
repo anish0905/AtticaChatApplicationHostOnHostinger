@@ -10,6 +10,8 @@ import notificationSound from '../../assests/sound.wav';
 import { BASE_URL } from "../../constants";
 import ForwardMessageModalAdminToEmp from "./Pages/ForwardMessageModalAdminToEmp";
 import Sidebar from "./Sidebar";
+import { FaArrowLeft } from "react-icons/fa";
+import AdminFileUploadModel from "./Pages/AdminFileUploadModel";
 
 function AdminEmpChat() {
   const [messages, setMessages] = useState([]);
@@ -35,6 +37,7 @@ function AdminEmpChat() {
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [isChatSelected, setIsChatSelected] = useState(false);
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
+  
 
   // Function to handle click on employee to initiate chat
   const handleClick = (id, name) => {
@@ -236,10 +239,10 @@ function AdminEmpChat() {
       <div className="flex-1 flex flex-col lg:flex-row">
         <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
           <div className="flex items-center justify-between mb-4">
-            <Link to="/AdminDashboard" className="text-lg font-bold">
+            {/* <Link to="/AdminDashboard" className="text-lg font-bold">
               <IoIosDocument size={25} />
-            </Link>
-            <span className="text-lg font-bold ml-2">Admin Chat</span>
+            </Link> */}
+            <span className="text-lg font-bold ml-2">Employee Chat</span>
             <Link to="/login" className="text-lg font-bold ml-2">
               <BiLogOut size={25} />
             </Link>
@@ -266,7 +269,7 @@ function AdminEmpChat() {
                     onClick={() => handleClick(user._id, user.name)}
                   >
                     <div className="flex justify-between">
-                      <span className="font-bold">{user.name}</span>
+                      <span className="font-md">{user.name}</span>
                     </div>
                   </div>
                 </li>
@@ -278,8 +281,22 @@ function AdminEmpChat() {
         {isChatSelected && (
           <div className="flex-1 flex flex-col justify-between bg-white">
             {/* Selected Recipient */}
-            <div className="bg-[#5443c3]  text-white p-4">
+            <div className="bg-[#5443c3]  text-white p-4 flex flex-row">
+              
+            {isChatSelected && (
+        <div className="">
+          <button
+            className="w-20 text-white "
+            onClick={handleBackToUserList}
+          >
+            <FaArrowLeft />
+          </button>
+        </div>
+      )}
+
               <h2 className="text-lg font-bold">{recipientName}</h2>
+
+             
             </div>
             {/* Messages */}
             <div className="overflow-y-auto flex-1 p-4">
@@ -309,7 +326,7 @@ function AdminEmpChat() {
                       )}
                       {message.document && (
                         <a
-                          href={message.document}
+                          href={message.content.document}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-blue-500"
@@ -317,7 +334,7 @@ function AdminEmpChat() {
                           View Document
                         </a>
                       )}
-                      {message.video && (
+                      {message.content.video && (
                         <video controls className="max-w-xs mt-2">
                           <source src={message.video} type="video/mp4" />
                           Your browser does not support the video tag.
@@ -370,6 +387,7 @@ function AdminEmpChat() {
                 >
                   Send
                 </button>
+                <AdminFileUploadModel sender={loggedInUserId} recipient={recipient} />
               </div>
             </div>
           </div>
@@ -431,7 +449,7 @@ function AdminEmpChat() {
         />
       )}
       {/* Back Button for Mobile and Tablet Views */}
-      {isChatSelected && (
+      {/* {isChatSelected && (
         <div className="fixed bottom-4 left-4">
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded"
@@ -440,7 +458,7 @@ function AdminEmpChat() {
             Back
           </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
