@@ -27,6 +27,7 @@ const userSchema = new mongoose.Schema(
         "Bouncers/Driver",
         "Security/CCTV",
         "Digital Marketing",
+        
       ],
       required: true,
     },
