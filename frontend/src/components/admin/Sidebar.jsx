@@ -54,21 +54,21 @@ const Sidebar = () => {
           }`}
         >
           <MdDashboard className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Dashboard
           </span>
         </div>
 
         <div
           onClick={() => handleNavigation("/Groups")}
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${
+          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${
             activeRoute === "/Groups"
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
           }`}
         >
           <GrChatOption className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Group Chat
           </span>
         </div>
@@ -76,7 +76,7 @@ const Sidebar = () => {
         <div
           onMouseEnter={() => setShowEmployeeOptions(true)}
           onMouseLeave={() => setShowEmployeeOptions(false)}
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${
+          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer z-50 ${
             employeeRoutes.includes(activeRoute)
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
@@ -91,7 +91,7 @@ const Sidebar = () => {
               onClick={() => handleNavigation("/register")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
             >
-              <FcManager className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <FcManager className="bg-white rounded-full  mr-2 my-2 text-2xl" />
               <span className="my-2">Employee Registration</span>
             </div>
             <div
@@ -108,19 +108,27 @@ const Sidebar = () => {
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Manager Registration</span>
             </div>
+
+            <div
+              onClick={() => handleNavigation("/managerRegister")}
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+            >
+              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <span className="my-2">Digital Marketing Team Registration</span>
+            </div>
           </span>
         </div>
 
         <div
           onClick={() => handleNavigation("/livemesages")}
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${
+          className={`group relative flex items-center rounded-full z-50 p-2 md:p-4 lg:p-5 cursor-pointer ${
             activeRoute === "/livemesages"
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
           }`}
         >
           <TbMessageForward  className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 z-50 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Live Chat
           </span>
         </div>
@@ -134,21 +142,21 @@ const Sidebar = () => {
           }`}
         >
           <BsChatSquareDots className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Employee
           </span>
         </Link>
 
         <Link
           to="/adminToadmin"
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${
+          className={`group relative flex items-center rounded-full p-2 md:p-4 z-50 lg:p-5 cursor-pointer ${
             activeRoute === "/adminToadmin"
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
           }`}
         >
           <BiSolidMessageCheck  className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Admin
           </span>
         </Link>

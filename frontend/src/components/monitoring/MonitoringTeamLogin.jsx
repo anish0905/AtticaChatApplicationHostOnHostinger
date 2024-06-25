@@ -6,7 +6,7 @@ import babusirr from "../../assests/babusirr.png";
 import back4 from "../../assests/back4.png";
 import { BASE_URL } from "../../constants";
 
-const HrLogin = () => {
+const MonitoringTeamLogin = () => {
   const [employeeId, setEmployeeId] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -59,7 +59,7 @@ const HrLogin = () => {
               alt="Chatvia Logo"
               className="mx-auto mb-4 w-72 h-32"
             />
-            <h2 className="text-2xl font-semibold">Hr Sign in</h2>
+            <h2 className="text-2xl font-semibold">MonitoringTeam Sign in</h2>
             <p className="text-gray-600">
               Sign in to continue with Attica Chat Portal.
             </p>
@@ -67,13 +67,13 @@ const HrLogin = () => {
           <form  className="w-full max-w-md mx-auto">
             <div className="mb-4">
               <label htmlFor="employeeCode" className="block text-gray-700">
-               Email
+               Employee Code
               </label>
               <input
-                type="mail"
+                type="text"
                 id="employeeCode"
                 className="block w-full mt-2 p-2 border border-gray-300 rounded"
-                placeholder="Enter your Email"
+                placeholder="Enter your Employee Code"
                 value={employeeId}
                 onChange={handleEmployeeCodeChange}
               />
@@ -112,4 +112,4 @@ const HrLogin = () => {
   );
 };
 
-export default HrLogin;
+export default  MonitoringTeamLogin ;
