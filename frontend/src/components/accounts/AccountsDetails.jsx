@@ -1,19 +1,18 @@
-
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { BASE_URL } from "../../constants";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
-const Modal = ({ show, onClose, DigitalMarketingTeam, onUpdate }) => {
-  const [formData, setFormData] = useState({ ...DigitalMarketingTeam });
+const BASE_URL = "http://localhost:5003";
+
+const Modal = ({ show, onClose, accountant, onUpdate }) => {
+  const [formData, setFormData] = useState({ ...accountant });
 
   useEffect(() => {
-    setFormData({ ...DigitalMarketingTeam });
-  }, [DigitalMarketingTeam]);
+    setFormData({ ...accountant });
+  }, [accountant]);
 
   if (!show) return null;
 
@@ -34,24 +33,12 @@ const Modal = ({ show, onClose, DigitalMarketingTeam, onUpdate }) => {
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Edit Digital Marketing Team Details</h2>
+        <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Edit Accountant Details</h2>
         <form>
           {[
-            { label: "Digital Marketing Team ID", name: "Digital Marketing Team_Id", type: "text" },
-            { label: "Digital Marketing Team Name", name: "Digital Marketing Team_name", type: "text" },
-            { label: "Digital Marketing Team Email", name: "Digital Marketing Team_email", type: "email" },
-            {
-              label: "Digital Marketing Team Password",
-              name: "Digital Marketing Team_password",
-              type: "password",
-            },
-            { label: "Digital Marketing Team Phone", name: "Digital Marketing Team_phone", type: "text" },
-            { label: "Digital Marketing Team Address", name: "Digital Marketing Team_address", type: "text" },
-            { label: "Branch City", name: "branch_city", type: "text" },
-            { label: "Branch State", name: "branch_state", type: "text" },
-            { label: "Branch Pincode", name: "branch_pincode", type: "text" },
-            { label: "Branch Name", name: "branch_name", type: "text" },
-            { label: "Branch Address", name: "branch_address", type: "text" },
+            { label: "Name", name: "name", type: "text" },
+            { label: "Email", name: "email", type: "email" },
+            { label: "Role", name: "role", type: "text" },
           ].map((field, index) => (
             <div className="mb-4" key={index}>
               <label
@@ -93,154 +80,120 @@ const Modal = ({ show, onClose, DigitalMarketingTeam, onUpdate }) => {
 };
 
 const AccountsDetails = () => {
-  const [DigitalMarketingTeams, setDigitalMarketingTeams] = useState([]);
+  const [accountants, setAccountants] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedDigitalMarketingTeam, setSelectedDigitalMarketingTeam] = useState(null);
+  const [selectedAccountant, setSelectedAccountant] = useState(null);
 
   useEffect(() => {
-    const fetchDigitalMarketingTeams = async () => {
+    const fetchAccountants = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/Digital Marketing Team/getAllDigital Marketing Teams`);
-        setDigitalMarketingTeams(res.data);
+        const res = await axios.get(`${BASE_URL}/api/allUser/getAllAccountantTeam`);
+        setAccountants(res.data);
       } catch (error) {
-        console.error("Error fetching Digital Marketing Teams", error);
+        console.error("Error fetching accountants", error);
       }
     };
 
-    fetchDigitalMarketingTeams();
+    fetchAccountants();
   }, []);
 
-  const handleEdit = (DigitalMarketingTeam) => {
-    setSelectedDigitalMarketingTeam(DigitalMarketingTeam);
+  const handleEdit = (accountant) => {
+    setSelectedAccountant(accountant);
     setShowModal(true);
   };
 
-  const handleDelete = async (DigitalMarketingTeamId) => {
+  const handleDelete = async (accountantId) => {
     try {
       if (window.confirm("Are you sure? The data will be deleted permanently.")) {
-        await axios.delete(`${BASE_URL}/api/Digital Marketing Team/deleteDigital Marketing TeamById/${DigitalMarketingTeamId}`);
-        setDigitalMarketingTeams(DigitalMarketingTeams.filter((DigitalMarketingTeam) => DigitalMarketingTeam._id !== DigitalMarketingTeamId));
-        toast.success('Digital Marketing Team deleted successfully');
+        await axios.delete(`${BASE_URL}/api/allUser/deleteAccountantById/${accountantId}`);
+        setAccountants(accountants.filter((accountant) => accountant._id !== accountantId));
+        toast.success('Accountant deleted successfully');
       }
     } catch (error) {
-      console.error("Error deleting Digital Marketing Team", error);
-      toast.error('Failed to delete Digital Marketing Team');
+      console.error("Error deleting accountant", error);
+      toast.error('Failed to delete accountant');
     }
   };
 
-  const handleUpdate = async (updatedDigitalMarketingTeam) => {
+  const handleUpdate = async (updatedAccountant) => {
     try {
       const res = await axios.put(
-        `${BASE_URL}/api/DigitalMarketingTeam/updateDigitalMarketingeamById/${updatedDigitalMarketingTeam._id}`,
-        updatedDigitalMarketingTeam
+        `${BASE_URL}/api/allUser/updateAccountantById/${updatedAccountant._id}`,
+        updatedAccountant
       );
-      setDigitalMarketingTeams(
-        DigitalMarketingTeams.map((DigitalMarketingTeam) =>
-          DigitalMarketingTeam._id === updatedDigitalMarketingTeam._id ? res.data.updatedDigitalMarketingTeam : DigitalMarketingTeam
+      setAccountants(
+        accountants.map((accountant) =>
+          accountant._id === updatedAccountant._id ? res.data.updatedAccountant : accountant
         )
       );
-      toast.success('Digital Marketing Team details updated successfully');
+      toast.success('Accountant details updated successfully');
     } catch (error) {
-      console.error("Error updating Digital Marketing Team", error);
-      toast.error('Failed to update Digital Marketing Team');
+      console.error("Error updating accountant", error);
+      toast.error('Failed to update accountant');
     }
   };
 
   return (
     <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
-    <ToastContainer />
-    <div className="flex-1 overflow-x-auto overflow-y-hidden">
-      <div className="h-full overflow-y-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-[#5443c3] sticky top-0">
-             <tr>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                ID
-              </th> 
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Name
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Email
-              </th>
-              {/* <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                 Phone NO
-              </th> */}
-              {/* <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch City
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch State
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch Pincode
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch Name
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch Address
-              </th> */}
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-            {DigitalMarketingTeams.map((DigitalMarketingTeam) => (
-              <tr key={DigitalMarketingTeam._id}>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.DigitalMarketingTeam_Id}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.DigitalMarketingTeam_name}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.DigitalMarketingTeam_email}
-                </td>
-                {/* <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.DigitalMarketingTeam_phone}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.branch_city}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.branch_state}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.branch_pincode}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.branch_name}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {DigitalMarketingTeam.branch_address}
-                </td> */}
-                <td className="py-4 px-4 whitespace-nowrap flex">
-                  <button
-                    onClick={() => handleEdit(DigitalMarketingTeam)}
-                    className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(DigitalMarketingTeam._id)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                   <RiDeleteBin5Line />
-                  </button>
-                </td>
+      <ToastContainer />
+      <div className="flex-1 overflow-x-auto overflow-y-hidden">
+        <div className="h-full overflow-y-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-[#5443c3] sticky top-0">
+              <tr>
+                
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Email
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Role
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
+              {accountants.map((accountant) => (
+                <tr key={accountant._id}>
+                 
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {accountant.name}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {accountant.email}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {accountant.role}
+                  </td>
+                  <td className="py-4 px-4 whitespace-nowrap flex">
+                    <button
+                      onClick={() => handleEdit(accountant)}
+                      className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(accountant._id)}
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      <RiDeleteBin5Line />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-      </div>
-      {selectedDigitalMarketingTeam && (
+      {selectedAccountant && (
         <Modal
           show={showModal}
           onClose={() => setShowModal(false)}
-          Digital Marketing Team={selectedDigitalMarketingTeam}
+          accountant={selectedAccountant}
           onUpdate={handleUpdate}
         />
       )}
