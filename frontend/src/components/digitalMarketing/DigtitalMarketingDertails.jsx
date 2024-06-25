@@ -100,7 +100,7 @@ const DigtitalMarketingDertails = () => {
   useEffect(() => {
     const fetchDigitalMarketingTeams = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/Digital Marketing Team/getAllDigital Marketing Teams`);
+        const res = await axios.get(`${BASE_URL}/api/allUser/getAllDigitalMarketingTeam`);
         setDigitalMarketingTeams(res.data);
       } catch (error) {
         console.error("Error fetching Digital Marketing Teams", error);

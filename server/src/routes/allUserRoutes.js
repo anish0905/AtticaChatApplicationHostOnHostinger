@@ -22,17 +22,19 @@ router.get("/counts/by-role", authController.getUsersCountByRole);
 
 router.get("/getAllDigitalMarketingTeam", authController.getAllDigitalTeams);
 
-router.get("/getAllAccountantTeam", authController.getAllAccountantTeams);
+router.get("/getAllAccountantTeam", authController.getAllAccountant);
 
-router.get("/getAllSoftwareTeam", authController.getAllSoftwareTeams);
+router.get("/getAllSoftwareTeam", authController.getAllSoftware);
 
-router.get("/getAllHRTeam", authController.getAllHRTeams);
+router.get("/getAllHRTeam", authController.getAllHR);
 
-router.get("/getAllCallCenterTeam", authController.getAllCallCenterTeams);
+router.get("/getAllCallCenterTeam", authController.getAllCallCenter);
 
-router.get("/getAllVirtualTeam", authController.getAllVirtualTeams);
+router.get("/getAllVirtualTeam", authController.getAllVirtualTeam);
 
-router.get("/getAllMonitoringTeam", authController.getAllMonitoringTeams);
+router.get("/getAllMonitoringTeam", authController.getAllMonitoringTeam);
+
+router.get("/getAllSecurityTeam", authController.getAllSecurity);
 
 
 router.get("/getbyId/:id", authController.getById)
