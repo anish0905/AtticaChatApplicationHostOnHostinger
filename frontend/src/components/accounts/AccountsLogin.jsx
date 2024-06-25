@@ -7,13 +7,13 @@ import back4 from "../../assests/back4.png";
 import { BASE_URL } from "../../constants";
 
 const AccountsLogin = () => {
-  const [employeeId, setEmployeeId] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleEmployeeCodeChange = (e) => setEmployeeId(e.target.value);
+  const handleEmployeeCodeChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
   const handleSubmit = async (e) => {
@@ -23,13 +23,12 @@ const AccountsLogin = () => {
 
     try {
       const response = await axios.post(
-        `${BASE_URL}/api/employeeRegistration/login`,
-        { employeeId, password }
+        `${BASE_URL}/api/allUser/acc/login`,
+        { email, password }
       );
       setLoading(false);
       localStorage.setItem("token", response.data.accessToken);
       console.log("response.data   ", response.data);
-      //localStorage.setItem('EmployeeId', response.data._id);
       localStorage.setItem("CurrentUserId", response.data._id);
       navigate("/empDashbord");
     } catch (err) {
@@ -64,17 +63,17 @@ const AccountsLogin = () => {
               Sign in to continue with Attica Chat Portal.
             </p>
           </div>
-          <form  className="w-full max-w-md mx-auto">
+          <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
             <div className="mb-4">
               <label htmlFor="employeeCode" className="block text-gray-700">
-                Employee Code
+                Employee Email
               </label>
               <input
                 type="text"
                 id="employeeCode"
                 className="block w-full mt-2 p-2 border border-gray-300 rounded"
-                placeholder="Enter your Employee Code"
-                value={employeeId}
+                placeholder="Enter your Email"
+                value={email}
                 onChange={handleEmployeeCodeChange}
               />
             </div>
