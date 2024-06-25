@@ -38,6 +38,10 @@ import SoftwareLogin from './components/software/SoftwareLogin'
 import HrLogin from "./components/Hr/HrLogin";
 import DigitalMarketingReg from "./components/admin/Pages/DigitalMarketingReg";
 import AccountsReg from "./components/admin/Pages/AcountsReg";
+import VirtualTeamLogin from "./components/virtualTeam/VirtualTeamLogin";
+import MonitoringTeamLogin from "./components/monitoring/MonitoringTeamLogin";
+import BouncersLogin from "./components/bouncers/BouncersLogin";
+import SecurityLogin from "./components/security/SecurityLogin";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
@@ -76,6 +80,10 @@ const App = () => {
             <Route path="/accounts" element={<AccountsLogin/>}/>
             <Route path='/software' element={<SoftwareLogin/>}/>
             <Route path="/hr" element={<HrLogin/>}/>
+            <Route path="/virtualTeam" element={<VirtualTeamLogin/>}/>
+            <Route path='/monitoringTeam' element={<MonitoringTeamLogin/>}/>
+             <Route path='/bouncers' element={<BouncersLogin/>}/>
+             <Route path="/security" element={<SecurityLogin/>}/>
              
               {isSuperAdminLoggedIn ? (
             <>
