@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from '../../constants';
 import img21 from "../../assests/img21.png";
 import logo from "../../assests/logo.png";
-import back14 from  "../../assests/back14.png";
+import back1 from  "../../assests/back1.png";
 
 const ManagerLogin = () => {
     const [email, setEmail] = useState('');
@@ -31,7 +31,7 @@ const ManagerLogin = () => {
     return (
 
         <div className="flex items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-6 lg:p-8 " 
-        style={{ backgroundImage: `url(${back14})` }}
+        style={{ backgroundImage: `url(${back1})` }}
         >
             <div className="flex flex-col lg:flex-row items-center justify-center w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-8">
@@ -64,11 +64,11 @@ const ManagerLogin = () => {
                     <input type="hidden" name="remember" defaultValue="true" />
                     <div>
                         <div className="mb-4">
-                            <label htmlFor="email-address"  className="block w-full mt-2 p-2 border border-gray-300 rounded">Email address</label>
+                            <label htmlFor="email-address"  className="block w-full mt-2 p-2 ">Email address</label>
                             <input id="email-address" name="email" type="email" autoComplete="email" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Email address" value={email} onChange={(e) => setEmail(e.target.value)} />
                         </div>
                         <div className="mb-4">
-                            <label htmlFor="password" className="block w-full mt-2 p-2 border border-gray-300 rounded">Password</label>
+                            <label htmlFor="password" className="block w-full mt-2 p-2 ">Password</label>
                             <input id="password" name="password" type="password" autoComplete="current-password" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
                         </div>
                     </div>

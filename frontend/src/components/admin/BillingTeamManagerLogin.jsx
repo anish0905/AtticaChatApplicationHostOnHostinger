@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../../constants";
-import back15 from "../../assests/back15.png";
+import back2 from "../../assests/back2.png";
 import babusirr from "../../assests/babusirr.png";
 import logo from "../../assests/logo.png";
 
@@ -34,7 +34,7 @@ const BillingTeamManagerLogin = () => {
   return (
     <div
     className="flex items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-6 lg:p-8"
-    style={{ backgroundImage: `url(${back15})` }}
+    style={{ backgroundImage: `url(${back2})` }}
   >
     <div className="flex flex-col lg:flex-row items-center justify-center w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
     <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-8">
