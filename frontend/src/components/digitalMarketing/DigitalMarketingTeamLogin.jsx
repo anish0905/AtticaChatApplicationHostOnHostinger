@@ -25,7 +25,7 @@ const DigitalMarketingTeamLogin = () => {
 
     try {
       const response = await axios.post(
-        `${BASE_URL}/api/allUser/login`,
+        `${BASE_URL}/api/digital/login`,
         { email, password }
       );
       setLoading(false);
