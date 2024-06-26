@@ -8,7 +8,8 @@ const {
   markMessagesRead,
   getNotificationId,
   forwardMessage,
-  replyToMessage
+  replyToMessage,
+  getMessagesByUser
 } = require("../controllers/messageController.js");
 const { upload } = require("../middleware/multer.middlewear.js");
 // Adjust the path as necessary
@@ -23,6 +24,7 @@ router.get("/unread-messages/:userId", unreadMessages);
 router.get("/mark-messages-read/:userId", markMessagesRead);
 router.post("/forward", forwardMessage);
 router.post("/reply",replyToMessage)
+router.get("/getAllByUser/:userId1", getMessagesByUser);
 
 
 
