@@ -6,7 +6,8 @@ import babusirr from "../../assests/babusirr.png";
 import back4 from "../../assests/back4.png";
 import { BASE_URL } from "../../constants";
 
-const VirtualTeamLogin = () => {
+const CallCenterLogin
+ = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -23,7 +24,7 @@ const VirtualTeamLogin = () => {
 
     try {
       const response = await axios.post(
-        `${BASE_URL}/api/allUser/virtualTeam/login`,
+        `${BASE_URL}/api/allUser/callcenter/login`,
         { email, password }
       );
       
@@ -31,7 +32,7 @@ const VirtualTeamLogin = () => {
       localStorage.setItem("token", response.data.accessToken);
       console.log("response.data   ", response.data);
       localStorage.setItem("CurrentUserId", response.data._id);
-      navigate("/VirtualTeamToVirtualTeam");
+      navigate("/CallCenterToCallCenter");
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
@@ -59,7 +60,7 @@ const VirtualTeamLogin = () => {
               alt="Chatvia Logo"
               className="mx-auto mb-4 w-72 h-32"
             />
-            <h2 className="text-2xl font-semibold">Virtual Team Sign in</h2>
+            <h2 className="text-2xl font-semibold">Call Center Sign in</h2>
             <p className="text-gray-600">
               Sign in to continue with Attica Chat Portal.
             </p>
@@ -112,4 +113,5 @@ const VirtualTeamLogin = () => {
   );
 };
 
-export default VirtualTeamLogin;
+export default CallCenterLogin
+;
