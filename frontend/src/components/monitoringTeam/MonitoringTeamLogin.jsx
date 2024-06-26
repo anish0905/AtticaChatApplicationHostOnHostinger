@@ -3,17 +3,18 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assests/logo.png";
 import babusirr from "../../assests/babusirr.png";
+// import monitoringTeamImage from "../../assests/monitoring-team-image.png"; // Update with your monitoring team image
 import back4 from "../../assests/back4.png";
-import { BASE_URL } from "../../constants";
+import { BASE_URL } from "../../constants"; // Ensure BASE_URL is correctly imported
 
-const VirtualTeamLogin = () => {
+const MonitoringTeamLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleEmployeeCodeChange = (e) => setEmail(e.target.value);
+  const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
   const handleSubmit = async (e) => {
@@ -23,15 +24,13 @@ const VirtualTeamLogin = () => {
 
     try {
       const response = await axios.post(
-        `${BASE_URL}/api/allUser/virtualTeam/login`,
+        `${BASE_URL}/api/allUser/monitoring/login`, // Updated API endpoint for monitoring team login
         { email, password }
       );
-      
       setLoading(false);
       localStorage.setItem("token", response.data.accessToken);
-      console.log("response.data   ", response.data);
       localStorage.setItem("CurrentUserId", response.data._id);
-      navigate("/VirtualTeamToVirtualTeam");
+      navigate("/MonitoringSideBar"); // Updated redirect path for monitoring team dashboard
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
@@ -48,8 +47,8 @@ const VirtualTeamLogin = () => {
         <div className="hidden lg:block lg:w-1/2">
           <img
             src={babusirr}
-            alt="Babusir"
-            className="object-cover h-full w-full rounded-full shadow-lg "
+            alt="Monitoring Team"
+            className="object-cover h-full w-full rounded-full shadow-lg"
           />
         </div>
         <div className="flex flex-col items-center justify-center lg:w-1/2 p-8 bg-white rounded-lg shadow-lg">
@@ -59,23 +58,23 @@ const VirtualTeamLogin = () => {
               alt="Chatvia Logo"
               className="mx-auto mb-4 w-72 h-32"
             />
-            <h2 className="text-2xl font-semibold">Virtual Team Sign in</h2>
+            <h2 className="text-2xl font-semibold">Monitoring Team Sign in</h2> {/* Updated heading */}
             <p className="text-gray-600">
-              Sign in to continue with Attica Chat Portal.
+              Sign in to continue with the Monitoring Team Portal.
             </p>
           </div>
           <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
             <div className="mb-4">
-              <label htmlFor="employeeCode" className="block text-gray-700">
-                Employee Email
+              <label htmlFor="email" className="block text-gray-700">
+                Email
               </label>
               <input
-                type="text"
-                id="employeeCode"
+                type="email"
+                id="email"
                 className="block w-full mt-2 p-2 border border-gray-300 rounded"
                 placeholder="Enter your Email"
                 value={email}
-                onChange={handleEmployeeCodeChange}
+                onChange={handleEmailChange}
               />
             </div>
             <div className="mb-4">
@@ -102,8 +101,8 @@ const VirtualTeamLogin = () => {
           </form>
           <div className="text-center mt-6 text-gray-600 text-sm">
             <p>
-              © 2024 attica. Crafted with{" "}
-              <span className="text-red-500">❤</span> by attica gold
+              © {new Date().getFullYear()} Attica. Crafted with{" "}
+              <span className="text-red-500">❤</span> by Attica Gold
             </p>
           </div>
         </div>
@@ -112,4 +111,4 @@ const VirtualTeamLogin = () => {
   );
 };
 
-export default VirtualTeamLogin;
+export default MonitoringTeamLogin;

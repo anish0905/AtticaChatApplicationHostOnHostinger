@@ -1,33 +1,38 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assests/logo.png";
 import babusirr from "../../assests/babusirr.png";
-import back4 from "../../assests/back3.png";
+import back4 from "../../assests/back4.png";
 import { BASE_URL } from "../../constants";
 
-const SuperAdminLogin = () => {
-  const [login, setLogin] = useState("");
+const CallCenterLogin
+ = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleEmployeeLogin = (e) => setLogin(e.target.value);
+  const handleEmployeeCodeChange = (e) => setEmail(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      const response = await axios.post(`${BASE_URL}/api/superAdmin/login`, {
-        login,
-      });
-      setLoading(false);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("login", login);
+      const response = await axios.post(
+        `${BASE_URL}/api/allUser/callcenter/login`,
+        { email, password }
+      );
       
-      navigate("/superAdminDashboard");
-      window.location.reload();
+      setLoading(false);
+      localStorage.setItem("token", response.data.accessToken);
+      console.log("response.data   ", response.data);
+      localStorage.setItem("CurrentUserId", response.data._id);
+      navigate("/CallCenterToCallCenter");
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
@@ -50,23 +55,41 @@ const SuperAdminLogin = () => {
         </div>
         <div className="flex flex-col items-center justify-center lg:w-1/2 p-8 bg-white rounded-lg shadow-lg">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-semibold">Superadmin Login</h2>
+            <img
+              src={logo}
+              alt="Chatvia Logo"
+              className="mx-auto mb-4 w-72 h-32"
+            />
+            <h2 className="text-2xl font-semibold">Call Center Sign in</h2>
             <p className="text-gray-600">
               Sign in to continue with Attica Chat Portal.
             </p>
           </div>
           <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
             <div className="mb-4">
-              <label htmlFor="login" className="block text-gray-700">
-                Password
+              <label htmlFor="employeeCode" className="block text-gray-700">
+                Employee Email
               </label>
               <input
                 type="text"
-                id="login"
+                id="employeeCode"
+                className="block w-full mt-2 p-2 border border-gray-300 rounded"
+                placeholder="Enter your Email"
+                value={email}
+                onChange={handleEmployeeCodeChange}
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-gray-700">
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
                 className="block w-full mt-2 p-2 border border-gray-300 rounded"
                 placeholder="********"
-                value={login}
-                onChange={handleEmployeeLogin}
+                value={password}
+                onChange={handlePasswordChange}
               />
             </div>
             {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -90,4 +113,5 @@ const SuperAdminLogin = () => {
   );
 };
 
-export default SuperAdminLogin;
+export default CallCenterLogin
+;

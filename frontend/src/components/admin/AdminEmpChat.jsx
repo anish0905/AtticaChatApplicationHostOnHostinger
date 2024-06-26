@@ -50,17 +50,21 @@ function AdminEmpChat() {
   };
 
   // Function to fetch messages between two users
-  const fetchMessages = (sender, recipient) => {
-    axios
-      .get(
+  const fetchMessages = async (sender, recipient) => {
+  
+    const startTime = Date.now();
+  
+    try {
+      const response = await axios.get(
         `${BASE_URL}/api/empadminsender/getadminmessages/${recipient}/${sender}`
-      )
-      .then((response) => {
-        setMessages(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+      );
+  
+      const endTime = Date.now();
+      
+      setMessages(response.data);
+    } catch (error) {
+      console.error("Error fetching messages:", error);
+    }
   };
 
   // Fetch all employees except the logged-in user
@@ -83,7 +87,7 @@ function AdminEmpChat() {
     if (loggedInUserId && recipient) {
       fetchMessages(loggedInUserId, recipient);
     }
-  }, [loggedInUserId, recipient]);
+  }, [loggedInUserId, recipient,messages]);
 
   // Automatically scroll to bottom when new messages are received
   useEffect(() => {
@@ -111,6 +115,7 @@ function AdminEmpChat() {
         setMessages([...messages, response.data.data]);
         setNewMessage("");
         setAttachment(null);
+        console.log("Sent message", response.data.data);
       })
       .catch((error) => {
         console.error(error);
@@ -143,7 +148,7 @@ function AdminEmpChat() {
 
       // Initial fetch and set interval to fetch every 3 seconds
       fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 3000);
+      const intervalId = setInterval(fetchUnreadMessages, 5000);
 
       // Clear interval on component unmount
       return () => clearInterval(intervalId);
@@ -181,10 +186,14 @@ function AdminEmpChat() {
 
   // Function to handle closure of pop-up SMS modal
   const handleModalClose = (senderId) => {
+    const startTime = Date.now();
+    
     axios
       .delete(`${BASE_URL}/api/deleteNotification/${senderId}`)
       .then(() => {
+        const endTime = Date.now();
         setShowPopSms(false);
+        
       })
       .catch((error) => {
         console.error("Error deleting notification:", error);
@@ -405,10 +414,9 @@ function AdminEmpChat() {
       </div>
 
       
-      {/* Pop SMS Modal */}
       {showPopSms && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
+          <div className="bg-white p-6 rounded-lg shadow-lg relative">
           <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
             <h2 className="text-xl font-bold text-green-600 text-center">
               New Message from {selectedSenderName}
@@ -417,6 +425,12 @@ function AdminEmpChat() {
               {popSms.map((sms, index) => (
                 <li key={index} className="mb-2">
                   <p>{sms.content.text}</p>
+                  <button
+                      className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                      onClick={() => handleModalClose(sms.sender)}
+                    >
+                      Close
+                    </button>
                   {sms.content.image && (
                     <img
                       src={sms.content.image}
@@ -441,8 +455,10 @@ function AdminEmpChat() {
                     </video>
                   )}
                 </li>
+                
               ))}
             </ul>
+  
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
               onClick={() => handleModalClose(selectedSender)}

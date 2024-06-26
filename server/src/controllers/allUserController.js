@@ -393,7 +393,7 @@ exports.getAllMonitoringTeam = async function (req, res) {
 
 exports.getAllBouncers = async function (req, res) {
   try {
-    const users = await User.find({ role: "Bouncers" }).select("-password");
+    const users = await User.find({ role: "Bouncers/Driver" }).select("-password");
     res.json(users);
   } catch (err) {
     res.status(500).send(err);
