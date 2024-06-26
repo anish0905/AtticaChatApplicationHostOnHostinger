@@ -31,6 +31,8 @@ import DigitalMarketingTeamLogin from "./components/digitalMarketing/DigitalMark
 import DigitalMarketingSideBar from "./components/digitalMarketing/DigitalMarketingSideBar";
 import DigitalToDigitalTamChat from "./components/digitalMarketing/DigitalToDigitalTamChat";
 import DigitalMarketingToAdminChat from "./components/digitalMarketing/DigitalMarketingToAdminChat";
+import MonitoringTeamLogin from "./components/monitoringTeam/MonitoringTeamLogin"
+import MonitoringReg from '../src/components/admin/Pages/MonitoringReg'
  
 // import AdminRegistration from "./components/admin/AdminRegistration";
 import AccountsLogin from "./components/accounts/AccountsLogin";
@@ -38,6 +40,14 @@ import SoftwareLogin from './components/software/SoftwareLogin'
 import HrLogin from "./components/Hr/HrLogin";
 import DigitalMarketingReg from "./components/admin/Pages/DigitalMarketingReg";
 import AccountsReg from "./components/admin/Pages/AcountsReg";
+import BouncerLogin from "./components/Bouncer/BouncerLogin";
+import MonitoringTeamSideBar from "./components/monitoringTeam/MonitoringSidebar";
+import MonitoringTeamChat from "./components/monitoringTeam/MonitoringTeamChat";
+import MonitoringToAdminChat from "./components/monitoringTeam/MonitoringToAdminChat";
+import BouncerTeamChat from "./components/Bouncer/BouncerTeamChat";
+import BouncerToAdminChat from "./components/Bouncer/BouncerToAdminChat";
+import BouncerSideBar from "./components/Bouncer/BouncerSidebar";
+import BouncerReg from './components/admin/Pages/BouncerReg'
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
@@ -56,6 +66,8 @@ const App = () => {
             <Route path="/DigitalMarketingToAdminChat" element={<DigitalMarketingToAdminChat/>} />
             <Route path="/DigitalMarketingReg" element={<DigitalMarketingReg />} />
             <Route path="/AccountsReg" element={<AccountsReg />} />
+            <Route path="/MonitoringReg" element={<MonitoringReg />} />
+            <Route path="/BouncerReg" element={<BouncerReg />} />
 
             {/* <Route path="/adminRegistration" element={<AdminRegistration/>}/> */}
             <Route element={<AuthRequired/>}>
@@ -76,6 +88,15 @@ const App = () => {
             <Route path="/accounts" element={<AccountsLogin/>}/>
             <Route path='/software' element={<SoftwareLogin/>}/>
             <Route path="/hr" element={<HrLogin/>}/>
+            <Route path="/monitoringTeam" element={<MonitoringTeamLogin/>}/>
+            <Route path="/MonitoringSideBar" element={<MonitoringTeamSideBar/>}/>
+            <Route path="/monitoringTeamChat" element={<MonitoringTeamChat/>}/>
+            <Route path="/MonitoringTeamToAdminChat" element={<MonitoringToAdminChat/>}/>
+            <Route path="/monitoringTeam" element={<MonitoringReg/>}/>
+            <Route path="/bouncerLogin" element={<BouncerLogin/>}/>
+            <Route path="/bouncerChat" element={<BouncerTeamChat/>}/>
+            <Route path="/BouncerToAdminChat" element={<BouncerToAdminChat/>}/>
+            <Route path="/BouncerTeamSidebar" element={<BouncerSideBar/>}/>
              
               {isSuperAdminLoggedIn ? (
             <>
