@@ -25,12 +25,20 @@ const FirstPage = () => {
     navigate('/accounts')
   }
 
-  const handleSoftwareLogin=()=>{
+  const handleSoftwareLogin=()=>{///callCenter
     navigate('/software')
   }
 
   const handleHrLogin=()=>{
     navigate('/hr')
+  }
+
+  const handleVirtualTeamLogin=()=>{
+    navigate('/virtualTeam')
+  }
+
+  const handleCallCenterLogin=()=>{
+    navigate('/callCenter')
   }
 
 
@@ -112,13 +120,13 @@ const FirstPage = () => {
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-               onClick={handleBillingTeamManagerLogin}
+               onClick={handleCallCenterLogin}
             >
               Call Center
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              // onClick={handleBillingTeamManagerLogin}
+               onClick={handleVirtualTeamLogin}
             >
               Virtual Team
             </button>
