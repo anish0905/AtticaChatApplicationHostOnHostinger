@@ -45,6 +45,7 @@ import SecurityLogin from "./components/security/SecurityLogin";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
+  console.log('isSuperAdminLoggedIn',isSuperAdminLoggedIn);
   return (
     <BrowserRouter>
           <Routes>
@@ -60,6 +61,7 @@ const App = () => {
             <Route path="/DigitalMarketingToAdminChat" element={<DigitalMarketingToAdminChat/>} />
             <Route path="/DigitalMarketingReg" element={<DigitalMarketingReg />} />
             <Route path="/AccountsReg" element={<AccountsReg />} />
+          
 
             {/* <Route path="/adminRegistration" element={<AdminRegistration/>}/> */}
             <Route element={<AuthRequired/>}>
@@ -87,7 +89,7 @@ const App = () => {
              
               {isSuperAdminLoggedIn ? (
             <>
-              <Route path="/superAdminDashboard" element={<SuperAdmin />} />
+                <Route path="/superAdminDashboard" element={<SuperAdmin />} />
               <Route path="/superAdminGroups" element={<SuperAdminGroupList />} />
               <Route path="/superAdminLiveMesages" element={<SuperAdminLiveChat />} />
             </>

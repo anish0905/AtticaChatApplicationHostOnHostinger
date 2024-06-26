@@ -25,7 +25,9 @@ const SuperAdminLogin = () => {
       setLoading(false);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("login", login);
+      
       navigate("/superAdminDashboard");
+      window.location.reload();
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
