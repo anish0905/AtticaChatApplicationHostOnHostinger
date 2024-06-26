@@ -116,6 +116,23 @@ const Sidebar = () => {
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Digital Marketing Team Registration</span>
             </div>
+
+            <div
+              onClick={() => handleNavigation("/VirtualTeamReg")}
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+            >
+              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <span className="my-2">Virtual Team Registration</span>
+            </div>
+
+            <div
+              onClick={() => handleNavigation("/CallCenterReg")}
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+            >
+              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <span className="my-2">Call Center Team Registration</span>
+            </div>
+
             <div
               onClick={() => handleNavigation("/AccountsReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"

@@ -9,13 +9,12 @@ import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
-import DigitalMarketingSideBar from "./DigitalMarketingSideBar";
-import ForwardModalDigitalMarketing from "./ForwardModalDigitalMarketing";
-import DigitalMarktingFileModel from "./DigitalMarktingFileModel";
+import VirtualTeamSidebar from "./VirtualTeamSidebar";
+import ForwardModalVirtualTeam from "./ForwordModalVirtualTeam";
 
 
 
-function DigitalToDigitalTamChat() {
+function VirtualToVirtualTeamChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [users, setUsers] = useState([]);
@@ -52,7 +51,6 @@ function DigitalToDigitalTamChat() {
       .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
       .then((response) => {
         setMessages(response.data);
-        console.log(response);
       })
       .catch((error) => {
         console.error(error);
@@ -61,7 +59,7 @@ function DigitalToDigitalTamChat() {
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/api/allUser/getAllDigitalMarketingTeam`)
+      .get(`${BASE_URL}/api/allUser/getAllVirtualTeam`)
       .then((response) => {
         const filteredUsers = response.data.filter(
           (user) => user._id !== loggedInUserId
@@ -232,7 +230,7 @@ function DigitalToDigitalTamChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      <DigitalMarketingSideBar />
+      <VirtualTeamSidebar />
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-blue-200 sticky top-0 z-10">
@@ -339,7 +337,6 @@ function DigitalToDigitalTamChat() {
             >
               Send
             </button>
-            <DigitalMarktingFileModel sender={loggedInUserId} recipient={recipient} />
           </div>
         </div>
       ) : (
@@ -402,7 +399,7 @@ function DigitalToDigitalTamChat() {
   </div>
 )}
 {showForwardModal && (
-        <ForwardModalDigitalMarketing
+        <ForwardModalVirtualTeam
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
@@ -413,4 +410,4 @@ function DigitalToDigitalTamChat() {
   );
 }
 
-export default DigitalToDigitalTamChat;
+export default VirtualToVirtualTeamChat;

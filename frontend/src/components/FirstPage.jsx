@@ -25,7 +25,7 @@ const FirstPage = () => {
     navigate('/accounts')
   }
 
-  const handleSoftwareLogin=()=>{
+  const handleSoftwareLogin=()=>{///callCenter
     navigate('/software')
   }
 
@@ -33,13 +33,30 @@ const FirstPage = () => {
     navigate('/hr')
   }
 
-  const handleMonitoringReg=()=>{
-    navigate('/monitoringTeam')
+
+const handleMonitoringTeamLogin=()=>{
+  navigate('/monitoringTeam')
+}
+
+
+const handleBouncersLogin=()=>{
+  navigate('/bouncerLogin')
+}
+
+
+const handleSecurityLogin=()=>{
+  navigate('/security')
+}
+  const handleVirtualTeamLogin=()=>{
+    navigate('/virtualTeam')
   }
 
-  const handleBouncerReg=()=>{
-    navigate('/bouncerLogin')
+  const handleCallCenterLogin=()=>{
+    navigate('/callCenter')
   }
+
+
+
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-[#824ece] overflow-hidden">
@@ -119,31 +136,34 @@ const FirstPage = () => {
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-               onClick={handleBillingTeamManagerLogin}
+               onClick={handleCallCenterLogin}
             >
               Call Center
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              // onClick={handleBillingTeamManagerLogin}
+              onClick={handleVirtualTeamLogin}
+             
             >
               Virtual Team
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              onClick={handleMonitoringReg}
+              onClick={handleMonitoringTeamLogin}
+              
             >
               Monitoring Team
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              onClick={handleBouncerReg}
+              onClick={handleBouncersLogin}
+             
             >
               Bouncers/Drivers
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              // onClick={handleBillingTeamManagerLogin}
+              onClick={handleSecurityLogin}
             >
               Security/CCTV
             </button>
@@ -161,3 +181,5 @@ const FirstPage = () => {
 };
 
 export default FirstPage;
+
+

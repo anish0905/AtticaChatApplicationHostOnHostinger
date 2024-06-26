@@ -1,18 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { BASE_URL } from "../../constants";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
-const BASE_URL = "http://localhost:5003";
-
-const Modal = ({ show, onClose, accountant, onUpdate }) => {
-  const [formData, setFormData] = useState({ ...accountant });
+const Modal = ({ show, onClose, callCenter, onUpdate }) => {
+  const [formData, setFormData] = useState({ ...callCenter });
 
   useEffect(() => {
-    setFormData({ ...accountant });
-  }, [accountant]);
+    setFormData({ ...callCenter });
+  }, [callCenter]);
 
   if (!show) return null;
 
@@ -32,15 +31,18 @@ const Modal = ({ show, onClose, accountant, onUpdate }) => {
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Edit Accountant Details</h2>
+        <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Edit Call Center Details</h2>
         <form>
           {[
-            { label: "Name", name: "name", type: "text" },
-            { label: "Email", name: "email", type: "email" },
-            { label: "Role", name: "role", type: "text" },
+            { label: "Call Center Name", name: "name", type: "text" },
+            { label: "Call Center Email", name: "email", type: "email" },
+            { label: "Call Center Password", name: "password", type: "password" }
           ].map((field, index) => (
             <div className="mb-4" key={index}>
-              <label className="block text-[#5443c3] text-sm font-bold mb-2" htmlFor={field.name}>
+              <label
+                className="block text-[#5443c3] text-sm font-bold mb-2"
+                htmlFor={field.name}
+              >
                 {field.label}
               </label>
               <input
@@ -75,57 +77,58 @@ const Modal = ({ show, onClose, accountant, onUpdate }) => {
   );
 };
 
-const AccountsDetails = () => {
-  const [accountants, setAccountants] = useState([]);
+const CallCenterDetail = () => {
+  const [callCenters, setCallCenters] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedAccountant, setSelectedAccountant] = useState(null);
-console.log(accountants);
+  const [selectedCallCenter, setSelectedCallCenter] = useState(null);
+
   useEffect(() => {
-    const fetchAccountants = async () => {
+    const fetchCallCenters = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/allUser/getAllAccountantTeam`);
-        setAccountants(res.data);
+        const res = await axios.get(`${BASE_URL}/api/allUser/getAllCallCenterTeam`);
+        setCallCenters(res.data);
       } catch (error) {
-        console.error("Error fetching accountants", error);
+        console.error("Error fetching Call Centers", error);
       }
     };
 
-    fetchAccountants();
+    fetchCallCenters();
   }, []);
 
-  const handleEdit = (accountant) => {
-    setSelectedAccountant(accountant);
+  const handleEdit = (callCenter) => {
+    setSelectedCallCenter(callCenter);
     setShowModal(true);
   };
 
-  const handleDelete = async (accountantId) => {
+  const handleDelete = async (callCenterId) => {
     try {
       if (window.confirm("Are you sure? The data will be deleted permanently.")) {
-        await axios.delete(`${BASE_URL}/api/allUser/delete/${accountantId}`);
-        setAccountants(accountants.filter((accountant) => accountant._id !== accountantId));
-        toast.success('Accountant deleted successfully');
+        await axios.delete(`${BASE_URL}/api/allUser/delete/${callCenterId}`);
+        setCallCenters(callCenters.filter((center) => center._id !== callCenterId));
+        toast.success('Call Center deleted successfully');
       }
     } catch (error) {
-      console.error("Error deleting accountant", error);
-      toast.error('Failed to delete accountant');
+      console.error("Error deleting Call Center", error);
+      toast.error('Failed to delete Call Center');
     }
   };
 
-  const handleUpdate = async (updatedAccountant) => {
+  const handleUpdate = async (updatedCallCenter) => {
     try {
       const res = await axios.patch(
-        `${BASE_URL}/api/allUser/update/${updatedAccountant._id}`,
-        updatedAccountant
+        `${BASE_URL}/api/allUser/update/${updatedCallCenter._id}`,
+        updatedCallCenter
       );
-      setAccountants(
-        accountants.map((accountant) =>
-          accountant._id === updatedAccountant._id ? res.data.data : accountant
+      setCallCenters(
+        callCenters.map((center) =>
+          center._id === updatedCallCenter._id ? res.data.updatedCallCenter : center
         )
       );
-      toast.success('Accountant details updated successfully');
+      window.location.reload(); // Fixed reload method
+      toast.success('Call Center details updated successfully');
     } catch (error) {
-      console.error("Error updating accountant", error);
-      toast.error('Failed to update accountant');
+      console.error("Error updating Call Center", error);
+      toast.error('Failed to update Call Center');
     }
   };
 
@@ -138,13 +141,13 @@ console.log(accountants);
             <thead className="bg-[#5443c3] sticky top-0">
               <tr>
                 <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  ID
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Name
                 </th>
                 <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Email
-                </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                  Role
                 </th>
                 <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Actions
@@ -152,26 +155,26 @@ console.log(accountants);
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-              {accountants.map((accountant) => (
-                <tr key={accountant._id}>
+              {callCenters.map((center) => (
+                <tr key={center._id}>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                    {accountant.name}
+                    {center?._id}
                   </td>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                    {accountant.email}
+                    {center?.name}
                   </td>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                    {accountant.role}
+                    {center?.email}
                   </td>
                   <td className="py-4 px-4 whitespace-nowrap flex">
                     <button
-                      onClick={() => handleEdit(accountant)}
+                      onClick={() => handleEdit(center)}
                       className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     >
                       <FaEdit />
                     </button>
                     <button
-                      onClick={() => handleDelete(accountant._id)}
+                      onClick={() => handleDelete(center._id)}
                       className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                     >
                       <RiDeleteBin5Line />
@@ -183,11 +186,11 @@ console.log(accountants);
           </table>
         </div>
       </div>
-      {selectedAccountant && (
+      {selectedCallCenter && (
         <Modal
           show={showModal}
           onClose={() => setShowModal(false)}
-          accountant={selectedAccountant}
+          callCenter={selectedCallCenter}
           onUpdate={handleUpdate}
         />
       )}
@@ -195,4 +198,4 @@ console.log(accountants);
   );
 };
 
-export default AccountsDetails;
+export default CallCenterDetail;

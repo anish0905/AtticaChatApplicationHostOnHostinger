@@ -73,7 +73,7 @@ const HrLogin = () => {
                 type="mail"
                 id="employeeCode"
                 className="block w-full mt-2 p-2 border border-gray-300 rounded"
-                placeholder="Enter your Employee Code"
+                placeholder="Enter your Email"
                 value={employeeId}
                 onChange={handleEmployeeCodeChange}
               />
