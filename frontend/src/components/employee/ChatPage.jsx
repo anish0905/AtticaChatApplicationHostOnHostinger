@@ -90,7 +90,7 @@ function ChatPage() {
     };
 
     axios
-      .post(`${BASE_URL}/api/postmessages`, messageData)
+      .post(`${BASE_URL}/api/postmessages, messageData)
       .then((response) => {
         setMessages([...messages, response.data.data]);
         setNewMessage("");
@@ -98,7 +98,7 @@ function ChatPage() {
       })
       .catch((error) => {
         console.error(error);
-      });
+      }`);
   };
 
   const handleFileUpload = (file) => {
@@ -119,8 +119,8 @@ function ChatPage() {
           const unreadUsersData = await Promise.all(
             users.map(async (user) => {
               const response = await axios.get(
-                `${BASE_URL}/api/mark-messages-read/${user._id}`
-              );
+               `${BASE_URL}/api/mark-messages-read/${user._id}
+              `);
               return { userId: user._id, data: response.data };
             })
           );
@@ -138,8 +138,8 @@ function ChatPage() {
   const fetchPopSms = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/api/getNotification/${loggedInUserId}`
-      );
+        `${BASE_URL}/api/getNotification/${loggedInUserId}
+      `);
       const data = response.data;
       setPopSms(data);
       if (data.length > 0) {
@@ -147,8 +147,8 @@ function ChatPage() {
         setSelectedSender(senderId);
         setShowPopSms(true);
         const empDetails = await axios.get(
-          `${BASE_URL}/api/employee/a/${senderId}`
-        );
+          `${BASE_URL}/api/employee/a/${senderId}
+        `);
         setSelectedSenderName(empDetails.data.name);
 
         // Play notification sound
@@ -166,10 +166,10 @@ function ChatPage() {
 
   const handleModalClose = (senderId) => {
     axios
-      .delete(`${BASE_URL}/api/deleteNotification/${senderId}`)
+      .delete(`${BASE_URL}/api/deleteNotification/${senderId})
       .then(() => {
         setShowPopSms(false);
-      })
+      }`)
       .catch((error) => {
         console.error("Error deleting notification:", error);
       });
