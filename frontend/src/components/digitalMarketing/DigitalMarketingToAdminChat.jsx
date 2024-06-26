@@ -71,7 +71,7 @@ function DigitalMarketingToAdminChat() {
       .catch((error) => {
         console.error(error);
       });
-  }, [loggedInUserId]);
+  }, []);
 
   // Fetch initial messages between logged-in user and selected recipient
   useEffect(() => {
