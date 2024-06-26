@@ -49,7 +49,16 @@ import BouncerTeamChat from "./components/Bouncer/BouncerTeamChat";
 import BouncerToAdminChat from "./components/Bouncer/BouncerToAdminChat";
 import BouncerSideBar from "./components/Bouncer/BouncerSidebar";
 import BouncerReg from './components/admin/Pages/BouncerReg'
-
+import CallCenterLogin from "./components/CallCenter/CallCenterLogin";
+import VirtualTeamRegistration from "./components/VirtualTeam/VirtualTeamRegistration";
+import VirtualTeamSidebar from "./components/VirtualTeam/VirtualTeamSidebar";
+import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualToVirtualTeamChat";
+import VirtualTeamToAdminChat from "./components/VirtualTeam/VirtualTeamToAdminChat";
+import CallCenterRegister from "./components/CallCenter/CallCenterRegister";
+import CallCenterSidebar from "./components/CallCenter/CallCenterSidebar";
+import CallCenterToCallCenterChat from "./components/CallCenter/CallCenterToCallCenterChat";
+import VirtualTeamLogin from "./components/VirtualTeam/VirtualTeamLogin";
+import CallCenterToAdminChat from "./components/CallCenter/CallCenterToAdminChat";
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
   return (
@@ -99,6 +108,21 @@ const App = () => {
             <Route path="/BouncerToAdminChat" element={<BouncerToAdminChat/>}/>
             <Route path="/BouncerTeamSidebar" element={<BouncerSideBar/>}/>
              
+
+            <Route path="/VirtualTeamSidebar" element={<VirtualTeamSidebar/>} />
+            <Route path="/VirtualTeamToVirtualTeam" element={<VirtualToVirtualTeamChat/>} />
+            <Route path="/VirtualTeamToAdminChat" element={<VirtualTeamToAdminChat/>} />
+            <Route path="/VirtualTeamReg" element={<VirtualTeamRegistration />} />
+            <Route path="/virtualTeam" element={<VirtualTeamLogin/>}/>
+
+            <Route path="/CallCenterSidebar" element={<CallCenterSidebar/>} />
+            <Route path="/CallCenterToCallCenter" element={<CallCenterToCallCenterChat/>} />
+            <Route path="/CallCenterToAdminChat" element={<CallCenterToAdminChat/>} />
+            <Route path="/CallCenterReg" element={<CallCenterRegister />} />
+            <Route path="/callCenter" element={<CallCenterLogin/>}/>
+
+
+
               {isSuperAdminLoggedIn ? (
             <>
               <Route path="/superAdminDashboard" element={<SuperAdmin />} />
