@@ -33,6 +33,20 @@ const FirstPage = () => {
     navigate('/hr')
   }
 
+
+const handleMonitoringTeamLogin=()=>{
+  navigate('/monitoringTeam')
+}
+
+
+const handleBouncersLogin=()=>{
+  navigate('/bouncers')
+}
+
+
+const handleSecurityLogin=()=>{
+  navigate('/security')
+}
   const handleVirtualTeamLogin=()=>{
     navigate('/virtualTeam')
   }
@@ -126,25 +140,26 @@ const FirstPage = () => {
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-               onClick={handleVirtualTeamLogin}
+              onClick={handleVirtualTeamLogin}
+             
             >
               Virtual Team
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              // onClick={handleBillingTeamManagerLogin}
+              onClick={handleMonitoringTeamLogin}
             >
               Monitoring Team
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              // onClick={handleBillingTeamManagerLogin}
+              onClick={handleBouncersLogin}
             >
               Bouncers/Drivers
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              // onClick={handleBillingTeamManagerLogin}
+              onClick={handleSecurityLogin}
             >
               Security/CCTV
             </button>
@@ -162,3 +177,5 @@ const FirstPage = () => {
 };
 
 export default FirstPage;
+
+

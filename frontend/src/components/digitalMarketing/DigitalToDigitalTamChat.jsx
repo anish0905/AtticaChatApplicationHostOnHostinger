@@ -11,6 +11,7 @@ import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
 import DigitalMarketingSideBar from "./DigitalMarketingSideBar";
 import ForwardModalDigitalMarketing from "./ForwardModalDigitalMarketing";
+import DigitalMarktingFileModel from "./DigitalMarktingFileModel";
 
 
 
@@ -51,6 +52,7 @@ function DigitalToDigitalTamChat() {
       .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
       .then((response) => {
         setMessages(response.data);
+        console.log(response);
       })
       .catch((error) => {
         console.error(error);
@@ -337,6 +339,7 @@ function DigitalToDigitalTamChat() {
             >
               Send
             </button>
+            <DigitalMarktingFileModel sender={loggedInUserId} recipient={recipient} />
           </div>
         </div>
       ) : (

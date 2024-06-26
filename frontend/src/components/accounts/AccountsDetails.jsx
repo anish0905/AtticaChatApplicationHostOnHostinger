@@ -27,7 +27,6 @@ const Modal = ({ show, onClose, accountant, onUpdate }) => {
   const handleUpdate = () => {
     onUpdate(formData);
     onClose();
-    window.location.reload();
   };
 
   return (
@@ -41,10 +40,7 @@ const Modal = ({ show, onClose, accountant, onUpdate }) => {
             { label: "Role", name: "role", type: "text" },
           ].map((field, index) => (
             <div className="mb-4" key={index}>
-              <label
-                className="block text-[#5443c3] text-sm font-bold mb-2"
-                htmlFor={field.name}
-              >
+              <label className="block text-[#5443c3] text-sm font-bold mb-2" htmlFor={field.name}>
                 {field.label}
               </label>
               <input
@@ -83,7 +79,7 @@ const AccountsDetails = () => {
   const [accountants, setAccountants] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedAccountant, setSelectedAccountant] = useState(null);
-
+console.log(accountants);
   useEffect(() => {
     const fetchAccountants = async () => {
       try {
@@ -105,7 +101,7 @@ const AccountsDetails = () => {
   const handleDelete = async (accountantId) => {
     try {
       if (window.confirm("Are you sure? The data will be deleted permanently.")) {
-        await axios.delete(`${BASE_URL}/api/allUser/deleteAccountantById/${accountantId}`);
+        await axios.delete(`${BASE_URL}/api/allUser/delete/${accountantId}`);
         setAccountants(accountants.filter((accountant) => accountant._id !== accountantId));
         toast.success('Accountant deleted successfully');
       }
@@ -117,13 +113,13 @@ const AccountsDetails = () => {
 
   const handleUpdate = async (updatedAccountant) => {
     try {
-      const res = await axios.put(
-        `${BASE_URL}/api/allUser/updateAccountantById/${updatedAccountant._id}`,
+      const res = await axios.patch(
+        `${BASE_URL}/api/allUser/update/${updatedAccountant._id}`,
         updatedAccountant
       );
       setAccountants(
         accountants.map((accountant) =>
-          accountant._id === updatedAccountant._id ? res.data.updatedAccountant : accountant
+          accountant._id === updatedAccountant._id ? res.data.data : accountant
         )
       );
       toast.success('Accountant details updated successfully');
@@ -141,7 +137,6 @@ const AccountsDetails = () => {
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-[#5443c3] sticky top-0">
               <tr>
-                
                 <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Name
                 </th>
@@ -159,7 +154,6 @@ const AccountsDetails = () => {
             <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
               {accountants.map((accountant) => (
                 <tr key={accountant._id}>
-                 
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                     {accountant.name}
                   </td>

@@ -6,14 +6,14 @@ import babusirr from "../../assests/babusirr.png";
 import back4 from "../../assests/back4.png";
 import { BASE_URL } from "../../constants";
 
-const HrLogin = () => {
-  const [employeeId, setEmployeeId] = useState("");
+const VirtualTeamLogin = () => {
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleEmployeeCodeChange = (e) => setEmployeeId(e.target.value);
+  const handleEmployeeCodeChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
 
   const handleSubmit = async (e) => {
@@ -23,15 +23,15 @@ const HrLogin = () => {
 
     try {
       const response = await axios.post(
-        `${BASE_URL}/api/employeeRegistration/login`,
-        { employeeId, password }
+        `${BASE_URL}/api/allUser/virtualTeam/login`,
+        { email, password }
       );
+      
       setLoading(false);
       localStorage.setItem("token", response.data.accessToken);
       console.log("response.data   ", response.data);
-      //localStorage.setItem('EmployeeId', response.data._id);
       localStorage.setItem("CurrentUserId", response.data._id);
-      navigate("/empDashbord");
+      navigate("/VirtualTeamToVirtualTeam");
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
@@ -59,22 +59,22 @@ const HrLogin = () => {
               alt="Chatvia Logo"
               className="mx-auto mb-4 w-72 h-32"
             />
-            <h2 className="text-2xl font-semibold">Hr Sign in</h2>
+            <h2 className="text-2xl font-semibold">Virtual Team Sign in</h2>
             <p className="text-gray-600">
               Sign in to continue with Attica Chat Portal.
             </p>
           </div>
-          <form  className="w-full max-w-md mx-auto">
+          <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
             <div className="mb-4">
               <label htmlFor="employeeCode" className="block text-gray-700">
-               Email
+                Employee Email
               </label>
               <input
-                type="mail"
+                type="text"
                 id="employeeCode"
                 className="block w-full mt-2 p-2 border border-gray-300 rounded"
                 placeholder="Enter your Email"
-                value={employeeId}
+                value={email}
                 onChange={handleEmployeeCodeChange}
               />
             </div>
@@ -112,4 +112,4 @@ const HrLogin = () => {
   );
 };
 
-export default HrLogin;
+export default VirtualTeamLogin;

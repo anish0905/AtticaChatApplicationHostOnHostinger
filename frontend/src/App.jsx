@@ -38,7 +38,9 @@ import SoftwareLogin from './components/software/SoftwareLogin'
 import HrLogin from "./components/Hr/HrLogin";
 import DigitalMarketingReg from "./components/admin/Pages/DigitalMarketingReg";
 import AccountsReg from "./components/admin/Pages/AcountsReg";
-import VirtualTeamLogin from "./components/VirtualTeam/VirtualTeamLogin";
+import MonitoringTeamLogin from "./components/monitoring/MonitoringTeamLogin";
+import BouncersLogin from "./components/bouncers/BouncersLogin";
+import SecurityLogin from "./components/security/SecurityLogin";
 import CallCenterLogin from "./components/CallCenter/CallCenterLogin";
 import VirtualTeamRegistration from "./components/VirtualTeam/VirtualTeamRegistration";
 import VirtualTeamSidebar from "./components/VirtualTeam/VirtualTeamSidebar";
@@ -47,6 +49,7 @@ import VirtualTeamToAdminChat from "./components/VirtualTeam/VirtualTeamToAdminC
 import CallCenterRegister from "./components/CallCenter/CallCenterRegister";
 import CallCenterSidebar from "./components/CallCenter/CallCenterSidebar";
 import CallCenterToCallCenterChat from "./components/CallCenter/CallCenterToCallCenterChat";
+import VirtualTeamLogin from "./components/VirtualTeam/VirtualTeamLogin";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
@@ -98,6 +101,9 @@ const App = () => {
             <Route path="/accounts" element={<AccountsLogin/>}/>
             <Route path='/software' element={<SoftwareLogin/>}/>
             <Route path="/hr" element={<HrLogin/>}/>
+             <Route path='/monitoringTeam' element={<MonitoringTeamLogin/>}/>
+             <Route path='/bouncers' element={<BouncersLogin/>}/>
+             <Route path="/security" element={<SecurityLogin/>}/>
    
              
               {isSuperAdminLoggedIn ? (
