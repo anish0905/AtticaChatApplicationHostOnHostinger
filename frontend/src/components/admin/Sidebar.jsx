@@ -140,9 +140,24 @@ const Sidebar = () => {
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Accounts Team Registration</span>
             </div>
+            <div
+              onClick={() => handleNavigation("/MonitoringReg")}
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+            >
+              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <span className="my-2">Monitoring Team Registration</span>
+            </div>
+            <div
+              onClick={() => handleNavigation("/BouncerReg")}
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+            >
+              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <span className="my-2">Bouncer Registration</span>
+            </div>
           </span>
         </div>
 
+       
         <div
           onClick={() => handleNavigation("/livemesages")}
           className={`group relative flex items-center rounded-full z-50 p-2 md:p-4 lg:p-5 cursor-pointer ${
