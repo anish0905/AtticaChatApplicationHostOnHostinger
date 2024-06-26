@@ -1,33 +1,35 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import logo from "../../assests/logo.png";
 import babusirr from "../../assests/babusirr.png";
-import back4 from "../../assests/back3.png";
+import back4 from "../../assests/back4.png";
 import { BASE_URL } from "../../constants";
 
-const SuperAdminLogin = () => {
-  const [login, setLogin] = useState("");
+const BouncerLogin = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleEmployeeLogin = (e) => setLogin(e.target.value);
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     setLoading(true);
     setError("");
 
     try {
-      const response = await axios.post(`${BASE_URL}/api/superAdmin/login`, {
-        login,
-      });
+      const response = await axios.post(
+        `${BASE_URL}/api/allUser/bouncers/login`, // Updated API endpoint for Bouncer login
+        { email, password }
+      );
       setLoading(false);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("login", login);
-      
-      navigate("/superAdminDashboard");
-      window.location.reload();
+      localStorage.setItem("token", response.data.accessToken);
+      localStorage.setItem("CurrentUserId", response.data._id);
+      navigate("/BouncerReg"); // Updated redirect path for Bouncer dashboard
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
@@ -45,28 +47,46 @@ const SuperAdminLogin = () => {
           <img
             src={babusirr}
             alt="Babusir"
-            className="object-cover h-full w-full rounded-full shadow-lg "
+            className="object-cover h-full w-full rounded-full shadow-lg"
           />
         </div>
         <div className="flex flex-col items-center justify-center lg:w-1/2 p-8 bg-white rounded-lg shadow-lg">
           <div className="text-center mb-6">
-            <h2 className="text-2xl font-semibold">Superadmin Login</h2>
+            <img
+              src={logo}
+              alt="Chatvia Logo"
+              className="mx-auto mb-4 w-72 h-32"
+            />
+            <h2 className="text-2xl font-semibold">Bouncer Sign in</h2> {/* Updated heading */}
             <p className="text-gray-600">
               Sign in to continue with Attica Chat Portal.
             </p>
           </div>
           <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
             <div className="mb-4">
-              <label htmlFor="login" className="block text-gray-700">
+              <label htmlFor="email" className="block text-gray-700">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="block w-full mt-2 p-2 border border-gray-300 rounded"
+                placeholder="Enter your Email"
+                value={email}
+                onChange={handleEmailChange}
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="password" className="block text-gray-700">
                 Password
               </label>
               <input
-                type="text"
-                id="login"
+                type="password"
+                id="password"
                 className="block w-full mt-2 p-2 border border-gray-300 rounded"
                 placeholder="********"
-                value={login}
-                onChange={handleEmployeeLogin}
+                value={password}
+                onChange={handlePasswordChange}
               />
             </div>
             {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
@@ -90,4 +110,4 @@ const SuperAdminLogin = () => {
   );
 };
 
-export default SuperAdminLogin;
+export default BouncerLogin;

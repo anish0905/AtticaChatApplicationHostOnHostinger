@@ -36,6 +36,8 @@ router.get("/getAllMonitoringTeam", authController.getAllMonitoringTeam);
 
 router.get("/getAllSecurityTeam", authController.getAllSecurity);
 
+router.get("/getAllBouncersTeam", authController.getAllBouncers);
+
 
 router.get("/getbyId/:id", authController.getById)
 router.delete("/delete/:id", authController.deleteById)

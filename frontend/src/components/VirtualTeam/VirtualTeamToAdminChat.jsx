@@ -1,18 +1,16 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import DigitalMarktingFileModel from "./DigitalMarktingFileModel";
+import VirtualTeamFileModel from "./VirtualTeamFileModel";
 import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
-import ForwardMsgDigitalMarketingToAdmin from "./ForwardMsgDigitalMarketingToAdmin";
-import Sidebar from "./DigitalMarketingSideBar";
+import ForwardMsgVirtualTeamToAdmin from "./ForwardMsgVirtualTeamToAdmin";
+import VirtualTeamSidebar from "./VirtualTeamSidebar"
 
 function DigitalMarketingToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -71,7 +69,7 @@ function DigitalMarketingToAdminChat() {
       .catch((error) => {
         console.error(error);
       });
-  }, []);
+  }, [loggedInUserId]);
 
   // Fetch initial messages between logged-in user and selected recipient
   useEffect(() => {
@@ -270,7 +268,7 @@ function DigitalMarketingToAdminChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-      <Sidebar />
+      <VirtualTeamSidebar/>
       <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
@@ -426,7 +424,7 @@ function DigitalMarketingToAdminChat() {
           >
             Send
           </button>
-          <DigitalMarktingFileModel sender={loggedInUserId} recipient={recipient} />
+          <VirtualTeamFileModel sender={loggedInUserId} recipient={recipient} />
         </div>
       </div>
       {showPopSms && (
@@ -458,7 +456,7 @@ function DigitalMarketingToAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardMsgDigitalMarketingToAdmin
+        <ForwardMsgVirtualTeamToAdmin
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
