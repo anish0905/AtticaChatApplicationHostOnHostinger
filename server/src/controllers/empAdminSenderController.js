@@ -95,8 +95,8 @@ const createMessage = async (req, res) => {
       recipient,
       content,
     });
-    
-   const result =await notification.save();
+
+    const result = await notification.save();
     res.status(201).json({ message: "Message sent", data: message });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -136,8 +136,7 @@ const getMessagesEmp = async (req, res) => {
 const getAdminMessages = async (req, res) => {
   const { userId1, userId2 } = req.params;
 
-  console.log(userId1, userId2);
-
+ 
   if (!ObjectId.isValid(userId1) || !ObjectId.isValid(userId2)) {
     return res.status(400).json({ message: "Invalid user ids" });
   }
@@ -150,7 +149,7 @@ const getAdminMessages = async (req, res) => {
       ],
     }).sort({ createdAt: 1 });
 
-    console.log(messages);
+   
 
     res.status(200).json(messages);
   } catch (error) {
@@ -158,42 +157,42 @@ const getAdminMessages = async (req, res) => {
   }
 };
 
-const getAllEmployee= async(req,res)=>{
+const getAllEmployee = async (req, res) => {
 
   try {
     const user = await MessageRes.find();
-    if(!user){
-      res.status(400).json({ message: error.message|| "user is not exists" });
+    if (!user) {
+      res.status(400).json({ message: error.message || "user is not exists" });
     }
 
-    res.status(200).json(user,{message:"use fetch sucessfully",suceess:true});
-    
+    res.status(200).json(user, { message: "use fetch sucessfully", suceess: true });
+
   } catch (error) {
     res.status(400).json({ message: error.message });
-    
+
   }
 
 }
-const getAllEmployeeById= async(req,res)=>{
- const {id} = req.params
+const getAllEmployeeById = async (req, res) => {
+  const { id } = req.params
   try {
-    const user = await MessageRes.findById({_id:id});
-    if(!user){
-      res.status(400).json({ message: error.message|| "user is not exists" });
+    const user = await MessageRes.findById({ _id: id });
+    if (!user) {
+      res.status(400).json({ message: error.message || "user is not exists" });
     }
 
-    res.status(200).json(user,{message:"use fetch sucessfully",suceess:true});
-    
+    res.status(200).json(user, { message: "use fetch sucessfully", suceess: true });
+
   } catch (error) {
     res.status(400).json({ message: error.message });
-    
+
   }
 
 }
 
-const markMessagesRead = async (req, res) => {  
+const markMessagesRead = async (req, res) => {
   const userId = req.params.userId;
-  try { 
+  try {
     // console.log(`Received userId: ${userId}`);
     const recipientObjectId = new ObjectId(userId);
     // console.log(`Converted to ObjectId: ${recipientObjectId}`);
@@ -201,7 +200,7 @@ const markMessagesRead = async (req, res) => {
     const result = await MessageRes.aggregate([
       {
         $match: {
-          recipient: recipientObjectId,  
+          recipient: recipientObjectId,
         }
       },
       {
@@ -290,5 +289,39 @@ const forwardMessage = async (req, res) => {
   }
 };
 
+const replyToMessage = async (req, res) => {
+  try {
+    const { parentMessageId, sender, recipient, text, image, document, video } = req.body;
 
-module.exports = { createMessage, getMessagesEmp, getAdminMessages,getAllEmployee,getAllEmployeeById ,markMessagesRead,markMessagesReadEmp ,forwardMessage};
+    // Find the parent message by ID
+    const parentMessage = await MessageRes.findById(parentMessageId);
+
+    // Check if the parent message exists
+    if (!parentMessage) {
+      return res.status(404).json({ error: "Parent message not found" });
+    }
+
+    // Create the reply message
+    const replyMessage = new MessageRes({
+      sender,
+      recipient,
+      content: {
+        text, image, document, video,
+        originalMessage:
+          parentMessage.content.text ||
+          parentMessage.content.originalMessage ||
+          "",
+      },
+      parentMessage: parentMessageId, // Reference to the parent message
+    });
+
+    // Save the reply message
+    await replyMessage.save();
+
+    res.status(201).json(replyMessage);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { createMessage, getMessagesEmp, getAdminMessages, getAllEmployee, getAllEmployeeById, markMessagesRead, markMessagesReadEmp, forwardMessage, replyToMessage };

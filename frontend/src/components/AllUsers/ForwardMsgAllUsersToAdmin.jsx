@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { BASE_URL } from "../../constants";
 
 
-const ForwardMsgDigitalMarketingToAdmin = ({
+const ForwardMsgAllUsersToAdmin = ({
   users,
   onForward,
   onCancel,
@@ -76,4 +76,4 @@ const ForwardMsgDigitalMarketingToAdmin = ({
   );
 };
 
-export default ForwardMsgDigitalMarketingToAdmin;
+export default ForwardMsgAllUsersToAdmin;

@@ -17,6 +17,16 @@ const empAdminSender = new mongoose.Schema(
         type: String,
         required: false,
       },
+      originalMessage: {
+        type: "string",
+
+        required: false,
+      },
+      replyMsg: {
+        type: "string",
+
+        required: false,
+      },
       image: {
         type: String,
         required: false,

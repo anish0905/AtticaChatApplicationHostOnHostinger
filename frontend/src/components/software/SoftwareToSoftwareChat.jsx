@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
@@ -7,12 +9,14 @@ import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
-import ReplyModel from "../../components/ReplyModel";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import Sidebar from "../AllUsers/Sidebar";
+import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers"
+import ReplyModel from "../ReplyModel";
 
-function DigitalToDigitalTamChat() {
+
+
+function SoftwareToSoftware() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [users, setUsers] = useState([]);
@@ -61,7 +65,7 @@ function DigitalToDigitalTamChat() {
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/api/allUser/getAllDigitalMarketingTeam`)
+      .get(`${BASE_URL}/api/allUser/getAllSoftwareTeam`)
       .then((response) => {
         const filteredUsers = response.data.filter(
           (user) => user._id !== loggedInUserId
@@ -212,6 +216,7 @@ function DigitalToDigitalTamChat() {
     setShowReplyModal(true);
   };
 
+
   const handleForward = (message) => {
     console.log(message);
     setForwardMessage(message);
@@ -220,6 +225,7 @@ function DigitalToDigitalTamChat() {
   };
 
   const handleForwardMessage = () => {
+
     setShowForwardModal(false);
     setShowDropdown(null);
   };
@@ -228,11 +234,12 @@ function DigitalToDigitalTamChat() {
     setShowForwardModal(false);
   };
 
+
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      <Sidebar value="DIGITALMARKETING" />
+      <Sidebar value="SOFTWARE" />
       {showChat ? (
-        <div className="w-full flex flex-col justify-between overflow-hidden">
+        <div className="w-full  flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-blue-200 sticky top-0 z-10">
             <div>
               <h1 className="text-2xl font-bold">{recipientName}</h1>
@@ -252,6 +259,7 @@ function DigitalToDigitalTamChat() {
                     ? "bg-blue-200 self-end"
                     : "bg-gray-200 self-start"
                   }`}
+
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
               >
@@ -264,9 +272,7 @@ function DigitalToDigitalTamChat() {
                   </div>
                 )}
                 {message.content && message.content.text && (
-                  <p className="font-bold">
-                    
-                    {message.content.text}</p>
+                  <p className="font-bold">{message.content.text}</p>
                 )}
                 {message.content && message.content.image && (
                   <img
@@ -310,7 +316,6 @@ function DigitalToDigitalTamChat() {
                     >
                       Reply
                     </button>
-
                     <button
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => handleForward(message)}
@@ -407,16 +412,14 @@ function DigitalToDigitalTamChat() {
           </div>
         </div>
       )}
-
       {showForwardModal && (
-        <ForwardModalAllUsers
+        < ForwardModalAllUsers
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
         />
       )}
-
       {replyMessage && (
         <ReplyModel
           message={replyMessage}
@@ -431,4 +434,4 @@ function DigitalToDigitalTamChat() {
   );
 }
 
-export default DigitalToDigitalTamChat;
+export default SoftwareToSoftware;

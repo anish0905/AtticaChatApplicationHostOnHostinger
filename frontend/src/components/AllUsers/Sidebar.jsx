@@ -8,15 +8,53 @@ import { RiContactsLine } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from "../../assests/logo.png";
 
-const VirtualTeamSidebar = () => {
+const Sidebar = ({value}) => {
+  console.log("value    ",value,"   ")
   const navigate = useNavigate();
   const location = useLocation();
   
   
-
   const handleChat = () => {
-    navigate("/VirtualTeamToVirtualTeam");
+    if (value === "HR") {
+      navigate("/HrToHrChat");
+    } else if (value === "ACCOUNT") {
+      navigate("/AccountToAccountChat");
+    }else if (value === "SOFTWARE") {
+      navigate("/SoftwareToSoftwareChat");
+    }else if (value === "BOUNCER") {
+      navigate("/bouncerChat");
+    }else if (value === "DIGITALMARKETING") {
+      navigate("/DigitalMarketingChatToDigitalMarketing");
+    }else if (value === "MONITORING") {
+      navigate("/monitoringTeamChat");
+    }else if (value === "VIRTUAL") {
+      navigate("/VirtualTeamToVirtualTeam");
+    }
+     else {
+      navigate("/");
+    }
   };
+
+  const handleAdminChat = () => {
+    if (value === "HR") {
+      navigate("/HrToAdminChat");
+    } else if (value === "ACCOUNT") {
+      navigate("/AccountToAdminChat");
+    }
+    else if (value === "SOFTWARE") {
+      navigate("/SoftwareToAdminChat");
+    }else if (value === "BOUNCER") {
+      navigate("/BouncerToAdminChat");
+    }else if (value === "DIGITALMARKENTING") {
+      navigate("/DigitalMarketingToAdminChat");
+    } else if (value === "MONITORING") {
+      navigate("/MonitoringTeamToAdminChat");
+    }else if (value === "VIRTUAL") {
+      navigate("/VirtualTeamToAdminChat");
+    }else {
+      navigate("/");
+    }
+  }
 
   const handleLogout = () => {
     navigate("/");
@@ -32,16 +70,7 @@ const VirtualTeamSidebar = () => {
       </div>
       
       <div className="flex flex-row lg:flex-col gap-[10px] sm:gap-[10px] md:gap-[10px] lg:gap-[40px] relative">
-        {/* <div 
-          onClick={handleGroup} 
-          className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/empgroupchat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
-        >
-          <GrChatOption />
-          <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-white text-black text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Group Chat
-          </span>
-        </div> */}
-        <div 
+          <div 
           onClick={handleChat} 
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/chat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
         >
@@ -50,17 +79,17 @@ const VirtualTeamSidebar = () => {
             Chat
           </span>
         </div>
-        
-        <Link 
-          to="/VirtualTeamToAdminChat" 
-          className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/empToadmin") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
+
+        <div 
+          onClick={handleAdminChat } 
+          className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/chat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
         >
-          <RiContactsLine />
+          <RiContactsLine/>
           <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-white text-black text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Admin
+          Admin
           </span>
-        </Link>
-        
+        </div>
+             
       </div>
       
       <div onClick={handleLogout} className="group relative flex items-center bg-[#fffefd] rounded-full p-3 md:p-5 ">
@@ -73,4 +102,4 @@ const VirtualTeamSidebar = () => {
   );
 };
 
-export default VirtualTeamSidebar;
+export default Sidebar;

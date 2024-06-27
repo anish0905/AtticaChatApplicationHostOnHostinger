@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { BASE_URL } from "../../constants";
-import CallCenterSidebar from "./CallCenterSidebar";
+import Sidebar from "../../components/admin/Sidebar" 
 import CallCenterDetails from "./CallCenterDetails";
 
 const CallCenterRegister = () => {
@@ -48,7 +48,7 @@ const CallCenterRegister = () => {
 
   return (
     <div className="lg:flex block bg-[#f6f5fb]">
-     <CallCenterSidebar/>
+<Sidebar/>
       <div className="flex-1 p-6">
         <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
           <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">

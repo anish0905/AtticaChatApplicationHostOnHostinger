@@ -6,12 +6,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
-const Modal = ({ show, onClose, accountTeam, onUpdate }) => {
-  const [formData, setFormData] = useState({ ...accountTeam });
+const Modal = ({ show, onClose, SoftwareTeam, onUpdate }) => {
+  const [formData, setFormData] = useState({ ...SoftwareTeam });
 
   useEffect(() => {
-    setFormData({ ...accountTeam });
-  }, [accountTeam]);
+    setFormData({ ...SoftwareTeam });
+  }, [SoftwareTeam]);
 
   if (!show) return null;
 
@@ -31,12 +31,12 @@ const Modal = ({ show, onClose, accountTeam, onUpdate }) => {
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Edit Account Team Details</h2>
+        <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Edit Software Details</h2>
         <form>
           {[
-            { label: "Account Team Name", name: "name", type: "text" },
-            { label: "Account Team Email", name: "email", type: "email" },
-            { label: "Account Team Password", name: "password", type: "password" }
+            { label: "Software Name", name: "name", type: "text" },
+            { label: "Software Email", name: "email", type: "email" },
+            { label: "Software Password", name: "password", type: "password" }
           ].map((field, index) => (
             <div className="mb-4" key={index}>
               <label
@@ -77,58 +77,58 @@ const Modal = ({ show, onClose, accountTeam, onUpdate }) => {
   );
 };
 
-const AccountTeamDetails = () => {
-  const [accountTeams, setAccountTeams] = useState([]);
+const SoftwareDetails = () => {
+  const [SoftwareTeams, setSoftwareTeams] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [selectedAccountTeam, setSelectedAccountTeam] = useState(null);
+  const [selectedSoftwareTeam, setSelectedSoftwareTeam] = useState(null);
 
   useEffect(() => {
-    const fetchAccountTeams = async () => {
+    const fetchSoftwareTeams = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/allUser/getAllAccountantTeam`);
-        setAccountTeams(res.data);
+        const res = await axios.get(`${BASE_URL}/api/allUser/getAllSoftwareTeam`);
+        setSoftwareTeams(res.data);
       } catch (error) {
-        console.error("Error fetching Account Teams", error);
+        console.error("Error fetching Virtual Teams", error);
       }
     };
 
-    fetchAccountTeams();
+    fetchSoftwareTeams();
   }, []);
 
-  const handleEdit = (accountTeam) => {
-    setSelectedAccountTeam(accountTeam);
+  const handleEdit = (SoftwareTeam) => {
+    setSelectedSoftwareTeam(SoftwareTeam);
     setShowModal(true);
   };
 
-  const handleDelete = async (accountTeamId) => {
+  const handleDelete = async (SoftwareTeamId) => {
     try {
       if (window.confirm("Are you sure? The data will be deleted permanently.")) {
-        await axios.delete(`${BASE_URL}/api/allUser/delete/${accountTeamId}`);
-        setAccountTeams(accountTeams.filter((team) => team._id !== accountTeamId));
-        toast.success('Account Team deleted successfully');
+        await axios.delete(`${BASE_URL}/api/allUser/delete/${SoftwareTeamId}`);
+        setSoftwareTeams(SoftwareTeams.filter((team) => team._id !== SoftwareTeamId));
+        toast.success('Virtual Team deleted successfully');
       }
     } catch (error) {
-      console.error("Error deleting Account Team", error);
-      toast.error('Failed to delete Account Team');
+      console.error("Error deleting Virtual Team", error);
+      toast.error('Failed to delete Virtual Team');
     }
   };
 
-  const handleUpdate = async (updatedAccountTeam) => {
+  const handleUpdate = async (updatedSoftwareTeam) => {
     try {
       const res = await axios.patch(
-        `${BASE_URL}/api/allUser/update/${updatedAccountTeam._id}`,
-        updatedAccountTeam
+        `${BASE_URL}/api/allUser/update/${updatedSoftwareTeam._id}`,
+        updatedSoftwareTeam
       );
-      setAccountTeams(
-        accountTeams.map((team) =>
-          team._id === updatedAccountTeam._id ? res.data.updatedAccountTeam : team
+      setSoftwareTeams(
+        SoftwareTeams.map((team) =>
+          team._id === updatedSoftwareTeam._id ? res.data.updatedSoftwareTeam : team
         )
       );
       window.location.reload(); // Fixed reload method
-      toast.success('Account Team details updated successfully');
+      toast.success('Virtual Team details updated successfully');
     } catch (error) {
-      console.error("Error updating Account Team", error);
-      toast.error('Failed to update Account Team');
+      console.error("Error updating Virtual Team", error);
+      toast.error('Failed to update Virtual Team');
     }
   };
 
@@ -155,7 +155,7 @@ const AccountTeamDetails = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-              {accountTeams.map((team) => (
+              {SoftwareTeams.map((team) => (
                 <tr key={team._id}>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                     {team?._id}
@@ -186,11 +186,11 @@ const AccountTeamDetails = () => {
           </table>
         </div>
       </div>
-      {selectedAccountTeam && (
+      {selectedSoftwareTeam && (
         <Modal
           show={showModal}
           onClose={() => setShowModal(false)}
-          accountTeam={selectedAccountTeam}
+          SoftwareTeam={selectedSoftwareTeam}
           onUpdate={handleUpdate}
         />
       )}
@@ -198,4 +198,4 @@ const AccountTeamDetails = () => {
   );
 };
 
-export default AccountTeamDetails;
+export default SoftwareDetails;

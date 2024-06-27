@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
+import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
 import { IoIosDocument } from "react-icons/io";
 import { FaPaperclip } from "react-icons/fa";
 import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logo from "../../assests/logo.png";
-import MonitoringTeamSideBar from "./MonitoringSidebar";
+import ReplyModel from "../../components/ReplyModel";
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
+import Sidebar from "../AllUsers/Sidebar";
+
 
 function MonitoringTeamChat() {
   const [messages, setMessages] = useState([]);
@@ -34,7 +36,8 @@ function MonitoringTeamChat() {
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
-  const navigate = useNavigate();
+  const [replyMessage, setReplyMessage] = useState(null);
+  const [showReplyModal, setShowReplyModal] = useState(false);
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -49,6 +52,7 @@ function MonitoringTeamChat() {
       .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
       .then((response) => {
         setMessages(response.data);
+        console.log(response);
       })
       .catch((error) => {
         console.error(error);
@@ -205,7 +209,8 @@ function MonitoringTeamChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text}`);
+    setReplyMessage(message);
+    setShowReplyModal(true);
   };
 
   const handleForward = (message) => {
@@ -216,6 +221,7 @@ function MonitoringTeamChat() {
   };
 
   const handleForwardMessage = () => {
+
     setShowForwardModal(false);
     setShowDropdown(null);
   };
@@ -224,9 +230,10 @@ function MonitoringTeamChat() {
     setShowForwardModal(false);
   };
 
+
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      <MonitoringTeamSideBar />
+  <Sidebar value="MONITORING" />
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-blue-200 sticky top-0 z-10">
@@ -241,7 +248,7 @@ function MonitoringTeamChat() {
             </button>
           </div>
           <div className="flex-grow overflow-y-auto p-4 flex flex-col">
-            {messages.map((message, index) => (
+            {messages.map((message,index) => (
               <div
                 key={message._id}
                 className={`mb-4 p-4 rounded-lg max-w-[70%] relative ${
@@ -249,9 +256,17 @@ function MonitoringTeamChat() {
                     ? "bg-blue-200 self-end"
                     : "bg-gray-200 self-start"
                 }`}
+
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
               >
+                  {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )}
                 {message.content && message.content.text && (
                   <p className="font-bold">{message.content.text}</p>
                 )}
@@ -281,30 +296,30 @@ function MonitoringTeamChat() {
                 <span className="text-xs text-gray-500">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
-
+              
                 {hoveredMessage === index && (
-                  <AiOutlineDown
-                    className="absolute top-2 right-2 cursor-pointer"
-                    onClick={() => handleDropdownClick(index)}
-                  />
-                )}
-
-                {showDropdown === index && (
-                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
-                    <button
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleReply(message)}
-                    >
-                      Reply
-                    </button>
-                    <button
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleForward(message)}
-                    >
-                      Forward
-                    </button>
-                  </div>
-                )}
+                    <AiOutlineDown
+                      className="absolute top-2 right-2 cursor-pointer"
+                      onClick={() => handleDropdownClick(index)}
+                    />
+                  )}
+            
+                  {showDropdown === index && (
+                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleReply(message)}
+                      >
+                        Reply
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleForward(message)}
+                      >
+                        Forward
+                      </button>
+                    </div>
+                  )}
               </div>
             ))}
             <div ref={messagesEndRef} />
@@ -332,6 +347,7 @@ function MonitoringTeamChat() {
             >
               Send
             </button>
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
           </div>
         </div>
       ) : (
@@ -349,9 +365,7 @@ function MonitoringTeamChat() {
           <ul>
             {users
               .filter((user) =>
-                user.name
-                  .toLowerCase()
-                  .includes(userSearchQuery.toLowerCase())
+                user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
               )
               .map((user) => (
                 <li
@@ -377,32 +391,44 @@ function MonitoringTeamChat() {
         </div>
       )}
 
-      {showPopSms && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg border border-blue-500">
-            <div className="flex items-center mb-4">
-              <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
-              <h3 className="text-lg font-semibold">New Message</h3>
-            </div>
-            <p className="mb-2">From: {selectedSenderName}</p>
-            <p className="mb-4">Message: {popSms[0]?.content?.text}</p>
-            <button
-              onClick={() => handleModalClose(popSms[0]?.sender)}
-              className="bg-blue-500 text-white p-2 rounded-lg"
-            >
-              Close
-            </button>
-          </div>
-        </div>
+{showPopSms && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white p-4 rounded-lg shadow-lg border border-blue-500">
+      <div className="flex items-center mb-4">
+        <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
+        <h3 className="text-lg font-semibold">New Message</h3>
+      </div>
+      <p className="mb-2">From: {selectedSenderName}</p>
+      <p className="mb-4">Message: {popSms[0]?.content?.text}</p>
+      <button
+        onClick={() => handleModalClose(popSms[0]?.sender)}
+        className="bg-blue-500 text-white p-2 rounded-lg"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+{showForwardModal && (
+        <ForwardModalAllUsers
+          users={users}
+          forwardMessage={forwardMessage}
+          onForward={handleForwardMessage}
+          onCancel={handleCancelForward}
+        />
       )}
-      {showForwardModal && (
-        <div>
-          <a onClick={() => navigate('/')}>Back to Previous Page </a>
-        </div>
+      {replyMessage && (
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+
+        />
       )}
     </div>
   );
 }
 
 export default MonitoringTeamChat;
-

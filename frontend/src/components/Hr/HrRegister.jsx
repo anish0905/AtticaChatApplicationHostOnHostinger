@@ -1,17 +1,13 @@
-
-
 import React, { useState } from "react";
-import Sidebar from "../admin/Sidebar" 
 import { BASE_URL } from "../../constants";
-import VirtualTeamDetails from "./VirtualTeamDetails";
-
-
-const VirtualTeamRegistration = () => {
+import HrDetails from "./HrDetails";
+import Sidebar from "../../components/admin/Sidebar"  
+const HrRegister = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    role:"VirtualTeam"
+    role:"HR"
     });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -50,20 +46,20 @@ const VirtualTeamRegistration = () => {
 
   return (
     <div className="lg:flex block bg-[#f6f5fb]">
-<Sidebar/>
+    <Sidebar/>
     <div className="flex-1 p-6">
       <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
         <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">
-         Virtual Team Details
+         Hr Details
         </h1>
         <button
           onClick={() => setIsModalOpen(true)}
           className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
         >
-          Open Virtual Team Registration Form
+          Open Hr Registration Form
         </button>
       </div>
-        <VirtualTeamDetails/>
+        <HrDetails/>
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-4xl mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto">
@@ -145,4 +141,4 @@ const VirtualTeamRegistration = () => {
   );
 };
 
-export default VirtualTeamRegistration;
+export default HrRegister;

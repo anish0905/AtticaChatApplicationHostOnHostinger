@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
@@ -8,12 +10,12 @@ import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
-import ReplyModel from "../ReplyModel";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
-import Sidebar from "../AllUsers/Sidebar"
+import Sidebar from "../AllUsers/Sidebar";
+import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin"
+import ReplyModel from "../ReplyModel";
 
-function BouncerToAdminChat() {
+function SoftwareToAdminChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [users, setUsers] = useState([]);
@@ -39,6 +41,7 @@ function BouncerToAdminChat() {
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [replyMessage, setReplyMessage] = useState(null); //--------------->
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
+
 
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
@@ -72,14 +75,13 @@ function BouncerToAdminChat() {
       .catch((error) => {
         console.error(error);
       });
-  }, [loggedInUserId]);
+  }, []);
 
   // Fetch initial messages between logged-in user and selected recipient
   useEffect(() => {
-    if (loggedInUserId && recipient) {
-      fetchMessages(loggedInUserId, recipient);
-    }
-  }, [loggedInUserId, recipient]);
+    const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
+    return () => clearInterval(intervalId);
+  }, [recipient]);
 
   // Automatically scroll to bottom when new messages are received
   useEffect(() => {
@@ -151,11 +153,11 @@ function BouncerToAdminChat() {
       };
 
       // Initial fetch and set interval to fetch every 3 seconds
-      fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 3000);
+      // fetchUnreadMessages();
+      // const intervalId = setInterval(fetchUnreadMessages, 3000);
 
-      // Clear interval on component unmount
-      return () => clearInterval(intervalId);
+      // // Clear interval on component unmount
+      // return () => clearInterval(intervalId);
     }
   }, [users]);
 
@@ -178,12 +180,12 @@ function BouncerToAdminChat() {
         }
       };
 
-      // Initial fetch and set interval to fetch every 3 seconds
-      fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 3000);
+      // // Initial fetch and set interval to fetch every 3 seconds
+      // fetchUnreadMessages();
+      // const intervalId = setInterval(fetchUnreadMessages, 3000);
 
-      // Clear interval on component unmount
-      return () => clearInterval(intervalId);
+      // // Clear interval on component unmount
+      // return () => clearInterval(intervalId);
     }
   }, [admins]);
 
@@ -193,6 +195,7 @@ function BouncerToAdminChat() {
       ...prevShowMessages,
       [userId]: !prevShowMessages[userId],
     }));
+   
   };
 
   // Fetch pop-up SMS notifications for logged-in user
@@ -216,7 +219,7 @@ function BouncerToAdminChat() {
 
   // Fetch pop-up SMS notifications at regular intervals
   useEffect(() => {
-    const interval = setInterval(fetchPopSms, 5000);
+    const interval = setInterval(fetchPopSms, 2000);
     return () => clearInterval(interval);
   }, [loggedInUserId, playNotificationSound]);
 
@@ -248,6 +251,8 @@ function BouncerToAdminChat() {
     setReplyMessage(message);  //--------------->
     setShowReplyModal(true);   //--------------->
   };
+
+
   const handleForward = (message) => {
     setForwardMessage(message);
     setShowForwardModal(true);
@@ -270,7 +275,7 @@ function BouncerToAdminChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-      <Sidebar  value="BOUNCER" />
+      <Sidebar value="SOFTWARE" />
       <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
@@ -302,6 +307,14 @@ function BouncerToAdminChat() {
                       >
                         {!showMessages[admin._id] ? (
                           <>
+                           {/* //---------------> */}
+                 {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )} 
                             {message.content && message.content.text && (
                               <p className="pe-2 text-base">{message.content.text}</p>
                             )}
@@ -347,8 +360,9 @@ function BouncerToAdminChat() {
               <div
                 className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                   }`}
-              >
-                {message.content && message.content.originalMessage && (
+              >  
+               {/* //---------------> */}
+               {message.content && message.content.originalMessage && (
                   <div className="mb-2">
                     <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
                       {message.content.originalMessage}
@@ -465,7 +479,7 @@ function BouncerToAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardModalAllUsers
+        <ForwardMsgAllUsersToAdmin  
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
@@ -487,4 +501,4 @@ function BouncerToAdminChat() {
   );
 }
 
-export default BouncerToAdminChat;
+export default SoftwareToAdminChat;

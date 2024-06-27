@@ -1,6 +1,9 @@
 
+
+
 import * as React from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types'; // Import PropTypes for type checking
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
@@ -13,15 +16,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { FaFolderPlus } from "react-icons/fa";
 import { BASE_URL } from '../../constants';
 
-
-export default function VirtualTeamFileModel({ sender, recipient }) {
+export default function AllUsersFileModel({ sender, recipient, admin }) {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false); // Add loading state
+  const [error, setError] = React.useState(null); // Add error state
   const anchorRef = React.useRef(null);
   const imageInputRef = React.useRef(null);
   const documentInputRef = React.useRef(null);
   const videoInputRef = React.useRef(null);
-  // console.log(selectedGroupName, selectedGrade);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -57,28 +59,38 @@ export default function VirtualTeamFileModel({ sender, recipient }) {
     }
   };
 
-  const handleFileChange = async (event, fieldName) => { // Accept fieldName parameter
+  const handleFileChange = async (event, fieldName) => {
     const file = event.target.files[0];
     if (file) {
-  
       // Create a FormData object to hold the file
       const formData = new FormData();
       formData.append(fieldName, file); // Use fieldName as the field name
       formData.append('sender', sender);
       formData.append('recipient', recipient);
-      
 
       setLoading(true); // Set loading to true before upload starts
-      try {
-        const response = await axios.post(`${BASE_URL}/api/empadminsender/createMessage`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+      setError(null); // Reset error state
 
+      try {
+        let response;
+        if (admin === "admin") {
+          response = await axios.post(`${BASE_URL}/api/empadminsender/createMessage`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        } else {
+          
+            response = await axios.post(`${BASE_URL}/api/postmessages`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        }
         console.log('File uploaded successfully:', response.data);
       } catch (error) {
         console.error('Error uploading file:', error);
+        setError('Error uploading file. Please try again.'); // Set error message
       } finally {
         setLoading(false); // Set loading to false after upload completes
       }
@@ -146,7 +158,7 @@ export default function VirtualTeamFileModel({ sender, recipient }) {
         <input
           ref={documentInputRef}
           type="file"
-          accept="application/pdf"
+          accept=".pdf,.doc,.docx,.txt"
           style={{ display: 'none' }}
           onChange={(e) => handleFileChange(e, 'document')} // Pass 'document' as fieldName
         />
@@ -160,6 +172,13 @@ export default function VirtualTeamFileModel({ sender, recipient }) {
       </div>
 
       {loading && <CircularProgress className='absolute top-1/2 left-1/2' />} {/* Show spinner when loading is true */}
+      {error && <div style={{ color: 'red' }}>{error}</div>} {/* Show error message if error occurs */}
     </Stack>
   );
 }
+
+AllUsersFileModel.propTypes = {
+  sender: PropTypes.string.isRequired,
+  recipient: PropTypes.string.isRequired,
+  admin: PropTypes.string.isRequired,
+};

@@ -1,18 +1,24 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import DigitalMarktingFileModel from "./DigitalMarktingFileModel";
 import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
-import ForwardMsgDigitalMarketingToAdmin from "./ForwardMsgDigitalMarketingToAdmin";
+<<<<<<< HEAD
+
 import Sidebar from "./DigitalMarketingSideBar";
+import ReplyModel from "../ReplyModel";//--------------->
+import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
+=======
+import Sidebar from "../AllUsers/Sidebar"
+import ReplyModel from "../ReplyModel";//--------------->
+>>>>>>> 4b93a20281db06b737accaa3b06ee4bb737d84b4
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+
 
 function DigitalMarketingToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -38,6 +44,8 @@ function DigitalMarketingToAdminChat() {
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [hoveredMessage, setHoveredMessage] = useState(null);
+  const [replyMessage, setReplyMessage] = useState(null); //--------------->
+  const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
 
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
@@ -75,10 +83,10 @@ function DigitalMarketingToAdminChat() {
 
   // Fetch initial messages between logged-in user and selected recipient
   useEffect(() => {
-    if (loggedInUserId && recipient) {
-      fetchMessages(loggedInUserId, recipient);
-    }
-  }, [loggedInUserId, recipient]);
+    const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
+    return () => clearInterval(intervalId);
+  }, [recipient]);
+
 
   // Automatically scroll to bottom when new messages are received
   useEffect(() => {
@@ -215,7 +223,7 @@ function DigitalMarketingToAdminChat() {
 
   // Fetch pop-up SMS notifications at regular intervals
   useEffect(() => {
-    const interval = setInterval(fetchPopSms, 5000);
+    const interval = setInterval(fetchPopSms, 2000);
     return () => clearInterval(interval);
   }, [loggedInUserId, playNotificationSound]);
 
@@ -244,8 +252,8 @@ function DigitalMarketingToAdminChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text} `);
-    setShowDropdown(null);
+    setReplyMessage(message);  //--------------->
+    setShowReplyModal(true);   //--------------->
   };
 
   const handleForward = (message) => {
@@ -270,7 +278,7 @@ function DigitalMarketingToAdminChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-      <Sidebar />
+      <Sidebar value="DIGITALMARKETING"/>
       <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
@@ -348,6 +356,15 @@ function DigitalMarketingToAdminChat() {
                 className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                   }`}
               >
+                  {/* //---------------> */}
+                 {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )} 
+                {/* //---------------> */}
                 {message.content && message.content.text && (
                   <p className="text-sm">{message.content.text}</p>
                 )}
@@ -383,21 +400,22 @@ function DigitalMarketingToAdminChat() {
                       onClick={() => handleDropdownClick(index)}
                     />
                     {showDropdown === index && (
-                      <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleReply(message)}
-                        >
-                          Reply
-                        </button>
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleForward(message)}
-                        >
-                          Forward
-                        </button>
-                      </div>
-                    )}
+                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleReply(message)}
+                    >
+                      Reply
+                    </button>
+
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleForward(message)}
+                    >
+                      Forward
+                    </button>
+                  </div>
+                )}
                   </>
                 }
               </div>
@@ -426,7 +444,7 @@ function DigitalMarketingToAdminChat() {
           >
             Send
           </button>
-          <DigitalMarktingFileModel sender={loggedInUserId} recipient={recipient} />
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}/>
         </div>
       </div>
       {showPopSms && (
@@ -458,11 +476,26 @@ function DigitalMarketingToAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardMsgDigitalMarketingToAdmin
+<<<<<<< HEAD
+        <ForwardMsgAllUsersToAdmin
+=======
+        <ForwardModalAllUserslAllUsers
+>>>>>>> 4b93a20281db06b737accaa3b06ee4bb737d84b4
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
           onCancel={handleCancelForward}
+        />
+      )}
+      {replyMessage && ( ////--------------------->
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+          value={"Admin"}
+
         />
       )}
     </div>
