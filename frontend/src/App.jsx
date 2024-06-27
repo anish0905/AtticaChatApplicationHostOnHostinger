@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import './App.css'
 import AuthRequired from "./components/authentication/AuthRequired";
 import Dashboard from "./components/admin/Dashboard";
 import Login from "./components/employee/Login";

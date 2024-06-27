@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
 const messageSchema = new mongoose.Schema(
   {
     sender: {
@@ -16,6 +16,16 @@ const messageSchema = new mongoose.Schema(
     content: {
       text: {
         type: String,
+        required: false,
+      },
+      originalMessage: {
+        type: "string",
+
+        required: false,
+      },
+      replyMsg: {
+        type: "string",
+
         required: false,
       },
       image: {
