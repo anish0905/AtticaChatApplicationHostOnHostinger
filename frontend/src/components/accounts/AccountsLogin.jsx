@@ -30,7 +30,7 @@ const AccountsLogin = () => {
       localStorage.setItem("token", response.data.accessToken);
       console.log("response.data   ", response.data);
       localStorage.setItem("CurrentUserId", response.data._id);
-      navigate("/empDashbord");
+      navigate("/AccountToAccountChat");
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);

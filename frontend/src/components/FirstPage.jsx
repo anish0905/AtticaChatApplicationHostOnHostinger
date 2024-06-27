@@ -30,7 +30,7 @@ const FirstPage = () => {
   }
 
   const handleHrLogin=()=>{
-    navigate('/hr')
+    navigate('/HrLogin')
   }
 
 

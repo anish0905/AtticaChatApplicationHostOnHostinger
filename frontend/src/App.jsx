@@ -59,6 +59,12 @@ import CallCenterSidebar from "./components/CallCenter/CallCenterSidebar";
 import CallCenterToCallCenterChat from "./components/CallCenter/CallCenterToCallCenterChat";
 import VirtualTeamLogin from "./components/VirtualTeam/VirtualTeamLogin";
 import CallCenterToAdminChat from "./components/CallCenter/CallCenterToAdminChat";
+import HrRegister from "./components/Hr/HrRegister";
+import HrToHrChat from "./components/Hr/HrToHrChat";
+import HrToAdmin from "./components/Hr/HrToAdmin";
+import AccountToAccountChat from "./components/accounts/AccountToAccountChat";
+import AccountToAdminChat from "./components/accounts/AccountToAdminChat";
+
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
   return (
@@ -95,7 +101,7 @@ const App = () => {
             <Route path="/adminToadmin" element={<AdmintoAdmin/>} />
             <Route path="/admindashboard" element={<AdminDashboard />} />
               <Route path="/atticDashboard" element={<AtticDashboard/>} />
-            <Route path="/accounts" element={<AccountsLogin/>}/>
+           
             <Route path='/software' element={<SoftwareLogin/>}/>
             <Route path="/hr" element={<HrLogin/>}/>
             <Route path="/monitoringTeam" element={<MonitoringTeamLogin/>}/>
@@ -121,6 +127,16 @@ const App = () => {
             <Route path="/CallCenterReg" element={<CallCenterRegister />} />
             <Route path="/callCenter" element={<CallCenterLogin/>}/>
 
+
+          
+            <Route path="/HrReg" element={<HrRegister />} />
+            <Route path="/HrLogin" element={<HrLogin/>}/>
+            <Route path="/HrToHrChat" element={<HrToHrChat/>}/>
+            <Route path="/HrToAdminChat" element={<HrToAdmin/>}/>
+
+            <Route path="/accounts" element={<AccountsLogin/>}/>
+            <Route path="/AccountToAccountChat" element={<AccountToAccountChat/>}/>
+            <Route path="/AccountToAdminChat" element={<AccountToAdminChat/>}/>  
 
 
               {isSuperAdminLoggedIn ? (
