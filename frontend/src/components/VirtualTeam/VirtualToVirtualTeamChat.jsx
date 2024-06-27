@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
@@ -9,8 +7,10 @@ import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
-import VirtualTeamSidebar from "./VirtualTeamSidebar";
-import ForwardModalVirtualTeam from "./ForwordModalVirtualTeam";
+import ReplyModel from "../../components/ReplyModel";
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
+import Sidebar from "../AllUsers/Sidebar";
 
 
 
@@ -37,6 +37,8 @@ function VirtualToVirtualTeamChat() {
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
+  const [replyMessage, setReplyMessage] = useState(null);
+  const [showReplyModal, setShowReplyModal] = useState(false);
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -207,8 +209,9 @@ function VirtualToVirtualTeamChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text}`);
-  };
+    setReplyMessage(message);
+    setShowReplyModal(true);
+  }
 
   const handleForward = (message) => {
     console.log(message);
@@ -230,7 +233,7 @@ function VirtualToVirtualTeamChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      <VirtualTeamSidebar />
+      <Sidebar value="VIRTUAL" />
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-blue-200 sticky top-0 z-10">
@@ -257,6 +260,13 @@ function VirtualToVirtualTeamChat() {
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
               >
+                {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )}
                 {message.content && message.content.text && (
                   <p className="font-bold">{message.content.text}</p>
                 )}
@@ -337,6 +347,7 @@ function VirtualToVirtualTeamChat() {
             >
               Send
             </button>
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
           </div>
         </div>
       ) : (
@@ -399,11 +410,22 @@ function VirtualToVirtualTeamChat() {
   </div>
 )}
 {showForwardModal && (
-        <ForwardModalVirtualTeam
+        <ForwardModalAllUsers
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+        />
+      )}
+
+      {replyMessage && (
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+
         />
       )}
     </div>

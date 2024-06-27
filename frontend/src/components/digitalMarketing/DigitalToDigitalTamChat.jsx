@@ -7,10 +7,10 @@ import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
-import DigitalMarketingSideBar from "./DigitalMarketingSideBar";
 import ReplyModel from "../../components/ReplyModel";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
+import Sidebar from "../AllUsers/Sidebar";
 
 function DigitalToDigitalTamChat() {
   const [messages, setMessages] = useState([]);
@@ -230,7 +230,7 @@ function DigitalToDigitalTamChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      <DigitalMarketingSideBar />
+      <Sidebar value="DIGITALMARKETING" />
       {showChat ? (
         <div className="w-full flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-blue-200 sticky top-0 z-10">

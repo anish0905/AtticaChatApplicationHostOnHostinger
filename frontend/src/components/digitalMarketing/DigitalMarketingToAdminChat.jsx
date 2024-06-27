@@ -8,10 +8,15 @@ import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
+<<<<<<< HEAD
 
 import Sidebar from "./DigitalMarketingSideBar";
 import ReplyModel from "../ReplyModel";//--------------->
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
+=======
+import Sidebar from "../AllUsers/Sidebar"
+import ReplyModel from "../ReplyModel";//--------------->
+>>>>>>> 4b93a20281db06b737accaa3b06ee4bb737d84b4
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 
 
@@ -273,7 +278,7 @@ function DigitalMarketingToAdminChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-      <Sidebar />
+      <Sidebar value="DIGITALMARKETING"/>
       <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
@@ -471,7 +476,11 @@ function DigitalMarketingToAdminChat() {
         </div>
       )}
       {showForwardModal && (
+<<<<<<< HEAD
         <ForwardMsgAllUsersToAdmin
+=======
+        <ForwardModalAllUserslAllUsers
+>>>>>>> 4b93a20281db06b737accaa3b06ee4bb737d84b4
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
