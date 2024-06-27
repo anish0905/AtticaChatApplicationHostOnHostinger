@@ -9,6 +9,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from "../../assests/logo.png";
 
 const Sidebar = ({value}) => {
+  console.log("value    ",value,"   ")
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -20,6 +21,8 @@ console.log("value",value)
       navigate("/HrToHrChat");
     } else if (value === "ACCOUNT") {
       navigate("/AccountToAccountChat");
+    }else if (value === "SOFTWARE") {
+      navigate("/SoftwareToSoftwareChat");
     } else if (value === "SECURITY") {
       navigate("/SecurityChat");
     }  else {
@@ -32,6 +35,9 @@ console.log("value",value)
       navigate("/HrToAdminChat");
     } else if (value === "ACCOUNT") {
       navigate("/AccountToAdminChat");
+    }
+    else if (value === "SOFTWARE") {
+      navigate("/SoftwareToAdminChat");
     } else if(value === "SECURITY"){
       navigate("/SecurityToAdminChat");
     }else {

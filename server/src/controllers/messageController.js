@@ -257,26 +257,39 @@ const forwardMessage = async (req, res) => {
 
 const replyToMessage = async (req, res) => {
   try {
-    const { parentMessageId, sender, recipient, content } = req.body;
+    const { parentMessageId, sender, recipient, text,image,document,video } = req.body;
+
+    // Find the parent message by ID
     const parentMessage = await Message.findById(parentMessageId);
 
+    // Check if the parent message exists
     if (!parentMessage) {
       return res.status(404).json({ error: "Parent message not found" });
     }
 
+    // Create the reply message
     const replyMessage = new Message({
       sender,
       recipient,
-      content,
-      parentMessage: parentMessageId,
+      content: {
+        text,image,document,video,
+          originalMessage:
+          parentMessage.content.text ||
+          parentMessage.content.originalMessage ||
+          "",
+      },
+      parentMessage: parentMessageId, // Reference to the parent message
     });
 
+    // Save the reply message
     await replyMessage.save();
+
     res.status(201).json(replyMessage);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
+
 module.exports = {
   createMessage,
   getMessages,

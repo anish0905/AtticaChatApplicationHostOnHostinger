@@ -12,11 +12,10 @@ import { MdNotificationsActive } from "react-icons/md";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import Sidebar from "../AllUsers/Sidebar";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers"
-import ReplyModel from "../ReplyModel";//--------------->
 
 
 
-function SecurityToSecurityChat() {
+function SoftwareToSoftware() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [users, setUsers] = useState([]);
@@ -39,8 +38,6 @@ function SecurityToSecurityChat() {
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
-  const [replyMessage, setReplyMessage] = useState(null); //--------------->
-  const [showReplyModal, setShowReplyModal] = useState(false);  //--------
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -64,7 +61,7 @@ function SecurityToSecurityChat() {
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/api/allUser/getAllSecurityTeam`)
+      .get(`${BASE_URL}/api/allUser/getAllSoftwareTeam`)
       .then((response) => {
         const filteredUsers = response.data.filter(
           (user) => user._id !== loggedInUserId
@@ -211,8 +208,7 @@ function SecurityToSecurityChat() {
   };
 
   const handleReply = (message) => {
-    setReplyMessage(message);  //--------------->
-    setShowReplyModal(true);   //--------------->
+    setNewMessage(`Replying to: ${message.content.text}`);
   };
 
   const handleForward = (message) => {
@@ -235,7 +231,7 @@ function SecurityToSecurityChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      <Sidebar value="SECURITY" />
+      <Sidebar value="SOFTWARE" />
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-blue-200 sticky top-0 z-10">
@@ -265,15 +261,13 @@ function SecurityToSecurityChat() {
                 {message.content && message.content.text && (
                   <p className="font-bold">{message.content.text}</p>
                 )}
-                {/* //---------------> */}
-                {message.content && message.content.originalMessage && (
-                  <div className="mb-2">
-                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
-                      {message.content.originalMessage}
-                    </span>
-                  </div>
-                )} 
-                {/* //---------------> */}
+                {message.content && message.content.image && (
+                  <img
+                    src={message.content.image}
+                    alt="Image"
+                    className="max-w-xs"
+                  />
+                )}
                 {message.content && message.content.document && (
                   <a
                     href={message.content.document}
@@ -414,19 +408,8 @@ function SecurityToSecurityChat() {
           onCancel={handleCancelForward}
         />
       )}
-      {replyMessage && ( ////--------------------->
-        <ReplyModel
-          message={replyMessage}
-          sender={loggedInUserId}
-          recipient={recipient}
-          isVisible={showReplyModal}
-          onClose={() => setShowReplyModal(false)}
-          value={"Security"}
-
-        />
-      )}
     </div>
   );
 }
 
-export default SecurityToSecurityChat;
+export default SoftwareToSoftware;

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import './App.css'
 import AuthRequired from "./components/authentication/AuthRequired";
 import Dashboard from "./components/admin/Dashboard";
 import Login from "./components/employee/Login";
@@ -55,7 +56,6 @@ import VirtualTeamSidebar from "./components/VirtualTeam/VirtualTeamSidebar";
 import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualToVirtualTeamChat";
 import VirtualTeamToAdminChat from "./components/VirtualTeam/ForwardMsgVirtualTeamToAdmin";
 import CallCenterRegister from "./components/CallCenter/CallCenterRegister";
-import CallCenterSidebar from "./components/CallCenter/CallCenterSidebar";
 import CallCenterToCallCenterChat from "./components/CallCenter/CallCenterToCallCenterChat";
 import VirtualTeamLogin from "./components/VirtualTeam/VirtualTeamLogin";
 import CallCenterToAdminChat from "./components/CallCenter/CallCenterToAdminChat";
@@ -65,6 +65,9 @@ import HrToAdmin from "./components/Hr/HrToAdmin";
 import AccountToAccountChat from "./components/accounts/AccountToAccountChat";
 import AccountToAdminChat from "./components/accounts/AccountToAdminChat";
 import SecurityLogin from "./components/security/SecurityLogin";
+import SoftwareReg from "./components/software/SoftwareReg";
+import SoftwareToSoftware from "./components/software/SoftwareToSoftwareChat";
+import SoftwareToAdminChat from "./components/software/SoftwareToAdminChat";
 import SecurityToSecurityChat from "./components/security/SecurityToSecurityChat"
 import SecurityRegister from "./components/security/SecurityRegister";
 import SecurityToAdmin from "./components/security/SecurityToAdmin";
@@ -126,7 +129,6 @@ const App = () => {
             <Route path="/VirtualTeamReg" element={<VirtualTeamRegistration />} />
             <Route path="/virtualTeam" element={<VirtualTeamLogin/>}/>
 
-            <Route path="/CallCenterSidebar" element={<CallCenterSidebar/>} />
             <Route path="/CallCenterToCallCenter" element={<CallCenterToCallCenterChat/>} />
             <Route path="/CallCenterToAdminChat" element={<CallCenterToAdminChat/>} />
             <Route path="/CallCenterReg" element={<CallCenterRegister />} />
@@ -143,6 +145,11 @@ const App = () => {
             <Route path="/AccountToAccountChat" element={<AccountToAccountChat/>}/>
             <Route path="/AccountToAdminChat" element={<AccountToAdminChat/>}/>
 
+
+            <Route path="/SoftwareReg" element={<SoftwareReg />} />
+            <Route path="/SoftwareLogin" element={<SoftwareLogin/>}/>
+            <Route path="/SoftwareToSoftwareChat" element={<SoftwareToSoftware/>}/>
+            <Route path="/SoftwareToAdminChat" element={<SoftwareToAdminChat/>}/>
             <Route path="/SecurityChat" element={<SecurityToSecurityChat/>}/>  
             <Route path="/SecurityToAdminChat" element={<SecurityToAdmin/>}/>  
             <Route path="/SecurityReg" element={<SecurityRegister/>}/>  

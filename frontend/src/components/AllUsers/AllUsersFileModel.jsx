@@ -1,5 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import * as React from 'react';
 import axios from 'axios';
+import { useRef,useEffect, useState } from 'react';
+import PropTypes from 'prop-types'; // Import PropTypes for type checking
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
@@ -12,13 +14,14 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { FaFolderPlus } from 'react-icons/fa';
 import { BASE_URL } from '../../constants';
 
-const AllUsersFileModel = ({ sender, recipient }) => {
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false); // Add loading state
-  const anchorRef = useRef(null);
-  const imageInputRef = useRef(null);
-  const documentInputRef = useRef(null);
-  const videoInputRef = useRef(null);
+export default function AllUsersFileModel({ sender, recipient, admin }) {
+  const [open, setOpen] = React.useState(false);
+  const [loading, setLoading] = React.useState(false); // Add loading state
+  const [error, setError] = React.useState(null); // Add error state
+  const anchorRef = React.useRef(null);
+  const imageInputRef = React.useRef(null);
+  const documentInputRef = React.useRef(null);
+  const videoInputRef = React.useRef(null);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -57,21 +60,35 @@ const AllUsersFileModel = ({ sender, recipient }) => {
   const handleFileChange = async (event, fieldName) => {
     const file = event.target.files[0];
     if (file) {
+      // Create a FormData object to hold the file
       const formData = new FormData();
       formData.append(fieldName, file);
       formData.append('sender', sender);
       formData.append('recipient', recipient);
 
-      setLoading(true);
+      setLoading(true); // Set loading to true before upload starts
+      setError(null); // Reset error state
+
       try {
-        const response = await axios.post(`${BASE_URL}/api/empadminsender/createMessage`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        });
+        let response;
+        if (admin === "admin") {
+          response = await axios.post(`${BASE_URL}/api/empadminsender/createMessage`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        } else {
+          
+            response = await axios.post(`${BASE_URL}/api/postmessages`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        }
         console.log('File uploaded successfully:', response.data);
       } catch (error) {
         console.error('Error uploading file:', error);
+        setError('Error uploading file. Please try again.'); // Set error message
       } finally {
         setLoading(false);
       }
@@ -137,7 +154,7 @@ const AllUsersFileModel = ({ sender, recipient }) => {
         <input
           ref={documentInputRef}
           type="file"
-          accept="application/pdf"
+          accept=".pdf,.doc,.docx,.txt"
           style={{ display: 'none' }}
           onChange={(e) => handleFileChange(e, 'document')}
         />
@@ -150,9 +167,14 @@ const AllUsersFileModel = ({ sender, recipient }) => {
         />
       </div>
 
-      {loading && <CircularProgress className="absolute top-1/2 left-1/2" />} {/* Show spinner when loading is true */}
+      {loading && <CircularProgress className='absolute top-1/2 left-1/2' />} {/* Show spinner when loading is true */}
+      {error && <div style={{ color: 'red' }}>{error}</div>} {/* Show error message if error occurs */}
     </Stack>
   );
-};
+}
 
-export default AllUsersFileModel;
+AllUsersFileModel.propTypes = {
+  sender: PropTypes.string.isRequired,
+  recipient: PropTypes.string.isRequired,
+  admin: PropTypes.string.isRequired,
+};
