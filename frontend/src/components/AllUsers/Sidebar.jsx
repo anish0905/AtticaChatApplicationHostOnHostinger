@@ -21,6 +21,14 @@ const Sidebar = ({value}) => {
       navigate("/AccountToAccountChat");
     }else if (value === "SOFTWARE") {
       navigate("/SoftwareToSoftwareChat");
+    }else if (value === "BOUNCER") {
+      navigate("/bouncerChat");
+    }else if (value === "DIGITALMARKETING") {
+      navigate("/DigitalMarketingChatToDigitalMarketing");
+    }else if (value === "MONITORING") {
+      navigate("/monitoringTeamChat");
+    }else if (value === "VIRTUAL") {
+      navigate("/VirtualTeamToVirtualTeam");
     }
      else {
       navigate("/");
@@ -35,7 +43,15 @@ const Sidebar = ({value}) => {
     }
     else if (value === "SOFTWARE") {
       navigate("/SoftwareToAdminChat");
-    } else {
+    }else if (value === "BOUNCER") {
+      navigate("/BouncerToAdminChat");
+    }else if (value === "DIGITALMARKENTING") {
+      navigate("/DigitalMarketingToAdminChat");
+    } else if (value === "MONITORING") {
+      navigate("/MonitoringTeamToAdminChat");
+    }else if (value === "VIRTUAL") {
+      navigate("/VirtualTeamToAdminChat");
+    }else {
       navigate("/");
     }
   }
