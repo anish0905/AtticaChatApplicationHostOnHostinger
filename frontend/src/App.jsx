@@ -65,6 +65,9 @@ import HrToAdmin from "./components/Hr/HrToAdmin";
 import AccountToAccountChat from "./components/accounts/AccountToAccountChat";
 import AccountToAdminChat from "./components/accounts/AccountToAdminChat";
 import SecurityLogin from "./components/security/SecurityLogin";
+import SecurityToSecurityChat from "./components/security/SecurityToSecurityChat"
+import SecurityRegister from "./components/security/SecurityRegister";
+import SecurityToAdmin from "./components/security/SecurityToAdmin";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
@@ -138,7 +141,11 @@ const App = () => {
 
             <Route path="/accounts" element={<AccountsLogin/>}/>
             <Route path="/AccountToAccountChat" element={<AccountToAccountChat/>}/>
-            <Route path="/AccountToAdminChat" element={<AccountToAdminChat/>}/>  
+            <Route path="/AccountToAdminChat" element={<AccountToAdminChat/>}/>
+
+            <Route path="/SecurityChat" element={<SecurityToSecurityChat/>}/>  
+            <Route path="/SecurityToAdminChat" element={<SecurityToAdmin/>}/>  
+            <Route path="/SecurityReg" element={<SecurityRegister/>}/>  
 
 
               {isSuperAdminLoggedIn ? (

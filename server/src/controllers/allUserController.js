@@ -402,7 +402,7 @@ exports.getAllBouncers = async function (req, res) {
 
 exports.getAllSecurity = async function (req, res) {
   try {
-    const users = await User.find({ role: "Security" }).select("-password");
+    const users = await User.find({ role: "Security/CCTV" }).select("-password");
     res.json(users);
   } catch (err) {
     res.status(500).send(err);

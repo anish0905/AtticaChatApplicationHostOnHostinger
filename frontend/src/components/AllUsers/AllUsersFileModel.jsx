@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
@@ -9,17 +9,16 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
-import { FaFolderPlus } from "react-icons/fa";
+import { FaFolderPlus } from 'react-icons/fa';
 import { BASE_URL } from '../../constants';
 
-export default function AllUsersFileModel({ sender, recipient }) {
-  const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(false); // Add loading state
-  const anchorRef = React.useRef(null);
-  const imageInputRef = React.useRef(null);
-  const documentInputRef = React.useRef(null);
-  const videoInputRef = React.useRef(null);
-  // console.log(selectedGroupName, selectedGrade);
+const AllUsersFileModel = ({ sender, recipient }) => {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false); // Add loading state
+  const anchorRef = useRef(null);
+  const imageInputRef = useRef(null);
+  const documentInputRef = useRef(null);
+  const videoInputRef = useRef(null);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -41,8 +40,8 @@ export default function AllUsersFileModel({ sender, recipient }) {
     }
   };
 
-  const prevOpen = React.useRef(open);
-  React.useEffect(() => {
+  const prevOpen = useRef(open);
+  useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
@@ -55,34 +54,29 @@ export default function AllUsersFileModel({ sender, recipient }) {
     }
   };
 
-  const handleFileChange = async (event, fieldName) => { // Accept fieldName parameter
+  const handleFileChange = async (event, fieldName) => {
     const file = event.target.files[0];
     if (file) {
-  
-      // Create a FormData object to hold the file
       const formData = new FormData();
-      formData.append(fieldName, file); // Use fieldName as the field name
+      formData.append(fieldName, file);
       formData.append('sender', sender);
       formData.append('recipient', recipient);
-      
 
-      setLoading(true); // Set loading to true before upload starts
+      setLoading(true);
       try {
         const response = await axios.post(`${BASE_URL}/api/empadminsender/createMessage`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
         });
-
         console.log('File uploaded successfully:', response.data);
       } catch (error) {
         console.error('Error uploading file:', error);
       } finally {
-        setLoading(false); // Set loading to false after upload completes
+        setLoading(false);
       }
 
-      // Reset the input value to allow uploading the same file again if needed
-      event.target.value = null;
+      event.target.value = null; // Reset the input value
     }
   };
 
@@ -96,7 +90,7 @@ export default function AllUsersFileModel({ sender, recipient }) {
           aria-expanded={open ? 'true' : undefined}
           aria-haspopup="true"
           onClick={handleToggle}
-          sx={{ height: '60px', width: '60px', minWidth: 'unset', color: "purple" }}
+          sx={{ height: '60px', width: '60px', minWidth: 'unset', color: 'purple' }}
         >
           <FaFolderPlus size={32} />
         </Button>
@@ -112,8 +106,7 @@ export default function AllUsersFileModel({ sender, recipient }) {
             <Grow
               {...TransitionProps}
               style={{
-                transformOrigin:
-                  placement === 'bottom-start' ? 'left top' : 'left bottom',
+                transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
               }}
             >
               <Paper>
@@ -139,25 +132,27 @@ export default function AllUsersFileModel({ sender, recipient }) {
           type="file"
           accept="image/*"
           style={{ display: 'none' }}
-          onChange={(e) => handleFileChange(e, 'image')} // Pass 'image' as fieldName
+          onChange={(e) => handleFileChange(e, 'image')}
         />
         <input
           ref={documentInputRef}
           type="file"
           accept="application/pdf"
           style={{ display: 'none' }}
-          onChange={(e) => handleFileChange(e, 'document')} // Pass 'document' as fieldName
+          onChange={(e) => handleFileChange(e, 'document')}
         />
         <input
           ref={videoInputRef}
           type="file"
           accept="video/*"
           style={{ display: 'none' }}
-          onChange={(e) => handleFileChange(e, 'video')} // Pass 'video' as fieldName
+          onChange={(e) => handleFileChange(e, 'video')}
         />
       </div>
 
-      {loading && <CircularProgress className='absolute top-1/2 left-1/2' />} {/* Show spinner when loading is true */}
+      {loading && <CircularProgress className="absolute top-1/2 left-1/2" />} {/* Show spinner when loading is true */}
     </Stack>
   );
-}
+};
+
+export default AllUsersFileModel;

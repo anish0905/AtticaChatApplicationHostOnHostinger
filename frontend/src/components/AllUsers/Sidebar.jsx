@@ -9,9 +9,10 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from "../../assests/logo.png";
 
 const Sidebar = ({value}) => {
-  console.log("HR  ",value,"   ")
   const navigate = useNavigate();
   const location = useLocation();
+
+console.log("value",value)
   
   
   const handleChat = () => {
@@ -19,7 +20,9 @@ const Sidebar = ({value}) => {
       navigate("/HrToHrChat");
     } else if (value === "ACCOUNT") {
       navigate("/AccountToAccountChat");
-    } else {
+    } else if (value === "SECURITY") {
+      navigate("/SecurityChat");
+    }  else {
       navigate("/");
     }
   };
@@ -29,7 +32,9 @@ const Sidebar = ({value}) => {
       navigate("/HrToAdminChat");
     } else if (value === "ACCOUNT") {
       navigate("/AccountToAdminChat");
-    } else {
+    } else if(value === "SECURITY"){
+      navigate("/SecurityToAdminChat");
+    }else {
       navigate("/");
     }
   }
