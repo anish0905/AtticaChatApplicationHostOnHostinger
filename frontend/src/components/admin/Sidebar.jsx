@@ -190,7 +190,7 @@ const Sidebar = () => {
         >
           <BsChatSquareDots className="text-lg md:text-2xl lg:text-3xl" />
           <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Employee
+            Employee Chat
           </span>
         </Link>
 
@@ -204,7 +204,7 @@ const Sidebar = () => {
         >
           <BiSolidMessageCheck  className="text-lg md:text-2xl lg:text-3xl" />
           <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Admin
+            Admin Chat
           </span>
         </Link>
       </div>

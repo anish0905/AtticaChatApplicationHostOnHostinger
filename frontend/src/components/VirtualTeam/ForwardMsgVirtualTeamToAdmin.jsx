@@ -45,7 +45,7 @@ const ForwardMsgVirtualTeamToAdmin = ({
       <div className="bg-white p-4 rounded shadow-lg w-full max-w-md">
         <h2 className="text-xl mb-4">Forward Message To:</h2>
         <div className="mb-4 max-h-60 overflow-y-auto">
-          {users.map((user) => (
+          {users?.map((user) => (
             <div key={user._id} className="flex items-center mb-2">
               <input
                 type="checkbox"
@@ -77,3 +77,6 @@ const ForwardMsgVirtualTeamToAdmin = ({
 };
 
 export default ForwardMsgVirtualTeamToAdmin;
+
+
+

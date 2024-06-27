@@ -156,6 +156,9 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
             </div>
           )}
 
+
+
+
           {selectedGroupName && selectedGrade && (
             <div className="flex flex-col flex-1 bg-[#f6f5fb]">
               <div className="text-[#ffffff] bg-[#5443c3] text-2xl p-4 flex gap-2 items-center justify-between">
@@ -167,6 +170,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                   <p>(Grade: {selectedGrade})</p>
                 </div>
               </div>
+
 
               <div
                 className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto"
@@ -180,7 +184,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                   >
                     <div
                       className={`${msg.employeeId === adminId ? "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl" : "bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-                        } py-2 px-4 rounded-lg max-w-md`}
+                        } py-2 px-4 rounded-lg max-w-lg`}
                     >
                       <p className={`text-sm font-bold ${msg.employeeId === adminId ? "text-green" : "text-purple-800"
                         }`}>
@@ -189,7 +193,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                       </p>
                       <p className="text-sm">{msg.message}</p>
                       {msg.Document && (
-                        <div className='text-8xl my-2'>
+                        <div className='text-8xl my-2 '>
                           <a href={msg.Document} download target="_blank" rel="noopener noreferrer">
                             <IoMdDocument />
                           </a>

@@ -53,7 +53,7 @@ import CallCenterLogin from "./components/CallCenter/CallCenterLogin";
 import VirtualTeamRegistration from "./components/VirtualTeam/VirtualTeamRegistration";
 import VirtualTeamSidebar from "./components/VirtualTeam/VirtualTeamSidebar";
 import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualToVirtualTeamChat";
-import VirtualTeamToAdminChat from "./components/VirtualTeam/VirtualTeamToAdminChat";
+import VirtualTeamToAdminChat from "./components/VirtualTeam/ForwardMsgVirtualTeamToAdmin";
 import CallCenterRegister from "./components/CallCenter/CallCenterRegister";
 import CallCenterSidebar from "./components/CallCenter/CallCenterSidebar";
 import CallCenterToCallCenterChat from "./components/CallCenter/CallCenterToCallCenterChat";
@@ -104,6 +104,7 @@ const App = () => {
            
             <Route path='/software' element={<SoftwareLogin/>}/>
             <Route path="/hr" element={<HrLogin/>}/>
+            <Route path="/security" element={<SecurityLogin/>}/>
             <Route path="/monitoringTeam" element={<MonitoringTeamLogin/>}/>
             <Route path="/MonitoringSideBar" element={<MonitoringTeamSideBar/>}/>
             <Route path="/monitoringTeamChat" element={<MonitoringTeamChat/>}/>
@@ -161,5 +162,5 @@ const App = () => {
     </BrowserRouter>
   )
 } 
+export default App  
 
-export default App

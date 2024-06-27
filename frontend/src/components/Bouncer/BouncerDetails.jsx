@@ -85,7 +85,7 @@ const BouncerDetails = () => {
   useEffect(() => {
     const fetchBouncers = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/allUser/getAllBouncers`);
+        const res = await axios.get(`${BASE_URL}/api/allUser/getAllBouncersTeam`);
         setBouncers(res.data);
       } catch (error) {
         console.error("Error fetching Bouncers", error);

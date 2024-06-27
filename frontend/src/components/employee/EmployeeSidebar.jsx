@@ -5,6 +5,7 @@ import { GrChatOption } from "react-icons/gr";
 import { RiContactsLine } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from "../../assests/logo.png";
+import { BiSolidMessageCheck } from "react-icons/bi";
 
 const EmployeeSidebar = () => {
   const navigate = useNavigate();
@@ -37,7 +38,7 @@ const EmployeeSidebar = () => {
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/empgroupchat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
         >
           <GrChatOption className="text-lg md:text-2xl lg:text-3xl"/>
-          <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-white text-black text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Group Chat
           </span>
         </div>
@@ -49,7 +50,7 @@ const EmployeeSidebar = () => {
 
           <BsChatSquareDots className="text-lg md:text-2xl lg:text-3xl" />
           <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Chat
+          Employee Chat
           </span>
         </div>
         
@@ -58,9 +59,9 @@ const EmployeeSidebar = () => {
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/empToadmin") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
         >
 
-          <RiContactsLine className="text-lg md:text-2xl lg:text-3xl"/>
+          <BiSolidMessageCheck className="text-lg md:text-2xl lg:text-3xl"/>
           <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Admin
+            Admin Chat
           </span>
         </Link>
         
