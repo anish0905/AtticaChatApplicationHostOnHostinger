@@ -315,9 +315,9 @@ function AdminEmpChat() {
       )}
 
               <h2 className="text-2xl font-semibold">{recipientName}</h2>
-
-             
             </div>
+
+
             {/* Messages */}
             <div className="overflow-y-auto flex-1 p-4">
               {messages.map((message, index) => (
@@ -331,6 +331,7 @@ function AdminEmpChat() {
                     onMouseEnter={() => handleHover(index)}
                     onMouseLeave={() => handleLeave()}
                   >
+                    
                     <div
                     className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                     }`}
