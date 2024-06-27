@@ -1,17 +1,21 @@
+
+
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
+import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
 import { IoIosDocument } from "react-icons/io";
 import { FaPaperclip } from "react-icons/fa";
 import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
-import { Link, useLocation, useNavigate } from 'react-router-dom';
-import logo from "../../assests/logo.png";
-import BouncerSideBar from "./BouncerSidebar"; // Adjust import to BouncerSidebar
+import BouncerSidebar from './BouncerSidebar'
+import ForwardModalBouncerTeam from './ForwardModalBouncerTeam'
+import BouncerModel from './BouncerModel'
 
-function BouncerTeamChat() { // Renamed component to BouncerTeamChat
+
+
+function BouncerTeamChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [users, setUsers] = useState([]);
@@ -34,7 +38,6 @@ function BouncerTeamChat() { // Renamed component to BouncerTeamChat
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
-  const navigate = useNavigate();
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -49,6 +52,7 @@ function BouncerTeamChat() { // Renamed component to BouncerTeamChat
       .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
       .then((response) => {
         setMessages(response.data);
+        console.log(response);
       })
       .catch((error) => {
         console.error(error);
@@ -57,7 +61,7 @@ function BouncerTeamChat() { // Renamed component to BouncerTeamChat
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/api/allUser/getAllBouncers`) // Adjust API endpoint for bouncers
+      .get(`${BASE_URL}/api/allUser/getAllMonitoringTeam`)
       .then((response) => {
         const filteredUsers = response.data.filter(
           (user) => user._id !== loggedInUserId
@@ -216,6 +220,7 @@ function BouncerTeamChat() { // Renamed component to BouncerTeamChat
   };
 
   const handleForwardMessage = () => {
+
     setShowForwardModal(false);
     setShowDropdown(null);
   };
@@ -224,9 +229,10 @@ function BouncerTeamChat() { // Renamed component to BouncerTeamChat
     setShowForwardModal(false);
   };
 
+
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      <BouncerSideBar /> {/* Replace with Bouncer sidebar */}
+      <BouncerSidebar />
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-blue-200 sticky top-0 z-10">
@@ -241,7 +247,7 @@ function BouncerTeamChat() { // Renamed component to BouncerTeamChat
             </button>
           </div>
           <div className="flex-grow overflow-y-auto p-4 flex flex-col">
-            {messages.map((message, index) => (
+            {messages.map((message,index) => (
               <div
                 key={message._id}
                 className={`mb-4 p-4 rounded-lg max-w-[70%] relative ${
@@ -249,6 +255,7 @@ function BouncerTeamChat() { // Renamed component to BouncerTeamChat
                     ? "bg-blue-200 self-end"
                     : "bg-gray-200 self-start"
                 }`}
+
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
               >
@@ -281,30 +288,30 @@ function BouncerTeamChat() { // Renamed component to BouncerTeamChat
                 <span className="text-xs text-gray-500">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
-
+              
                 {hoveredMessage === index && (
-                  <AiOutlineDown
-                    className="absolute top-2 right-2 cursor-pointer"
-                    onClick={() => handleDropdownClick(index)}
-                  />
-                )}
-
-                {showDropdown === index && (
-                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
-                    <button
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleReply(message)}
-                    >
-                      Reply
-                    </button>
-                    <button
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleForward(message)}
-                    >
-                      Forward
-                    </button>
-                  </div>
-                )}
+                    <AiOutlineDown
+                      className="absolute top-2 right-2 cursor-pointer"
+                      onClick={() => handleDropdownClick(index)}
+                    />
+                  )}
+            
+                  {showDropdown === index && (
+                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleReply(message)}
+                      >
+                        Reply
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleForward(message)}
+                      >
+                        Forward
+                      </button>
+                    </div>
+                  )}
               </div>
             ))}
             <div ref={messagesEndRef} />
@@ -332,6 +339,7 @@ function BouncerTeamChat() { // Renamed component to BouncerTeamChat
             >
               Send
             </button>
+            <BouncerModel sender={loggedInUserId} recipient={recipient} />
           </div>
         </div>
       ) : (
@@ -349,9 +357,7 @@ function BouncerTeamChat() { // Renamed component to BouncerTeamChat
           <ul>
             {users
               .filter((user) =>
-                user.name
-                  .toLowerCase()
-                  .includes(userSearchQuery.toLowerCase())
+                user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
               )
               .map((user) => (
                 <li
@@ -377,28 +383,31 @@ function BouncerTeamChat() { // Renamed component to BouncerTeamChat
         </div>
       )}
 
-      {showPopSms && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-4 rounded-lg shadow-lg border border-blue-500">
-            <div className="flex items-center mb-4">
-              <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
-              <h3 className="text-lg font-semibold">New Message</h3>
-            </div>
-            <p className="mb-2">From: {selectedSenderName}</p>
-            <p className="mb-4">Message: {popSms[0]?.content?.text}</p>
-            <button
-              onClick={() => handleModalClose(popSms[0]?.sender)}
-              className="bg-blue-500 text-white p-2 rounded-lg"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
-      {showForwardModal && (
-        <div>
-          <a onClick={() => navigate('/')}>Back to Previous Page </a>
-        </div>
+{showPopSms && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white p-4 rounded-lg shadow-lg border border-blue-500">
+      <div className="flex items-center mb-4">
+        <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
+        <h3 className="text-lg font-semibold">New Message</h3>
+      </div>
+      <p className="mb-2">From: {selectedSenderName}</p>
+      <p className="mb-4">Message: {popSms[0]?.content?.text}</p>
+      <button
+        onClick={() => handleModalClose(popSms[0]?.sender)}
+        className="bg-blue-500 text-white p-2 rounded-lg"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+{showForwardModal && (
+        <ForwardModalBouncerTeam
+          users={users}
+          forwardMessage={forwardMessage}
+          onForward={handleForwardMessage}
+          onCancel={handleCancelForward}
+        />
       )}
     </div>
   );

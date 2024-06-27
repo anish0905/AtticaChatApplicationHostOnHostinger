@@ -1,8 +1,17 @@
-import axios from 'axios';
-import React, { useState } from 'react';
-import { BASE_URL } from '../../constants';
 
-const ForwardModalMonitoringTeam = ({ users, onForward, onCancel, forwardMessage }) => {
+import axios from "axios";
+import React, { useState } from "react";
+import { BASE_URL } from "../../constants";
+
+
+const ForwardMessageBouncerToAdmin = ({
+  users,
+  onForward,
+  onCancel,
+  forwardMessage,
+}) => {
+  console.log(users[0].email);
+   console.log(" forwardMessage", forwardMessage._id);
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const handleUserSelection = (userId) => {
@@ -16,17 +25,17 @@ const ForwardModalMonitoringTeam = ({ users, onForward, onCancel, forwardMessage
   const handleForward = () => {
     onForward(selectedUsers);
     axios
-      .post(`${BASE_URL}/api/forward`, {
+      .post(`${BASE_URL}/api/empadminsender/forward`, {
         messageId: forwardMessage._id,
-        newRecipients: selectedUsers
+        newRecipients: selectedUsers,
       })
       .then((response) => {
         // Handle success response if needed
-        console.log('Message forwarded successfully!', response.data);
+        console.log("Message forwarded successfully!", response.data);
       })
       .catch((error) => {
         // Handle error if any
-        console.error('Error forwarding message:', error);
+        console.error("Error forwarding message:", error);
       });
   };
 
@@ -42,7 +51,8 @@ const ForwardModalMonitoringTeam = ({ users, onForward, onCancel, forwardMessage
                 checked={selectedUsers.includes(user._id)}
                 onChange={() => handleUserSelection(user._id)}
               />
-              <span className="ml-2">{user.name}</span>
+              <span className="ml-2">{user.email
+              }</span>
             </div>
           ))}
         </div>
@@ -65,5 +75,4 @@ const ForwardModalMonitoringTeam = ({ users, onForward, onCancel, forwardMessage
   );
 };
 
-export default ForwardModalMonitoringTeam;
-
+export default ForwardMessageBouncerToAdmin;
