@@ -1,8 +1,11 @@
+
+
+
 import axios from 'axios';
 import React, { useState } from 'react';
 import { BASE_URL } from '../../constants';
 
-const ForwardModalCallCenter = ({ users, onForward, onCancel, forwardMessage,admin }) => {
+const ForwardModalAllUsers = ({ users, onForward, onCancel, forwardMessage }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const handleUserSelection = (userId) => {
@@ -65,5 +68,5 @@ const ForwardModalCallCenter = ({ users, onForward, onCancel, forwardMessage,adm
   );
 };
 
-export default ForwardModalCallCenter;
+export default ForwardModalAllUsers;
 
