@@ -133,8 +133,8 @@ function DigitalToDigitalTamChat() {
         }
       };
       fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 2 * 1000);
-      return () => clearInterval(intervalId);
+      // const intervalId = setInterval(fetchUnreadMessages, 2 * 1000);
+      // return () => clearInterval(intervalId);
     }
   }, [users]);
 

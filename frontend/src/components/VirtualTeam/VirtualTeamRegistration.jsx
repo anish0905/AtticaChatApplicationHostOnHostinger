@@ -1,7 +1,7 @@
 
 
 import React, { useState } from "react";
-import Sidebar from "../../components/admin/Sidebar" 
+import Sidebar from "../admin/Sidebar" 
 import { BASE_URL } from "../../constants";
 import VirtualTeamDetails from "./VirtualTeamDetails";
 

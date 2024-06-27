@@ -11,6 +11,7 @@ import { BASE_URL } from "../../constants";
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 import Sidebar from "../AllUsers/Sidebar";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+import ReplyModel from "../ReplyModel";
 
 function AccountToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -36,6 +37,8 @@ function AccountToAdminChat() {
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [hoveredMessage, setHoveredMessage] = useState(null);
+  const [replyMessage, setReplyMessage] = useState(null); //--------------->
+  const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
 
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
@@ -73,10 +76,9 @@ function AccountToAdminChat() {
 
   // Fetch initial messages between logged-in user and selected recipient
   useEffect(() => {
-    if (loggedInUserId && recipient) {
-      fetchMessages(loggedInUserId, recipient);
-    }
-  }, [loggedInUserId, recipient]);
+    const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
+    return () => clearInterval(intervalId);
+  }, [recipient]);
 
   // Automatically scroll to bottom when new messages are received
   useEffect(() => {
@@ -176,11 +178,11 @@ function AccountToAdminChat() {
       };
 
       // Initial fetch and set interval to fetch every 3 seconds
-      fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 3000);
+      // fetchUnreadMessages();
+      // const intervalId = setInterval(fetchUnreadMessages, 3000);
 
-      // Clear interval on component unmount
-      return () => clearInterval(intervalId);
+      // // Clear interval on component unmount
+      // return () => clearInterval(intervalId);
     }
   }, [admins]);
 
@@ -213,7 +215,7 @@ function AccountToAdminChat() {
 
   // Fetch pop-up SMS notifications at regular intervals
   useEffect(() => {
-    const interval = setInterval(fetchPopSms, 5000);
+    const interval = setInterval(fetchPopSms, 2000);
     return () => clearInterval(interval);
   }, [loggedInUserId, playNotificationSound]);
 
@@ -242,10 +244,9 @@ function AccountToAdminChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text} `);
-    setShowDropdown(null);
+    setReplyMessage(message);  //--------------->
+    setShowReplyModal(true);   //--------------->
   };
-
   const handleForward = (message) => {
     setForwardMessage(message);
     setShowForwardModal(true);
@@ -300,6 +301,13 @@ function AccountToAdminChat() {
                       >
                         {!showMessages[admin._id] ? (
                           <>
+                          {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )} 
                             {message.content && message.content.text && (
                               <p className="pe-2 text-base">{message.content.text}</p>
                             )}
@@ -346,6 +354,13 @@ function AccountToAdminChat() {
                 className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                   }`}
               >
+                {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )} 
                 {message.content && message.content.text && (
                   <p className="text-sm">{message.content.text}</p>
                 )}
@@ -461,6 +476,17 @@ function AccountToAdminChat() {
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
           onCancel={handleCancelForward}
+        />
+      )}
+      {replyMessage && ( ////--------------------->
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+          value={"Admin"}
+
         />
       )}
     </div>

@@ -4,14 +4,16 @@ import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import DigitalMarktingFileModel from "./DigitalMarktingFileModel";
 import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
-import ForwardMsgDigitalMarketingToAdmin from "./ForwardMsgDigitalMarketingToAdmin";
+
 import Sidebar from "./DigitalMarketingSideBar";
 import ReplyModel from "../ReplyModel";//--------------->
+import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+
 
 function DigitalMarketingToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -437,7 +439,7 @@ function DigitalMarketingToAdminChat() {
           >
             Send
           </button>
-          <DigitalMarktingFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}/>
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}/>
         </div>
       </div>
       {showPopSms && (
@@ -469,7 +471,7 @@ function DigitalMarketingToAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardMsgDigitalMarketingToAdmin
+        <ForwardMsgAllUsersToAdmin
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}

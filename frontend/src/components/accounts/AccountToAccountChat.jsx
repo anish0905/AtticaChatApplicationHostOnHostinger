@@ -12,6 +12,7 @@ import { MdNotificationsActive } from "react-icons/md";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import Sidebar from "../AllUsers/Sidebar";
+import ReplyModel from "../ReplyModel";
 
 
 
@@ -38,6 +39,8 @@ function AccountToAccountChat() {
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
+  const [replyMessage, setReplyMessage] = useState(null);
+  const [showReplyModal, setShowReplyModal] = useState(false);
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -208,9 +211,9 @@ function AccountToAccountChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text}`);
+    setReplyMessage(message);
+    setShowReplyModal(true);
   };
-
   const handleForward = (message) => {
     console.log(message);
     setForwardMessage(message);
@@ -257,7 +260,14 @@ function AccountToAccountChat() {
 
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
-              >
+              >  
+              {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )}
                 {message.content && message.content.text && (
                   <p className="font-bold">{message.content.text}</p>
                 )}
@@ -295,22 +305,23 @@ function AccountToAccountChat() {
                     />
                   )}
             
-                  {showDropdown === index && (
-                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleReply(message)}
-                      >
-                        Reply
-                      </button>
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleForward(message)}
-                      >
-                        Forward
-                      </button>
-                    </div>
-                  )}
+            {showDropdown === index && (
+                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleReply(message)}
+                    >
+                      Reply
+                    </button>
+
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleForward(message)}
+                    >
+                      Forward
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
             <div ref={messagesEndRef} />
@@ -406,6 +417,17 @@ function AccountToAccountChat() {
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+        />
+      )}
+      {replyMessage && (
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+         
+
         />
       )}
     </div>
