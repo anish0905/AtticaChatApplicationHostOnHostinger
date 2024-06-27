@@ -45,15 +45,11 @@ import BouncerTeamChat from "./components/Bouncer/BouncerTeamChat";
 import BouncerToAdminChat from "./components/Bouncer/BouncerToAdminChat";
 import BouncerReg from './components/admin/Pages/BouncerReg'
 import CallCenterLogin from "./components/CallCenter/CallCenterLogin";
-<<<<<<< HEAD
 import VirtualTeamRegistration from "./components/virtualTeam/VirtualTeamRegistration";
-import VirtualTeamSidebar from "./components/virtualTeam/ForwardMsgVirtualTeamToAdmin";
-import VirtualToVirtualTeamChat from "./components/virtualTeam/ForwardMsgVirtualTeamToAdmin";
-import VirtualTeamToAdminChat from "./components/virtualTeam/ForwardMsgVirtualTeamToAdmin";
-=======
-import VirtualTeamRegistration from "./components/VirtualTeam/VirtualTeamRegistration";
-import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualToVirtualTeamChat";
->>>>>>> 4b93a20281db06b737accaa3b06ee4bb737d84b4
+import VirtualToVirtualTeamChat from "./components/virtualTeam/VirtualTeamRegistration";
+import VirtualTeamToAdminChat from "./components/virtualTeam/VirtualTeamToAdminChat";
+
+
 import CallCenterRegister from "./components/CallCenter/CallCenterRegister";
 import CallCenterToCallCenterChat from "./components/CallCenter/CallCenterToCallCenterChat";
 import VirtualTeamLogin from "./components/virtualTeam/VirtualTeamLogin";
@@ -68,7 +64,7 @@ import SoftwareReg from "./components/software/SoftwareReg";
 import SoftwareToSoftware from "./components/software/SoftwareToSoftwareChat";
 import SoftwareToAdminChat from "./components/software/SoftwareToAdminChat";
 
-import VirtualTeamToAdminChat from "./components/VirtualTeam/VirtualTeamToAdminChat"
+
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');

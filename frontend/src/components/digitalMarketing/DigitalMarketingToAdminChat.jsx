@@ -8,15 +8,11 @@ import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
-<<<<<<< HEAD
 
 import Sidebar from "./DigitalMarketingSideBar";
 import ReplyModel from "../ReplyModel";//--------------->
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
-=======
-import Sidebar from "../AllUsers/Sidebar"
-import ReplyModel from "../ReplyModel";//--------------->
->>>>>>> 4b93a20281db06b737accaa3b06ee4bb737d84b4
+
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 
 
@@ -476,11 +472,11 @@ function DigitalMarketingToAdminChat() {
         </div>
       )}
       {showForwardModal && (
-<<<<<<< HEAD
+
         <ForwardMsgAllUsersToAdmin
-=======
-        <ForwardModalAllUserslAllUsers
->>>>>>> 4b93a20281db06b737accaa3b06ee4bb737d84b4
+
+       
+
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
