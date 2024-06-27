@@ -123,6 +123,25 @@ const getMessages = async (req, res) => {
   }
 };
 
+const getMessagesByUser = async (req, res) => {
+  const { userId1} = req.params;
+
+  if (!ObjectId.isValid(userId1)) {
+    return res.status(400).json({ message: "Invalid user IDs" });
+  }
+
+  try {
+    const messages = await Message.find({recipient: userId1
+      
+    }).sort({ createdAt: 1 });
+
+    res.status(200).json(messages);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
+
+
 const deleteMessage = async (req, res) => {
   const { id } = req.params;
   try {
@@ -266,5 +285,6 @@ module.exports = {
   markMessagesRead,
   getNotificationId,
   forwardMessage,
-  replyToMessage
+  replyToMessage,
+  getMessagesByUser
 };

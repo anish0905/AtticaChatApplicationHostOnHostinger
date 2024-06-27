@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assests/logo.png";
-import babusirr from "../../assests/babusirr.png";
-import back4 from "../../assests/back4.png";
+
+// // import img21 from '../../assests/img21.jpg'
+import img21 from '../../assests/img21.png'
+import back3 from "../../assests/back3.png";
 import { BASE_URL } from "../../constants";
 
 const VirtualTeamLogin = () => {
@@ -42,12 +44,12 @@ const VirtualTeamLogin = () => {
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-[#f7f7ff]"
-      style={{ backgroundImage: `url(${back4})` }}
+      style={{ backgroundImage: `url(${back3})` }}
     >
       <div className="flex flex-col lg:flex-row items-center justify-center lg:space-x-6 space-y-6 lg:space-y-0 w-full max-w-5xl p-4">
         <div className="hidden lg:block lg:w-1/2">
           <img
-            src={babusirr}
+            src={img21}
             alt="Babusir"
             className="object-cover h-full w-full rounded-full shadow-lg "
           />
@@ -70,8 +72,8 @@ const VirtualTeamLogin = () => {
                 Employee Email
               </label>
               <input
-                type="text"
-                id="employeeCode"
+                type="email"
+                id="email"
                 className="block w-full mt-2 p-2 border border-gray-300 rounded"
                 placeholder="Enter your Email"
                 value={email}
@@ -100,15 +102,16 @@ const VirtualTeamLogin = () => {
               {loading ? "Signing in..." : "Sign In"}
             </button>
           </form>
-          <div className="text-center mt-6 text-gray-600 text-sm">
-            <p>
-              © 2024 attica. Crafted with{" "}
-              <span className="text-red-500">❤</span> by attica gold
-            </p>
-          </div>
+        </div>
+        <div className="text-center mt-6 text-gray-600 text-sm">
+          <p>
+            © 2024 attic's ChatApp Crafted with{" "}
+            <span className="text-red-500">❤</span> by attica gold
+          </p>
         </div>
       </div>
     </div>
+
   );
 };
 

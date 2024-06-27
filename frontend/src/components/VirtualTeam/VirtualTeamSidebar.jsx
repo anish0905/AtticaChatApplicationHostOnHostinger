@@ -52,7 +52,7 @@ const VirtualTeamSidebar = () => {
         </div>
         
         <Link 
-          to="/DigitalMarketingToAdminChat" 
+          to="/VirtualTeamToAdminChat" 
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/empToadmin") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
         >
           <RiContactsLine />

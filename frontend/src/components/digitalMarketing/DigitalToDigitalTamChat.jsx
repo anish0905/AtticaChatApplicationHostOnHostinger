@@ -71,12 +71,11 @@ function DigitalToDigitalTamChat() {
       .catch((error) => {
         console.error(error);
       });
-  }, [loggedInUserId]);
+  }, []);
 
   useEffect(() => {
-    if (sender && recipient) {
-      fetchMessages(sender, recipient);
-    }
+    const intervalId = setInterval(() => fetchMessages(sender, recipient), 2000);
+    return () => clearInterval(intervalId);
   }, [sender, recipient]);
 
   const handleSendMessage = () => {
@@ -134,7 +133,7 @@ function DigitalToDigitalTamChat() {
         }
       };
       fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 3 * 1000);
+      const intervalId = setInterval(fetchUnreadMessages, 2 * 1000);
       return () => clearInterval(intervalId);
     }
   }, [users]);
@@ -164,7 +163,7 @@ function DigitalToDigitalTamChat() {
   };
 
   useEffect(() => {
-    const interval = setInterval(fetchPopSms, 5000);
+    const interval = setInterval(fetchPopSms, 2000);
     return () => clearInterval(interval);
   }, [loggedInUserId, playNotificationSound]);
 
