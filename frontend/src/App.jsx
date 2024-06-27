@@ -64,6 +64,7 @@ import HrToHrChat from "./components/Hr/HrToHrChat";
 import HrToAdmin from "./components/Hr/HrToAdmin";
 import AccountToAccountChat from "./components/accounts/AccountToAccountChat";
 import AccountToAdminChat from "./components/accounts/AccountToAdminChat";
+import SecurityLogin from "./components/security/SecurityLogin";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
