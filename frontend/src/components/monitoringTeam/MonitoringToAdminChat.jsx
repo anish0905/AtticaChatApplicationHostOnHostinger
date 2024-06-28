@@ -1,18 +1,16 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import FileMonitoringModel from "./MonitoringModel";
 import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
-import ForwardMessageMonitoringToAdmin from "./ForwardMessageMonitoringToAdmin";
-import MonitoringSidebar from "./MonitoringSidebar";
+import Sidebar from "../AllUsers/Sidebar"
+import ReplyModel from "../ReplyModel";//--------------->
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 
 function MonitoringAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -38,6 +36,9 @@ function MonitoringAdminChat() {
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [hoveredMessage, setHoveredMessage] = useState(null);
+  const [replyMessage, setReplyMessage] = useState(null); //--------------->
+  const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
+
 
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
@@ -242,10 +243,9 @@ function MonitoringAdminChat() {
   const handleDropdownClick = (index) => {
     setShowDropdown(showDropdown === index ? null : index);
   };
-
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text} `);
-    setShowDropdown(null);
+    setReplyMessage(message);  //--------------->
+    setShowReplyModal(true);   //--------------->
   };
 
   const handleForward = (message) => {
@@ -270,7 +270,7 @@ function MonitoringAdminChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-      <MonitoringSidebar />
+     <Sidebar value="MONITORING"/>
       <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
@@ -348,6 +348,13 @@ function MonitoringAdminChat() {
                 className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                   }`}
               >
+                {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )} 
                 {message.content && message.content.text && (
                   <p className="text-sm">{message.content.text}</p>
                 )}
@@ -426,7 +433,7 @@ function MonitoringAdminChat() {
           >
             Send
           </button>
-          <FileMonitoringModel sender={loggedInUserId} recipient={recipient} />
+          <AllUsersFileModel  sender={loggedInUserId} recipient={recipient} />
         </div>
       </div>
       {showPopSms && (
@@ -458,11 +465,22 @@ function MonitoringAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardMessageMonitoringToAdmin
-          users={admins}
+        <ForwardModalAllUserslAllUsers
+           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
           onCancel={handleCancelForward}
+        />
+      )}
+       {replyMessage && ( ////--------------------->
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+          value={"Admin"}
+
         />
       )}
     </div>

@@ -136,8 +136,7 @@ const getMessagesEmp = async (req, res) => {
 const getAdminMessages = async (req, res) => {
   const { userId1, userId2 } = req.params;
 
-  console.log(userId1, userId2);
-
+ 
   if (!ObjectId.isValid(userId1) || !ObjectId.isValid(userId2)) {
     return res.status(400).json({ message: "Invalid user ids" });
   }
@@ -150,7 +149,7 @@ const getAdminMessages = async (req, res) => {
       ],
     }).sort({ createdAt: 1 });
 
-    console.log(messages);
+   
 
     res.status(200).json(messages);
   } catch (error) {

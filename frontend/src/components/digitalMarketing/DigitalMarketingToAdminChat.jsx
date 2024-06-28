@@ -4,13 +4,15 @@ import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
-import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin"
+import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
+import Sidebar from "../AllUsers/Sidebar"
 import ReplyModel from "../ReplyModel";//--------------->
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+
 
 function DigitalMarketingToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -270,6 +272,7 @@ function DigitalMarketingToAdminChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
+      <Sidebar value="DIGITALMARKETING"/>
       <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
@@ -467,7 +470,7 @@ function DigitalMarketingToAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardMsgAllUsersToAdmin
+        <ForwardModalAllUserslAllUsers
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}

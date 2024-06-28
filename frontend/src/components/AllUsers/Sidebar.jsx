@@ -23,6 +23,14 @@ console.log("value",value)
       navigate("/AccountToAccountChat");
     }else if (value === "SOFTWARE") {
       navigate("/SoftwareToSoftwareChat");
+    }else if (value === "BOUNCER") {
+      navigate("/bouncerChat");
+    }else if (value === "DIGITALMARKETING") {
+      navigate("/DigitalMarketingChatToDigitalMarketing");
+    }else if (value === "MONITORING") {
+      navigate("/monitoringTeamChat");
+    }else if (value === "VIRTUAL") {
+      navigate("/VirtualTeamToVirtualTeam");
     } else if (value === "SECURITY") {
       navigate("/SecurityChat");
     }  else {
@@ -38,7 +46,15 @@ console.log("value",value)
     }
     else if (value === "SOFTWARE") {
       navigate("/SoftwareToAdminChat");
-    } else if(value === "SECURITY"){
+    }else if (value === "BOUNCER") {
+      navigate("/BouncerToAdminChat");
+    }else if (value === "DIGITALMARKETING") {
+      navigate("/DigitalMarketingToAdminChat");
+    } else if (value === "MONITORING") {
+      navigate("/MonitoringTeamToAdminChat");
+    }else if (value === "VIRTUAL") {
+      navigate("/VirtualTeamToAdminChat");
+    }else if(value === "SECURITY"){
       navigate("/SecurityToAdminChat");
     }else {
       navigate("/");

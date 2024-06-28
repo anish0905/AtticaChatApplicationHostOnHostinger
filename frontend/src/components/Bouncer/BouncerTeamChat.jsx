@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
@@ -9,10 +7,10 @@ import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
-import BouncerSidebar from './BouncerSidebar'
-import ForwardModalBouncerTeam from './ForwardModalBouncerTeam'
-import BouncerModel from './BouncerModel'
-
+import Sidebar from "../AllUsers/Sidebar"
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
+import ReplyModel from "../../components/ReplyModel";
 
 
 function BouncerTeamChat() {
@@ -38,6 +36,9 @@ function BouncerTeamChat() {
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
+  const [replyMessage, setReplyMessage] = useState(null);
+  const [showReplyModal, setShowReplyModal] = useState(false);
+
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -61,7 +62,7 @@ function BouncerTeamChat() {
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/api/allUser/getAllMonitoringTeam`)
+      .get(`${BASE_URL}/api/allUser/getAllBouncersTeam`)
       .then((response) => {
         const filteredUsers = response.data.filter(
           (user) => user._id !== loggedInUserId
@@ -208,8 +209,10 @@ function BouncerTeamChat() {
     setShowDropdown(showDropdown === index ? null : index);
   };
 
+ 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text}`);
+    setReplyMessage(message);
+    setShowReplyModal(true);
   };
 
   const handleForward = (message) => {
@@ -232,7 +235,7 @@ function BouncerTeamChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      <BouncerSidebar />
+      <Sidebar  value="BOUNCER" />
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-blue-200 sticky top-0 z-10">
@@ -259,6 +262,14 @@ function BouncerTeamChat() {
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
               >
+                
+                {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )}
                 {message.content && message.content.text && (
                   <p className="font-bold">{message.content.text}</p>
                 )}
@@ -339,7 +350,7 @@ function BouncerTeamChat() {
             >
               Send
             </button>
-            <BouncerModel sender={loggedInUserId} recipient={recipient} />
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
           </div>
         </div>
       ) : (
@@ -402,11 +413,21 @@ function BouncerTeamChat() {
   </div>
 )}
 {showForwardModal && (
-        <ForwardModalBouncerTeam
+        <ForwardModalAllUsers
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+        />
+      )}
+      {replyMessage && (
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+
         />
       )}
     </div>

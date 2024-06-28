@@ -12,6 +12,7 @@ import { MdNotificationsActive } from "react-icons/md";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import Sidebar from "../AllUsers/Sidebar";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers"
+import ReplyModel from "../ReplyModel";
 
 
 
@@ -38,6 +39,8 @@ function HrToHrChat() {
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
+  const [replyMessage, setReplyMessage] = useState(null);
+  const [showReplyModal, setShowReplyModal] = useState(false);
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -133,8 +136,8 @@ function HrToHrChat() {
         }
       };
       fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 2 * 1000);
-      return () => clearInterval(intervalId);
+      // const intervalId = setInterval(fetchUnreadMessages, 2 * 1000);
+      // return () => clearInterval(intervalId);
     }
   }, [users]);
 
@@ -208,7 +211,8 @@ function HrToHrChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text}`);
+    setReplyMessage(message);
+    setShowReplyModal(true);
   };
 
   const handleForward = (message) => {
@@ -258,6 +262,13 @@ function HrToHrChat() {
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
               >
+                {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )}
                 {message.content && message.content.text && (
                   <p className="font-bold">{message.content.text}</p>
                 )}
@@ -408,7 +419,20 @@ function HrToHrChat() {
           onCancel={handleCancelForward}
         />
       )}
+        {replyMessage && (
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+          
+
+        />
+      )}
     </div>
+
+
   );
 }
 

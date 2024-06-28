@@ -33,7 +33,7 @@ const DigitalMarketingTeamLogin = () => {
       console.log("response.data   ", response.data);
       //localStorage.setItem('EmployeeId', response.data._id);
       localStorage.setItem("CurrentUserId", response.data._id);
-      navigate("/DigitalSideBar");
+      navigate("/DigitalMarketingChatToDigitalMarketing");
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
