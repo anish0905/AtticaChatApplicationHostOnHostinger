@@ -1,8 +1,6 @@
-
-
-
 import * as React from 'react';
 import axios from 'axios';
+import { useRef,useEffect, useState } from 'react';
 import PropTypes from 'prop-types'; // Import PropTypes for type checking
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
@@ -13,7 +11,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MenuList from '@mui/material/MenuList';
 import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
-import { FaFolderPlus } from "react-icons/fa";
+import { FaFolderPlus } from 'react-icons/fa';
 import { BASE_URL } from '../../constants';
 
 export default function AllUsersFileModel({ sender, recipient, admin }) {
@@ -45,8 +43,8 @@ export default function AllUsersFileModel({ sender, recipient, admin }) {
     }
   };
 
-  const prevOpen = React.useRef(open);
-  React.useEffect(() => {
+  const prevOpen = useRef(open);
+  useEffect(() => {
     if (prevOpen.current === true && open === false) {
       anchorRef.current.focus();
     }
@@ -64,7 +62,7 @@ export default function AllUsersFileModel({ sender, recipient, admin }) {
     if (file) {
       // Create a FormData object to hold the file
       const formData = new FormData();
-      formData.append(fieldName, file); // Use fieldName as the field name
+      formData.append(fieldName, file);
       formData.append('sender', sender);
       formData.append('recipient', recipient);
 
@@ -92,11 +90,10 @@ export default function AllUsersFileModel({ sender, recipient, admin }) {
         console.error('Error uploading file:', error);
         setError('Error uploading file. Please try again.'); // Set error message
       } finally {
-        setLoading(false); // Set loading to false after upload completes
+        setLoading(false);
       }
 
-      // Reset the input value to allow uploading the same file again if needed
-      event.target.value = null;
+      event.target.value = null; // Reset the input value
     }
   };
 
@@ -110,7 +107,7 @@ export default function AllUsersFileModel({ sender, recipient, admin }) {
           aria-expanded={open ? 'true' : undefined}
           aria-haspopup="true"
           onClick={handleToggle}
-          sx={{ height: '60px', width: '60px', minWidth: 'unset', color: "purple" }}
+          sx={{ height: '60px', width: '60px', minWidth: 'unset', color: 'purple' }}
         >
           <FaFolderPlus size={32} />
         </Button>
@@ -126,8 +123,7 @@ export default function AllUsersFileModel({ sender, recipient, admin }) {
             <Grow
               {...TransitionProps}
               style={{
-                transformOrigin:
-                  placement === 'bottom-start' ? 'left top' : 'left bottom',
+                transformOrigin: placement === 'bottom-start' ? 'left top' : 'left bottom',
               }}
             >
               <Paper>
@@ -153,21 +149,21 @@ export default function AllUsersFileModel({ sender, recipient, admin }) {
           type="file"
           accept="image/*"
           style={{ display: 'none' }}
-          onChange={(e) => handleFileChange(e, 'image')} // Pass 'image' as fieldName
+          onChange={(e) => handleFileChange(e, 'image')}
         />
         <input
           ref={documentInputRef}
           type="file"
           accept=".pdf,.doc,.docx,.txt"
           style={{ display: 'none' }}
-          onChange={(e) => handleFileChange(e, 'document')} // Pass 'document' as fieldName
+          onChange={(e) => handleFileChange(e, 'document')}
         />
         <input
           ref={videoInputRef}
           type="file"
           accept="video/*"
           style={{ display: 'none' }}
-          onChange={(e) => handleFileChange(e, 'video')} // Pass 'video' as fieldName
+          onChange={(e) => handleFileChange(e, 'video')}
         />
       </div>
 

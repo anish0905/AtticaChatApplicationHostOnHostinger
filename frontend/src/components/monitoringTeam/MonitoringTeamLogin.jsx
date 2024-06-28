@@ -30,7 +30,7 @@ const MonitoringTeamLogin = () => {
       setLoading(false);
       localStorage.setItem("token", response.data.accessToken);
       localStorage.setItem("CurrentUserId", response.data._id);
-      navigate("/MonitoringSideBar"); // Updated redirect path for monitoring team dashboard
+      navigate("/monitoringTeamChat"); // Updated redirect path for monitoring team dashboard
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);

@@ -29,7 +29,7 @@ const BouncerLogin = () => {
       setLoading(false);
       localStorage.setItem("token", response.data.accessToken);
       localStorage.setItem("CurrentUserId", response.data._id);
-      navigate("/BouncerTeamSidebar"); // Updated redirect path for Bouncer dashboard
+      navigate("/bouncerChat"); // Updated redirect path for Bouncer dashboard
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);

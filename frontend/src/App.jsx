@@ -43,13 +43,13 @@ import MonitoringTeamChat from "./components/monitoringTeam/MonitoringTeamChat";
 import MonitoringToAdminChat from "./components/monitoringTeam/MonitoringToAdminChat";
 import BouncerTeamChat from "./components/Bouncer/BouncerTeamChat";
 import BouncerToAdminChat from "./components/Bouncer/BouncerToAdminChat";
-import BouncerReg from './components/admin/Pages/BouncerReg'
-import CallCenterLogin from "./components/CallCenter/CallCenterLogin";
-import VirtualTeamRegistration from "./components/VirtualTeam/VirtualTeamRegistration";
 import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualTeamRegistration";
 import VirtualTeamToAdminChat from "./components/VirtualTeam/VirtualTeamToAdminChat";
 
 
+import BouncerReg from './components/admin/Pages/BouncerReg';
+import CallCenterLogin from "./components/CallCenter/CallCenterLogin"
+import VirtualTeamRegistration from "./components/VirtualTeam/VirtualTeamRegistration";
 import CallCenterRegister from "./components/CallCenter/CallCenterRegister";
 import CallCenterToCallCenterChat from "./components/CallCenter/CallCenterToCallCenterChat";
 import VirtualTeamLogin from "./components/VirtualTeam/VirtualTeamLogin";
@@ -64,7 +64,10 @@ import SoftwareReg from "./components/software/SoftwareReg";
 import SoftwareToSoftware from "./components/software/SoftwareToSoftwareChat";
 import SoftwareToAdminChat from "./components/software/SoftwareToAdminChat";
 
-
+import SecurityToSecurityChat from "./components/security/SecurityToSecurityChat";
+import SecurityRegister from "./components/security/SecurityRegister";
+import SecurityToAdmin from "./components/security/SecurityToAdmin";
+import Sidebar from "./components/AllUsers/Sidebar";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
@@ -137,13 +140,21 @@ const App = () => {
 
             <Route path="/accounts" element={<AccountsLogin/>}/>
             <Route path="/AccountToAccountChat" element={<AccountToAccountChat/>}/>
-            <Route path="/AccountToAdminChat" element={<AccountToAdminChat/>}/>  
+            <Route path="/AccountToAdminChat" element={<AccountToAdminChat/>}/>
 
 
             <Route path="/SoftwareReg" element={<SoftwareReg />} />
             <Route path="/SoftwareLogin" element={<SoftwareLogin/>}/>
             <Route path="/SoftwareToSoftwareChat" element={<SoftwareToSoftware/>}/>
             <Route path="/SoftwareToAdminChat" element={<SoftwareToAdminChat/>}/>
+            <Route path="/SecurityChat" element={<SecurityToSecurityChat/>}/>  
+            <Route path="/SecurityToAdminChat" element={<SecurityToAdmin/>}/>  
+            <Route path="/SecurityReg" element={<SecurityRegister/>}/>  
+
+            <Route path="/Sidebar" element={<Sidebar/>}/>  
+
+
+
 
               {isSuperAdminLoggedIn ? (
             <>

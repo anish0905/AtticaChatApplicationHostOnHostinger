@@ -23,14 +23,14 @@ const  SecurityLogin = () => {
 
     try {
       const response = await axios.post( 
-        `${BASE_URL}/api/allUser/acc/login`,
+        `${BASE_URL}/api/allUser/Security/login`,
         { email, password }
       );
       setLoading(false);
       localStorage.setItem("token", response.data.accessToken);
       console.log("response.data   ", response.data);
       localStorage.setItem("CurrentUserId", response.data._id);
-      navigate("/empDashbord");
+      navigate("/SecurityChat");
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
@@ -68,7 +68,7 @@ const  SecurityLogin = () => {
         </div>
 
         <div className="w-full max-w-md">
-          <form onSubmit="">
+          <form onSubmit={handleSubmit} className="w-full max-w-md mx-auto">
             <div className="mb-4">
               <label htmlFor="email" className="block text-gray-700">
                 Email

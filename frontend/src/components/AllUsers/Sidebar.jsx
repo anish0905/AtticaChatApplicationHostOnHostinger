@@ -12,6 +12,8 @@ const Sidebar = ({value}) => {
   console.log("value    ",value,"   ")
   const navigate = useNavigate();
   const location = useLocation();
+
+console.log("value",value)
   
   
   const handleChat = () => {
@@ -29,8 +31,9 @@ const Sidebar = ({value}) => {
       navigate("/monitoringTeamChat");
     }else if (value === "VIRTUAL") {
       navigate("/VirtualTeamToVirtualTeam");
-    }
-     else {
+    } else if (value === "SECURITY") {
+      navigate("/SecurityChat");
+    }  else {
       navigate("/");
     }
   };
@@ -45,12 +48,14 @@ const Sidebar = ({value}) => {
       navigate("/SoftwareToAdminChat");
     }else if (value === "BOUNCER") {
       navigate("/BouncerToAdminChat");
-    }else if (value === "DIGITALMARKENTING") {
+    }else if (value === "DIGITALMARKETING") {
       navigate("/DigitalMarketingToAdminChat");
     } else if (value === "MONITORING") {
       navigate("/MonitoringTeamToAdminChat");
     }else if (value === "VIRTUAL") {
       navigate("/VirtualTeamToAdminChat");
+    }else if(value === "SECURITY"){
+      navigate("/SecurityToAdminChat");
     }else {
       navigate("/");
     }
