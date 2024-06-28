@@ -8,11 +8,11 @@ import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from '../../assests/sound.wav';
 import { BASE_URL } from "../../constants";
-import ForwardMessageModalAdminToEmp from "./Pages/ForwardMessageModalAdminToEmp";
 import Sidebar from "./Sidebar";
 import { FaArrowLeft } from "react-icons/fa";
-import AdminFileUploadModel from "./Pages/AdminFileUploadModel";
 import { IoMdSend } from "react-icons/io";
+import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 
 function AdminEmpChat() {
   const [messages, setMessages] = useState([]);
@@ -52,15 +52,13 @@ function AdminEmpChat() {
   // Function to fetch messages between two users
   const fetchMessages = async (sender, recipient) => {
   
-    const startTime = Date.now();
+    
   
     try {
       const response = await axios.get(
         `${BASE_URL}/api/empadminsender/getadminmessages/${recipient}/${sender}`
       );
   
-      const endTime = Date.now();
-      
       setMessages(response.data);
     } catch (error) {
       console.error("Error fetching messages:", error);
@@ -84,10 +82,10 @@ function AdminEmpChat() {
 
   // Fetch initial messages between logged-in user and selected recipient
   useEffect(() => {
-    if (loggedInUserId && recipient) {
-      fetchMessages(loggedInUserId, recipient);
-    }
-  }, [loggedInUserId, recipient,messages]);
+    const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
+    return () => clearInterval(intervalId);
+  }, [recipient]);
+
 
   // Automatically scroll to bottom when new messages are received
   useEffect(() => {
@@ -147,11 +145,11 @@ function AdminEmpChat() {
       };
 
       // Initial fetch and set interval to fetch every 3 seconds
-      fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 5000);
+      // fetchUnreadMessages();
+      // const intervalId = setInterval(fetchUnreadMessages, 5000);
 
-      // Clear interval on component unmount
-      return () => clearInterval(intervalId);
+      // // Clear interval on component unmount
+      // return () => clearInterval(intervalId);
     }
   }, [users]);
 
@@ -180,7 +178,7 @@ function AdminEmpChat() {
 
   // Fetch pop-up SMS notifications at regular intervals
   useEffect(() => {
-    const interval = setInterval(fetchPopSms, 5000);
+    const interval = setInterval(fetchPopSms, 2000);
     return () => clearInterval(interval);
   }, [loggedInUserId, playNotificationSound]);
 
@@ -406,7 +404,7 @@ function AdminEmpChat() {
                 >
                   <IoMdSend />
                 </button>
-                <AdminFileUploadModel sender={loggedInUserId} recipient={recipient} />
+                <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
               </div>
             </div>
           </div>
@@ -468,26 +466,16 @@ function AdminEmpChat() {
           </div>
         </div>
       )}
-      {/* Forward Modal */}
+     
       {showForwardModal && (
-        <ForwardMessageModalAdminToEmp
+        <ForwardModalAllUsers
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
           onCancel={handleCancelForward}
         />
       )}
-      {/* Back Button for Mobile and Tablet Views */}
-      {/* {isChatSelected && (
-        <div className="fixed bottom-4 left-4">
-          <button
-            className="bg-blue-500 text-white px-4 py-2 rounded"
-            onClick={handleBackToUserList}
-          >
-            Back
-          </button>
-        </div>
-      )} */}
+      
     </div>
   );
 }

@@ -8,7 +8,9 @@ import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
-import ForwardMessageModalEmp from './ForwardMessageModalEmp';
+import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
+import ReplyModel from "../ReplyModel";
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 
 
 
@@ -35,6 +37,8 @@ function ChatPage() {
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
+  const [replyMessage, setReplyMessage] = useState(null);
+  const [showReplyModal, setShowReplyModal] = useState(false);
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -70,10 +74,10 @@ function ChatPage() {
   }, [loggedInUserId]);
 
   useEffect(() => {
-    if (sender && recipient) {
-      fetchMessages(sender, recipient);
-    }
+    const intervalId = setInterval(() => fetchMessages(sender, recipient), 2000);
+    return () => clearInterval(intervalId);
   }, [sender, recipient]);
+
 
   const handleSendMessage = () => {
     if (!newMessage.trim() && !attachment) return;
@@ -130,8 +134,8 @@ function ChatPage() {
         }
       };
       fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 3 * 1000);
-      return () => clearInterval(intervalId);
+      // const intervalId = setInterval(fetchUnreadMessages, 3 * 1000);
+      // return () => clearInterval(intervalId);
     }
   }, [users]);
 
@@ -160,20 +164,21 @@ function ChatPage() {
   };
 
   useEffect(() => {
-    const interval = setInterval(fetchPopSms, 5000);
+    const interval = setInterval(fetchPopSms, 2000);
     return () => clearInterval(interval);
   }, [loggedInUserId, playNotificationSound]);
 
-  const handleModalClose = (senderId) => {
-    axios
-      .delete(`${BASE_URL}/api/deleteNotification/${senderId})
-      .then(() => {
-        setShowPopSms(false);
-      }`)
-      .catch((error) => {
-        console.error("Error deleting notification:", error);
-      });
+  const handleModalClose = async (senderId) => {
+    try {
+      const resp = await axios.delete(`${BASE_URL}/api/deleteNotification/${senderId}`);
+      // Handle the response if needed, e.g., check resp.status or resp.data
+      setShowPopSms(false);
+    } catch (error) {
+      console.error('Error deleting notification:', error);
+      // Handle the error, e.g., show an error message to the user
+    }
   };
+  
 
   const handleBackToEmployees = () => {
     setShowChat(false);
@@ -205,7 +210,8 @@ function ChatPage() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text}`);
+    setReplyMessage(message);
+    setShowReplyModal(true);
   };
 
   const handleForward = (message) => {
@@ -254,7 +260,14 @@ function ChatPage() {
 
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
-              >
+              >  
+               {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )}
                 {message.content && message.content.text && (
                   <p className="font-bold">{message.content.text}</p>
                 )}
@@ -320,21 +333,14 @@ function ChatPage() {
               placeholder="Type a message..."
               className="flex-grow p-2 border rounded-lg mr-2"
             />
-            <input
-              type="file"
-              onChange={(e) => handleFileUpload(e.target.files[0])}
-              className="hidden"
-              id="file-upload"
-            />
-            <label htmlFor="file-upload">
-              <FaPaperclip className="text-gray-500 hover:text-gray-700 cursor-pointer mr-2" />
-            </label>
+           
             <button
               onClick={handleSendMessage}
               className="bg-blue-500 text-white p-2 rounded-lg"
             >
               Send
             </button>
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
           </div>
         </div>
       ) : (
@@ -397,11 +403,21 @@ function ChatPage() {
   </div>
 )}
 {showForwardModal && (
-        <ForwardMessageModalEmp
+        <ForwardModalAllUsers   
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+        />
+      )}
+      {replyMessage && (
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+
         />
       )}
     </div>

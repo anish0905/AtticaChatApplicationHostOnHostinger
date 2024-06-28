@@ -4,13 +4,13 @@ import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import AdminFileUploadModel from "./AdminFileUploadModel";
 import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../../assests/sound.wav";
 import { BASE_URL } from "../../../constants";
-import ForwardMessageModalAmintoAmin from "./ForwardMessageModalAmintoAmin";
 import Sidebar from "../Sidebar";
+import AllUsersFileModel from "../../AllUsers/AllUsersFileModel";
+import ForwardMsgAllUsersToAdmin from "../../AllUsers/ForwardMsgAllUsersToAdmin";
 
 function AdmintoAdmin() {
   const [messages, setMessages] = useState([]);
@@ -74,7 +74,8 @@ function AdmintoAdmin() {
   // Fetch initial messages between logged-in user and selected recipient
   useEffect(() => {
     if (loggedInUserId && recipient) {
-      fetchMessages(loggedInUserId, recipient);
+      const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient),2000);
+      return () => clearInterval(intervalId);
     }
   }, [loggedInUserId, recipient]);
 
@@ -177,10 +178,10 @@ function AdmintoAdmin() {
 
       // Initial fetch and set interval to fetch every 3 seconds
       fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 3000);
+      // const intervalId = setInterval(fetchUnreadMessages, 3000);
 
-      // Clear interval on component unmount
-      return () => clearInterval(intervalId);
+      // // Clear interval on component unmount
+      // return () => clearInterval(intervalId);
     }
   }, [admins]);
 
@@ -424,7 +425,7 @@ function AdmintoAdmin() {
           >
             Send
           </button>
-          <AdminFileUploadModel sender={loggedInUserId} recipient={recipient} />
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
         </div>
       </div>
       {showPopSms && (
@@ -456,7 +457,7 @@ function AdmintoAdmin() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardMessageModalAmintoAmin
+        <ForwardMsgAllUsersToAdmin
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}

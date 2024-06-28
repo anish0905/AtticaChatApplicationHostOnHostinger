@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch,AiOutlineDown  } from "react-icons/ai";
-import FileUploadModel from "./FileUploadModel";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
@@ -10,7 +9,10 @@ import { FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from '../../constants';
-import EmpToAdminForwardMessage from './EmpToAdminForwardMessage'
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
+import ReplyModel from "../ReplyModel";
+
 function EmpAdminChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -35,6 +37,8 @@ function EmpAdminChat() {
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
+  const [replyMessage, setReplyMessage] = useState(null); //--------------->
+  const [showReplyModal, setShowReplyModal] = useState(false);  //-----
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -69,10 +73,9 @@ function EmpAdminChat() {
   }, [loggedInUserId]);
 
   useEffect(() => {
-    if (sender && recipient) {
-      fetchMessages(sender, recipient);
-    }
-  }, [sender, recipient]);
+    const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
+    return () => clearInterval(intervalId);
+  }, [recipient]);
 
   useEffect(() => {
     axios
@@ -158,8 +161,8 @@ function EmpAdminChat() {
         }
       };
       fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 30 * 1000);
-      return () => clearInterval(intervalId);
+      // const intervalId = setInterval(fetchUnreadMessages, 30 * 1000);
+      // return () => clearInterval(intervalId);
     }
   }, [admins]);
 
@@ -195,7 +198,7 @@ function EmpAdminChat() {
   };
 
   useEffect(() => {
-    const interval = setInterval(fetchPopSms, 5000);
+    const interval = setInterval(fetchPopSms, 2000);
     return () => clearInterval(interval);
   }, [loggedInUserId,playNotificationSound]);
 
@@ -219,7 +222,8 @@ function EmpAdminChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text}`);
+    setReplyMessage(message);  //--------------->
+    setShowReplyModal(true);   //--------------->
   };
 
   const handleForward = (message) => {
@@ -323,7 +327,15 @@ function EmpAdminChat() {
               className={`w-1/3 p-2 rounded-md mb-2 relative ${
                 message.sender === loggedInUserId ?  "bg-blue-100 self-end" : "bg-gray-200 self-start"
               }`}
-            >
+            >   {/* //---------------> */}
+            {message.content && message.content.originalMessage && (
+             <div className="mb-2">
+               <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                 {message.content.originalMessage}
+               </span>
+             </div>
+           )} 
+           {/* //---------------> */}
               {message.content && message.content.text && (
                 <p className="text-sm">{message.content.text}</p>
               )}
@@ -399,7 +411,7 @@ function EmpAdminChat() {
           >
             Send
           </button>
-          <FileUploadModel sender={loggedInUserId} recipient={recipient} />
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
         </div>
       </div>
       {showPopSms && (
@@ -448,11 +460,22 @@ function EmpAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <EmpToAdminForwardMessage
+        <ForwardMsgAllUsersToAdmin
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+        />
+      )}
+       {replyMessage && ( ////--------------------->
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+          value={"Admin"}
+
         />
       )}
     </div>
