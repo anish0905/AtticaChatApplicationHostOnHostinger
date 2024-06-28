@@ -4,6 +4,7 @@ import { BASE_URL } from '../../constants';
 
 const ForwardMessageModalBillingTeam = ({ users, onForward, onCancel, forwardMessage }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleUserSelection = (userId) => {
     setSelectedUsers((prevSelectedUsers) =>
@@ -29,12 +30,23 @@ const ForwardMessageModalBillingTeam = ({ users, onForward, onCancel, forwardMes
     });
   };
 
+  const filteredUsers = users.filter(user =>
+    user.manager_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
       <div className="bg-white p-4 rounded shadow-lg w-full max-w-md">
         <h2 className="text-xl mb-4">Forward Message To:</h2>
+        <input
+          type="text"
+          placeholder="Search..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="mb-4 p-2 border border-gray-300 rounded w-full"
+        />
         <div className="mb-4 max-h-48 overflow-y-auto">
-          {users.map((user) => (
+          {filteredUsers.map((user) => (
             <div key={user._id} className="flex items-center mb-2">
               <input
                 type="checkbox"
