@@ -43,6 +43,10 @@ import MonitoringTeamChat from "./components/monitoringTeam/MonitoringTeamChat";
 import MonitoringToAdminChat from "./components/monitoringTeam/MonitoringToAdminChat";
 import BouncerTeamChat from "./components/Bouncer/BouncerTeamChat";
 import BouncerToAdminChat from "./components/Bouncer/BouncerToAdminChat";
+import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualTeamRegistration";
+import VirtualTeamToAdminChat from "./components/VirtualTeam/VirtualTeamToAdminChat";
+
+
 import BouncerReg from './components/admin/Pages/BouncerReg';
 import CallCenterLogin from "./components/CallCenter/CallCenterLogin"
 import VirtualTeamRegistration from "./components/VirtualTeam/VirtualTeamRegistration";
@@ -59,9 +63,8 @@ import SecurityLogin from "./components/security/SecurityLogin";
 import SoftwareReg from "./components/software/SoftwareReg";
 import SoftwareToSoftware from "./components/software/SoftwareToSoftwareChat";
 import SoftwareToAdminChat from "./components/software/SoftwareToAdminChat";
-import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualToVirtualTeamChat"
-import VirtualTeamToAdminChat from "./components/VirtualTeam/VirtualTeamToAdminChat"
-import SecurityToSecurityChat from "./components/security/SecurityToSecurityChat"
+
+import SecurityToSecurityChat from "./components/security/SecurityToSecurityChat";
 import SecurityRegister from "./components/security/SecurityRegister";
 import SecurityToAdmin from "./components/security/SecurityToAdmin";
 import Sidebar from "./components/AllUsers/Sidebar";
