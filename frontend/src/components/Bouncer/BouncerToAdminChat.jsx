@@ -10,8 +10,9 @@ import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
 import ReplyModel from "../ReplyModel";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
+
 import Sidebar from "../AllUsers/UserSidebar"
+import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 
 function BouncerToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -464,7 +465,7 @@ function BouncerToAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardModalAllUsers
+        <ForwardMsgAllUsersToAdmin
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}

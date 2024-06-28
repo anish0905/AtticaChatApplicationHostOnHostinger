@@ -4,7 +4,7 @@ import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import { FaVideo } from "react-icons/fa";
+import { FaArrowLeft, FaVideo } from "react-icons/fa";
 import { FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
@@ -13,6 +13,7 @@ import { BASE_URL } from '../../constants';
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 import ReplyModel from "../ReplyModel";
+import EmployeeSidebar from './EmployeeSidebar'
 
 
 function EmpAdminChat() {

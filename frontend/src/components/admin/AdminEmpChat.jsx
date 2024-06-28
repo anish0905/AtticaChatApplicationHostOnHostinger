@@ -41,7 +41,7 @@ function AdminEmpChat() {
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
   const [replyMessage, setReplyMessage] = useState(null); //--------------->
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
-  
+
 
   // Function to handle click on employee to initiate chat
   const handleClick = (id, name) => {
@@ -54,15 +54,16 @@ function AdminEmpChat() {
 
   // Function to fetch messages between two users
   const fetchMessages = async (sender, recipient) => {
-  
-    
-  
+
+
+
     try {
       const response = await axios.get(
         `${BASE_URL}/api/empadminsender/getadminmessages/${recipient}/${sender}`
       );
-  
+
       setMessages(response.data);
+      // console.log(response.data);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
@@ -188,13 +189,13 @@ function AdminEmpChat() {
   // Function to handle closure of pop-up SMS modal
   const handleModalClose = (senderId) => {
     const startTime = Date.now();
-    
+
     axios
       .delete(`${BASE_URL}/api/deleteNotification/${senderId}`)
       .then(() => {
         const endTime = Date.now();
         setShowPopSms(false);
-        
+
       })
       .catch((error) => {
         console.error("Error deleting notification:", error);
@@ -303,17 +304,17 @@ function AdminEmpChat() {
           <div className="flex-1 flex flex-col justify-between bg-[#f6f5fb]">
             {/* Selected Recipient */}
             <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
-              
-            {isChatSelected && (
-        <div className="text-2xl p-4 flex gap-2 items-center justify-between">
-          <button
-            className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
-            onClick={handleBackToUserList}
-          >
-            <FaArrowLeft />
-          </button>
-        </div>
-      )}
+
+              {isChatSelected && (
+                <div className="text-2xl p-4 flex gap-2 items-center justify-between">
+                  <button
+                    className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+                    onClick={handleBackToUserList}
+                  >
+                    <FaArrowLeft />
+                  </button>
+                </div>
+              )}
 
               <h2 className="text-2xl font-semibold">{recipientName}</h2>
             </div>
@@ -324,47 +325,49 @@ function AdminEmpChat() {
               {messages.map((message, index) => (
                 <div key={index} className="mb-2">
                   <div
-                    className={`flex ${
-                      message.sender === loggedInUserId
+                    className={`flex ${message.sender === loggedInUserId
                         ? "justify-end"
                         : "justify-start"
-                    }`}
+                      }`}
                     onMouseEnter={() => handleHover(index)}
                     onMouseLeave={() => handleLeave()}
                   >
-                    
+
                     <div
-                    className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
-                    }`}
-                    >  
-                     {/* //---------------> */}
-                 {message.content && message.content.originalMessage && (
-                  <div className="mb-2">
-                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
-                      {message.content.originalMessage}
-                    </span>
-                  </div>
-                )} 
-                {/* //---------------> */}
-                      <p className="text-sm">{message.content.text}</p>
-                      {message.image && (
+                      className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
+                        }`}
+                    >
+                      {/* //---------------> */}
+                      {message.content && message.content.originalMessage && (
+                        <div className="mb-2">
+                          <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                            {message.content.originalMessage}
+                          </span>
+                        </div>
+                      )}
+                      {/* //---------------> */}
+                      <p className="text-sm">{message?.content?.text}</p>
+
+                      {message?.content?.image && (
+               
                         <img
-                          src={message.image}
+                          src={message?.content?.image}
                           alt="attachment"
                           className="max-w-xs mt-2"
-                        />
+                        /> 
+                      
                       )}
-                      {message.document && (
+                      {message?.document && (
                         <a
-                          href={message.content.document}
+                          href={message?.content?.document}
                           target="_blank"
                           rel="noopener noreferrer"
-                     className="text-orange-600 hover:underline"
+                          className="text-orange-600 hover:underline"
                         >
                           View Document
                         </a>
                       )}
-                      {message.content.video && (
+                      {message?.content?.video && (
                         <video controls className="max-w-xs text-orange-600 hover:underline">
                           <source src={message.video} type="video/mp4" />
                           Your browser does not support the video tag.
@@ -379,7 +382,7 @@ function AdminEmpChat() {
                           onClick={() => handleDropdownClick(index)}
                         />
                       }
-                      {showDropdown === index &&  (
+                      {showDropdown === index && (
                         <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
                           <button
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -417,60 +420,59 @@ function AdminEmpChat() {
                 >
                   <IoMdSend />
                 </button>
-                <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
+                <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
               </div>
             </div>
           </div>
         )}
       </div>
 
-      
       {showPopSms && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg relative">
-          <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
+            <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
             <h2 className="text-xl font-bold text-green-600 text-center">
               New Message from {selectedSenderName}
             </h2>
             <ul>
-            {popSms.map((sms, index) => (
-          <li key={index} className="mb-2 relative">
-            <p>{sms.content.text}</p>
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-              onClick={() => handleModalClose(sms.sender)}
-            >
-              Close
-            </button>
-            {sms.content.image && (
-              <img
-                src={sms.content.image}
-                alt="attachment"
-                className="w-32 mt-2 cursor-pointer"
-                onClick={() => handleImageClick(sms.content.image)}
-              />
-            )}
-            {sms.content.document && (
-              <a
-                href={sms.content.document}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-blue-500"
-              >
-                View Document
-              </a>
-            )}
-            {sms.content.video && (
-              <video controls className="max-w-xs mt-2">
-                <source src={sms.content.video} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            )}
+              {popSms.map((sms, index) => (
+                <li key={index} className="mb-2 relative">
+                  <p>{sms.content.text}</p>
+                  <button
+                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                    onClick={() => handleModalClose(sms.sender)}
+                  >
+                    Close
+                  </button>
+                  {sms.content.image && (
+                    <img
+                      src={sms.content.image}
+                      alt="attachment"
+                      className="w-32 mt-2 cursor-pointer"
+                      onClick={() => handleImageClick(sms.content.image)}
+                    />
+                  )}
+                  {sms.content.document && (
+                    <a
+                      href={sms.content.document}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500"
+                    >
+                      View Document
+                    </a>
+                  )}
+                  {sms.content.video && (
+                    <video controls className="max-w-xs mt-2">
+                      <source src={sms.content.video} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  )}
                 </li>
-                
+
               ))}
             </ul>
-  
+
             <button
               className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
               onClick={() => handleModalClose(selectedSender)}
@@ -480,7 +482,7 @@ function AdminEmpChat() {
           </div>
         </div>
       )}
-     
+
       {showForwardModal && (
         <ForwardModalAllUsers
           users={users}

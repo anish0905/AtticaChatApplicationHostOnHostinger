@@ -7,7 +7,7 @@ import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
-import ReplyModel from "../../components/ReplyModel";
+import ReplyModel from "../ReplyModel";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import Sidebar from "../AllUsers/UserSidebar";
