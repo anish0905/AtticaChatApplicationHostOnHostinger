@@ -11,6 +11,10 @@ import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from '../../constants';
 import EmpToAdminForwardMessage from './EmpToAdminForwardMessage'
+import EmployeeSidebar from "./EmployeeSidebar";
+import { FaArrowLeft } from "react-icons/fa";
+
+
 function EmpAdminChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -35,11 +39,13 @@ function EmpAdminChat() {
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
+  const [isChatSelected, setIsChatSelected] = useState(false);
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
     setRecipient(id);
     setRecipientName(name);
+    setIsChatSelected(true);
     fetchMessages(loggedInUserId, id);
   };
 
@@ -239,26 +245,36 @@ function EmpAdminChat() {
     setShowForwardModal(false);
   };
 
+  const handleBackToUserList = () => {
+    setIsChatSelected(false);
+    setSelectedChatUserId("");
+    setRecipient("");
+    setRecipientName("");
+    setMessages([]);
+  };
+
+
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/4 bg-gray-100 p-4">
-        <h1 className="text-2xl font-bold mb-4">All Admins</h1>
+    <div className="flex flex-col lg:flex-row h-screen">
+       <EmployeeSidebar />
+      <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
+        <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
           <input
             type="text"
             value={adminSearchQuery}
             onChange={(e) => setAdminSearchQuery(e.target.value)}
-            className="w-full p-2 text-sm text-gray-700 bg-gray-200 rounded pl-10"
+            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
             placeholder="Search by email..."
           />
-          <AiOutlineSearch className="absolute top-3 left-3 text-gray-500" />
+          <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
         </div>
-        <div className="h-full overflow-y-auto">
+        <div className="h-5/6 overflow-y-auto">
           {filteredAdmins.map((admin) => (
             <div key={admin._id}>
               <div
-                className="w-full h-auto font-medium rounded-md bg-red-200 mb-4 text-2xl block items-center p-4 cursor-pointer"
+                className="w-full h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
                 onClick={() => handleClick(admin._id, admin.email)}
               >
                 <h1>{admin.email}</h1>
@@ -268,7 +284,7 @@ function EmpAdminChat() {
                     unreadUser.data.map((message) => (
                       <div
                         key={message._id}
-                        className="text-green-400 flex justify-between items-center content-center gap-5"
+                        className="text-orange-600 flex justify-between items-center content-center gap-5 mt-2"
                         onClick={() => handleShowMessage(admin._id)}
                       >
                         {!showMessages[admin._id] ? (
@@ -279,9 +295,7 @@ function EmpAdminChat() {
                              )
                            }
                            {
-                             message.content.image && (
-                               <FaImage />
-                             )
+                             message.content.image && ( <FaImage /> )
                            }
                            {
                              message.content.video && (
@@ -309,21 +323,44 @@ function EmpAdminChat() {
           ))}
         </div>
       </div>
-      <div className="w-4/5 p-4">
-        <div className="flex justify-between items-center content-center mb-4">
+
+
+      {isChatSelected && (
+      <div className="w-full lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
+           
+{isChatSelected && (
+        <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+        <button
+            className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+            onClick={handleBackToUserList}
+          >
+            <FaArrowLeft />
+          </button>
+   
           <h1 className="text-2xl font-bold">Chat with {recipientName}</h1>
-          <Link to={"/"} className="group relative flex items-center justify-end font-extrabold text-2xl  rounded-full p-3 md:p-5 ">
-            <BiLogOut />
-          </Link>
+          <Link
+   to={"/"}
+   className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
+ >
+   {/* <BiLogOut /> */}
+ </Link>
         </div>
-        <div className="flex flex-col h-4/5 overflow-y-auto mb-4">
+)}
+
+
+
+        <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`w-1/3 p-2 rounded-md mb-2 relative ${
-                message.sender === loggedInUserId ?  "bg-blue-100 self-end" : "bg-gray-200 self-start"
-              }`}
+              className={`flex relative ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2  `}
+        onMouseEnter={() => handleHover(index)}
+        onMouseLeave={() => handleLeave()}
             >
+              <div
+          className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
+            }`}
+        >
               {message.content && message.content.text && (
                 <p className="text-sm">{message.content.text}</p>
               )}
@@ -331,7 +368,7 @@ function EmpAdminChat() {
                 <img
                   src={message.content.image}
                   alt="Image"
-                  className="max-w-xs"
+                  className="max-w-xs rounded"
                 />
               )}
               {message.content && message.content.document && (
@@ -339,18 +376,18 @@ function EmpAdminChat() {
                   href={message.content.document}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
+                  className="text-orange-600 hover:underline"
                 >
                   <IoIosDocument className="text-9xl"/>
                 </a>
               )}
               {message.content && message.content.video && (
-                <video controls className="max-w-xs">
+                <video controls className="max-w-xs text-orange-600 hover:underline">
                   <source src={message.content.video} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               )}
-              <span className="text-xs text-gray-500">
+              <span className="text-xs text-orange-600">
                 {message.sender === loggedInUserId && new Date(message.createdAt).toLocaleString()}
               </span>
               
@@ -375,16 +412,17 @@ function EmpAdminChat() {
                       </button>
                     </div>
                   )}
+                  </div>
             </div>
           ))}
           <div ref={messagesEndRef} />
         </div>
-        <div className="flex justify-center items-center w-3/4 fixed bottom-0 mb-0 pb-0">
+        <div className="flex items-center p-4 bg-[#f6f5fb] w-full">
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            className="w-full p-2 text-sm text-gray-700 bg-gray-200"
+            className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
             placeholder="Type a message..."
           />
           <input
@@ -395,13 +433,16 @@ function EmpAdminChat() {
           />
           <button
             onClick={handleSendMessage}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
+           className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           >
             Send
           </button>
           <FileUploadModel sender={loggedInUserId} recipient={recipient} />
         </div>
-      </div>
+      </div>)}
+
+
+
       {showPopSms && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div

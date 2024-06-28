@@ -45,15 +45,11 @@ import BouncerTeamChat from "./components/Bouncer/BouncerTeamChat";
 import BouncerToAdminChat from "./components/Bouncer/BouncerToAdminChat";
 import BouncerReg from './components/admin/Pages/BouncerReg'
 import CallCenterLogin from "./components/CallCenter/CallCenterLogin";
-import VirtualTeamRegistration from "./components/virtualTeam/VirtualTeamRegistration";
-import VirtualToVirtualTeamChat from "./components/virtualTeam/VirtualTeamRegistration";
-import VirtualTeamToAdminChat from "./components/virtualTeam/VirtualTeamToAdminChat";
-
-
 import VirtualTeamRegistration from "./components/VirtualTeam/VirtualTeamRegistration";
-import VirtualTeamSidebar from "./components/VirtualTeam/VirtualTeamSidebar";
-import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualToVirtualTeamChat";
-import  VirtualTeamToAdminChat from "./components/VirtualTeam/VirtualTeamToAdminChat";
+import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualTeamRegistration";
+import VirtualTeamToAdminChat from "./components/VirtualTeam/VirtualTeamToAdminChat";
+
+
 import CallCenterRegister from "./components/CallCenter/CallCenterRegister";
 import CallCenterToCallCenterChat from "./components/CallCenter/CallCenterToCallCenterChat";
 import VirtualTeamLogin from "./components/VirtualTeam/VirtualTeamLogin";
