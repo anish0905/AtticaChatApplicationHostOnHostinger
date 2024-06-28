@@ -13,6 +13,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+import ReplyModel from "../ReplyModel";
 
 function AdminEmpChat() {
   const [messages, setMessages] = useState([]);
@@ -38,6 +39,8 @@ function AdminEmpChat() {
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [isChatSelected, setIsChatSelected] = useState(false);
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
+  const [replyMessage, setReplyMessage] = useState(null); //--------------->
+  const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
   
 
   // Function to handle click on employee to initiate chat
@@ -211,8 +214,8 @@ function AdminEmpChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text} `);
-    setShowDropdown(null);
+    setReplyMessage(message);  //--------------->
+    setShowReplyModal(true);   //--------------->
   };
 
   const handleForward = (message) => {
@@ -313,9 +316,9 @@ function AdminEmpChat() {
       )}
 
               <h2 className="text-2xl font-semibold">{recipientName}</h2>
-
-             
             </div>
+
+
             {/* Messages */}
             <div className="overflow-y-auto flex-1 p-4">
               {messages.map((message, index) => (
@@ -329,10 +332,20 @@ function AdminEmpChat() {
                     onMouseEnter={() => handleHover(index)}
                     onMouseLeave={() => handleLeave()}
                   >
+                    
                     <div
                     className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                     }`}
-                    >
+                    >  
+                     {/* //---------------> */}
+                 {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )} 
+                {/* //---------------> */}
                       <p className="text-sm">{message.content.text}</p>
                       {message.image && (
                         <img
@@ -420,38 +433,39 @@ function AdminEmpChat() {
               New Message from {selectedSenderName}
             </h2>
             <ul>
-              {popSms.map((sms, index) => (
-                <li key={index} className="mb-2">
-                  <p>{sms.content.text}</p>
-                  <button
-                      className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                      onClick={() => handleModalClose(sms.sender)}
-                    >
-                      Close
-                    </button>
-                  {sms.content.image && (
-                    <img
-                      src={sms.content.image}
-                      alt="attachment"
-                      className="max-w-xs mt-2"
-                    />
-                  )}
-                  {sms.content.document && (
-                    <a
-                      href={sms.content.document}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500"
-                    >
-                      View Document
-                    </a>
-                  )}
-                  {sms.content.video && (
-                    <video controls className="max-w-xs mt-2">
-                      <source src={sms.content.video} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  )}
+            {popSms.map((sms, index) => (
+          <li key={index} className="mb-2 relative">
+            <p>{sms.content.text}</p>
+            <button
+              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+              onClick={() => handleModalClose(sms.sender)}
+            >
+              Close
+            </button>
+            {sms.content.image && (
+              <img
+                src={sms.content.image}
+                alt="attachment"
+                className="w-32 mt-2 cursor-pointer"
+                onClick={() => handleImageClick(sms.content.image)}
+              />
+            )}
+            {sms.content.document && (
+              <a
+                href={sms.content.document}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500"
+              >
+                View Document
+              </a>
+            )}
+            {sms.content.video && (
+              <video controls className="max-w-xs mt-2">
+                <source src={sms.content.video} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            )}
                 </li>
                 
               ))}
@@ -475,7 +489,17 @@ function AdminEmpChat() {
           onCancel={handleCancelForward}
         />
       )}
-      
+      {replyMessage && ( ////--------------------->
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+          value={"Admin"}
+
+        />
+      )}
     </div>
   );
 }
