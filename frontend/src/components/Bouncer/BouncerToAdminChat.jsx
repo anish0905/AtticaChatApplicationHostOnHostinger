@@ -11,7 +11,7 @@ import { BASE_URL } from "../../constants";
 import ReplyModel from "../ReplyModel";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
-import Sidebar from "../AllUsers/Sidebar"
+import Sidebar from "../AllUsers/UserSidebar"
 
 function BouncerToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -76,10 +76,9 @@ function BouncerToAdminChat() {
 
   // Fetch initial messages between logged-in user and selected recipient
   useEffect(() => {
-    if (loggedInUserId && recipient) {
-      fetchMessages(loggedInUserId, recipient);
-    }
-  }, [loggedInUserId, recipient]);
+    const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
+    return () => clearInterval(intervalId);
+  }, [recipient]);
 
   // Automatically scroll to bottom when new messages are received
   useEffect(() => {
@@ -433,7 +432,7 @@ function BouncerToAdminChat() {
           >
             Send
           </button>
-          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
         </div>
       </div>
       {showPopSms && (

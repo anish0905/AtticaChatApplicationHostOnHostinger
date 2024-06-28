@@ -11,7 +11,7 @@ import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import Sidebar from "../AllUsers/Sidebar";
+import Sidebar from "../AllUsers/UserSidebar";
 import ReplyModel from "../ReplyModel";
 
 

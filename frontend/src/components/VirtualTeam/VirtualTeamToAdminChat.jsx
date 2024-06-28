@@ -8,7 +8,7 @@ import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
-import Sidebar from "../AllUsers/Sidebar"
+import Sidebar from "../AllUsers/UserSidebar"
 import ReplyModel from "../ReplyModel";//--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 

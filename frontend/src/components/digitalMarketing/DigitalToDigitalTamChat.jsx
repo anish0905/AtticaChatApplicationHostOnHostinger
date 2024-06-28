@@ -10,7 +10,7 @@ import { MdNotificationsActive } from "react-icons/md";
 import ReplyModel from "../../components/ReplyModel";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
-import Sidebar from "../AllUsers/Sidebar";
+import Sidebar from "../AllUsers/UserSidebar";
 
 function DigitalToDigitalTamChat() {
   const [messages, setMessages] = useState([]);
@@ -77,6 +77,7 @@ function DigitalToDigitalTamChat() {
     const intervalId = setInterval(() => fetchMessages(sender, recipient), 2000);
     return () => clearInterval(intervalId);
   }, [sender, recipient]);
+
 
   const handleSendMessage = () => {
     if (!newMessage.trim() && !attachment) return;

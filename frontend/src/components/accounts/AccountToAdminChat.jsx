@@ -9,7 +9,7 @@ import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
-import Sidebar from "../AllUsers/Sidebar";
+import Sidebar from "../AllUsers/UserSidebar";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ReplyModel from "../ReplyModel";
 

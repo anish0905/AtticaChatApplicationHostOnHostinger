@@ -8,7 +8,7 @@ import { RiContactsLine } from "react-icons/ri";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import logo from "../../assests/logo.png";
 
-const Sidebar = ({value}) => {
+const UserSidebar = ({value}) => {
   console.log("value    ",value,"   ")
   const navigate = useNavigate();
   const location = useLocation();
@@ -107,4 +107,4 @@ console.log("value",value)
   );
 };
 
-export default Sidebar;
+export default UserSidebar;

@@ -11,7 +11,7 @@ import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import Sidebar from "../AllUsers/Sidebar";
+import Sidebar from "../AllUsers/UserSidebar";
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin"
 import ReplyModel from "../ReplyModel";
 

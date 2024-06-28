@@ -67,7 +67,7 @@ import SoftwareToAdminChat from "./components/software/SoftwareToAdminChat";
 import SecurityToSecurityChat from "./components/security/SecurityToSecurityChat";
 import SecurityRegister from "./components/security/SecurityRegister";
 import SecurityToAdmin from "./components/security/SecurityToAdmin";
-import Sidebar from "./components/AllUsers/Sidebar";
+import Sidebar from "./components/AllUsers/UserSidebar";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');

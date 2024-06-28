@@ -7,7 +7,7 @@ import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
-import Sidebar from "../AllUsers/Sidebar"
+import Sidebar from "../AllUsers/UserSidebar"
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import ReplyModel from "../../components/ReplyModel";
@@ -75,10 +75,10 @@ function BouncerTeamChat() {
   }, [loggedInUserId]);
 
   useEffect(() => {
-    if (sender && recipient) {
-      fetchMessages(sender, recipient);
-    }
+    const intervalId = setInterval(() => fetchMessages(sender, recipient), 2000);
+    return () => clearInterval(intervalId);
   }, [sender, recipient]);
+
 
   const handleSendMessage = () => {
     if (!newMessage.trim() && !attachment) return;
@@ -165,7 +165,7 @@ function BouncerTeamChat() {
   };
 
   useEffect(() => {
-    const interval = setInterval(fetchPopSms, 5000);
+    const interval = setInterval(fetchPopSms, 2000);
     return () => clearInterval(interval);
   }, [loggedInUserId, playNotificationSound]);
 
@@ -271,7 +271,9 @@ function BouncerTeamChat() {
                   </div>
                 )}
                 {message.content && message.content.text && (
-                  <p className="font-bold">{message.content.text}</p>
+                  <p className="font-bold">
+                    
+                    {message.content.text}</p>
                 )}
                 {message.content && message.content.image && (
                   <img

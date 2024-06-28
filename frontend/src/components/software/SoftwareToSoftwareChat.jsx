@@ -10,7 +10,7 @@ import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import Sidebar from "../AllUsers/Sidebar";
+import Sidebar from "../AllUsers/UserSidebar";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers"
 import ReplyModel from "../ReplyModel";
 

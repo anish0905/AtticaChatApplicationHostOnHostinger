@@ -10,7 +10,7 @@ import { MdNotificationsActive } from "react-icons/md";
 import ReplyModel from "../../components/ReplyModel";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
-import Sidebar from "../AllUsers/Sidebar";
+import Sidebar from "../AllUsers/UserSidebar";
 
 
 function MonitoringTeamChat() {
@@ -193,6 +193,11 @@ function MonitoringTeamChat() {
     handleResize(); // Initial check
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
+    return () => clearInterval(intervalId);
+  }, [recipient]);
 
   useEffect(() => {
     if (messagesEndRef.current) {

@@ -10,7 +10,7 @@ import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import Sidebar from "../AllUsers/Sidebar";
+import Sidebar from "../AllUsers/UserSidebar";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers"
 import ReplyModel from "../ReplyModel";//--------------->
 
@@ -262,18 +262,25 @@ function SecurityToSecurityChat() {
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
               >
-                {message.content && message.content.text && (
-                  <p className="font-bold">{message.content.text}</p>
-                )}
-                {/* //---------------> */}
                 {message.content && message.content.originalMessage && (
                   <div className="mb-2">
                     <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
                       {message.content.originalMessage}
                     </span>
                   </div>
-                )} 
-                {/* //---------------> */}
+                )}
+                {message.content && message.content.text && (
+                  <p className="font-bold">
+                    
+                    {message.content.text}</p>
+                )}
+                {message.content && message.content.image && (
+                  <img
+                    src={message.content.image}
+                    alt="Image"
+                    className="max-w-xs"
+                  />
+                )}
                 {message.content && message.content.document && (
                   <a
                     href={message.content.document}
