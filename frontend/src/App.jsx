@@ -45,6 +45,11 @@ import BouncerTeamChat from "./components/Bouncer/BouncerTeamChat";
 import BouncerToAdminChat from "./components/Bouncer/BouncerToAdminChat";
 import BouncerReg from './components/admin/Pages/BouncerReg'
 import CallCenterLogin from "./components/CallCenter/CallCenterLogin";
+import VirtualTeamRegistration from "./components/virtualTeam/VirtualTeamRegistration";
+import VirtualToVirtualTeamChat from "./components/virtualTeam/VirtualTeamRegistration";
+import VirtualTeamToAdminChat from "./components/virtualTeam/VirtualTeamToAdminChat";
+
+
 import VirtualTeamRegistration from "./components/VirtualTeam/VirtualTeamRegistration";
 import VirtualTeamSidebar from "./components/VirtualTeam/VirtualTeamSidebar";
 import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualToVirtualTeamChat";
@@ -62,6 +67,8 @@ import SecurityLogin from "./components/security/SecurityLogin";
 import SoftwareReg from "./components/software/SoftwareReg";
 import SoftwareToSoftware from "./components/software/SoftwareToSoftwareChat";
 import SoftwareToAdminChat from "./components/software/SoftwareToAdminChat";
+
+
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
