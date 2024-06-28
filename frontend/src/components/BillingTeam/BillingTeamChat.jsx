@@ -4,13 +4,14 @@ import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import FileUploadModel from "../employee/FileUploadModel";
+
 import { io } from "socket.io-client";
 import { FaVideo, FaImage } from "react-icons/fa";
 import useSound from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
 import ForwardMessageModalBillingTeam from './ForwardMessageModalBillingTeam';
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 
 function BillingTeamChat() {
   const [messages, setMessages] = useState([]);
@@ -395,7 +396,7 @@ function BillingTeamChat() {
           >
             Send
           </button>
-          <FileUploadModel sender={loggedInUserId} recipient={recipient} />
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
         </div>
       </div>
       {showPopSms && (

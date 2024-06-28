@@ -74,9 +74,8 @@ function VirtualToVirtualTeamChat() {
   }, [loggedInUserId]);
 
   useEffect(() => {
-    if (sender && recipient) {
-      fetchMessages(sender, recipient);
-    }
+    const intervalId = setInterval(() => fetchMessages(sender, recipient), 2000);
+    return () => clearInterval(intervalId);
   }, [sender, recipient]);
 
   const handleSendMessage = () => {

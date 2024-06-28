@@ -4,13 +4,13 @@ import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import FileUploadModel from "../employee/FileUploadModel";
 import { FaVideo, FaImage } from "react-icons/fa";
 import GPSTracker from "./Gps.jsx"; // Adjust the import path as necessary
 import { BASE_URL } from '../../constants';
 import ForwardMessageModal from './ForwardMessageModal';
 import useSound from "use-sound";
 import notificationSound from "../../assests/sound.wav";
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel.jsx";
 
 
 function ManagerChat() {
@@ -411,7 +411,7 @@ function ManagerChat() {
             >
               Send
             </button>
-            <FileUploadModel sender={loggedInUserId} recipient={recipient} />
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
           </div>
         </div>
       </div>

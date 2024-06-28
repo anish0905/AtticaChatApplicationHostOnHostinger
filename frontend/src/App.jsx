@@ -43,7 +43,7 @@ import MonitoringTeamChat from "./components/monitoringTeam/MonitoringTeamChat";
 import MonitoringToAdminChat from "./components/monitoringTeam/MonitoringToAdminChat";
 import BouncerTeamChat from "./components/Bouncer/BouncerTeamChat";
 import BouncerToAdminChat from "./components/Bouncer/BouncerToAdminChat";
-import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualTeamRegistration";
+import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualToVirtualTeamChat";
 import VirtualTeamToAdminChat from "./components/VirtualTeam/VirtualTeamToAdminChat";
 
 

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { AiOutlineSearch,AiOutlineDown  } from "react-icons/ai";
-import FileUploadModel from "./FileUploadModel";
+import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
@@ -10,7 +9,12 @@ import { FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from '../../constants';
-import EmpToAdminForwardMessage from './EmpToAdminForwardMessage'
+
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
+import ReplyModel from "../ReplyModel";
+
+
 function EmpAdminChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -20,8 +24,8 @@ function EmpAdminChat() {
   const [recipientName, setRecipientName] = useState("");
   const [sender, setSender] = useState("");
   const [attachment, setAttachment] = useState(null);
-  const [userSearchQuery, setUserSearchQuery] = useState(""); 
-  const [adminSearchQuery, setAdminSearchQuery] = useState(""); 
+  const [userSearchQuery, setUserSearchQuery] = useState("");
+  const [adminSearchQuery, setAdminSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
   const [admins, setAdmins] = useState([]);
   const [unreadUsers, setUnreadUsers] = useState([]);
@@ -36,10 +40,17 @@ function EmpAdminChat() {
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
 
+  const [replyMessage, setReplyMessage] = useState(null); //--------------->
+  const [showReplyModal, setShowReplyModal] = useState(false);  //-----
+
+  const [isChatSelected, setIsChatSelected] = useState(false);
+
+
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
     setRecipient(id);
     setRecipientName(name);
+    setIsChatSelected(true);
     fetchMessages(loggedInUserId, id);
   };
 
@@ -69,14 +80,13 @@ function EmpAdminChat() {
   }, [loggedInUserId]);
 
   useEffect(() => {
-    if (sender && recipient) {
-      fetchMessages(sender, recipient);
-    }
-  }, [sender, recipient]);
+    const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
+    return () => clearInterval(intervalId);
+  }, [recipient]);
 
   useEffect(() => {
     axios
-      .get( `${BASE_URL}/api/admin/getAllAdmin`)
+      .get(`${BASE_URL}/api/admin/getAllAdmin`)
       .then((response) => {
         const filteredAdmins = response.data.filter(
           (admin) => admin._id !== loggedInUserId
@@ -158,8 +168,8 @@ function EmpAdminChat() {
         }
       };
       fetchUnreadMessages();
-      const intervalId = setInterval(fetchUnreadMessages, 30 * 1000);
-      return () => clearInterval(intervalId);
+      // const intervalId = setInterval(fetchUnreadMessages, 30 * 1000);
+      // return () => clearInterval(intervalId);
     }
   }, [admins]);
 
@@ -195,9 +205,9 @@ function EmpAdminChat() {
   };
 
   useEffect(() => {
-    const interval = setInterval(fetchPopSms, 5000);
+    const interval = setInterval(fetchPopSms, 2000);
     return () => clearInterval(interval);
-  }, [loggedInUserId,playNotificationSound]);
+  }, [loggedInUserId, playNotificationSound]);
 
   const handleModalClose = (senderId) => {
     axios
@@ -219,7 +229,8 @@ function EmpAdminChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text}`);
+    setReplyMessage(message);  //--------------->
+    setShowReplyModal(true);   //--------------->
   };
 
   const handleForward = (message) => {
@@ -239,26 +250,36 @@ function EmpAdminChat() {
     setShowForwardModal(false);
   };
 
+  const handleBackToUserList = () => {
+    setIsChatSelected(false);
+    setSelectedChatUserId("");
+    setRecipient("");
+    setRecipientName("");
+    setMessages([]);
+  };
+
+
 
   return (
-    <div className="flex h-screen">
-      <div className="w-1/4 bg-gray-100 p-4">
-        <h1 className="text-2xl font-bold mb-4">All Admins</h1>
+    <div className="flex flex-col lg:flex-row h-screen">
+      <EmployeeSidebar />
+      <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
+        <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
           <input
             type="text"
             value={adminSearchQuery}
             onChange={(e) => setAdminSearchQuery(e.target.value)}
-            className="w-full p-2 text-sm text-gray-700 bg-gray-200 rounded pl-10"
+            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
             placeholder="Search by email..."
           />
-          <AiOutlineSearch className="absolute top-3 left-3 text-gray-500" />
+          <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
         </div>
-        <div className="h-full overflow-y-auto">
+        <div className="h-5/6 overflow-y-auto">
           {filteredAdmins.map((admin) => (
             <div key={admin._id}>
               <div
-                className="w-full h-auto font-medium rounded-md bg-red-200 mb-4 text-2xl block items-center p-4 cursor-pointer"
+                className="w-full h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
                 onClick={() => handleClick(admin._id, admin.email)}
               >
                 <h1>{admin.email}</h1>
@@ -268,36 +289,34 @@ function EmpAdminChat() {
                     unreadUser.data.map((message) => (
                       <div
                         key={message._id}
-                        className="text-green-400 flex justify-between items-center content-center gap-5"
+                        className="text-orange-600 flex justify-between items-center content-center gap-5 mt-2"
                         onClick={() => handleShowMessage(admin._id)}
                       >
                         {!showMessages[admin._id] ? (
-                           <>
-                           {
-                             message.content.text && (
-                               <p className="pe-2 text-base">{message.content.text}</p>
-                             )
-                           }
-                           {
-                             message.content.image && (
-                               <FaImage />
-                             )
-                           }
-                           {
-                             message.content.video && (
-                               <FaVideo />
-                             )
-                           }
-                           {
-                             message.content.document && (
-                               <IoIosDocument className="text-xl" />
-                             )
-                           }
-                           <p className="text-xs text-black">
-                             {new Date(message.createdAt).toLocaleDateString()}{" "}
-                             {new Date(message.createdAt).toLocaleTimeString()}
-                           </p>
-                         </>
+                          <>
+                            {
+                              message.content.text && (
+                                <p className="pe-2 text-base">{message.content.text}</p>
+                              )
+                            }
+                            {
+                              message.content.image && (<FaImage />)
+                            }
+                            {
+                              message.content.video && (
+                                <FaVideo />
+                              )
+                            }
+                            {
+                              message.content.document && (
+                                <IoIosDocument className="text-xl" />
+                              )
+                            }
+                            <p className="text-xs text-black">
+                              {new Date(message.createdAt).toLocaleDateString()}{" "}
+                              {new Date(message.createdAt).toLocaleTimeString()}
+                            </p>
+                          </>
                         ) : (
                           <p></p>
                         )}
@@ -309,56 +328,82 @@ function EmpAdminChat() {
           ))}
         </div>
       </div>
-      <div className="w-4/5 p-4">
-        <div className="flex justify-between items-center content-center mb-4">
-          <h1 className="text-2xl font-bold">Chat with {recipientName}</h1>
-          <Link to={"/"} className="group relative flex items-center justify-end font-extrabold text-2xl  rounded-full p-3 md:p-5 ">
-            <BiLogOut />
-          </Link>
-        </div>
-        <div className="flex flex-col h-4/5 overflow-y-auto mb-4">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`w-1/3 p-2 rounded-md mb-2 relative ${
-                message.sender === loggedInUserId ?  "bg-blue-100 self-end" : "bg-gray-200 self-start"
-              }`}
-            >
-              {message.content && message.content.text && (
-                <p className="text-sm">{message.content.text}</p>
-              )}
-              {message.content && message.content.image && (
-                <img
-                  src={message.content.image}
-                  alt="Image"
-                  className="max-w-xs"
-                />
-              )}
-              {message.content && message.content.document && (
-                <a
-                  href={message.content.document}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
+
+
+      {isChatSelected && (
+        <div className="w-full lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
+
+          {isChatSelected && (
+            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+              <button
+                className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+                onClick={handleBackToUserList}
+              >
+                <FaArrowLeft />
+              </button>
+
+              <h1 className="text-2xl font-bold">Chat with {recipientName}</h1>
+              <Link
+                to={"/"}
+                className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
+              >
+                {/* <BiLogOut /> */}
+              </Link>
+            </div>
+          )}
+
+
+
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+
+
+                className={`flex relative ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2  `}
+                onMouseEnter={() => handleHover(index)}
+                onMouseLeave={() => handleLeave()}
+              >
+                <div
+                  className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
+                    }`}
                 >
-                  <IoIosDocument className="text-9xl"/>
-                </a>
-              )}
-              {message.content && message.content.video && (
-                <video controls className="max-w-xs">
-                  <source src={message.content.video} type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-              )}
-              <span className="text-xs text-gray-500">
-                {message.sender === loggedInUserId && new Date(message.createdAt).toLocaleString()}
-              </span>
-              
-                    <AiOutlineDown
-                      className="absolute top-2 right-2 cursor-pointer"
-                      onClick={() => handleDropdownClick(index)}
+
+                  {message.content && message.content.text && (
+                    <p className="text-sm">{message.content.text}</p>
+                  )}
+                  {message.content && message.content.image && (
+                    <img
+                      src={message.content.image}
+                      alt="Image"
+                      className="max-w-xs rounded"
                     />
-              
+                  )}
+                  {message.content && message.content.document && (
+                    <a
+                      href={message.content.document}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-orange-600 hover:underline"
+                    >
+                      <IoIosDocument className="text-9xl" />
+                    </a>
+                  )}
+                  {message.content && message.content.video && (
+                    <video controls className="max-w-xs text-orange-600 hover:underline">
+                      <source src={message.content.video} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  )}
+                  <span className="text-xs text-orange-600">
+                    {message.sender === loggedInUserId && new Date(message.createdAt).toLocaleString()}
+                  </span>
+
+                  <AiOutlineDown
+                    className="absolute top-2 right-2 cursor-pointer"
+                    onClick={() => handleDropdownClick(index)}
+                  />
+
                   {showDropdown === index && (
                     <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
                       <button
@@ -375,33 +420,37 @@ function EmpAdminChat() {
                       </button>
                     </div>
                   )}
-            </div>
-          ))}
-          <div ref={messagesEndRef} />
-        </div>
-        <div className="flex justify-center items-center w-3/4 fixed bottom-0 mb-0 pb-0">
-          <input
-            type="text"
-            value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
-            className="w-full p-2 text-sm text-gray-700 bg-gray-200"
-            placeholder="Type a message..."
-          />
-          <input
-            type="file"
-            onChange={handleAttachmentChange}
-            className="hidden"
-            id="file-upload"
-          />
-          <button
-            onClick={handleSendMessage}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2"
-          >
-            Send
-          </button>
-          <FileUploadModel sender={loggedInUserId} recipient={recipient} />
-        </div>
-      </div>
+                </div>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
+          <div className="flex items-center p-4 bg-[#f6f5fb] w-full">
+            <input
+              type="text"
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
+              className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
+              placeholder="Type a message..."
+            />
+            <input
+              type="file"
+              onChange={handleAttachmentChange}
+              className="hidden"
+              id="file-upload"
+            />
+            <button
+              onClick={handleSendMessage}
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Send
+            </button>
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
+          </div>
+        </div>)}
+
+
+
       {showPopSms && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div
@@ -448,11 +497,22 @@ function EmpAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <EmpToAdminForwardMessage
+        <ForwardMsgAllUsersToAdmin
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+        />
+      )}
+      {replyMessage && ( ////--------------------->
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+          value={"Admin"}
+
         />
       )}
     </div>
