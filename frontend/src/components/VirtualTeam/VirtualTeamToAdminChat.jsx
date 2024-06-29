@@ -11,6 +11,7 @@ import { BASE_URL } from "../../constants";
 import Sidebar from "../AllUsers/UserSidebar"
 import ReplyModel from "../ReplyModel";//--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 
 
 function VirtualTeamToAdminChat() {
@@ -271,7 +272,7 @@ function VirtualTeamToAdminChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-      <Sidebar value="VIRTUAL"/>
+      <Sidebar  value="BOUNCER" />
       <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
@@ -349,13 +350,13 @@ function VirtualTeamToAdminChat() {
                 className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                   }`}
               >
-                  {message.content && message.content.originalMessage && (
+                {message.content && message.content.originalMessage && (
                   <div className="mb-2">
                     <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
                       {message.content.originalMessage}
                     </span>
                   </div>
-                )}
+                )} 
                 {message.content && message.content.text && (
                   <p className="text-sm">{message.content.text}</p>
                 )}
@@ -434,7 +435,7 @@ function VirtualTeamToAdminChat() {
           >
             Send
           </button>
-          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}/>
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
         </div>
       </div>
       {showPopSms && (
@@ -466,14 +467,14 @@ function VirtualTeamToAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardModalAllUserslAllUsers
+        <ForwardMsgAllUsersToAdmin
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
           onCancel={handleCancelForward}
         />
       )}
-       {replyMessage && ( ////--------------------->
+      {replyMessage && ( ////--------------------->
         <ReplyModel
           message={replyMessage}
           sender={loggedInUserId}

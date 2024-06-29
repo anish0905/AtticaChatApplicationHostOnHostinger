@@ -48,6 +48,7 @@ const BouncerReg = () => {
         const errorData = await response.json();
         setError(errorData.message || "Registration failed");
       }
+      window.location.reload();
     } catch (error) {
       setError("An error occurred: " + error.message);
     }
@@ -55,7 +56,7 @@ const BouncerReg = () => {
 
   return (
     <div className="lg:flex block bg-[#f6f5fb]">
-      <BouncerSideBar />
+         <Sidebar />
       <div className="flex-1 p-6">
         <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
           <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">

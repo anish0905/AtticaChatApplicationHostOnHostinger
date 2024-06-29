@@ -13,6 +13,7 @@ import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
 import ForwardMsgCallCenterToAdmin from "./ForwardMsgCallCenterToAdmin";
 import CallCenterSidebar from "./CallCenterSidebar"
+import ReplyModel from "../ReplyModel";//--------------->
 
 
 function CallCenterToAdminChat() {
@@ -39,6 +40,8 @@ function CallCenterToAdminChat() {
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [hoveredMessage, setHoveredMessage] = useState(null);
+  const [replyMessage, setReplyMessage] = useState(null); //--------------->
+  const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
 
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
@@ -76,10 +79,9 @@ function CallCenterToAdminChat() {
 
   // Fetch initial messages between logged-in user and selected recipient
   useEffect(() => {
-    if (loggedInUserId && recipient) {
-      fetchMessages(loggedInUserId, recipient);
-    }
-  }, [loggedInUserId, recipient]);
+    const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
+    return () => clearInterval(intervalId);
+  }, [recipient]);
 
   // Automatically scroll to bottom when new messages are received
   useEffect(() => {
@@ -245,8 +247,8 @@ function CallCenterToAdminChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text} `);
-    setShowDropdown(null);
+    setReplyMessage(message);  //--------------->
+    setShowReplyModal(true);   //--------------->
   };
 
   const handleForward = (message) => {
@@ -303,14 +305,39 @@ function CallCenterToAdminChat() {
                       >
                         {!showMessages[admin._id] ? (
                           <>
-                            {message.content && message.content.text && (
-                              <p className="pe-2 text-base">{message.content.text}</p>
-                            )}
-                            {message.content && message.content.image && <FaImage />}
-                            {message.content && message.content.video && <FaVideo />}
-                            {message.content && message.content.document && (
-                              <IoIosDocument className="text-xl" />
-                            )}
+                              {/* //---------------> */}
+                 {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )} 
+                {/* //---------------> */}
+                {message.content && message.content.text && (
+                  <p className="text-sm">{message.content.text}</p>
+                )}
+                {message.content && message.content.image && (
+                  <>
+                    <img src={message.content.image} alt="Image" className="max-w-xs rounded" />
+                  </>
+                )}
+                {message.content && message.content.document && (
+                  <a
+                    href={message.content.document}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-orange-600 hover:underline"
+                  >
+                    <IoIosDocument className="text-9xl" />
+                  </a>
+                )}
+                {message.content && message.content.video && (
+                  <video controls className="max-w-xs text-orange-600 hover:underline">
+                    <source src={message.content.video} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
                             <p className="text-xs text-black">
                               {new Date(message.createdAt).toLocaleDateString()}{" "}
                               {new Date(message.createdAt).toLocaleTimeString()}
@@ -349,6 +376,15 @@ function CallCenterToAdminChat() {
                 className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                   }`}
               >
+                 {/* //---------------> */}
+                 {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )} 
+                {/* //---------------> */}
                 {message.content && message.content.text && (
                   <p className="text-sm">{message.content.text}</p>
                 )}
@@ -464,6 +500,18 @@ function CallCenterToAdminChat() {
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
           onCancel={handleCancelForward}
+        />
+      )}
+
+{replyMessage && ( ////--------------------->
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+          value={"Admin"}
+
         />
       )}
     </div>

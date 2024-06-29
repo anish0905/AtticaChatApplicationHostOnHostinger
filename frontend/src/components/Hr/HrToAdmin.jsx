@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
@@ -10,10 +8,13 @@ import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
+
+import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
+
+import Sidebar from "../AllUsers/UserSidebar"
+import ReplyModel from "../ReplyModel";//--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import Sidebar from "../AllUsers/UserSidebar";
-import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin"
-import ReplyModel from "../ReplyModel";
+
 
 function HrToAdmin() {
   const [messages, setMessages] = useState([]);
@@ -39,8 +40,8 @@ function HrToAdmin() {
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [hoveredMessage, setHoveredMessage] = useState(null);
-  const [replyMessage, setReplyMessage] = useState(null);
-  const [showReplyModal, setShowReplyModal] = useState(false);
+  const [replyMessage, setReplyMessage] = useState(null); //--------------->
+  const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
 
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
@@ -154,10 +155,10 @@ function HrToAdmin() {
 
       // Initial fetch and set interval to fetch every 3 seconds
       fetchUnreadMessages();
-      // const intervalId = setInterval(fetchUnreadMessages, 3000);
+      const intervalId = setInterval(fetchUnreadMessages, 3000);
 
-      // // Clear interval on component unmount
-      // return () => clearInterval(intervalId);
+      // Clear interval on component unmount
+      return () => clearInterval(intervalId);
     }
   }, [users]);
 
@@ -182,10 +183,10 @@ function HrToAdmin() {
 
       // Initial fetch and set interval to fetch every 3 seconds
       fetchUnreadMessages();
-      // const intervalId = setInterval(fetchUnreadMessages, 3000);
+      const intervalId = setInterval(fetchUnreadMessages, 3000);
 
-      // // Clear interval on component unmount
-      // return () => clearInterval(intervalId);
+      // Clear interval on component unmount
+      return () => clearInterval(intervalId);
     }
   }, [admins]);
 
@@ -195,7 +196,6 @@ function HrToAdmin() {
       ...prevShowMessages,
       [userId]: !prevShowMessages[userId],
     }));
-   
   };
 
   // Fetch pop-up SMS notifications for logged-in user
@@ -248,8 +248,8 @@ function HrToAdmin() {
   };
 
   const handleReply = (message) => {
-    setReplyMessage(message);
-    setShowReplyModal(true);
+    setReplyMessage(message);  //--------------->
+    setShowReplyModal(true);   //--------------->
   };
 
   const handleForward = (message) => {
@@ -274,7 +274,7 @@ function HrToAdmin() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-      <Sidebar value="HR" />
+      <Sidebar value="HR"/>
       <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
@@ -352,13 +352,15 @@ function HrToAdmin() {
                 className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                   }`}
               >
+                  {/* //---------------> */}
                  {message.content && message.content.originalMessage && (
                   <div className="mb-2">
                     <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
                       {message.content.originalMessage}
                     </span>
                   </div>
-                )}
+                )} 
+                {/* //---------------> */}
                 {message.content && message.content.text && (
                   <p className="text-sm">{message.content.text}</p>
                 )}
@@ -394,21 +396,22 @@ function HrToAdmin() {
                       onClick={() => handleDropdownClick(index)}
                     />
                     {showDropdown === index && (
-                      <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleReply(message)}
-                        >
-                          Reply
-                        </button>
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleForward(message)}
-                        >
-                          Forward
-                        </button>
-                      </div>
-                    )}
+                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleReply(message)}
+                    >
+                      Reply
+                    </button>
+
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleForward(message)}
+                    >
+                      Forward
+                    </button>
+                  </div>
+                )}
                   </>
                 }
               </div>
@@ -437,7 +440,7 @@ function HrToAdmin() {
           >
             Send
           </button>
-          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}/>
         </div>
       </div>
       {showPopSms && (
@@ -469,14 +472,15 @@ function HrToAdmin() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardMsgAllUsersToAdmin    //ForwardMsgDigitalMarketingToAdmin
+
+        <ForwardMsgAllUsersToAdmin
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
           onCancel={handleCancelForward}
         />
       )}
-       {replyMessage && (
+      {replyMessage && ( ////--------------------->
         <ReplyModel
           message={replyMessage}
           sender={loggedInUserId}

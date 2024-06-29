@@ -11,7 +11,8 @@ import ForwardMessageModal from './ForwardMessageModal';
 import useSound from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel.jsx";
-
+import ReplyModel from "../../components/ReplyModel";
+import { MdNotificationsActive } from "react-icons/md";
 
 function ManagerChat() {
   const [messages, setMessages] = useState([]);
@@ -37,7 +38,8 @@ function ManagerChat() {
   const [selectedSender, setSelectedSender] = useState("");
   const [selectedSenderName, setSelectedSenderName] = useState("");
   const [playNotificationSound] = useSound(notificationSound);// State for controlling modal visibility
-
+  const [replyMessage, setReplyMessage] = useState(null);
+  const [showReplyModal, setShowReplyModal] = useState(false);
   const handleClick = (id, name) => {
     setRecipient(id);
     setRecipientName(name);
@@ -178,25 +180,23 @@ function ManagerChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text}`);
+    setReplyMessage(message);
+    setShowReplyModal(true);
   };
 
   const handleForward = (message) => {
-    console.log(message)
+    console.log(message);
     setForwardMessage(message);
     setShowForwardModal(true);
     setShowDropdown(null);
-
   };
 
+  const handleForwardMessage = () => {
 
-  const handleForwardMessage = (selectedUsers) => {
-    selectedUsers.forEach((userId) => {
-      // Your forwarding logic here
-    });
     setShowForwardModal(false);
     setShowDropdown(null);
   };
+
   const handleCancelForward = () => {
     setShowForwardModal(false);
   };
@@ -321,17 +321,24 @@ function ManagerChat() {
           <div className="flex-grow overflow-y-auto p-4 flex flex-col">
             {messages.map((message, index) => (
               <div
-                key={index}
-                className={`flex ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2 `}
+                key={message._id}
+                className={`mb-4 p-4 rounded-lg max-w-[70%] relative ${message.sender === loggedInUserId
+                    ? "bg-blue-200 self-end"
+                    : "bg-gray-200 self-start"
+                  }`}
+
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
               >
-                <div
-                className={`w-1/3 p-2 rounded-md ${message.sender === loggedInUserId ?  "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl"
-                  }`}
-              >
+                {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )}
                 {message.content && message.content.text && (
-                  <p className="text-sm">{message.content.text}</p>
+                  <p className="font-bold">{message.content.text}</p>
                 )}
                 {message.content && message.content.image && (
                   <img
@@ -345,28 +352,30 @@ function ManagerChat() {
                     href={message.content.document}
                     target="_blank"
                     rel="noopener noreferrer"
-                     className="text-orange-600 hover:underline"
+                    className="text-blue-500 hover:underline"
                   >
                     <IoIosDocument className="text-9xl" />
                   </a>
                 )}
                 {message.content && message.content.video && (
-                  <video controls className="max-w-xs text-orange-600 hover:underline">
+                  <video controls className="max-w-xs">
                     <source src={message.content.video} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 )}
-                <span className="text-xs text-orange-600">
+                <span className="text-xs text-gray-500">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
+
                 {hoveredMessage === index && (
                   <AiOutlineDown
                     className="absolute top-2 right-2 cursor-pointer"
                     onClick={() => handleDropdownClick(index)}
                   />
                 )}
+
                 {showDropdown === index && (
-                  <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
+                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
                     <button
                       className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       onClick={() => handleReply(message)}
@@ -381,7 +390,6 @@ function ManagerChat() {
                     </button>
                   </div>
                 )}
-                </div>
               </div>
             ))}
             <div ref={messagesEndRef} />
@@ -416,49 +424,39 @@ function ManagerChat() {
         </div>
       </div>
       {showPopSms && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className={`bg-white relative p-6 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw]`}>
-              {showPopSms && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                  <div className={`bg-white relative p-4 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw] animate-pop-up`}>
-                    {popSms.length > 0 &&
-                      popSms
-                        .filter((sms) => sms.sender === selectedSender)
-                        .map((sms) => (
-                          <div key={sms.id} className="relative border border-gray-200 rounded-lg p-2 mb-2 shadow-sm">
-                            <div className="flex items-center gap-5 mb-1">
-                              <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
-                              <h1 className="text-xl font-bold text-green-600 text-center">
-                                {selectedSenderName}
-                              </h1>
-                            </div>
-                            <p className="text-base font-bold mb-1">{sms.content.text}</p>
-                            <p className="text-sm text-gray-500 mb-2">
-                              {new Date(sms.createdAt).toLocaleDateString()}{" "}
-                              {new Date(sms.createdAt).toLocaleTimeString()}
-                            </p>
-                            <button
-                              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                              onClick={() => handleModalClose(sms.sender)}
-                            >
-                              Close
-                            </button>
-                          </div>
-                        ))}
-                  </div>
-                </div>
-              )}
-
-            </div>
-          </div>
-        )}
-
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white p-4 rounded-lg shadow-lg border border-blue-500">
+      <div className="flex items-center mb-4">
+        <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
+        <h3 className="text-lg font-semibold">New Message</h3>
+      </div>
+      <p className="mb-2">From: {selectedSenderName}</p>
+      <p className="mb-4">Message: {popSms[0]?.content?.text}</p>
+      <button
+        onClick={() => handleModalClose(popSms[0]?.sender)}
+        className="bg-blue-500 text-white p-2 rounded-lg"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
       {showForwardModal && (
         <ForwardMessageModal
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+        />
+      )}
+          {replyMessage && (
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+
         />
       )}
     </div>

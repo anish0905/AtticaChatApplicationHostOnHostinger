@@ -46,6 +46,7 @@ const AccountsReg = () => {
         const errorData = await response.json();
         setError(errorData.message || "Registration failed");
       }
+      window.location.reload();
     } catch (error) {
       setError("An error occurred: " + error.message);
     }

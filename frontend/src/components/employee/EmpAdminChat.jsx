@@ -188,6 +188,7 @@ function EmpAdminChat() {
         `${BASE_URL}/api/getNotification/${loggedInUserId}`
       );
       const data = response.data;
+      
       setPopSms(data);
       if (data.length > 0) {
         const senderId = data[0].sender;
