@@ -57,6 +57,38 @@ const BlockAccess = () => {
         "Digital Marketing": "allUser/access/unblock/"
     };
 
+    const BlockBranchWise = {
+        "Admin": "admin/access/blockall",
+        "Employee": "employeeRegistration/access/blockall",
+        "Manager": "manager/access/blockall",
+        "Billing Team": "billingTeam/access/blockall",
+        "Accounts": "allUser/access/blockall",
+        "Software": "allUser/access/blockall",
+        "HR": "allUser/access/blockall",
+        "Call Center": "allUser/access/blockall",
+        "Virtual Team": "allUser/access/blockall",
+        "Monitoring Team": "allUser/access/blockall",
+        "Bouncers": "allUser/access/blockall",
+        "Security": "allUser/access/blockall",
+        "Digital Marketing": "allUser/access/blockall"
+    };
+
+    const UnblockBranchWise = {
+        "Admin": "admin/access/unblock/all",
+        "Employee": "employeeRegistration/unblock",
+        "Manager": "manager/access/unblock/all",
+        "Billing Team": "billingTeam/access/unblock/all",
+        "Accounts": "allUser/access/unblock/all",
+        "Software": "allUser/access/unblock/all",
+        "HR": "allUser/access/unblock/all",
+        "Call Center": "allUser/access/unblock/all",
+        "Virtual Team": "allUser/access/unblock/all",
+        "Monitoring Team": "allUser/access/unblock/all",
+        "Bouncers": "allUser/access/unblock/all",
+        "Security": "allUser/access/unblock/all",
+        "Digital Marketing": "allUser/access/unblock/all"
+    };
+
     const endpoint = roleEndpointMap[selectedRole];
 
     useEffect(() => {
@@ -142,6 +174,50 @@ const BlockAccess = () => {
         }
     };
 
+    const BlockBranchWisefun = async () => {
+        try {
+            const endpoint = BlockBranchWise[selectedRole];
+            await axios.put(`${BASE_URL}/api/${endpoint}`);
+            setUsers(prevUsers => prevUsers.map(user => ({ ...user, access: false })));
+            Swal.fire({
+                title: 'All Users Blocked!',
+                text: 'All users have been blocked successfully.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        } catch (error) {
+            console.error(`Error blocking users: ${error}`);
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was an error blocking all users.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    };
+
+    const UnblockBranchWisefun = async () => {
+        try {
+            const endpoint = UnblockBranchWise[selectedRole];
+            await axios.put(`${BASE_URL}/api/${endpoint}`);
+            setUsers(prevUsers => prevUsers.map(user => ({ ...user, access: true })));
+            Swal.fire({
+                title: 'All Users Unblocked!',
+                text: 'All users have been unblocked successfully.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        } catch (error) {
+            console.error(`Error unblocking users: ${error}`);
+            Swal.fire({
+                title: 'Error!',
+                text: 'There was an error unblocking all users.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    };
+
     return (
         <div className="lg:flex block">
             <SuperAdminSidebar />
@@ -177,6 +253,18 @@ const BlockAccess = () => {
                     onChange={handleSearchChange}
                     className="mt-2 block text-xl font-medium pl-3 pr-10 py-3 bg-slate-200 border-gray-400 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm lg:w-1/5 w-full"
                 />
+                <div className="flex gap-4 mt-4">
+                    <button 
+                        className='bg-red-700 px-4 py-2 rounded-md shadow-md text-white' 
+                        onClick={BlockBranchWisefun}>
+                        Block All
+                    </button>
+                    <button 
+                        className='bg-green-700 px-4 py-2 rounded-md shadow-md text-white' 
+                        onClick={UnblockBranchWisefun}>
+                        Unblock All
+                    </button>
+                </div>
                 <div className="mt-4 overflow-y-auto lg:w-1/5 w-full" style={{ maxHeight: '750px' }}>
                     <ul className="block font-medium px-3 py-1 rounded text-base lg:w-full w-full">
                         {filteredUsers.map(user => (
@@ -199,6 +287,7 @@ const BlockAccess = () => {
                         ))}
                     </ul>
                 </div>
+                
             </div>
         </div>
     );

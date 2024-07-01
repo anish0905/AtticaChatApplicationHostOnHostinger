@@ -36,6 +36,6 @@ router.get("/a/:id", getEmployeeById);
 router.put("/accessBlock/:id", accessBlock);
 router.put("/access/unblock/:id", accessUnblock);
 router.put("/access/blockall", BolockAllEmployee);
-router.put("/access/unblock/all", Unblocked);
+router.put("/unblock", Unblocked);
 
 module.exports = router;
