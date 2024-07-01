@@ -3,8 +3,9 @@ const MessageRes = require("../model/EmpAdminSenderModel.js");
 const { use } = require("../routes/messageRoutes.js");
 const { uploadOnCloudinary } = require("../utils/cloudinary.js");
 const { ObjectId } = require("mongodb");
-const fs = require('fs');
+const fs = require("fs");
 const Notification = require("../model/notificationModel.js");
+const cron = require("node-cron");
 
 const createMessage = async (req, res) => {
   const { sender, recipient, text } = req.body;
@@ -103,40 +104,114 @@ const createMessage = async (req, res) => {
   }
 };
 
-const getMessagesEmp = async (req, res) => {
-  const { userId1, userId2 } = req.params;
+// const getMessagesEmp = async (req, res) => {
+//   const { userId1, userId2 } = req.params;
 
-  if (!ObjectId.isValid(userId1) || !ObjectId.isValid(userId2)) {
-    return res.status(400).json({ message: "Invalid user IDs" });
-  }
+//   if (!ObjectId.isValid(userId1) || !ObjectId.isValid(userId2)) {
+//     return res.status(400).json({ message: "Invalid user IDs" });
+//   }
+
+//   try {
+//     const twoHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000); // 2 hours in milliseconds
+
+//     const messages = await MessageRes.find({
+//       $or: [
+//         {
+//           sender: userId1,
+//           recipient: userId2,
+//           createdAt: { $gte: twoHoursAgo },
+//         },
+//         {
+//           sender: userId2,
+//           recipient: userId1,
+//           createdAt: { $gte: twoHoursAgo },
+//         },
+//       ],
+//     }).sort({ createdAt: 1 });
+
+//     res.status(200).json(messages);
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+
+// Define the deletion logic
+
+const getMessagesEmp = async () => {
+  const now = new Date();
+  const fifteenMinutesAgo = new Date(now - 15 * 60 * 1000);
+  const twelveHoursAgo = new Date(now - 2 * 60 * 1000);
 
   try {
-    const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000); // 2 hours in milliseconds
-
-    const messages = await MessageRes.find({
-      $or: [
-        {
-          sender: userId1,
-          recipient: userId2,
-          createdAt: { $gte: twoHoursAgo },
+    // Update records with media content older than 15 minutes
+    await MessageRes.updateMany(
+      {
+        $or: [
+          {
+            "content.image": { $exists: true, $ne: null },
+            updatedAt: { $lte: fifteenMinutesAgo },
+          },
+          {
+            "content.document": { $exists: true, $ne: null },
+            updatedAt: { $lte: fifteenMinutesAgo },
+          },
+          {
+            "content.video": { $exists: true, $ne: null },
+            updatedAt: { $lte: fifteenMinutesAgo },
+          },
+        ],
+      },
+      {
+        $unset: {
+          "content.image": "",
+          "content.document": "",
+          "content.video": "",
         },
-        {
-          sender: userId2,
-          recipient: userId1,
-          createdAt: { $gte: twoHoursAgo },
-        },
-      ],
-    }).sort({ createdAt: 1 });
+      }
+    );
 
-    res.status(200).json(messages);
+    // Update records with text content older than 12 hours by setting a flag or clearing content
+    await MessageRes.updateMany(
+      {
+        $or: [
+          {
+            "content.text": { $exists: true, $ne: null },
+            updatedAt: { $lte: twelveHoursAgo },
+          },
+          {
+            "content.originalMessage": { $exists: true, $ne: null },
+            updatedAt: { $lte: twelveHoursAgo },
+          },
+          {
+            "content.replyMsg": { $exists: true, $ne: null },
+            updatedAt: { $lte: twelveHoursAgo },
+          },
+        ],
+      },
+      {
+        $set: {
+          // You can set a flag or clear the content fields as needed
+          // Example: Set a flag indicating the message is outdated
+          isOutdated: true,
+        },
+        // Or you could use $unset to clear specific fields
+        // $unset: { "content.text": "", "content.originalMessage": "", "content.replyMsg": "" },
+      }
+    );
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error updating old messages:", error);
   }
 };
+
+// Schedule the task
+cron.schedule("* * * * *", getMessagesEmp, {
+  scheduled: true,
+  timezone: "Asia/Kolkata",
+});
+
 const getAdminMessages = async (req, res) => {
   const { userId1, userId2 } = req.params;
 
- 
   if (!ObjectId.isValid(userId1) || !ObjectId.isValid(userId2)) {
     return res.status(400).json({ message: "Invalid user ids" });
   }
@@ -149,8 +224,6 @@ const getAdminMessages = async (req, res) => {
       ],
     }).sort({ createdAt: 1 });
 
-   
-
     res.status(200).json(messages);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -158,37 +231,34 @@ const getAdminMessages = async (req, res) => {
 };
 
 const getAllEmployee = async (req, res) => {
-
   try {
     const user = await MessageRes.find();
     if (!user) {
       res.status(400).json({ message: error.message || "user is not exists" });
     }
 
-    res.status(200).json(user, { message: "use fetch sucessfully", suceess: true });
-
+    res
+      .status(200)
+      .json(user, { message: "use fetch sucessfully", suceess: true });
   } catch (error) {
     res.status(400).json({ message: error.message });
-
   }
-
-}
+};
 const getAllEmployeeById = async (req, res) => {
-  const { id } = req.params
+  const { id } = req.params;
   try {
     const user = await MessageRes.findById({ _id: id });
     if (!user) {
       res.status(400).json({ message: error.message || "user is not exists" });
     }
 
-    res.status(200).json(user, { message: "use fetch sucessfully", suceess: true });
-
+    res
+      .status(200)
+      .json(user, { message: "use fetch sucessfully", suceess: true });
   } catch (error) {
     res.status(400).json({ message: error.message });
-
   }
-
-}
+};
 
 const markMessagesRead = async (req, res) => {
   const userId = req.params.userId;
@@ -201,26 +271,26 @@ const markMessagesRead = async (req, res) => {
       {
         $match: {
           recipient: recipientObjectId,
-        }
+        },
       },
       {
         $sort: {
-          updatedAt: -1  // Sort by updatedAt in descending order
-        }
+          updatedAt: -1, // Sort by updatedAt in descending order
+        },
       },
       {
-        $limit: 1  // Limit the result to one document
-      }
+        $limit: 1, // Limit the result to one document
+      },
     ]);
 
     // if (result.length === 0) {
     //   console.log('No matching messages found.');
-    // } 
+    // }
 
     res.json(result);
   } catch (error) {
-    console.error('Error occurred:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error occurred:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
@@ -237,34 +307,34 @@ const markMessagesReadEmp = async (req, res) => {
       {
         $match: {
           recipient: recipientObjectId,
-          createdAt: { $gte: twoHoursAgo }
-        }
+          createdAt: { $gte: twoHoursAgo },
+        },
       },
       {
         $sort: {
-          updatedAt: -1  // Sort by updatedAt in descending order
-        }
+          updatedAt: -1, // Sort by updatedAt in descending order
+        },
       },
       {
-        $limit: 1  // Limit the result to one document
-      }
+        $limit: 1, // Limit the result to one document
+      },
     ]);
 
     // if (result.length === 0) {
     //   console.log('No matching messages found.');
-    // } 
+    // }
 
     res.json(result);
   } catch (error) {
-    console.error('Error occurred:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error("Error occurred:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
 const forwardMessage = async (req, res) => {
   try {
     const { messageId, newRecipients } = req.body;
-    console.log(newRecipients)
+    console.log(newRecipients);
     const originalMessage = await MessageRes.findById(messageId);
 
     if (!originalMessage) {
@@ -291,7 +361,8 @@ const forwardMessage = async (req, res) => {
 
 const replyToMessage = async (req, res) => {
   try {
-    const { parentMessageId, sender, recipient, text, image, document, video } = req.body;
+    const { parentMessageId, sender, recipient, text, image, document, video } =
+      req.body;
 
     // Find the parent message by ID
     const parentMessage = await MessageRes.findById(parentMessageId);
@@ -306,7 +377,10 @@ const replyToMessage = async (req, res) => {
       sender,
       recipient,
       content: {
-        text, image, document, video,
+        text,
+        image,
+        document,
+        video,
         originalMessage:
           parentMessage.content.text ||
           parentMessage.content.originalMessage ||
@@ -324,4 +398,14 @@ const replyToMessage = async (req, res) => {
   }
 };
 
-module.exports = { createMessage, getMessagesEmp, getAdminMessages, getAllEmployee, getAllEmployeeById, markMessagesRead, markMessagesReadEmp, forwardMessage, replyToMessage };
+module.exports = {
+  createMessage,
+  getMessagesEmp,
+  getAdminMessages,
+  getAllEmployee,
+  getAllEmployeeById,
+  markMessagesRead,
+  markMessagesReadEmp,
+  forwardMessage,
+  replyToMessage,
+};

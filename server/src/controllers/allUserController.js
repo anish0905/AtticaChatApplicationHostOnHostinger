@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // Registration logic
 exports.registerUser = async (req, res) => {
   try {
-    const { name, email, password,role } = req.body;
+    const { name, email, password, role } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -32,7 +32,6 @@ exports.registerUser = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 exports.getUsersCountByRole = async (req, res) => {
   try {
@@ -102,6 +101,11 @@ exports.loginDigitalMarketing = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
+    if (!user.access) {
+      return res
+        .status(401)
+        .json({ error: "Digital Marketing not authorized" });
+    }
 
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
@@ -116,7 +120,11 @@ exports.loginDigitalMarketing = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ token, message: "Digital Marketing logged in successfully", _id: user._id });
+    res.status(200).json({
+      token,
+      message: "Digital Marketing logged in successfully",
+      _id: user._id,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -130,6 +138,9 @@ exports.loginAccountant = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
+    if (!user.access) {
+      return res.status(401).json({ error: "Accountant not authorized" });
+    }
 
     // Compare password
     const isMatch = await bcrypt.compare(password, user.password);
@@ -144,12 +155,15 @@ exports.loginAccountant = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ token, message: "Accountant logged in successfully", _id: user._id });
+    res.status(200).json({
+      token,
+      message: "Accountant logged in successfully",
+      _id: user._id,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
 
 exports.loginSoftware = async (req, res) => {
   try {
@@ -158,6 +172,9 @@ exports.loginSoftware = async (req, res) => {
     const user = await User.findOne({ email, role: "Software" });
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
+    }
+    if (!user.access) {
+      return res.status(401).json({ error: "Software not authorized" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
@@ -171,7 +188,11 @@ exports.loginSoftware = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ token, message: "Software logged in successfully", _id: user._id });
+    res.status(200).json({
+      token,
+      message: "Software logged in successfully",
+      _id: user._id,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -185,6 +206,9 @@ exports.loginHR = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
+    if (!user.access) {
+      return res.status(401).json({ error: "HR not authorized" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -197,7 +221,9 @@ exports.loginHR = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ token, message: "HR logged in successfully", _id: user._id });
+    res
+      .status(200)
+      .json({ token, message: "HR logged in successfully", _id: user._id });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -212,6 +238,9 @@ exports.loginCallCenter = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
+    if (!user.access) {
+      return res.status(401).json({ error: "CallCenter not authorized" });
+    }
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
@@ -223,13 +252,15 @@ exports.loginCallCenter = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ token, message: "CallCenter logged in successfully", _id: user._id });
+    res.status(200).json({
+      token,
+      message: "CallCenter logged in successfully",
+      _id: user._id,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
-
-
 
 exports.loginVirtualTeam = async (req, res) => {
   try {
@@ -239,6 +270,9 @@ exports.loginVirtualTeam = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
+    if (!user.access) {
+      return res.status(401).json({ error: "VirtualTeam not authorized" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -251,7 +285,11 @@ exports.loginVirtualTeam = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ token, message: "VirtualTeam logged in successfully", _id: user._id });
+    res.status(200).json({
+      token,
+      message: "VirtualTeam logged in successfully",
+      _id: user._id,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -266,6 +304,10 @@ exports.loginMonitoringTeam = async (req, res) => {
       return res.status(400).json({ message: "Invalid email or password" });
     }
 
+    if (!user.access) {
+      return res.status(401).json({ error: "MonitoringTeam not authorized" });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid email or password" });
@@ -277,13 +319,17 @@ exports.loginMonitoringTeam = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ token, message: "MonitoringTeam logged in successfully", _id: user._id });
+    res.status(200).json({
+      token,
+      message: "MonitoringTeam logged in successfully",
+      _id: user._id,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-exports.loginBouncers= async (req, res) => {
+exports.loginBouncers = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -291,6 +337,9 @@ exports.loginBouncers= async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
+    if (!user.access) {
+      return res.status(401).json({ error: "Bouncers not authorized" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -303,7 +352,11 @@ exports.loginBouncers= async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ token, message: "MonitoringTeam logged in successfully", _id: user._id });
+    res.status(200).json({
+      token,
+      message: "MonitoringTeam logged in successfully",
+      _id: user._id,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -317,6 +370,9 @@ exports.loginSecurity = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: "Invalid email or password" });
     }
+    if (!user.access) {
+      return res.status(401).json({ error: "Security not authorized" });
+    }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
@@ -329,17 +385,21 @@ exports.loginSecurity = async (req, res) => {
       { expiresIn: "1h" }
     );
 
-    res.status(200).json({ token, message: "Security/CCTV logged in successfully", _id: user._id });
+    res.status(200).json({
+      token,
+      message: "Security/CCTV logged in successfully",
+      _id: user._id,
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-
-
 exports.getAllDigitalTeams = async function (req, res) {
   try {
-    const users = await User.find({ role: "Digital Marketing" }).select("-password");
+    const users = await User.find({ role: "Digital Marketing" }).select(
+      "-password"
+    );
     res.json(users);
   } catch (err) {
     res.status(500).send(err);
@@ -384,7 +444,9 @@ exports.getAllVirtualTeam = async function (req, res) {
 
 exports.getAllMonitoringTeam = async function (req, res) {
   try {
-    const users = await User.find({ role: "MonitoringTeam" }).select("-password");
+    const users = await User.find({ role: "MonitoringTeam" }).select(
+      "-password"
+    );
     res.json(users);
   } catch (err) {
     res.status(500).send(err);
@@ -393,7 +455,9 @@ exports.getAllMonitoringTeam = async function (req, res) {
 
 exports.getAllBouncers = async function (req, res) {
   try {
-    const users = await User.find({ role: "Bouncers/Driver" }).select("-password");
+    const users = await User.find({ role: "Bouncers/Driver" }).select(
+      "-password"
+    );
     res.json(users);
   } catch (err) {
     res.status(500).send(err);
@@ -402,15 +466,14 @@ exports.getAllBouncers = async function (req, res) {
 
 exports.getAllSecurity = async function (req, res) {
   try {
-    const users = await User.find({ role: "Security/CCTV" }).select("-password");
+    const users = await User.find({ role: "Security/CCTV" }).select(
+      "-password"
+    );
     res.json(users);
   } catch (err) {
     res.status(500).send(err);
   }
 };
-
-
-
 
 exports.getAllHR = async function (req, res) {
   try {
@@ -437,7 +500,6 @@ exports.getById = async function (req, res) {
     res.status(500).send(err);
   }
 };
-
 
 exports.updateById = async function (req, res) {
   const { email, password, name } = req.body;
@@ -466,7 +528,9 @@ exports.updateById = async function (req, res) {
     ).select("-password");
 
     if (!updatedUserDetails) {
-      return res.status(404).json({ message: "User not found", success: false });
+      return res
+        .status(404)
+        .json({ message: "User not found", success: false });
     }
 
     res.status(200).json({
@@ -479,5 +543,38 @@ exports.updateById = async function (req, res) {
   }
 };
 
+//////////////////////////??///////////////////////////////////
+exports.accessBlock = async (req, res) => {
+  const { id } = req.params;
+  const manager = await ManagerDetails.find();
+  manager.access = false;
+  await manager.save();
+  res.status(200).json({ message: "Access Blocked Successfully" });
+};
+exports.accessUnblock = async (req, res) => {
+  const { id } = req.params;
+  const manager = await ManagerDetails.find();
+  manager.access = true;
+  await manager.save();
+  res.status(200).json({ message: "Access Unblocked Successfully" });
+};
 
+exports.blockAllUser = async (req, res) => {
+  const manager = await ManagerDetails.find();
+  manager.forEach(async (m) => {
+    m.access = false;
+    await m.save();
+  });
+  res.status(200).json({ message: "All Managers Access Blocked Successfully" });
+};
 
+exports.unblockAllUser = async (req, res) => {
+  const manager = await ManagerDetails.find();
+  manager.forEach(async (m) => {
+    m.access = true;
+    await m.save();
+  });
+  res
+    .status(200)
+    .json({ message: "All Managers Access Unblocked Successfully" });
+};

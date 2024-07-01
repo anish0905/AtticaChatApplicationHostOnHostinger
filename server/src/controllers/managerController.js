@@ -101,7 +101,7 @@ const loginManager = async (req, res) => {
     return res.status(200).json({
       id: manager._id,
       accessToken,
-      message: "Manager logged in successfully"
+      message: "Manager logged in successfully",
     });
   } catch (error) {
     return res.status(400).json({ message: error.message });
@@ -189,6 +189,42 @@ const currentManager = async (req, res) => {
   }
 };
 
+const accessBlock = async (req, res) => {
+  const { id } = req.params;
+  const manager = await ManagerDetails.find();
+  manager.access = false;
+  await manager.save();
+  res.status(200).json({ message: "Access Blocked Successfully" });
+};
+
+const accessUnblock = async (req, res) => {
+  const { id } = req.params;
+  const manager = await ManagerDetails.find();
+  manager.access = true;
+  await manager.save();
+  res.status(200).json({ message: "Access Unblocked Successfully" });
+};
+
+const blockAllManager = async (req, res) => {
+  const manager = await ManagerDetails.find();
+  manager.forEach(async (m) => {
+    m.access = false;
+    await m.save();
+  });
+  res.status(200).json({ message: "All Managers Access Blocked Successfully" });
+};
+
+const unblockAllManager = async (req, res) => {
+  const manager = await ManagerDetails.find();
+  manager.forEach(async (m) => {
+    m.access = true;
+    await m.save();
+  });
+  res
+    .status(200)
+    .json({ message: "All Managers Access Unblocked Successfully" });
+};
+
 module.exports = {
   registerManager,
   loginManager,
@@ -198,4 +234,11 @@ module.exports = {
   deleteManagerById,
   updateManagerById,
   currentManager,
+
+  accessBlock,
+  accessUnblock,
+  blockAllManager,
+  unblockAllManager,
+
+  // Add more methods as needed
 };

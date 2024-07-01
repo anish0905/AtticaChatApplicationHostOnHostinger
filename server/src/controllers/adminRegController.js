@@ -32,15 +32,22 @@ const AdminLogin = async (req, res) => {
     if (!email || !password) {
       return res.status(400).json({ message: "Please fill all the fields" });
     }
+
     const admin = await Admin.findOne({ email });
     if (!admin) {
       return res.status(400).json({ message: "Admin not found" });
+    }
+    // Ensure the employee attempting to log in has access=true
+    if (!admin.access) {
+      return res.status(401).json({ error: "admin not authorized" });
     }
     const isMatch = await admin.matchPassword(password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    res.status(200).json({ message: "Admin logged in successfully" ,data:admin });
+    res
+      .status(200)
+      .json({ message: "Admin logged in successfully", data: admin });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -99,4 +106,49 @@ const getAdminById = async (req, res) => {
   }
 };
 
-module.exports = { AdminRegistion, AdminLogin, getAllAdmin, delAdminbyId,getAdminById };
+const accessBlocks = async (req, res) => {
+  const { id } = req.params;
+  const admin = await Admin.findById(id);
+  admin.access = false;
+  await admin.save();
+  res.status(200).json({ message: "Access Blocked successfully" });
+};
+
+const accessUnblocks = async (req, res) => {
+  const { id } = req.params;
+  const admin = await Admin.findById(id);
+  admin.access = true;
+  await admin.save();
+  res.status(200).json({ message: "Access Unblocked successfully" });
+};
+
+const blockAllAdmin = async (req, res) => {
+  const admins = await Admin.find();
+  admins.forEach(async (admin) => {
+    admin.access = false;
+    await admin.save();
+  });
+  res.status(200).json({ message: "All Admins Access Blocked successfully" });
+};
+
+const unblockAllAdmin = async (req, res) => {
+  const admins = await Admin.find();
+  admins.forEach(async (admin) => {
+    admin.access = true;
+    await admin.save();
+  });
+  res.status(200).json({ message: "All Admins Access Unblocked successfully" });
+};
+
+module.exports = {
+  AdminRegistion,
+  AdminLogin,
+  getAllAdmin,
+  delAdminbyId,
+  getAdminById,
+
+  accessBlocks,
+  accessUnblocks,
+  blockAllAdmin,
+  unblockAllAdmin,
+};

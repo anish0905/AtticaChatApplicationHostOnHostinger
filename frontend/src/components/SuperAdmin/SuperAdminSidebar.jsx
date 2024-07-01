@@ -7,6 +7,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { GrChatOption } from "react-icons/gr";
 import { MdDashboard } from "react-icons/md";
 import { RiDashboardLine } from "react-icons/ri";
+import { TbLockFilled } from "react-icons/tb";
 
 
 const SuperAdminSidebar = () => {
@@ -81,15 +82,16 @@ const SuperAdminSidebar = () => {
           </span>
         </div>
 
-        {/* <Link
-          to="/adminToemp"
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === '/adminToemp' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
+         <Link
+          to="/BlockAccess"
+          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === '/BlockAccess' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
         >
-          <BsChatSquareDots className="text-lg md:text-2xl lg:text-3xl" />
+          <TbLockFilled  className="text-lg md:text-2xl lg:text-3xl" />
           <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Employee
+            Block
           </span>
-        </Link> */}
+        </Link> 
+
       </div>
 
       <div
