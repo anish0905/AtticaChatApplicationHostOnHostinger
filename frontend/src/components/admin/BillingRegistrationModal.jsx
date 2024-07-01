@@ -5,6 +5,7 @@ import BillingTeamDetails from "../BillingTeam/BillingTeamDetails";
 import { BASE_URL } from "../../constants";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CsvFileUpload from '../utility/CsvFileUpload';
 
 const BillingRegistrationModal = () => {
   const navigate = useNavigate();
@@ -61,16 +62,23 @@ const BillingRegistrationModal = () => {
     <div className="lg:flex block bg-[#f6f5fb]">
       <Sidebar />
       <div className="flex-1 p-6">
-        <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
-          <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">
-            Billing Team Details
-          </h1>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
-          >
-            Open Billing Registration Form
-          </button>
+      <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Billing Team Details</h1>
+          <div>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
+            >
+              Open Registration Form
+            </button>
+            {/* <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 ml-2 mt-4 lg:mt-0"
+            /> */}
+            <CsvFileUpload endpoint="/api/billingTeam/register" />
+          </div>
         </div>
         <BillingTeamDetails />
         {isModalOpen && (

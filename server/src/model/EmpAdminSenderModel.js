@@ -40,7 +40,7 @@ const empAdminSender = new mongoose.Schema(
         required: false,
       },
     },
-  },
+  },                     
   { timestamps: true }
 );
 

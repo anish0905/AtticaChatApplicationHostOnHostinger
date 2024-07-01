@@ -3,6 +3,7 @@ import Sidebar from "./../Sidebar";
 import { BASE_URL } from "../../../constants";
 import AccountsDetails from "../../accounts/AccountsDetails";
 import MonitoringDetails from "../../monitoringTeam/MonitoringDetails";
+import CSVFileUpload from "../../utility/CsvFileUpload";
 
 const MonitoringReg = () => {
   const [formData, setFormData] = useState({
@@ -57,16 +58,23 @@ const MonitoringReg = () => {
     <div className="lg:flex block bg-[#f6f5fb]">
       <Sidebar />
       <div className="flex-1 p-6">
-        <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
-          <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">
-            Monitoring Team Details
-          </h1>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
-          >
-            Open Monitoring Team Registration Form
-          </button>
+      <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Monitoring  Team Details</h1>
+          <div>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
+            >
+              Open Registration Form
+            </button>
+            {/* <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 ml-2 mt-4 lg:mt-0"
+            /> */}
+            <CSVFileUpload endpoint="/api/allUser/register" />
+          </div>
         </div>
         <MonitoringDetails/>
         {isModalOpen && (

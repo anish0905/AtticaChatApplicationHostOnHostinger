@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BASE_URL } from "../../constants";
 import Sidebar from "../../components/admin/Sidebar"  
 import SoftwareDetails from "./SoftwareDetails";
+import CSVFileUpload from "../utility/CsvFileUpload";
 const SoftwareReg = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -49,17 +50,24 @@ const SoftwareReg = () => {
     <div className="lg:flex block bg-[#f6f5fb]">
     <Sidebar/>
     <div className="flex-1 p-6">
-      <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
-        <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">
-         Software Details
-        </h1>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
-        >
-          Open Software Registration Form
-        </button>
-      </div>
+    <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
+          <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Software Team Details</h1>
+          <div>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
+            >
+              Open Registration Form
+            </button>
+            {/* <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 ml-2 mt-4 lg:mt-0"
+            /> */}
+            <CSVFileUpload endpoint="/api/allUser/register" />
+          </div>
+        </div>
         <SoftwareDetails/>
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
