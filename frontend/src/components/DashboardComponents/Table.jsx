@@ -60,7 +60,7 @@ const Table = () => {
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">State</th>
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">City</th>
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Pincode</th>
-              {/* <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Location</th> */}
+              <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Location</th>
             </tr>
           </thead>
           <tbody>
@@ -76,13 +76,13 @@ const Table = () => {
                 <td className="py-2 px-4 border-b text-[#5443c3]">{item.branch_state}</td>
                 <td className="py-2 px-4 border-b text-[#5443c3]">{item.branch_city}</td>
                 <td className="py-2 px-4 border-b text-[#5443c3]">{item.branch_pincode}</td>
-                {/* <td
+                <td
                   className="py-2 px-4 border-b text-decoration-line: underline"
                   style={{ color: 'blue', cursor: 'pointer' }}
                   onClick={() => openModal(item._id)}
                 >
                   Click here
-                </td> */}
+                </td>
               </tr>
             ))}
           </tbody>

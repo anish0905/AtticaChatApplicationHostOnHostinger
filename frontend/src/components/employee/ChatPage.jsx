@@ -79,7 +79,7 @@ function ChatPage() {
   }, [sender, recipient]);
 
 
-  const handleSendMessage = () => {
+  const handleSendMessage =async () => {
     if (!newMessage.trim() && !attachment) return;
 
     const messageData = {
@@ -93,16 +93,18 @@ function ChatPage() {
       video: attachment?.type.startsWith("video/") ? attachment.url : null,
     };
 
-    axios
-      .post(`${BASE_URL}/api/postmessages, messageData)
-      .then((response) => {
-        setMessages([...messages, response.data.data]);
-        setNewMessage("");
-        setAttachment(null);
-      })
-      .catch((error) => {
-        console.error(error);
-      }`);
+    
+    try {
+      const response= await axios.post(`${BASE_URL}/api/postmessages`,messageData)
+      setMessages([...messages, response.data.data]);
+      setNewMessage("");
+      setAttachment(null);
+    } catch (error) {
+      console.log(error)
+      
+    }
+
+    
   };
 
   const handleFileUpload = (file) => {
@@ -393,6 +395,7 @@ function ChatPage() {
       </div>
       <p className="mb-2">From: {selectedSenderName}</p>
       <p className="mb-4">Message: {popSms[0]?.content?.text}</p>
+      
       <button
         onClick={() => handleModalClose(popSms[0]?.sender)}
         className="bg-blue-500 text-white p-2 rounded-lg"

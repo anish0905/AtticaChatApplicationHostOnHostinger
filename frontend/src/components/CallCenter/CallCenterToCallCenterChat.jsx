@@ -11,7 +11,9 @@ import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
 import ForwardModalCallCenter from "./ForwardModalCallCenter";
 import CallCenterSidebar from "./CallCenterSidebar";
-
+import ReplyModel from "../ReplyModel";//--------------->
+import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 
 
 function CallCenterToCallCenterChat() {
@@ -37,6 +39,8 @@ function CallCenterToCallCenterChat() {
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
+  const [replyMessage, setReplyMessage] = useState(null); //--------------->
+  const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -72,9 +76,8 @@ function CallCenterToCallCenterChat() {
   }, [loggedInUserId]);
 
   useEffect(() => {
-    if (sender && recipient) {
-      fetchMessages(sender, recipient);
-    }
+    const intervalId = setInterval(() => fetchMessages(sender, recipient), 2000);
+    return () => clearInterval(intervalId);
   }, [sender, recipient]);
 
   const handleSendMessage = () => {
@@ -207,7 +210,8 @@ function CallCenterToCallCenterChat() {
   };
 
   const handleReply = (message) => {
-    setNewMessage(`Replying to: ${message.content.text}`);
+    setReplyMessage(message);  //--------------->
+    setShowReplyModal(true);   //--------------->
   };
 
   const handleForward = (message) => {
@@ -257,28 +261,35 @@ function CallCenterToCallCenterChat() {
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
               >
+                  {/* //---------------> */}
+                  {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )} 
+                {/* //---------------> */}
                 {message.content && message.content.text && (
-                  <p className="font-bold">{message.content.text}</p>
+                  <p className="text-sm">{message.content.text}</p>
                 )}
                 {message.content && message.content.image && (
-                  <img
-                    src={message.content.image}
-                    alt="Image"
-                    className="max-w-xs"
-                  />
+                  <>
+                    <img src={message.content.image} alt="Image" className="max-w-xs rounded" />
+                  </>
                 )}
                 {message.content && message.content.document && (
                   <a
                     href={message.content.document}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
+                    className="text-orange-600 hover:underline"
                   >
                     <IoIosDocument className="text-9xl" />
                   </a>
                 )}
                 {message.content && message.content.video && (
-                  <video controls className="max-w-xs">
+                  <video controls className="max-w-xs text-orange-600 hover:underline">
                     <source src={message.content.video} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
@@ -337,6 +348,7 @@ function CallCenterToCallCenterChat() {
             >
               Send
             </button>
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
           </div>
         </div>
       ) : (
@@ -399,11 +411,21 @@ function CallCenterToCallCenterChat() {
   </div>
 )}
 {showForwardModal && (
-        <ForwardModalCallCenter
+        <ForwardModalAllUsers
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+        />
+      )}
+       {replyMessage && (
+        <ReplyModel
+          message={replyMessage}
+          sender={loggedInUserId}
+          recipient={recipient}
+          isVisible={showReplyModal}
+          onClose={() => setShowReplyModal(false)}
+
         />
       )}
     </div>

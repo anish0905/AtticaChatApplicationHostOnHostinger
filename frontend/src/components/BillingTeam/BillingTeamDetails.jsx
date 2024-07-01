@@ -26,6 +26,7 @@ const Modal = ({ show, onClose, employee, onUpdate }) => {
   const handleUpdate = () => {
     onUpdate(formData);
     onClose();
+    window.location.reload();
   };
 
   return (

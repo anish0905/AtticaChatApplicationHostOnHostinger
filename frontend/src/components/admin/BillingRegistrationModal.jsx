@@ -44,7 +44,7 @@ const BillingRegistrationModal = () => {
         console.log("Registration successful");
         toast.success("Registration successful");
         setIsModalOpen(false); // Close the modal on successful registration
-        navigate("/billingTeamRegister");
+        navigate("/billingTeamRegister");window.location.reload();
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Registration failed");

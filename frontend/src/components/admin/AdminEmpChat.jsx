@@ -1,10 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
-import { BiLogOut } from "react-icons/bi";
-import { Link } from "react-router-dom";
-import { IoIosDocument } from "react-icons/io";
-import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from '../../assests/sound.wav';
 import { BASE_URL } from "../../constants";
@@ -42,7 +38,7 @@ function AdminEmpChat() {
   const [replyMessage, setReplyMessage] = useState(null); //--------------->
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
 
-
+console.log("selectedSenderName  ",selectedSenderName)
   // Function to handle click on employee to initiate chat
   const handleClick = (id, name) => {
     setRecipient(id);
@@ -158,22 +154,49 @@ function AdminEmpChat() {
   }, [users]);
 
   // Fetch pop-up SMS notifications for logged-in user
+  // const fetchPopSms = async () => {
+  //   try {
+  //     const response = await axios.get(
+  //       `${BASE_URL}/api/getNotification/${loggedInUserId}`
+  //     );
+  //     console.log("empDetails response  ",response.data.data.name)
+  //     const data = response.data;
+  //     setPopSms(data);
+  //     if (data.length > 0) {
+  //       const senderId = data[0].sender;
+  //       setSelectedSender(senderId);
+  //       setShowPopSms(true);
+  //       const empDetails = await axios.get(
+  //         `${BASE_URL}/api/employee/a/${senderId}`
+  //       );
+  //       console.log("empDetails  ",empDetails)
+  //       setSelectedSenderName(empDetails.data.name);
+  //       playNotificationSound();
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching pop SMS:", error);
+  //   }
+  // };
+
+
   const fetchPopSms = async () => {
     try {
       const response = await axios.get(
         `${BASE_URL}/api/getNotification/${loggedInUserId}`
       );
       const data = response.data;
+      console.log("admin....",response.data)
       setPopSms(data);
       if (data.length > 0) {
         const senderId = data[0].sender;
         setSelectedSender(senderId);
         setShowPopSms(true);
         const empDetails = await axios.get(
-          `${BASE_URL}/api/employee/a/${senderId}`
+           `${BASE_URL}/api/employee/a/${senderId}`
         );
+        console.log(empDetails.data);
         setSelectedSenderName(empDetails.data.name);
-        playNotificationSound();
+        playNotificationSound()
       }
     } catch (error) {
       console.error("Error fetching pop SMS:", error);
@@ -219,21 +242,24 @@ function AdminEmpChat() {
     setShowReplyModal(true);   //--------------->
   };
 
+
   const handleForward = (message) => {
     setForwardMessage(message);
     setShowForwardModal(true);
-    setShowDropdown(null)
+    setShowDropdown(null);
   };
 
   const handleCancelForward = () => {
     setShowForwardModal(false);
     setForwardMessage(null);
+    setShowDropdown(null);
   };
 
   const handleConfirmForward = () => {
     // Perform forward action here, then close modal
     setShowForwardModal(false);
     setForwardMessage(null);
+    setShowDropdown(null);
   };
 
   const handleBackToUserList = () => {
@@ -321,67 +347,60 @@ function AdminEmpChat() {
 
 
             {/* Messages */}
-            <div className="overflow-y-auto flex-1 p-4">
-              {messages.map((message, index) => (
-                <div key={index} className="mb-2">
-                  <div
-                    className={`flex ${message.sender === loggedInUserId
-                        ? "justify-end"
-                        : "justify-start"
-                      }`}
-                    onMouseEnter={() => handleHover(index)}
-                    onMouseLeave={() => handleLeave()}
-                  >
-
-                    <div
-                      className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
-                        }`}
+          
+            <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
+            {messages.map((message, index) => (
+              <div
+                key={index}
+                className={`flex relative ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2  `}
+                onMouseEnter={() => handleHover(index)}
+                onMouseLeave={() => handleLeave()}
+              >
+                <div
+                  className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
+                    }`}
+                >            {/* //---------------> */}
+                {message.content && message.content.originalMessage && (
+                 <div className="mb-2">
+                   <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                     {message.content.originalMessage}
+                   </span>
+                 </div>
+               )} 
+                  {message.content && message.content.text && (
+                    <p className="text-sm">{message.content.text}</p>
+                  )}
+                  {message.content && message.content.image && (
+                    <>
+                      <img src={message.content.image} alt="Image" className="max-w-xs rounded" />
+                    </>
+                  )}
+                  {message.content && message.content.document && (
+                    <a
+                      href={message.content.document}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-orange-600 hover:underline"
                     >
-                      {/* //---------------> */}
-                      {message.content && message.content.originalMessage && (
-                        <div className="mb-2">
-                          <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
-                            {message.content.originalMessage}
-                          </span>
-                        </div>
-                      )}
-                      {/* //---------------> */}
-                      <p className="text-sm">{message?.content?.text}</p>
-
-                      {message?.content?.image && (
-               
-                        <img
-                          src={message?.content?.image}
-                          alt="attachment"
-                          className="max-w-xs mt-2"
-                        /> 
-                      
-                      )}
-                      {message?.document && (
-                        <a
-                          href={message?.content?.document}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-orange-600 hover:underline"
-                        >
-                          View Document
-                        </a>
-                      )}
-                      {message?.content?.video && (
-                        <video controls className="max-w-xs text-orange-600 hover:underline">
-                          <source src={message.video} type="video/mp4" />
-                          Your browser does not support the video tag.
-                        </video>
-                      )}
-                      <span className="text-xs text-orange-600">
-                        {new Date(message.createdAt).toLocaleString()}
-                      </span>
-                      {hoveredMessage === index &&
-                        <AiOutlineDown
-                          className="absolute top-2 right-2 cursor-pointer"
-                          onClick={() => handleDropdownClick(index)}
-                        />
-                      }
+                      <IoIosDocument className="text-9xl" />
+                    </a>
+                  )}
+                  {message.content && message.content.video && (
+                    <video controls className="max-w-xs text-orange-600 hover:underline">
+                      <source src={message.content.video} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  )}
+                  <span className="text-xs text-orange-600">
+                    {new Date(message.createdAt).toLocaleString()}
+                  </span>
+                  {
+                    hoveredMessage === index &&
+                    <>
+                      <AiOutlineDown
+                        className="absolute top-2 right-2 cursor-pointer"
+                        onClick={() => handleDropdownClick(index)}
+                      />
                       {showDropdown === index && (
                         <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
                           <button
@@ -398,12 +417,13 @@ function AdminEmpChat() {
                           </button>
                         </div>
                       )}
-                    </div>
-                  </div>
+                    </>
+                  }
                 </div>
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
+              </div>
+            ))}
+            <div ref={messagesEndRef} />
+          </div>
             {/* Input */}
             <div className="p-4 border-t flex justify-center items-center">
               <input
@@ -426,69 +446,58 @@ function AdminEmpChat() {
           </div>
         )}
       </div>
-
       {showPopSms && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg relative">
-            <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
-            <h2 className="text-xl font-bold text-green-600 text-center">
-              New Message from {selectedSenderName}
-            </h2>
-            <ul>
-              {popSms.map((sms, index) => (
-                <li key={index} className="mb-2 relative">
-                  <p>{sms.content.text}</p>
-                  <button
-                    className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                    onClick={() => handleModalClose(sms.sender)}
-                  >
-                    Close
-                  </button>
-                  {sms.content.image && (
-                    <img
-                      src={sms.content.image}
-                      alt="attachment"
-                      className="w-32 mt-2 cursor-pointer"
-                      onClick={() => handleImageClick(sms.content.image)}
-                    />
-                  )}
-                  {sms.content.document && (
-                    <a
-                      href={sms.content.document}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500"
-                    >
-                      View Document
-                    </a>
-                  )}
-                  {sms.content.video && (
-                    <video controls className="max-w-xs mt-2">
-                      <source src={sms.content.video} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  )}
-                </li>
-
-              ))}
-            </ul>
-
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-              onClick={() => handleModalClose(selectedSender)}
-            >
-              Close
-            </button>
+          <div
+            className={`bg-white relative p-6 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw]`}
+          >
+            {showPopSms && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div
+                  className={`bg-white relative p-4 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw] animate-pop-up`}
+                >
+                  {popSms.length > 0 &&
+                    popSms
+                      .filter((sms) => sms.sender === selectedSender)
+                      .map((sms) => (
+                        <div
+                          key={sms.id}
+                          className="relative border border-gray-200 rounded-lg p-2 mb-2 shadow-sm"
+                        >
+                          <div className="flex items-center gap-5 mb-1">
+                            <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
+                            <h1 className="text-xl font-bold text-green-600 text-center">
+                              {selectedSenderName}
+                            </h1>
+                          </div>
+                          <p className="text-base font-bold mb-1">
+                            {sms.content.text}
+                          </p>
+                          <p className="text-sm text-gray-500 mb-2">
+                            {new Date(sms.createdAt).toLocaleDateString()}{" "}
+                            {new Date(sms.createdAt).toLocaleTimeString()}
+                          </p>
+                          <button
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                            onClick={() => handleModalClose(sms.sender)}
+                          >
+                            Close
+                          </button>
+                        </div>
+                      ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
-
       {showForwardModal && (
         <ForwardModalAllUsers
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
           onCancel={handleCancelForward}
+          value="admin"
         />
       )}
       {replyMessage && ( ////--------------------->
