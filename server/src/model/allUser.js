@@ -15,6 +15,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    access: {
+      type: Boolean,
+      default: true,
+    },
+
     role: {
       type: String,
       enum: [
@@ -27,7 +33,6 @@ const userSchema = new mongoose.Schema(
         "Bouncers/Driver",
         "Security/CCTV",
         "Digital Marketing",
-        
       ],
       required: true,
     },

@@ -49,6 +49,11 @@ const managerSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+
+    access: {
+      type: Boolean,
+      default: true,
+    },
   },
   {
     timestamps: true,

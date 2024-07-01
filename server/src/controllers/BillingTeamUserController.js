@@ -125,8 +125,8 @@ const generateToken = (userId) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await BillingTeamUser.find();
-    const usersWithoutPasswords = users.map(({ _doc: { password, ...userWithoutPassword } }) => userWithoutPassword);
-    res.status(200).json({ message: "Successfully fetched all users", users: usersWithoutPasswords });
+    
+    res.status(200).json(users);
   } catch (error) {
     res.status(500).json({
       message: "An error occurred while fetching users",

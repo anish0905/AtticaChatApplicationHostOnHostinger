@@ -74,7 +74,11 @@ const loginUser = asyncHandler(async (req, res) => {
     return res.status(400).json({ error: "All fields are mandatory!" });
   }
 
+  // Check if there's an employee with access=true
+
+  // Check if the employee attempting to log in has access=true
   const employeeAvailable = await EmployeReg.findOne({ employeeId });
+
   if (
     !employeeAvailable ||
     !(await bcrypt.compare(password, employeeAvailable.password))
@@ -83,10 +87,21 @@ const loginUser = asyncHandler(async (req, res) => {
       .status(401)
       .json({ error: "Employee ID or password is not valid" });
   }
+  console.log(employeeAvailable);
 
+  // if (!employeeAvailable.access) {
+  //   return res.status(401).json({ error: "Employee not authorized" });
+  // }
+
+  // Ensure the employee attempting to log in has access=true
+  if (!employeeAvailable.access) {
+    return res.status(401).json({ error: "Employee not authorized" });
+  }
+
+  // Create JWT token
   const accessToken = jwt.sign(
     {
-      useremployeeAvailable: {
+      employeeAvailable: {
         id: employeeAvailable.id,
       },
     },
@@ -94,6 +109,7 @@ const loginUser = asyncHandler(async (req, res) => {
     { expiresIn: "15m" }
   );
 
+  // Return token and employee details
   res.status(200).json({
     accessToken,
     employeeGrade: employeeAvailable.grade,
@@ -200,6 +216,38 @@ const getEmployeeById = async (req, res) => {
   }
 };
 
+const accessBlock = async (req, res) => {
+  const { id } = req.params;
+  const employee = await EmployeReg.findById(id);
+  employee.access = false;
+  await employee.save();
+  res.status(200).json({ message: "Access Blocked Successfully" });
+};
+
+const accessUnblock = async (req, res) => {
+  const { id } = req.params;
+  const employee = await EmployeReg.findById(id);
+  employee.access = true;
+  await employee.save();
+  res.status(200).json({ message: "Access Unblocked Successfully" });
+};
+
+const BolockAllEmployee = async (req, res) => {
+  const employees = await EmployeReg.find();
+  employees.forEach(async (employee) => {
+    employee.access = false;
+    await employee.save();
+  });
+  res.status(200).json({ message: "All Access Blocked Successfully" });
+};
+const Unblocked = async (req, res) => {
+  const employees = await EmployeReg.find();
+  employees.forEach(async (employee) => {
+    employee.access = true;
+    await employee.save();
+  });
+  res.status(200).json({ message: "All Access Unblocked Successfully" });
+};
 module.exports = {
   registerEmployee,
   loginUser,
@@ -208,4 +256,9 @@ module.exports = {
   deleteEmployee,
   getTotalMemberAccordingToGroup,
   getEmployeeById,
+
+  accessBlock,
+  accessUnblock,
+  BolockAllEmployee,
+  Unblocked,
 };
