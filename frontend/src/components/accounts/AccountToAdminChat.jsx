@@ -8,10 +8,13 @@ import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
+
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
-import Sidebar from "../AllUsers/UserSidebar";
+
+import Sidebar from "../AllUsers/UserSidebar"
+import ReplyModel from "../ReplyModel";//--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import ReplyModel from "../ReplyModel";
+
 
 function AccountToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -79,6 +82,7 @@ function AccountToAdminChat() {
     const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
     return () => clearInterval(intervalId);
   }, [recipient]);
+
 
   // Automatically scroll to bottom when new messages are received
   useEffect(() => {
@@ -178,11 +182,11 @@ function AccountToAdminChat() {
       };
 
       // Initial fetch and set interval to fetch every 3 seconds
-      // fetchUnreadMessages();
-      // const intervalId = setInterval(fetchUnreadMessages, 3000);
+      fetchUnreadMessages();
+      const intervalId = setInterval(fetchUnreadMessages, 3000);
 
-      // // Clear interval on component unmount
-      // return () => clearInterval(intervalId);
+      // Clear interval on component unmount
+      return () => clearInterval(intervalId);
     }
   }, [admins]);
 
@@ -199,6 +203,7 @@ function AccountToAdminChat() {
     try {
       const response = await axios.get(`${BASE_URL}/api/getNotification/${loggedInUserId}`);
       const data = response.data;
+      console.log("rrr  ",data)
       setPopSms(data);
       if (data.length > 0) {
         const senderId = data[0].sender;
@@ -247,6 +252,7 @@ function AccountToAdminChat() {
     setReplyMessage(message);  //--------------->
     setShowReplyModal(true);   //--------------->
   };
+
   const handleForward = (message) => {
     setForwardMessage(message);
     setShowForwardModal(true);
@@ -269,7 +275,7 @@ function AccountToAdminChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-      <Sidebar value="ACCOUNT" />
+      <Sidebar value="ACCOUNT"/>
       <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
@@ -301,13 +307,6 @@ function AccountToAdminChat() {
                       >
                         {!showMessages[admin._id] ? (
                           <>
-                          {message.content && message.content.originalMessage && (
-                  <div className="mb-2">
-                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
-                      {message.content.originalMessage}
-                    </span>
-                  </div>
-                )} 
                             {message.content && message.content.text && (
                               <p className="pe-2 text-base">{message.content.text}</p>
                             )}
@@ -354,13 +353,15 @@ function AccountToAdminChat() {
                 className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                   }`}
               >
-                {message.content && message.content.originalMessage && (
+                  {/* //---------------> */}
+                 {message.content && message.content.originalMessage && (
                   <div className="mb-2">
                     <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
                       {message.content.originalMessage}
                     </span>
                   </div>
                 )} 
+                {/* //---------------> */}
                 {message.content && message.content.text && (
                   <p className="text-sm">{message.content.text}</p>
                 )}
@@ -396,21 +397,22 @@ function AccountToAdminChat() {
                       onClick={() => handleDropdownClick(index)}
                     />
                     {showDropdown === index && (
-                      <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleReply(message)}
-                        >
-                          Reply
-                        </button>
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleForward(message)}
-                        >
-                          Forward
-                        </button>
-                      </div>
-                    )}
+                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleReply(message)}
+                    >
+                      Reply
+                    </button>
+
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleForward(message)}
+                    >
+                      Forward
+                    </button>
+                  </div>
+                )}
                   </>
                 }
               </div>
@@ -439,7 +441,7 @@ function AccountToAdminChat() {
           >
             Send
           </button>
-          <AllUsersFileModel  sender={loggedInUserId} recipient={recipient} />
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}/>
         </div>
       </div>
       {showPopSms && (
@@ -471,6 +473,7 @@ function AccountToAdminChat() {
         </div>
       )}
       {showForwardModal && (
+
         <ForwardMsgAllUsersToAdmin
           users={admins}
           forwardMessage={forwardMessage}

@@ -11,6 +11,7 @@ import { BASE_URL } from "../../constants";
 import Sidebar from "../AllUsers/UserSidebar"
 import ReplyModel from "../ReplyModel";//--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 
 function MonitoringAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -465,7 +466,7 @@ function MonitoringAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardModalAllUserslAllUsers
+        <ForwardMsgAllUsersToAdmin
            users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}

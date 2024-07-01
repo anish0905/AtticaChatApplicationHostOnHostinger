@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import { BASE_URL } from '../../constants';
 
-const ForwardModalAllUsers = ({ users, onForward, onCancel, forwardMessage }) => {
+const ForwardModalAllUsers = ({ users, onForward, onCancel, forwardMessage, value }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -16,19 +16,35 @@ const ForwardModalAllUsers = ({ users, onForward, onCancel, forwardMessage }) =>
 
   const handleForward = () => {
     onForward(selectedUsers);
-    axios
-      .post(`${BASE_URL}/api/forward`, {
-        messageId: forwardMessage._id,
-        newRecipients: selectedUsers,
-      })
-      .then((response) => {
-        // Handle success response if needed
-        console.log('Message forwarded successfully!', response.data);
-      })
-      .catch((error) => {
-        // Handle error if any
-        console.error('Error forwarding message:', error);
-      });
+    if (value != "admin") {
+      axios
+        .post(`${BASE_URL}/api/forward`, {
+          messageId: forwardMessage._id,
+          newRecipients: selectedUsers,
+        })
+        .then((response) => {
+          // Handle success response if needed
+          console.log('Message forwarded successfully!', response.data);
+        })
+        .catch((error) => {
+          // Handle error if any
+          console.error('Error forwarding message:', error);
+        });
+    } else {
+      axios
+        .post(`${BASE_URL}/api/empadminsender/forward`, {
+          messageId: forwardMessage._id,
+          newRecipients: selectedUsers,
+        })
+        .then((response) => {
+          // Handle success response if needed
+          console.log('Message forwarded successfully!', response.data);
+        })
+        .catch((error) => {
+          // Handle error if any
+          console.error('Error forwarding message:', error);
+        });
+    }
   };
 
   const filteredUsers = users.filter((user) =>
