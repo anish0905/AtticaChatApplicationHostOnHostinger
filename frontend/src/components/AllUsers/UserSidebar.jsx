@@ -90,7 +90,8 @@ const UserSidebar = ({ value }) => {
       <div className="w-16 md:w-24 lg:w-32 h-16 md:h-16 lg:h-24 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
         <img className="m-2 md:m-4 lg:m-10" src={logo} alt="Logo" />
       </div>
-      
+      <p className='text-white'>{userDetails?.name}</p> 
+   
     {/* __________________________user Details__________________ */}
 
       <div className=" group relative flex items-center bg-[#fffefd] rounded-full p-3 md:p-5 ">
@@ -99,7 +100,9 @@ const UserSidebar = ({ value }) => {
           onMouseEnter={() => setShowTooltip(true)}
           onMouseLeave={() => setShowTooltip(false)}
         >
+        
           <CgProfile />
+      
           <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-white text-black text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Profile
         </span>
@@ -107,10 +110,14 @@ const UserSidebar = ({ value }) => {
             <div className="absolute top-full left-0 mt-2  p-4 bg-white text-black text-sm md:text-md rounded shadow-md z-10 items-start">
               <p>Email: {userDetails.email}</p>
               <p>Name: {userDetails.name}</p>
+              <p>Role: {userDetails.role}</p>
             </div>
           )}
         </div>
+        
       </div>
+    
+
 
 {/* _______________________________________//________________________________________ */}
 

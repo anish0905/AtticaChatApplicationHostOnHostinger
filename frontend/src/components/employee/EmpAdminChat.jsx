@@ -427,7 +427,7 @@ function EmpAdminChat() {
             ))}
             <div ref={messagesEndRef} />
           </div>
-          <div className="flex items-center p-4 bg-[#f6f5fb] w-full">
+          <div className="flex items-center p-4 bg-[#f6f5fb] fixed bottom-0 lg:static w-full">
             <input
               type="text"
               value={newMessage}
