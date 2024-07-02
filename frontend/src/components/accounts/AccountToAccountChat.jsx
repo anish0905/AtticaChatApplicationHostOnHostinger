@@ -1,5 +1,8 @@
 
 
+
+
+
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
@@ -11,8 +14,9 @@ import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import Sidebar from "../AllUsers/UserSidebar";
+import UserSidebar from "../AllUsers/UserSidebar";
 import ReplyModel from "../ReplyModel";
+// import UserSidebar from "../AllUsers/UserSidebar";
 
 
 
@@ -234,7 +238,7 @@ function AccountToAccountChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      <Sidebar value="ACCOUNT" />
+      <UserSidebar value="ACCOUNT" />
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-blue-200 sticky top-0 z-10">

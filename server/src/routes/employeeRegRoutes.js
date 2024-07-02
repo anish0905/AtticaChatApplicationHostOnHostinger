@@ -8,6 +8,11 @@ const {
   deleteEmployee,
   getTotalMemberAccordingToGroup,
   getEmployeeById,
+
+  accessBlock,
+  accessUnblock,
+  BolockAllEmployee,
+  Unblocked,
 } = require("../controllers/employeeRegController");
 
 // Register
@@ -26,5 +31,11 @@ router.put("/:employeeId", updateEmployee);
 router.delete("/:employeeId", deleteEmployee);
 router.get("/getTotalMember", getTotalMemberAccordingToGroup);
 router.get("/a/:id", getEmployeeById);
+
+// Route to toggle 'access' field for the current user
+router.put("/accessBlock/:id", accessBlock);
+router.put("/access/unblock/:id", accessUnblock);
+router.put("/access/blockall", BolockAllEmployee);
+router.put("/access/unblock/all", Unblocked);
 
 module.exports = router;

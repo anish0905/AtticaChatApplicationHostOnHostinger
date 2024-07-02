@@ -12,6 +12,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [userDetails, setUserDetails] = useState()
 
   const handleEmployeeCodeChange = (e) => setEmployeeId(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -31,11 +32,26 @@ const Login = () => {
       console.log("response.data   ", response.data);
       //localStorage.setItem('EmployeeId', response.data._id);
       localStorage.setItem("CurrentUserId", response.data._id);
+
+      fetchUserDetails(response.data._id);
       navigate("/empDashbord");
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
       setError(err.response?.data?.message || "Login failed");
+    }
+  };
+
+
+  const fetchUserDetails = async (userId) => {
+    try {
+      const resp = await axios.get(`${BASE_URL}/api/allUser/getbyId/${userId}`);
+      setUserDetails(resp.data);
+      console.log(resp.data)
+      localStorage.setItem("userDetails",JSON.stringify(resp.data))
+    } catch (error) {
+      console.error("Fetch User Details Error:", error);
+      // Handle error gracefully, set userDetails to null or {}
     }
   };
 
