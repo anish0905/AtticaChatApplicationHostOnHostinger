@@ -69,6 +69,7 @@ import SecurityRegister from "./components/security/SecurityRegister";
 import SecurityToAdmin from "./components/security/SecurityToAdmin";
 import Sidebar from "./components/AllUsers/UserSidebar";
 import BlockAccess from "./components/SuperAdmin/BlockAccess";
+import Chat from "./components/SuperAdmin/Chat";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem('login');
@@ -80,6 +81,7 @@ const App = () => {
             <Route path="/adminlogin" element={<AdminLogin/>} />
             <Route path="/kitkat" element={<SuperAdminLogin/>} />
             <Route path="/empgroupchat" element={<EmpGroupChat/>}/>
+            <Route path="/superadminChat" element={<Chat />} />
 
             <Route path="/DigitalTeamLogin" element={<DigitalMarketingTeamLogin/>} />
             <Route path="/DigitalMarketingChatToDigitalMarketing" element={<DigitalToDigitalTamChat />} />
