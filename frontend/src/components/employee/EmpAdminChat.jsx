@@ -9,7 +9,7 @@ import { FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from '../../constants';
-
+import { IoMdSend } from "react-icons/io";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 import ReplyModel from "../ReplyModel";
@@ -445,7 +445,7 @@ function EmpAdminChat() {
               onClick={handleSendMessage}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
-              Send
+              <IoMdSend />
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
           </div>

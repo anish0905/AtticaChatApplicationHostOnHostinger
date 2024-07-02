@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Modal = ({ show, onClose, callCenter, onUpdate }) => {
   const [formData, setFormData] = useState({ ...callCenter });
@@ -79,14 +80,17 @@ const Modal = ({ show, onClose, callCenter, onUpdate }) => {
 
 const CallCenterDetail = () => {
   const [callCenters, setCallCenters] = useState([]);
+  const [filteredCallCenters, setFilteredCallCenters] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedCallCenter, setSelectedCallCenter] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchCallCenters = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/api/allUser/getAllCallCenterTeam`);
         setCallCenters(res.data);
+        setFilteredCallCenters(res.data);
       } catch (error) {
         console.error("Error fetching Call Centers", error);
       }
@@ -94,6 +98,13 @@ const CallCenterDetail = () => {
 
     fetchCallCenters();
   }, []);
+
+  useEffect(() => {
+    const results = callCenters.filter((center) =>
+      center.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+    setFilteredCallCenters(results);
+  }, [searchQuery, callCenters]);
 
   const handleEdit = (callCenter) => {
     setSelectedCallCenter(callCenter);
@@ -105,6 +116,7 @@ const CallCenterDetail = () => {
       if (window.confirm("Are you sure? The data will be deleted permanently.")) {
         await axios.delete(`${BASE_URL}/api/allUser/delete/${callCenterId}`);
         setCallCenters(callCenters.filter((center) => center._id !== callCenterId));
+        setFilteredCallCenters(filteredCallCenters.filter((center) => center._id !== callCenterId));
         toast.success('Call Center deleted successfully');
       }
     } catch (error) {
@@ -124,7 +136,11 @@ const CallCenterDetail = () => {
           center._id === updatedCallCenter._id ? res.data.updatedCallCenter : center
         )
       );
-      window.location.reload(); // Fixed reload method
+      setFilteredCallCenters(
+        filteredCallCenters.map((center) =>
+          center._id === updatedCallCenter._id ? res.data.updatedCallCenter : center
+        )
+      );
       toast.success('Call Center details updated successfully');
     } catch (error) {
       console.error("Error updating Call Center", error);
@@ -135,6 +151,21 @@ const CallCenterDetail = () => {
   return (
     <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
       <ToastContainer />
+      <div className="mb-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search by name..."
+            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <AiOutlineSearch
+            size={20}
+            className="absolute top-3 left-3 text-gray-500 text-2xl"
+          />
+        </div>
+      </div>
       <div className="flex-1 overflow-x-auto overflow-y-hidden">
         <div className="h-full overflow-y-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -155,7 +186,7 @@ const CallCenterDetail = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-              {callCenters.map((center) => (
+              {filteredCallCenters.map((center) => (
                 <tr key={center._id}>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                     {center?._id}

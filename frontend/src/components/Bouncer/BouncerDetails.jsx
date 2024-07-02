@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Modal = ({ show, onClose, bouncer, onUpdate }) => {
   const [formData, setFormData] = useState({ ...bouncer });
@@ -81,6 +82,7 @@ const BouncerDetails = () => {
   const [bouncers, setBouncers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedBouncer, setSelectedBouncer] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchBouncers = async () => {
@@ -124,17 +126,37 @@ const BouncerDetails = () => {
           bouncer._id === updatedBouncer._id ? res.data.updatedBouncer : bouncer
         )
       );
-      window.location.reload(); // Consider alternative solutions
       toast.success('Bouncer details updated successfully');
     } catch (error) {
       console.error("Error updating Bouncer", error);
       toast.error('Failed to update Bouncer');
     }
+    setShowModal(false);
   };
+
+  const filteredBouncers = bouncers.filter((bouncer) =>
+    bouncer.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
       <ToastContainer />
+      <div className="flex items-center justify-between mb-4">
+        {/* <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Bouncer Details</h1> */}
+        <div className="relative mb-4 w-full">
+          <input
+            type="text"
+            placeholder="Search by name..."
+            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <AiOutlineSearch
+            size={20}
+            className="absolute top-3 left-3 text-gray-500 text-2xl"
+          />
+        </div>
+      </div>
       <div className="flex-1 overflow-x-auto overflow-y-hidden">
         <div className="h-full overflow-y-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -155,7 +177,7 @@ const BouncerDetails = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-              {bouncers.map((bouncer) => (
+              {filteredBouncers.map((bouncer) => (
                 <tr key={bouncer._id}>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                     {bouncer?._id}

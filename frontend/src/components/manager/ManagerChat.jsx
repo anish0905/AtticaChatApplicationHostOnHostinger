@@ -13,6 +13,7 @@ import notificationSound from "../../assests/sound.wav";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel.jsx";
 import ReplyModel from "../../components/ReplyModel";
 import { MdNotificationsActive } from "react-icons/md";
+import { IoMdSend } from "react-icons/io";
 
 function ManagerChat() {
   const [messages, setMessages] = useState([]);
@@ -239,10 +240,10 @@ function ManagerChat() {
       });
   };
 
+
   return (
     <div>
       <GPSTracker managerId={loggedInUserId} />
-
       <div className="flex flex-col lg:flex-row h-screen">
         <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
           <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Billing Team</h1>
@@ -256,6 +257,11 @@ function ManagerChat() {
             />
             <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
           </div>
+
+
+
+
+          
           <div className="h-5/6 overflow-y-auto">
             {filteredUsers.map((user) => (
               <div key={user._id}>
@@ -417,7 +423,7 @@ function ManagerChat() {
               onClick={handleSendMessage}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
-              Send
+             <IoMdSend />
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
           </div>

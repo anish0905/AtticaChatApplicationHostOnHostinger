@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Modal = ({ show, onClose, monitoringTeam, onUpdate }) => {
   const [formData, setFormData] = useState({ ...monitoringTeam });
@@ -77,16 +78,19 @@ const Modal = ({ show, onClose, monitoringTeam, onUpdate }) => {
   );
 };
 
-const MonitoringDetails = () => { // Renamed component
-  const [monitoringTeams, setMonitoringTeams] = useState([]); // Changed state and variable names
+const MonitoringDetails = () => {
+  const [monitoringTeams, setMonitoringTeams] = useState([]);
+  const [filteredTeams, setFilteredTeams] = useState([]); // New state for filtered teams
   const [showModal, setShowModal] = useState(false);
-  const [selectedMonitoringTeam, setSelectedMonitoringTeam] = useState(null); // Changed variable name
+  const [selectedMonitoringTeam, setSelectedMonitoringTeam] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
   useEffect(() => {
-    const fetchMonitoringTeams = async () => { // Changed function name
+    const fetchMonitoringTeams = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/allUser/getAllMonitoringTeam`); // Updated API endpoint
-        setMonitoringTeams(res.data); // Updated state
+        const res = await axios.get(`${BASE_URL}/api/allUser/getAllMonitoringTeam`);
+        setMonitoringTeams(res.data);
+        setFilteredTeams(res.data); // Initialize filtered teams
       } catch (error) {
         console.error("Error fetching Monitoring Teams", error);
       }
@@ -95,16 +99,24 @@ const MonitoringDetails = () => { // Renamed component
     fetchMonitoringTeams();
   }, []);
 
+  useEffect(() => {
+    setFilteredTeams(
+      monitoringTeams.filter((team) =>
+        team.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    );
+  }, [searchQuery, monitoringTeams]);
+
   const handleEdit = (monitoringTeam) => {
-    setSelectedMonitoringTeam(monitoringTeam); // Updated variable name
+    setSelectedMonitoringTeam(monitoringTeam);
     setShowModal(true);
   };
 
   const handleDelete = async (monitoringTeamId) => {
     try {
       if (window.confirm("Are you sure? The data will be deleted permanently.")) {
-        await axios.delete(`${BASE_URL}/api/allUser/delete/${monitoringTeamId}`); // Updated API endpoint
-        setMonitoringTeams(monitoringTeams.filter((team) => team._id !== monitoringTeamId)); // Updated state
+        await axios.delete(`${BASE_URL}/api/allUser/delete/${monitoringTeamId}`);
+        setMonitoringTeams(monitoringTeams.filter((team) => team._id !== monitoringTeamId));
         toast.success('Monitoring Team deleted successfully');
       }
     } catch (error) {
@@ -116,7 +128,7 @@ const MonitoringDetails = () => { // Renamed component
   const handleUpdate = async (updatedMonitoringTeam) => {
     try {
       const res = await axios.patch(
-        `${BASE_URL}/api/allUser/update/${updatedMonitoringTeam._id}`, // Updated API endpoint
+        `${BASE_URL}/api/allUser/update/${updatedMonitoringTeam._id}`,
         updatedMonitoringTeam
       );
       setMonitoringTeams(
@@ -124,7 +136,6 @@ const MonitoringDetails = () => { // Renamed component
           team._id === updatedMonitoringTeam._id ? res.data.updatedMonitoringTeam : team
         )
       );
-      window.location.reload(); // Fixed reload method (consider alternative solutions)
       toast.success('Monitoring Team details updated successfully');
     } catch (error) {
       console.error("Error updating Monitoring Team", error);
@@ -135,6 +146,21 @@ const MonitoringDetails = () => { // Renamed component
   return (
     <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
       <ToastContainer />
+      <div className="mb-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search by name..."
+          className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <AiOutlineSearch
+            size={20}
+            className="absolute top-3 left-3 text-gray-500 text-2xl"
+          />
+        </div>
+      </div>
       <div className="flex-1 overflow-x-auto overflow-y-hidden">
         <div className="h-full overflow-y-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -155,7 +181,7 @@ const MonitoringDetails = () => { // Renamed component
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-              {monitoringTeams.map((team) => (
+              {filteredTeams.map((team) => (
                 <tr key={team._id}>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                     {team?._id}
@@ -190,7 +216,7 @@ const MonitoringDetails = () => { // Renamed component
         <Modal
           show={showModal}
           onClose={() => setShowModal(false)}
-          monitoringTeam={selectedMonitoringTeam} // Updated prop name
+          monitoringTeam={selectedMonitoringTeam}
           onUpdate={handleUpdate}
         />
       )}
@@ -198,4 +224,4 @@ const MonitoringDetails = () => { // Renamed component
   );
 };
 
-export default MonitoringDetails; // Updated export name
+export default MonitoringDetails;

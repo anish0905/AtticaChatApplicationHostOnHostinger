@@ -13,6 +13,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import AllUsersFileModel from "../../AllUsers/AllUsersFileModel";
 import ForwardMsgAllUsersToAdmin from "../../AllUsers/ForwardMsgAllUsersToAdmin";
 import ReplyModel from "../../ReplyModel";
+import { IoMdSend } from "react-icons/io";
 
 function AdmintoAdmin() {
   const [messages, setMessages] = useState([]);
@@ -470,7 +471,7 @@ function AdmintoAdmin() {
               onClick={handleSendMessage}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
-              Send
+               <IoMdSend />
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
           </div>

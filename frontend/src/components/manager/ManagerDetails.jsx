@@ -5,6 +5,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Modal = ({ show, onClose, manager, onUpdate }) => {
   const [formData, setFormData] = useState({ ...manager });
@@ -94,6 +95,7 @@ const ManagerDetails = () => {
   const [managers, setManagers] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedManager, setSelectedManager] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchManagers = async () => {
@@ -144,95 +146,112 @@ const ManagerDetails = () => {
     }
   };
 
+  const filteredManagers = managers.filter(manager =>
+    manager.manager_name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
-    <ToastContainer />
-    <div className="flex-1 overflow-x-auto overflow-y-hidden">
-      <div className="h-full overflow-y-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-[#5443c3] sticky top-0">
-            <tr>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Manager ID
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Manager Name
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Manager Email
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Manager Phone
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch City
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch State
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch Pincode
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch Name
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Branch Address
-              </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-            {managers.map((manager) => (
-              <tr key={manager._id}>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {manager.manager_Id}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {manager.manager_name}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {manager.manager_email}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {manager.manager_phone}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {manager.branch_city}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {manager.branch_state}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {manager.branch_pincode}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {manager.branch_name}
-                </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
-                  {manager.branch_address}
-                </td>
-                <td className="py-4 px-4 whitespace-nowrap flex">
-                  <button
-                    onClick={() => handleEdit(manager)}
-                    className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                    <FaEdit />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(manager._id)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                  >
-                   <RiDeleteBin5Line />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <ToastContainer />
+      <div className="relative mb-4 w-full">
+        <input
+          type="text"
+          placeholder="Search by Manager Name"
+        className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <AiOutlineSearch
+            size={20}
+            className="absolute top-3 left-3 text-gray-500 text-2xl"
+          />
       </div>
+      <div className="flex-1 overflow-x-auto overflow-y-hidden">
+        <div className="h-full overflow-y-auto">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-[#5443c3] sticky top-0">
+              <tr>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Manager ID
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Manager Name
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Manager Email
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Manager Phone
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Branch City
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Branch State
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Branch Pincode
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Branch Name
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Branch Address
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Actions
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
+              {filteredManagers.map((manager) => (
+                <tr key={manager._id}>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {manager.manager_Id}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {manager.manager_name}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {manager.manager_email}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {manager.manager_phone}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {manager.branch_city}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {manager.branch_state}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {manager.branch_pincode}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {manager.branch_name}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                    {manager.branch_address}
+                  </td>
+                  <td className="py-4 px-4 whitespace-nowrap flex">
+                    <button
+                      onClick={() => handleEdit(manager)}
+                      className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                      <FaEdit />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(manager._id)}
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                     <RiDeleteBin5Line />
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
       {selectedManager && (
         <Modal
