@@ -61,7 +61,7 @@ const employeeRegSchema = mongoose.Schema(
     },
     access: {
       type: Boolean,
-      default: true, // Ensure the default value is set properly
+      default: true, 
     },
   },
   {

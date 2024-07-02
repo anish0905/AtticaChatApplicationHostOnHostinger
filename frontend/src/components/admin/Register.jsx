@@ -5,6 +5,10 @@ import Sidebar from './Sidebar';
 import EmployeeDetails from './EmployeeDetails';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CsvFileUpload from '../utility/CsvFileUpload';
+
+
+
 
 export const Register = () => {
   const [form, setForm] = useState({
@@ -14,12 +18,12 @@ export const Register = () => {
     employeeId: '',
     state: '',
     language: '',
-    grade: 'A', // Default value for the dropdown
-    group: 'Karnataka Team' // Default value for the dropdown
+    grade: '',
+    group: ''
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [error, setError] = useState(null); // For displaying errors
+  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,19 +35,19 @@ export const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null); // Clear previous errors
+    setError(null);
 
     if (form.password !== form.confirmPassword) {
       setError("Passwords do not match");
       return;
     }
 
-    const token = localStorage.getItem('AdminId'); // Retrieve token from localStorage
+    const token = localStorage.getItem('AdminId');
 
     try {
       const res = await axios.post(`${emplyeRegistration}`, form, {
         headers: {
-          Authorization: `Bearer ${token}` // Set token in request headers
+          Authorization: `Bearer ${token}`
         }
       });
       console.log('Registered user', res.data);
@@ -56,8 +60,8 @@ export const Register = () => {
         employeeId: '',
         state: '',
         language: '',
-        grade: 'A',
-        group: 'Karnataka Team'
+        grade: '',
+        group: ''
       });
     } catch (error) {
       console.log("An error occurred during registering a user", error);
@@ -65,18 +69,68 @@ export const Register = () => {
     }
   };
 
+  // const handleFileUpload = async (e) => {
+  //   const file = e.target.files[0];
+  //   if (!file) return;
+
+  //   Papa.parse(file, {
+  //     header: true,
+  //     complete: async (results) => {
+  //       const data = results.data;
+  //       await processBatches(data);
+  //     },
+  //     error: (error) => {
+  //       console.error("Error parsing CSV file:", error);
+  //       setError("Error parsing CSV file");
+  //     }
+  //   });
+  // };
+
+  // const processBatches = async (data) => {
+  //   const token = localStorage.getItem('AdminId');
+  //   const totalBatches = Math.ceil(data.length );
+  //   // console.log("total   ",totalBatches)
+  //   for (let i = 0; i < totalBatches; i++) {
+  //     const batch = data.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE);
+  //     console.log("batch;;;;  ",batch)
+  //     try {
+  //       await Promise.all(
+  //         batch.map(row => axios.post(`${emplyeRegistration}`, row, {
+  //           headers: {
+  //             Authorization: `Bearer ${token}`
+  //           }
+  //         }))
+  //       );
+  //       toast.success(`Batch ${i + 1} of ${totalBatches} registered successfully!`);
+  //     } catch (error) {
+  //       console.log(`An error occurred during registering batch ${i + 1}`, error);
+  //       setError(`An error occurred during registering batch ${i + 1}`);
+  //       break;
+  //     }
+  //   }
+  // };
+
   return (
     <div className="lg:flex block bg-[#f6f5fb]">
       <Sidebar />
       <div className="flex-1 p-6">
         <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
           <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Employee Details</h1>
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
-          >
-            Open Registration Form
-          </button>
+          <div>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
+            >
+              Open Registration Form
+            </button>
+            {/* <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileUpload}
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 ml-2 mt-4 lg:mt-0"
+            /> */}
+            <CsvFileUpload endpoint="/api/employeeRegistration/register" />
+          </div>
         </div>
         <EmployeeDetails />
         {isModalOpen && (
@@ -99,7 +153,7 @@ export const Register = () => {
                     </label>
                     <input
                       className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                      id={field.name} // Ensure id is unique
+                      id={field.name}
                       type={field.type}
                       name={field.name}
                       value={form[field.name]}

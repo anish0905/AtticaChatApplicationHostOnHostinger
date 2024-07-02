@@ -241,13 +241,18 @@ const BolockAllEmployee = async (req, res) => {
   res.status(200).json({ message: "All Access Blocked Successfully" });
 };
 const Unblocked = async (req, res) => {
-  const employees = await EmployeReg.find();
-  employees.forEach(async (employee) => {
-    employee.access = true;
-    await employee.save();
-  });
-  res.status(200).json({ message: "All Access Unblocked Successfully" });
+  try {
+    const employees = await EmployeReg.find();
+    for (const employee of employees) {
+      employee.access = true;
+      await employee.save();
+    }
+    res.status(200).json({ message: "All Access Unblocked Successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "An error occurred", error });
+  }
 };
+
 module.exports = {
   registerEmployee,
   loginUser,
