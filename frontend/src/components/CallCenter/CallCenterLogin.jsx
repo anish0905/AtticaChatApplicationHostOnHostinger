@@ -6,12 +6,14 @@ import babusirr from "../../assests/babusirr.png";
 import back4 from "../../assests/back4.png";
 import { BASE_URL } from "../../constants";
 
+
 const CallCenterLogin
  = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userDetails, setUserDetails] = useState()
   const navigate = useNavigate();
 
   const handleEmployeeCodeChange = (e) => setEmail(e.target.value);
@@ -32,11 +34,26 @@ const CallCenterLogin
       localStorage.setItem("token", response.data.accessToken);
       console.log("response.data   ", response.data);
       localStorage.setItem("CurrentUserId", response.data._id);
+
+      fetchUserDetails(response.data._id);
+
       navigate("/CallCenterToCallCenter");
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
       setError(err.response?.data?.message || "Login failed");
+    }
+  };
+
+  const fetchUserDetails = async (userId) => {
+    try {
+      const resp = await axios.get(`${BASE_URL}/api/allUser/getbyId/${userId}`);
+      setUserDetails(resp.data);
+      console.log(resp.data)
+      localStorage.setItem("userDetails",JSON.stringify(resp.data))
+    } catch (error) {
+      console.error("Fetch User Details Error:", error);
+      // Handle error gracefully, set userDetails to null or {}
     }
   };
 

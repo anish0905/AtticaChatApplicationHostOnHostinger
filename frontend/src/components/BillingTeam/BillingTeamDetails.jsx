@@ -144,7 +144,7 @@ const BillingTeamDetails = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-              {employees.map((employee) => (
+              {employees?.map((employee) => (
                 <tr key={employee._id}>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">{employee.name}</td>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">{employee.email}</td>
@@ -187,3 +187,4 @@ const BillingTeamDetails = () => {
 };
 
 export default BillingTeamDetails;
+

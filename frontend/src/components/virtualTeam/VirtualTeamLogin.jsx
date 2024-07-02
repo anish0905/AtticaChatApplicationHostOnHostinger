@@ -13,6 +13,8 @@ const VirtualTeamLogin = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userDetails, setUserDetails] = useState()
+
   const navigate = useNavigate();
 
   const handleEmployeeCodeChange = (e) => setEmail(e.target.value);
@@ -33,6 +35,8 @@ const VirtualTeamLogin = () => {
       localStorage.setItem("token", response.data.accessToken);
       console.log("response.data   ", response.data);
       localStorage.setItem("CurrentUserId", response.data._id);
+      fetchUserDetails(response.data._id);
+
       navigate("/VirtualTeamToVirtualTeam");
     } catch (err) {
       setLoading(false);
@@ -40,6 +44,20 @@ const VirtualTeamLogin = () => {
       setError(err.response?.data?.message || "Login failed");
     }
   };
+
+
+  
+  const fetchUserDetails = async (userId) => {
+    try {
+      const resp = await axios.get(`${BASE_URL}/api/allUser/getbyId/${userId}`);
+      setUserDetails(resp.data);
+      console.log(resp.data)
+      localStorage.setItem("userDetails",JSON.stringify(resp.data))
+    } catch (error) {
+      console.error("Fetch User Details Error:", error);
+      // Handle error gracefully, set userDetails to null or {}
+    }
+  }; 
 
   return (
     <div
