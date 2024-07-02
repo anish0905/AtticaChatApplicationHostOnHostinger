@@ -39,8 +39,18 @@ const empAdminSender = new mongoose.Schema(
         type: String,
         required: false,
       },
+     
+        lat :{
+          type:Number,
+          required:false
+        },
+        lng :{
+          type : Number,
+          required:false
+        }
+
     },
-  },                     
+  },
   { timestamps: true }
 );
 

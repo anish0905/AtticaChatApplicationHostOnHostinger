@@ -1,7 +1,7 @@
 import * as React from 'react';
 import axios from 'axios';
-import { useRef,useEffect, useState } from 'react';
-import PropTypes from 'prop-types'; // Import PropTypes for type checking
+import { useRef, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
@@ -14,14 +14,15 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { FaFolderPlus } from 'react-icons/fa';
 import { BASE_URL } from '../../constants';
 
-export default function AllUsersFileModel({ sender, recipient, admin }) {
+export default function AllUsersFileModel({ sender, recipient, admin, latitude, longitude }) {
   const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(false); // Add loading state
-  const [error, setError] = React.useState(null); // Add error state
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
   const anchorRef = React.useRef(null);
   const imageInputRef = React.useRef(null);
   const documentInputRef = React.useRef(null);
   const videoInputRef = React.useRef(null);
+  const LocationInputRef = React.useRef(null);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -60,26 +61,24 @@ export default function AllUsersFileModel({ sender, recipient, admin }) {
   const handleFileChange = async (event, fieldName) => {
     const file = event.target.files[0];
     if (file) {
-      // Create a FormData object to hold the file
       const formData = new FormData();
       formData.append(fieldName, file);
       formData.append('sender', sender);
       formData.append('recipient', recipient);
 
-      setLoading(true); // Set loading to true before upload starts
-      setError(null); // Reset error state
+      setLoading(true);
+      setError(null);
 
       try {
         let response;
-        if (admin === "admin") {
+        if (admin === 'admin') {
           response = await axios.post(`${BASE_URL}/api/empadminsender/createMessage`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           });
         } else {
-          
-            response = await axios.post(`${BASE_URL}/api/postmessages`, formData, {
+          response = await axios.post(`${BASE_URL}/api/postmessages`, formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
@@ -88,12 +87,52 @@ export default function AllUsersFileModel({ sender, recipient, admin }) {
         console.log('File uploaded successfully:', response.data);
       } catch (error) {
         console.error('Error uploading file:', error);
-        setError('Error uploading file. Please try again.'); // Set error message
+        setError('Error uploading file. Please try again.');
       } finally {
         setLoading(false);
       }
 
-      event.target.value = null; // Reset the input value
+      event.target.value = null;
+    }
+  };
+
+  const imgageWithLocation = async (event, fieldName) => {
+    const file = event.target.files[0];
+    if (file) {
+      const formData = new FormData();
+      formData.append(fieldName, file);
+      formData.append('sender', sender);
+      formData.append('recipient', recipient);
+      formData.append('lat', latitude);
+      formData.append('lng', longitude);
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        let response;
+        if (admin === 'admin') {
+          response = await axios.post(`${BASE_URL}/api/empadminsender/createMessage`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        } else {
+          response = await axios.post(`${BASE_URL}/api/postmessages`, formData, {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+        }
+        console.log('File uploaded successfully:', response.data);
+      } catch (error) {
+        console.error('Error uploading file:', error);
+        setError('Error uploading file. Please try again.');
+      } finally {
+        setLoading(false);
+      }
+
+      event.target.value = null;
     }
   };
 
@@ -137,6 +176,7 @@ export default function AllUsersFileModel({ sender, recipient, admin }) {
                     <MenuItem onClick={() => handleFileInputClick(imageInputRef)}>Image</MenuItem>
                     <MenuItem onClick={() => handleFileInputClick(documentInputRef)}>Document</MenuItem>
                     <MenuItem onClick={() => handleFileInputClick(videoInputRef)}>Video</MenuItem>
+                    <MenuItem onClick={() => handleFileInputClick(LocationInputRef)}>Image With Location</MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
@@ -165,10 +205,17 @@ export default function AllUsersFileModel({ sender, recipient, admin }) {
           style={{ display: 'none' }}
           onChange={(e) => handleFileChange(e, 'video')}
         />
+        <input
+          ref={LocationInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={(e) => imgageWithLocation(e, 'image')}
+        />
       </div>
 
-      {loading && <CircularProgress className='absolute top-1/2 left-1/2' />} {/* Show spinner when loading is true */}
-      {error && <div style={{ color: 'red' }}>{error}</div>} {/* Show error message if error occurs */}
+      {loading && <CircularProgress className='absolute top-1/2 left-1/2' />}
+      {error && <div style={{ color: 'red' }}>{error}</div>}
     </Stack>
   );
 }
@@ -177,4 +224,6 @@ AllUsersFileModel.propTypes = {
   sender: PropTypes.string.isRequired,
   recipient: PropTypes.string.isRequired,
   admin: PropTypes.string.isRequired,
+  latitude: PropTypes.number.isRequired,
+  longitude: PropTypes.number.isRequired,
 };

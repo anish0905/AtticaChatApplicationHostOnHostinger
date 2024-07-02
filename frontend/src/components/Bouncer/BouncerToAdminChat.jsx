@@ -40,6 +40,8 @@ function BouncerToAdminChat() {
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [replyMessage, setReplyMessage] = useState(null); //--------------->
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
+  const [latitude, setlatitude] = useState(null);
+  const [longitude, setlongitude] = useState(null)
 
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
@@ -60,6 +62,29 @@ function BouncerToAdminChat() {
       });
   };
 
+  useEffect(() => {
+    const fetchLocation = () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+       
+              setlatitude(position.coords.latitude)
+                setlongitude(position.coords.longitude);
+       
+          },
+          (error) => {
+            console.error("Error getting location:", error);
+          }
+        );
+      } else {
+        console.error("Geolocation is not supported by this browser.");
+      }
+    };
+
+    fetchLocation(); // Call fetchLocation function
+  }, []);
+
+console.log("dthhhhhhhfj",location)
   // Fetch all admins except the logged-in user
   useEffect(() => {
     axios
@@ -268,9 +293,10 @@ function BouncerToAdminChat() {
   };
 
 
+
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-      <Sidebar  value="BOUNCER" />
+      <Sidebar value="BOUNCER" />
       <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
@@ -354,7 +380,7 @@ function BouncerToAdminChat() {
                       {message.content.originalMessage}
                     </span>
                   </div>
-                )} 
+                )}
                 {message.content && message.content.text && (
                   <p className="text-sm">{message.content.text}</p>
                 )}
@@ -433,7 +459,16 @@ function BouncerToAdminChat() {
           >
             Send
           </button>
-          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
+
+          <AllUsersFileModel
+            sender={loggedInUserId}
+            recipient={recipient}
+            admin={"admin"}
+            latitude={latitude}
+            longitude={longitude}
+             // Pass the location prop here
+          />
+
         </div>
       </div>
       {showPopSms && (
