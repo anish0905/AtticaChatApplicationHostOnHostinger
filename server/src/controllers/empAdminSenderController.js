@@ -8,7 +8,7 @@ const Notification = require("../model/notificationModel.js");
 const cron = require("node-cron");
 
 const createMessage = async (req, res) => {
-  const { sender, recipient, text } = req.body;
+  const { sender, recipient, text,senderName } = req.body;
 
   try {
     let content = { text };
@@ -85,6 +85,7 @@ const createMessage = async (req, res) => {
 
     const message = new MessageRes({
       sender,
+      senderName,
       recipient,
       content,
     });
@@ -104,110 +105,37 @@ const createMessage = async (req, res) => {
   }
 };
 
-// const getMessagesEmp = async (req, res) => {
-//   const { userId1, userId2 } = req.params;
+const getMessagesEmp = async (req, res) => {
+  const { userId1, userId2 } = req.params;
 
-//   if (!ObjectId.isValid(userId1) || !ObjectId.isValid(userId2)) {
-//     return res.status(400).json({ message: "Invalid user IDs" });
-//   }
-
-//   try {
-//     const twoHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000); // 2 hours in milliseconds
-
-//     const messages = await MessageRes.find({
-//       $or: [
-//         {
-//           sender: userId1,
-//           recipient: userId2,
-//           createdAt: { $gte: twoHoursAgo },
-//         },
-//         {
-//           sender: userId2,
-//           recipient: userId1,
-//           createdAt: { $gte: twoHoursAgo },
-//         },
-//       ],
-//     }).sort({ createdAt: 1 });
-
-//     res.status(200).json(messages);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// };
-
-// Define the deletion logic
-
-const getMessagesEmp = async () => {
-  const now = new Date();
-  const fifteenMinutesAgo = new Date(now - 15 * 60 * 1000);
-  const twelveHoursAgo = new Date(now - 2 * 60 * 1000);
+  if (!ObjectId.isValid(userId1) || !ObjectId.isValid(userId2)) {
+    return res.status(400).json({ message: "Invalid user IDs" });
+  }
 
   try {
-    // Update records with media content older than 15 minutes
-    await MessageRes.updateMany(
-      {
-        $or: [
-          {
-            "content.image": { $exists: true, $ne: null },
-            updatedAt: { $lte: fifteenMinutesAgo },
-          },
-          {
-            "content.document": { $exists: true, $ne: null },
-            updatedAt: { $lte: fifteenMinutesAgo },
-          },
-          {
-            "content.video": { $exists: true, $ne: null },
-            updatedAt: { $lte: fifteenMinutesAgo },
-          },
-        ],
-      },
-      {
-        $unset: {
-          "content.image": "",
-          "content.document": "",
-          "content.video": "",
-        },
-      }
-    );
+    const twoHoursAgo = new Date(Date.now() - 12 * 60 * 60 * 1000); // 2 hours in milliseconds
 
-    // Update records with text content older than 12 hours by setting a flag or clearing content
-    await MessageRes.updateMany(
-      {
-        $or: [
-          {
-            "content.text": { $exists: true, $ne: null },
-            updatedAt: { $lte: twelveHoursAgo },
-          },
-          {
-            "content.originalMessage": { $exists: true, $ne: null },
-            updatedAt: { $lte: twelveHoursAgo },
-          },
-          {
-            "content.replyMsg": { $exists: true, $ne: null },
-            updatedAt: { $lte: twelveHoursAgo },
-          },
-        ],
-      },
-      {
-        $set: {
-          // You can set a flag or clear the content fields as needed
-          // Example: Set a flag indicating the message is outdated
-          isOutdated: true,
+    const messages = await MessageRes.find({
+      $or: [
+        {
+          sender: userId1,
+          recipient: userId2,
+          createdAt: { $gte: twoHoursAgo },
         },
-        // Or you could use $unset to clear specific fields
-        // $unset: { "content.text": "", "content.originalMessage": "", "content.replyMsg": "" },
-      }
-    );
+        {
+          sender: userId2,
+          recipient: userId1,
+          createdAt: { $gte: twoHoursAgo },
+        },
+      ],
+    }).sort({ createdAt: 1 });
+
+    res.status(200).json(messages);
   } catch (error) {
-    console.error("Error updating old messages:", error);
+    res.status(500).json({ message: error.message });
   }
 };
 
-// Schedule the task
-cron.schedule("* * * * *", getMessagesEmp, {
-  scheduled: true,
-  timezone: "Asia/Kolkata",
-});
 
 const getAdminMessages = async (req, res) => {
   const { userId1, userId2 } = req.params;

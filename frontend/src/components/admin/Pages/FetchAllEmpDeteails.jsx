@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import Swal from 'sweetalert2';
-import { BASE_URL } from '../../constants';
+import { BASE_URL } from '../../../constants';
 
-const ShowAllEmpChat = () => {
+
+
+const FetchAllEmpDeteails = ({ handleClick }) => {
     const [selectedRole, setSelectedRole] = useState('Admin');
     const [users, setUsers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -26,12 +27,11 @@ const ShowAllEmpChat = () => {
         "Digital Marketing": "allUser/getAllDigitalMarketingTeam"
     };
 
-    const endpoint = roleEndpointMap[selectedRole];
-
     useEffect(() => {
         const fetchUsers = async () => {
             setLoading(true);
             try {
+                const endpoint = roleEndpointMap[selectedRole];
                 if (endpoint) {
                     const response = await axios.get(`${BASE_URL}/api/${endpoint}`);
                     setUsers(response.data);
@@ -49,27 +49,36 @@ const ShowAllEmpChat = () => {
         setSearchQuery(event.target.value);
     };
 
-    const handleSelect = (userId) => {
+    const handleSelect = (userId, name) => {
         localStorage.setItem('user1', userId);
-        setSelectedUserId(prevSelectedUserId => {
-            if (prevSelectedUserId === userId) {
-                Swal.fire({
-                    title: 'Deselected',
-                    text: `User with ID ${userId} has been deselected`,
-                    icon: 'info',
-                    confirmButtonText: 'OK'
-                });
-                return null;
-            } else {
-                Swal.fire({
-                    title: 'Selected',
-                    text: `User with ID ${userId} has been selected`,
-                    icon: 'success',
-                    confirmButtonText: 'OK'
-                });
-                return userId;
-            }
-        });
+        localStorage.setItem('user1Name', name);
+        setSelectedUserId(userId);
+        handleClick(userId, name);
+    };
+
+    const renderUserDetails = () => {
+        return (
+            <ul className="block font-medium px-3 py-1 rounded text-base lg:w-full w-full">
+                {filteredUsers.length > 0 ? filteredUsers.map(user => (
+                    <li key={user._id} className="w-full h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-lg block items-center p-4 cursor-pointer" onClick={() => handleSelect(user._id, getUserDisplayField(user))}>
+                        <p className='text-xl'>{getUserDisplayField(user)}</p>
+                    </li>
+                )) : (
+                    <p>No users found</p>
+                )}
+            </ul>
+        );
+    };
+
+    const getUserDisplayField = (user) => {
+        switch (selectedRole) {
+            case "Admin":
+                return user.email;
+            case "Manager":
+                return user.manager_name;
+            default:
+                return user.name;
+        }
     };
 
     const filteredUsers = users?.filter(user => {
@@ -82,9 +91,6 @@ const ShowAllEmpChat = () => {
 
     return (
         <div className="flex-grow p-4 w-full">
-            <label htmlFor="userRoles" className="block font-medium bg-[#5443C3] px-4 py-4 rounded text-white text-xl">
-                Select 1st User:
-            </label>
             <select
                 id="userRoles"
                 name="userRoles"
@@ -105,35 +111,11 @@ const ShowAllEmpChat = () => {
                 className="mt-2 block text-xl font-medium pl-3 w-full py-3 bg-slate-200 border-gray-400 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm"
             />
 
-            <div className="mt-4 overflow-y-auto" style={{ maxHeight: '750px' }}>
-                {loading ? (
-                    <p>Loading...</p>
-                ) : (
-                    <ul className="block font-medium px-3 py-1 rounded text-base lg:w-full w-full">
-                        {filteredUsers.length > 0 ? filteredUsers.map(user => (
-                            <li key={user._id} className='flex items-center justify-between gap-5 my-4'>
-                                <p className='text-xl'>
-                                    {selectedRole === "Admin" ? user.email :
-                                    selectedRole === "Manager" ? user.manager_name :
-                                    user.name}
-                                </p>
-                                <button
-                                    className={`px-2 py-1 rounded-md shadow-md text-white ${
-                                        selectedUserId === user._id ? 'bg-blue-700' : 'bg-green-700'
-                                    }`}
-                                    onClick={() => handleSelect(user._id)}
-                                >
-                                    {selectedUserId === user._id ? 'Selected' : 'Select'}
-                                </button>
-                            </li>
-                        )) : (
-                            <p>No users found</p>
-                        )}
-                    </ul>
-                )}
+            <div className="mt-4 overflow-y-auto" style={{ maxHeight: '600px' }}>
+                {loading ? <p>Loading...</p> : renderUserDetails()}
             </div>
         </div>
     );
 };
 
-export default ShowAllEmpChat;
+export default FetchAllEmpDeteails;

@@ -16,7 +16,7 @@ const Chat = () => {
     const fetchMessages = (sender, recipient) => {
         axios
           .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
-          .then((response) => {
+          .then((response) => {``
             setMessages(response.data);
           })
           .catch((error) => {

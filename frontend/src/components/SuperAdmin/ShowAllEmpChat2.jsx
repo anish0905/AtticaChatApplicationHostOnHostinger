@@ -81,7 +81,7 @@ const ShowAllEmpChat2 = () => {
     });
 
     return (
-        <div className="flex-grow p-4 w-1/2">
+        <div className="flex-grow p-4 w-full">
             <label htmlFor="userRoles" className="block font-medium bg-[#5443C3] px-4 py-4 rounded text-white text-xl">
                 Select 2nd User :
             </label>

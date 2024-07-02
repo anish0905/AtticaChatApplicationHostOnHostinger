@@ -7,6 +7,10 @@ const empAdminSender = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    senderName:{
+      type: String,
+
+    },
     recipient: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
