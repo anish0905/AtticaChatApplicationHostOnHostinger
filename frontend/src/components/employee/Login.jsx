@@ -12,6 +12,7 @@ const Login = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  
 
   const handleEmployeeCodeChange = (e) => setEmployeeId(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -31,6 +32,8 @@ const Login = () => {
       console.log("response.data   ", response.data);
       //localStorage.setItem('EmployeeId', response.data._id);
       localStorage.setItem("CurrentUserId", response.data._id);
+
+     
       navigate("/empDashbord");
     } catch (err) {
       setLoading(false);
@@ -39,6 +42,8 @@ const Login = () => {
     }
   };
 
+
+ 
   return (
     <div
       className="flex items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-6 lg:p-8"

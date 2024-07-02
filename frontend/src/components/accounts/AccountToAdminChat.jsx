@@ -8,7 +8,7 @@ import { FaVideo, FaImage } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
-
+import { FaArrowLeft } from "react-icons/fa";
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 
 import Sidebar from "../AllUsers/UserSidebar"
@@ -42,11 +42,15 @@ function AccountToAdminChat() {
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [replyMessage, setReplyMessage] = useState(null); //--------------->
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
+  const [isChatSelected, setIsChatSelected] = useState(false);
+  const [selectedChatUserId, setSelectedChatUserId] = useState("");
 
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
     setRecipient(id);
     setRecipientName(name);
+    setIsChatSelected(true);
+    setSelectedChatUserId(id);
     fetchMessages(loggedInUserId, id);
   };
 
@@ -273,10 +277,19 @@ function AccountToAdminChat() {
   };
 
 
+  const handleBackToUserList = () => {
+    setIsChatSelected(false);
+    setSelectedChatUserId("");
+    setRecipient("");
+    setRecipientName("");
+    setMessages([]);
+  };
+
+
   return (
     <div className="flex flex-col lg:flex-row h-screen">
       <Sidebar value="ACCOUNT"/>
-      <div className="w-full lg:w-1/5 bg-white border-2 border-gray-100 shadow-lg p-4">
+      <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
           <input
@@ -331,16 +344,36 @@ function AccountToAdminChat() {
           ))}
         </div>
       </div>
-      <div className="w-full lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
-        <div className="flex justify-between items-center content-center p-4 bg-white text-[#5443c3]">
+
+
+
+
+      {isChatSelected && (
+            
+
+            <div className="w-full lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
+
+              {isChatSelected && (
+          <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+         
+         <button  className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+                onClick={handleBackToUserList}
+                >
+                <FaArrowLeft />
+                </button>
+
           <h1 className="text-2xl font-bold">Chat with {recipientName}</h1>
           <Link
             to={"/"}
             className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
           >
-            <BiLogOut />
+            {/* <BiLogOut /> */}
           </Link>
         </div>
+
+              )}
+
+       
         <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
           {messages.map((message, index) => (
             <div
@@ -420,7 +453,7 @@ function AccountToAdminChat() {
           ))}
           <div ref={messagesEndRef} />
         </div>
-        <div className="flex items-center p-4 bg-[#f6f5fb] w-full">
+        <div className="flex items-center p-4 bg-[#f6f5fb] w-full fixed bottom-0 lg:static">
           <input
             type="text"
             value={newMessage}
@@ -444,6 +477,16 @@ function AccountToAdminChat() {
           <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}/>
         </div>
       </div>
+
+
+          )
+        
+      }
+      
+
+
+
+
       {showPopSms && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white relative p-6 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw]">

@@ -10,7 +10,7 @@ import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { MdNotificationsActive } from "react-icons/md";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import Sidebar from "../AllUsers/UserSidebar";
+import UserSidebar from "../AllUsers/UserSidebar";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers"
 import ReplyModel from "../ReplyModel";
 
@@ -237,7 +237,7 @@ function SoftwareToSoftware() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      <Sidebar value="SOFTWARE" />
+      <UserSidebar value="SOFTWARE" />
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 bg-blue-200 sticky top-0 z-10">

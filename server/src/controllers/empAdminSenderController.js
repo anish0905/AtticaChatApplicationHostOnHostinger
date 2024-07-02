@@ -8,10 +8,12 @@ const Notification = require("../model/notificationModel.js");
 const cron = require("node-cron");
 
 const createMessage = async (req, res) => {
-  const { sender, recipient, text,senderName } = req.body;
+  const { sender, recipient, text,lat, lng,senderName } = req.body;
+ 
 
   try {
-    let content = { text };
+    let content = { text,lat,lng };
+
 
     // Upload image if it exists
     const hasImage = req.files && req.files.image;
@@ -81,6 +83,7 @@ const createMessage = async (req, res) => {
           .json({ error: "Video upload failed. Please try again." });
       }
       content.video = videoUploadResult.url;
+      
     }
 
     const message = new MessageRes({
@@ -88,9 +91,12 @@ const createMessage = async (req, res) => {
       senderName,
       recipient,
       content,
+  
     });
 
     await message.save();
+
+
 
     const notification = new Notification({
       sender,
