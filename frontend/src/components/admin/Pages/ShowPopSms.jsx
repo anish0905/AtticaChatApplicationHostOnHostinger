@@ -22,9 +22,7 @@ const ShowPopSms = ({ loggedInUserId, playNotificationSound }) => {
         const senderId = data[0].sender;
         setSelectedSender(senderId);
         setShowPopSms(true);
-        const empDetails = await axios.get(`${BASE_URL}/api/employee/a/${senderId}`);
-        console.log("Employee Details:", empDetails.data);
-        setSelectedSenderName(empDetails.data.name);
+        
         playNotificationSound();
       } else {
         setShowPopSms(false);
@@ -68,7 +66,7 @@ const ShowPopSms = ({ loggedInUserId, playNotificationSound }) => {
               <div className="flex items-center gap-5 mb-1">
                 <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
                 <h1 className="text-xl font-bold text-green-600 text-center">
-                  {selectedSenderName}
+                  {sms.senderName}
                 </h1>
               </div>
               <p className="text-base font-bold mb-1">{sms.content.text}</p>

@@ -195,7 +195,7 @@ const getTotalMemberAccordingToGroup = asyncHandler(async (req, res) => {
 
 const getEmployeeById = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
+  
 
   // Validate ID format
   if (!mongoose.Types.ObjectId.isValid(id)) {

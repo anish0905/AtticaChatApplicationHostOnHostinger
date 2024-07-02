@@ -12,6 +12,10 @@ const notificationSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
+    senderName:{
+      type: String,
+     
+    },
     content: {
       text: {
         type: String,

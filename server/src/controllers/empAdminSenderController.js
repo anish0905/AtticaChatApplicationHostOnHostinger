@@ -101,6 +101,7 @@ const createMessage = async (req, res) => {
     const notification = new Notification({
       sender,
       recipient,
+      senderName,
       content,
     });
 
@@ -135,12 +136,14 @@ const getMessagesEmp = async (req, res) => {
         },
       ],
     }).sort({ createdAt: 1 });
+    
 
     res.status(200).json(messages);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
+
 
 
 const getAdminMessages = async (req, res) => {
@@ -178,6 +181,7 @@ const getAllEmployee = async (req, res) => {
     res.status(400).json({ message: error.message });
   }
 };
+
 const getAllEmployeeById = async (req, res) => {
   const { id } = req.params;
   try {
@@ -197,9 +201,9 @@ const getAllEmployeeById = async (req, res) => {
 const markMessagesRead = async (req, res) => {
   const userId = req.params.userId;
   try {
-    // console.log(`Received userId: ${userId}`);
+    
     const recipientObjectId = new ObjectId(userId);
-    // console.log(`Converted to ObjectId: ${recipientObjectId}`);
+  
 
     const result = await MessageRes.aggregate([
       {
@@ -217,9 +221,7 @@ const markMessagesRead = async (req, res) => {
       },
     ]);
 
-    // if (result.length === 0) {
-    //   console.log('No matching messages found.');
-    // }
+    
 
     res.json(result);
   } catch (error) {
@@ -231,9 +233,9 @@ const markMessagesRead = async (req, res) => {
 const markMessagesReadEmp = async (req, res) => {
   const userId = req.params.userId;
   try {
-    // console.log(`Received userId: ${userId}`);
+   
     const recipientObjectId = new ObjectId(userId);
-    // console.log(`Converted to ObjectId: ${recipientObjectId}`);
+    
 
     const twoHoursAgo = new Date(Date.now() - 2 * 60 * 60 * 1000); // 2 hours in milliseconds
 
@@ -254,9 +256,7 @@ const markMessagesReadEmp = async (req, res) => {
       },
     ]);
 
-    // if (result.length === 0) {
-    //   console.log('No matching messages found.');
-    // }
+    
 
     res.json(result);
   } catch (error) {

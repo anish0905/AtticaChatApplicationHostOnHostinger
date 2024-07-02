@@ -14,7 +14,7 @@ const UserSidebar = ({ value }) => {
   const location = useLocation();
   const [showTooltip, setShowTooltip] = useState(false);
 
-  console.log("User Details:", userDetails);
+  // console.log("User Details:", userDetails);
 
   const handleChat = () => {
     switch (value) {
