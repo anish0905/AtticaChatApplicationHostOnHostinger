@@ -11,7 +11,7 @@ const AccountsLogin = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
-  const [userDetails, setUserDetails] = useState()
+  const [userDetails, setUserDetails] = useState() 
 
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handlePasswordChange = (e) => setPassword(e.target.value);
@@ -39,6 +39,8 @@ const AccountsLogin = () => {
     }
   };
 
+
+
   const fetchUserDetails = async (userId) => {
     try {
       const resp = await axios.get(`${BASE_URL}/api/allUser/getbyId/${userId}`);
@@ -49,7 +51,7 @@ const AccountsLogin = () => {
       console.error("Fetch User Details Error:", error);
       // Handle error gracefully, set userDetails to null or {}
     }
-  };
+  };  
 
 
   return (
