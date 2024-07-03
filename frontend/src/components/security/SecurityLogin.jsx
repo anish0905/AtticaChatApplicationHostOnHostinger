@@ -30,6 +30,7 @@ const  SecurityLogin = () => {
       localStorage.setItem("token", response.data.accessToken);
       console.log("response.data   ", response.data);
       localStorage.setItem("CurrentUserId", response.data._id);
+      fetchUserDetails(response.data._id);
       navigate("/SecurityChat");
     } catch (err) {
       setLoading(false);
@@ -37,6 +38,20 @@ const  SecurityLogin = () => {
       setError(err.response?.data?.message || "Login failed");
     }
   };
+
+  
+  const fetchUserDetails = async (userId) => {
+    try {
+      const resp = await axios.get(`${BASE_URL}/api/allUser/getbyId/${userId}`)
+      console.log(resp.data)
+      localStorage.setItem("userDetails",JSON.stringify(resp.data))
+    } catch (error) {
+      console.error("Fetch User Details Error:", error);
+      // Handle error gracefully, set userDetails to null or {}
+    }
+  };
+
+  
 
   return (
     <div

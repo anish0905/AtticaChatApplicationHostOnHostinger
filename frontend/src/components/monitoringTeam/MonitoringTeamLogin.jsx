@@ -12,6 +12,7 @@ const MonitoringTeamLogin = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [userDetails, setUserDetails] = useState()
   const navigate = useNavigate();
 
   const handleEmailChange = (e) => setEmail(e.target.value);
@@ -30,11 +31,24 @@ const MonitoringTeamLogin = () => {
       setLoading(false);
       localStorage.setItem("token", response.data.accessToken);
       localStorage.setItem("CurrentUserId", response.data._id);
+      fetchUserDetails(response.data._id);
       navigate("/monitoringTeamChat"); // Updated redirect path for monitoring team dashboard
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
       setError(err.response?.data?.message || "Login failed");
+    }
+  };
+
+  const fetchUserDetails = async (userId) => {
+    try {
+      const resp = await axios.get(`${BASE_URL}/api/allUser/getbyId/${userId}`);
+      setUserDetails(resp.data);
+      console.log(resp.data)
+      localStorage.setItem("userDetails",JSON.stringify(resp.data))
+    } catch (error) {
+      console.error("Fetch User Details Error:", error);
+      // Handle error gracefully, set userDetails to null or {}
     }
   };
 

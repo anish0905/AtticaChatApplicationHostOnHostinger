@@ -33,11 +33,24 @@ const DigitalMarketingTeamLogin = () => {
       console.log("response.data   ", response.data);
       //localStorage.setItem('EmployeeId', response.data._id);
       localStorage.setItem("CurrentUserId", response.data._id);
+      fetchUserDetails(response.data._id);
       navigate("/DigitalMarketingChatToDigitalMarketing");
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);
       setError(err.response?.data?.message || "Login failed");
+    }
+  };
+
+  const fetchUserDetails = async (userId) => {
+    try {
+      const resp = await axios.get(`${BASE_URL}/api/allUser/getbyId/${userId}`);
+      
+     
+      localStorage.setItem("userDetails",JSON.stringify(resp.data))
+    } catch (error) {
+      console.error("Fetch User Details Error:", error);
+      // Handle error gracefully, set userDetails to null or {}
     }
   };
 

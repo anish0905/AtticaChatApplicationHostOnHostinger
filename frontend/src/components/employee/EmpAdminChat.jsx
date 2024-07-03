@@ -46,6 +46,8 @@ function EmpAdminChat() {
 
   const [isChatSelected, setIsChatSelected] = useState(false);
 
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -109,6 +111,7 @@ function EmpAdminChat() {
     const messageData = {
       sender: loggedInUserId,
       recipient: recipient,
+      senderName:userDetails.name,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
       document: attachment?.type.startsWith("application/") ? attachment.url : null,
@@ -447,7 +450,7 @@ function EmpAdminChat() {
             >
               <IoMdSend />
             </button>
-            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name} />
           </div>
         </div>)}
 

@@ -237,7 +237,7 @@ const BlockAccess = () => {
                     name="userRoles"
                     value={selectedRole}
                     onChange={handleRoleChange}
-                    className="mt-1 block text-4xl font-extrabold pl-3 w-full py-2 border-gray-300 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm "
+                    className="mt-1 block lg:text-2xl text-lg font-extrabold pl-3 w-full py-2 border-gray-300 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm "
                 >
                     <option value="Admin">Admin</option>
                     <option value="Employee">Employee</option>
@@ -298,7 +298,7 @@ const BlockAccess = () => {
 
             </div>
             
-                <div  className='lg:w-9/12 w-full flex'>
+                <div  className='lg:w-9/12 w-full flex flex-col lg:flex-row mb-24'>
                     
                         <ShowAllEmpChat
                             
@@ -309,7 +309,7 @@ const BlockAccess = () => {
                   
                 </div>
 
-                <div className='bg-green-700 text-white rounded-md shadow-md fixed px-4 py-4  font-extrabold text-xl bottom-5 right-5'>
+                <div className='bg-green-700 text-white rounded-md shadow-md fixed px-4 py-2 font-extrabold text-xl lg:mr-0 mr-10 bottom-5 right-5'>
                 <ChatModel/>
             </div>
                

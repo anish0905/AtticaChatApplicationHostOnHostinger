@@ -41,14 +41,14 @@ const Chat = () => {
     };
 
     return (
-        <div className="flex-grow overflow-y-auto p-4 flex flex-col">
+        <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#f6f5fb] h-screen">
              <h1  className="block font-medium bg-[#5443C3] px-4 py-4 rounded text-white text-xl mb-5 ">chat</h1>
             {messages.map((message, index) => (
                 <div
                     key={message._id}
                     className={`mb-4 p-4 rounded-lg max-w-[70%] relative ${message.sender === loggedInUserId
-                        ? 'bg-blue-200 self-end'
-                        : 'bg-gray-200 self-start'
+                        ? 'bg-[#5443C3] text-white rounded-tr-3xl rounded-bl-3xl self-end'
+                        : 'bg-white text-[#5443C3] rounded-tl-3xl rounded-br-3xl self-start'
                     }`}
                     onMouseEnter={() => handleHover(index)}
                     onMouseLeave={() => setHoveredMessage(null)}
@@ -86,7 +86,7 @@ const Chat = () => {
                             Your browser does not support the video tag.
                         </video>
                     )}
-                    <span className="text-xs text-gray-500">
+                    <span className="text-xs text-black">
                         {new Date(message.createdAt).toLocaleString()}
                     </span>
                 </div>

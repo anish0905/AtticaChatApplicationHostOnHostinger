@@ -41,8 +41,9 @@ function DigitalMarketingToAdminChat() {
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [replyMessage, setReplyMessage] = useState(null); //--------------->
-  const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
-
+  const [showReplyModal, setShowReplyModal] = useState(false); 
+   //--------------->
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
     setRecipient(id);
@@ -96,6 +97,7 @@ function DigitalMarketingToAdminChat() {
     const messageData = {
       sender: loggedInUserId,
       recipient,
+      senderName:userDetails.name,
       text: newMessage,
       image: attachment?.type?.startsWith("image/") ? attachment.url : null,
       video: attachment?.type?.startsWith("video/") ? attachment.url : null,
@@ -440,7 +442,7 @@ function DigitalMarketingToAdminChat() {
           >
             Send
           </button>
-          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}/>
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name}/>
         </div>
       </div>
       {showPopSms && (

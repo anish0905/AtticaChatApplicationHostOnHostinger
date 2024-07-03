@@ -13,6 +13,7 @@ import ReplyModel from "../ReplyModel";
 import FetchAllEmpDeteails from "./Pages/FetchAllEmpDeteails";
 import ShowPopSms from "./Pages/ShowPopSms";
 
+const senderName = localStorage.getItem('email');
 function AdminEmpChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -98,6 +99,7 @@ console.log("selectedSenderName  ",selectedSenderName)
     const messageData = {
       sender: loggedInUserId,
       recipient: recipient,
+      senderName,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
       document: attachment?.type.startsWith("application/")
@@ -340,7 +342,7 @@ console.log("selectedSenderName  ",selectedSenderName)
                 >
                   <IoMdSend />
                 </button>
-                <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
+                <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}  senderName={senderName} />
               </div>
             </div>
           </div>
@@ -356,6 +358,7 @@ console.log("selectedSenderName  ",selectedSenderName)
           onForward={handleConfirmForward}
           onCancel={handleCancelForward}
           value="admin"
+       
         />
       )}
       {replyMessage && ( ////--------------------->

@@ -62,10 +62,11 @@ function ManagerChat() {
     axios
       .get(`${BASE_URL}/api/billingTeam/getAllUsers`)
       .then((response) => {
-        const filteredUsers = response.data.users.filter(
+        const filteredUsers = response.data.filter(
           (user) => user._id !== loggedInUserId
         );
         setUsers(filteredUsers);
+        setUnreadUsers(filteredUsers);
       })
       .catch((error) => {
         console.error(error);
@@ -138,8 +139,8 @@ function ManagerChat() {
     }
   };
 
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
+  const filteredUsers = users.filter((users) =>
+    users.name.toLowerCase().includes(userSearchQuery.toLowerCase())
   );
 
   useEffect(() => {

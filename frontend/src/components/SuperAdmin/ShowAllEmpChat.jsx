@@ -81,7 +81,7 @@ const ShowAllEmpChat = () => {
     });
 
     return (
-        <div className="flex-grow p-4 w-full">
+        <div className="flex-grow p-4 w-auto">
             <label htmlFor="userRoles" className="block font-medium bg-[#5443C3] px-4 py-4 rounded text-white text-xl">
                 Select 1st User:
             </label>
@@ -90,7 +90,7 @@ const ShowAllEmpChat = () => {
                 name="userRoles"
                 value={selectedRole}
                 onChange={(event) => setSelectedRole(event.target.value)}
-                className="mt-1 block text-4xl font-extrabold pl-3 pr-10 py-2 border-gray-300 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm w-full"
+                className="mt-1 block lg:text-2xl text-lg font-extrabold pl-3 pr-10 py-2 border-gray-300 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm w-full"
             >
                 {Object.keys(roleEndpointMap).map((role) => (
                     <option key={role} value={role}>{role}</option>
