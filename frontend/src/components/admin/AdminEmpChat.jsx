@@ -13,8 +13,10 @@ import ReplyModel from "../ReplyModel";
 import FetchAllEmpDeteails from "./Pages/FetchAllEmpDeteails";
 import ShowPopSms from "./Pages/ShowPopSms";
 import { FaLocationDot } from "react-icons/fa6";
+import GoogleMapsuper from "../SuperAdmin/GoogleMapsuper";
 
 const senderName = localStorage.getItem('email');
+
 function AdminEmpChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -25,9 +27,7 @@ function AdminEmpChat() {
   const [attachment, setAttachment] = useState(null);
   const messagesEndRef = useRef(null);
   const [unreadUsers, setUnreadUsers] = useState([]);
-
   const [selectedSenderName, setSelectedSenderName] = useState("");
-
   const [playNotificationSound] = useSound(notificationSound);
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
@@ -35,11 +35,15 @@ function AdminEmpChat() {
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [isChatSelected, setIsChatSelected] = useState(false);
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
-  const [replyMessage, setReplyMessage] = useState(null); //--------------->
-  const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
+  const [replyMessage, setReplyMessage] = useState(null);
+  const [showReplyModal, setShowReplyModal] = useState(false);
+  const [showMap, setShowMap] = useState(false);
+  const [location, setLocation] = useState([]);
 
-  console.log("selectedSenderName  ", selectedSenderName)
-  // Function to handle click on employee to initiate chat
+  // Debugging logs
+  console.log("location: ", location);
+  console.log("selectedSenderName: ", selectedSenderName);
+
   const handleClick = (id, name) => {
     setRecipient(id);
     setRecipientName(name);
@@ -48,24 +52,17 @@ function AdminEmpChat() {
     fetchMessages(loggedInUserId, id);
   };
 
-  // Function to fetch messages between two users
   const fetchMessages = async (sender, recipient) => {
-
-
-
     try {
       const response = await axios.get(
         `${BASE_URL}/api/empadminsender/getadminmessages/${recipient}/${sender}`
       );
-
       setMessages(response.data);
-      // console.log(response.data);
     } catch (error) {
       console.error("Error fetching messages:", error);
     }
   };
 
-  // Fetch all employees except the logged-in user
   useEffect(() => {
     axios
       .get(`${BASE_URL}/api/employeeRegistration/`)
@@ -80,25 +77,21 @@ function AdminEmpChat() {
       });
   }, [loggedInUserId]);
 
-  // Fetch initial messages between logged-in user and selected recipient
   useEffect(() => {
     const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
     return () => clearInterval(intervalId);
   }, [recipient]);
 
-
-  // Automatically scroll to bottom when new messages are received
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Function to send a new message
   const handleSendMessage = () => {
     if (!newMessage.trim() && !attachment) return;
 
     const messageData = {
       sender: loggedInUserId,
-      recipient: recipient,
+      recipient,
       senderName,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
@@ -114,17 +107,12 @@ function AdminEmpChat() {
         setMessages([...messages, response.data.data]);
         setNewMessage("");
         setAttachment(null);
-        console.log("Sent message", response.data.data);
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  // Filtered list of users based on search query
-
-
-  // Fetch unread messages for all users at regular intervals
   useEffect(() => {
     if (users.length > 0) {
       const fetchUnreadMessages = async () => {
@@ -142,12 +130,8 @@ function AdminEmpChat() {
           console.error(error);
         }
       };
-
-
     }
   }, [users]);
-
-
 
   const handleHover = (index) => {
     setHoveredMessage(index);
@@ -162,10 +146,9 @@ function AdminEmpChat() {
   };
 
   const handleReply = (message) => {
-    setReplyMessage(message);  //--------------->
-    setShowReplyModal(true);   //--------------->
+    setReplyMessage(message);
+    setShowReplyModal(true);
   };
-
 
   const handleForward = (message) => {
     setForwardMessage(message);
@@ -180,7 +163,6 @@ function AdminEmpChat() {
   };
 
   const handleConfirmForward = () => {
-    // Perform forward action here, then close modal
     setShowForwardModal(false);
     setForwardMessage(null);
     setShowDropdown(null);
@@ -194,60 +176,50 @@ function AdminEmpChat() {
     setMessages([]);
   };
 
+  const handleLocationClick = (locations) => {
+    setLocation(locations);
+    setShowMap(true);
+  };
+
   return (
     <div className="flex flex-col lg:flex-row h-screen">
       <Sidebar />
-      {/* Header */}
       <div className="flex-1 flex flex-col lg:flex-row">
         <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
           <div className="flex items-center justify-between mb-4">
-
             <span className="text-2xl font-bold mb-4 text-[#5443c3]">Employee Chat</span>
-
           </div>
-
-          {/* ------------------------------------------------- */}
-
-
           <FetchAllEmpDeteails handleClick={handleClick} />
         </div>
 
-
-        {/* Chat Area */}
         {isChatSelected && (
           <div className="flex-1 flex flex-col justify-between bg-[#f6f5fb]">
-            {/* Selected Recipient */}
             <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
-
               {isChatSelected && (
                 <div className="text-2xl p-4 flex gap-2 items-center justify-between">
                   <button
-                    className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+                    className="w-20 text-[#5443c3] sm:text-white md:text-white text-2xl mt-2"
                     onClick={handleBackToUserList}
                   >
                     <FaArrowLeft />
                   </button>
                 </div>
               )}
-
               <h2 className="text-2xl font-semibold">{recipientName}</h2>
             </div>
-
-
-            {/* Messages */}
 
             <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`flex relative ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2  `}
+                  className={`flex relative ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2`}
                   onMouseEnter={() => handleHover(index)}
                   onMouseLeave={() => handleLeave()}
                 >
                   <div
                     className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                       }`}
-                  >            {/* //---------------> */}
+                  >
                     {message.content && message.content.originalMessage && (
                       <div className="mb-2">
                         <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
@@ -259,16 +231,13 @@ function AdminEmpChat() {
                       <p className="text-sm">{message.content.text}</p>
                     )}
                     {message.content && message.content.image && (
-                      <>
-                        <img src={message.content.image} alt="Image" className="max-w-xs rounded" />
-                      </>
+                      <img src={message.content.image} alt="Image" className="max-w-xs rounded" />
                     )}
-                    {message.content && message.content.lat && (
-                      <div className="text-5xl flex justify-center content-center items-center my-4 cursor-pointer">
+                    {message.locations && message.locations.length > 0 && (
+                      <div className="text-5xl flex justify-center content-center items-center my-4 cursor-pointer" onClick={() => handleLocationClick(message.locations)}>
                         <FaLocationDot />
                       </div>
                     )}
-
                     {message.content && message.content.document && (
                       <a
                         href={message.content.document}
@@ -288,8 +257,7 @@ function AdminEmpChat() {
                     <span className="text-xs text-orange-600">
                       {new Date(message.createdAt).toLocaleString()}
                     </span>
-                    {
-                      hoveredMessage === index &&
+                    {hoveredMessage === index && (
                       <>
                         <AiOutlineDown
                           className="absolute top-2 right-2 cursor-pointer"
@@ -312,13 +280,12 @@ function AdminEmpChat() {
                           </div>
                         )}
                       </>
-                    }
+                    )}
                   </div>
                 </div>
               ))}
               <div ref={messagesEndRef} />
             </div>
-            {/* Input */}
             <div className="p-4 border-t flex justify-center items-center">
               <input
                 type="text"
@@ -340,9 +307,7 @@ function AdminEmpChat() {
           </div>
         )}
       </div>
-
       <ShowPopSms playNotificationSound={playNotificationSound} loggedInUserId={loggedInUserId} />
-
       {showForwardModal && (
         <ForwardModalAllUsers
           users={users}
@@ -350,10 +315,9 @@ function AdminEmpChat() {
           onForward={handleConfirmForward}
           onCancel={handleCancelForward}
           value="admin"
-
         />
       )}
-      {replyMessage && ( ////--------------------->
+      {replyMessage && (
         <ReplyModel
           message={replyMessage}
           sender={loggedInUserId}
@@ -361,8 +325,12 @@ function AdminEmpChat() {
           isVisible={showReplyModal}
           onClose={() => setShowReplyModal(false)}
           value={"Admin"}
-
         />
+      )}
+      {showMap && location.length >= 1 && (
+        <div className="w-full lg:w-1/2 p-4">
+          <GoogleMapsuper locations={location} onClose={() => setShowMap(false)} className="w-full" />
+        </div>
       )}
     </div>
   );

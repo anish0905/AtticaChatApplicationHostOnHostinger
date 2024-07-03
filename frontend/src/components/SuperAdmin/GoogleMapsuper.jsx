@@ -19,6 +19,7 @@ const CloseButton = ({ onClose }) => {
 };
 
 const GoogleMapsuper = ({ locations, onClose }) => {
+  console.log("GoogleMapsuper",locations);
   const position = [locations[0].latitude, locations[0].longitude]; // Use the first location as the starting point
   const polyline = locations.map(location => [location.latitude, location.longitude]); // Map locations to polyline coordinates
 
