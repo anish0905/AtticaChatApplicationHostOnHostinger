@@ -14,7 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { FaFolderPlus } from 'react-icons/fa';
 import { BASE_URL } from '../../constants';
 
-export default function AllUsersFileModel({ sender, recipient, admin, latitude, longitude }) {
+export default function AllUsersFileModel({ sender, recipient, admin, latitude, longitude,senderName }) {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
@@ -65,6 +65,7 @@ export default function AllUsersFileModel({ sender, recipient, admin, latitude, 
       formData.append(fieldName, file);
       formData.append('sender', sender);
       formData.append('recipient', recipient);
+      formData.append('senderName', senderName);
 
       setLoading(true);
       setError(null);
@@ -105,6 +106,7 @@ export default function AllUsersFileModel({ sender, recipient, admin, latitude, 
       formData.append('recipient', recipient);
       formData.append('lat', latitude);
       formData.append('lng', longitude);
+      formData.append('senderName', senderName);
 
       setLoading(true);
       setError(null);

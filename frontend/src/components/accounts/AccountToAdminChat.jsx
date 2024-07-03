@@ -477,7 +477,7 @@ function AccountToAdminChat() {
           >
             Send
           </button>
-          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}/>
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name}/>
         </div>
       </div>
 

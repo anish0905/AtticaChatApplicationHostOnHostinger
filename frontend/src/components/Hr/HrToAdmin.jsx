@@ -43,7 +43,10 @@ function HrToAdmin() {
   const [replyMessage, setReplyMessage] = useState(null); //--------------->
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
   const [isChatSelected, setIsChatSelected] = useState(false);
-  const [selectedChatUserId, setSelectedChatUserId] = useState("");  
+  const [selectedChatUserId, setSelectedChatUserId] = useState(""); 
+
+   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
 
 
   // Function to handle click on admin or employee to initiate chat
@@ -102,6 +105,7 @@ function HrToAdmin() {
     const messageData = {
       sender: loggedInUserId,
       recipient,
+      senderName:userDetails.name,
       text: newMessage,
       image: attachment?.type?.startsWith("image/") ? attachment.url : null,
       video: attachment?.type?.startsWith("video/") ? attachment.url : null,
@@ -475,7 +479,7 @@ function HrToAdmin() {
           >
             Send
           </button>
-          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}/>
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name}/>
         </div>
       </div>
 

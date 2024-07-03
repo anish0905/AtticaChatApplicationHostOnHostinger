@@ -1,14 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../../constants';
+import { useSound } from "use-sound";
+import notificationSound from "../../../assests/sound.wav";
 
-const ShowPopSms = ({ loggedInUserId, playNotificationSound }) => {
+
+const ShowPopSms = ({ loggedInUserId }) => {
   const [popSms, setPopSms] = useState([]);
   const [selectedSender, setSelectedSender] = useState('');
   const [selectedSenderName, setSelectedSenderName] = useState('');
   const [showPopSms, setShowPopSms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [playNotificationSound] = useSound(notificationSound);
 
   const fetchPopSms = async () => {
     setLoading(true);

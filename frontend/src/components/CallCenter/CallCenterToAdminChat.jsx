@@ -3,18 +3,19 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
-import { BiLogOut } from "react-icons/bi";
+
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import CallCenterFileModel from "./CallCenterFileModel";
-import { FaVideo, FaImage } from "react-icons/fa";
+
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
-import ForwardMsgCallCenterToAdmin from "./ForwardMsgCallCenterToAdmin";
+
 import CallCenterSidebar from "./CallCenterSidebar"
 import ReplyModel from "../ReplyModel";//--------------->
 import { FaArrowLeft } from "react-icons/fa";
+import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 
 
 function CallCenterToAdminChat() {
@@ -25,7 +26,7 @@ function CallCenterToAdminChat() {
   const [recipient, setRecipient] = useState("");
   const [recipientName, setRecipientName] = useState("");
   const [attachment, setAttachment] = useState(null);
-  const [userSearchQuery, setUserSearchQuery] = useState("");
+
   const [adminSearchQuery, setAdminSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
   const [admins, setAdmins] = useState([]);
@@ -45,6 +46,9 @@ function CallCenterToAdminChat() {
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
   const [isChatSelected, setIsChatSelected] = useState(false);
   const [selectedChatUserId, setSelectedChatUserId] = useState("");  
+
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
 
 
   // Function to handle click on admin or employee to initiate chat
@@ -101,6 +105,7 @@ function CallCenterToAdminChat() {
     const messageData = {
       sender: loggedInUserId,
       recipient,
+      senderName:userDetails.name,
       text: newMessage,
       image: attachment?.type?.startsWith("image/") ? attachment.url : null,
       video: attachment?.type?.startsWith("video/") ? attachment.url : null,
@@ -496,7 +501,7 @@ function CallCenterToAdminChat() {
           >
             Send
           </button>
-          <CallCenterFileModel  sender={loggedInUserId} recipient={recipient} />
+          <AllUsersFileModel  sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name} />
         </div>
       </div>
 
@@ -537,7 +542,7 @@ function CallCenterToAdminChat() {
         </div>
       )}
       {showForwardModal && (
-        <ForwardMsgCallCenterToAdmin
+        <ForwardMsgAllUsersToAdmin
           users={admins}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
