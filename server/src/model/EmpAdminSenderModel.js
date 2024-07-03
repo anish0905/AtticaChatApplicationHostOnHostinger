@@ -44,16 +44,14 @@ const empAdminSender = new mongoose.Schema(
         required: false,
       },
      
-        lat :{
-          type:Number,
-          required:false
-        },
-        lng :{
-          type : Number,
-          required:false
-        }
+       
 
     },
+    locations: [{
+      longitude: { type: Number, required: true },
+      latitude: { type: Number, required: true },
+    
+    }]
   },
   { timestamps: true }
 );

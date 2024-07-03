@@ -13,15 +13,15 @@ const createMessage = async (req, res) => {
 
 
   try {
-    const parsedLat = lat ? parseFloat(lat) : 0;
-    const parsedLng = lng ? parseFloat(lng) : 0;
+  
 
-    // Check if parsedLat and parsedLng are valid numbers
-    if (isNaN(parsedLat) || isNaN(parsedLng)) {
-      return res.status(400).json({ message: "Invalid latitude or longitude values" });
+    let content = { text, };
+    let locations = {
+      longitude: parseFloat(lng),
+      latitude: parseFloat(lat),
+
     }
-
-    let content = { text, lat: parsedLat, lng: parsedLng };
+     
 
 
     // Upload image if it exists
@@ -100,6 +100,7 @@ const createMessage = async (req, res) => {
       senderName,
       recipient,
       content,
+      locations,
   
     });
 
