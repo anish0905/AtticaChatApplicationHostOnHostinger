@@ -96,7 +96,7 @@ const FetchAllEmpDeteails = ({ handleClick }) => {
                 name="userRoles"
                 value={selectedRole}
                 onChange={(event) => setSelectedRole(event.target.value)}
-                className="mt-1 block lg:text-xl font-bold text-base placeholder:font-extrabold pl-3 pr-10 py-2 border-gray-300 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm w-full"
+                className="mt-1 block lg:text-xl font-bold text-base placeholder:font-extrabold pl-3 pr-10 py-2 border-purple-300 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm w-full"
             >
                 {Object.keys(roleEndpointMap).map((role) => (
                     <option key={role} value={role}>{role}</option>

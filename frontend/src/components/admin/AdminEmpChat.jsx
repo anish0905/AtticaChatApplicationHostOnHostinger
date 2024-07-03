@@ -184,8 +184,8 @@ function AdminEmpChat() {
   return (
     <div className="flex flex-col lg:flex-row h-screen">
       <Sidebar />
-      <div className="flex-1 flex flex-col lg:flex-row">
-        <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
+      <div className="flex-1 flex flex-col lg:flex-row ">
+        <div className={`flex flex-col bg-white text-black p-4  w-full border shadow shadow-blue-500/65 lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
           <div className="flex items-center justify-between mb-4">
             <span className="text-2xl font-bold mb-4 text-[#5443c3]">Employee Chat</span>
           </div>
@@ -208,17 +208,19 @@ function AdminEmpChat() {
               <h2 className="text-2xl font-semibold">{recipientName}</h2>
             </div>
 
-            <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
+
+
+            <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto" style={{ maxHeight: "80vh" }}>
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`flex relative ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2`}
+                  className={`flex break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2`}
                   onMouseEnter={() => handleHover(index)}
                   onMouseLeave={() => handleLeave()}
                 >
                   <div
-                    className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
-                      }`}
+                    className={`${message.sender === loggedInUserId ? "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl" : "bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                      } py-2 px-4 rounded-lg max-w-lg`}
                   >
                     {message.content && message.content.originalMessage && (
                       <div className="mb-2">

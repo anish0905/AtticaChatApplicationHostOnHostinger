@@ -179,7 +179,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                 {messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`flex ${msg.employeeId === adminId ? "justify-end" : "justify-start"
+                    className={`flex break-words whitespace-pre-wrap ${msg.employeeId === adminId ? "justify-end" : "justify-start"
                       } mb-2`}
                   >
                     <div
