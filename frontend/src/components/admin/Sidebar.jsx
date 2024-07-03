@@ -211,7 +211,7 @@ const Sidebar = () => {
           </span>
         </Link>
 
-        <Link
+        {/* <Link
           to="/adminToadmin"
           className={`group relative flex items-center rounded-full p-2 md:p-4 z-50 lg:p-5 cursor-pointer ${
             activeRoute === "/adminToadmin"
@@ -223,7 +223,7 @@ const Sidebar = () => {
           <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Admin Chat
           </span>
-        </Link>
+        </Link> */}
       </div>
 
       <div

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../constants";
+import { FaEdit } from "react-icons/fa";
+import { RiDeleteBin5Line } from "react-icons/ri";
 
 const Modal = ({ show, onClose, employee, onUpdate }) => {
   const [formData, setFormData] = useState({ ...employee });
@@ -26,13 +28,13 @@ const Modal = ({ show, onClose, employee, onUpdate }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
       <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4">Edit Admin Details</h2>
+        <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Edit Admin Details</h2>
 
         <form>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+            <label className="block text-[#5443c3] text-sm font-bold mb-2">
               Name
             </label>
             <input
@@ -43,7 +45,7 @@ const Modal = ({ show, onClose, employee, onUpdate }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+            <label className="block text-[#5443c3] text-sm font-bold mb-2">
               Employee ID
             </label>
             <input
@@ -54,7 +56,7 @@ const Modal = ({ show, onClose, employee, onUpdate }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 text-sm font-bold mb-2">
+            <label className="block text-[#5443c3] text-sm font-bold mb-2">
               OTP
             </label>
             <input
@@ -69,7 +71,7 @@ const Modal = ({ show, onClose, employee, onUpdate }) => {
             <button
               type="button"
               onClick={handleUpdate}
-              className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
               Update
             </button>
@@ -140,42 +142,43 @@ const AdminDetails = () => {
   };
 
   return (
-    <div className="w-full p-6 bg-gray-100 rounded-lg shadow-md">
-      <div className="flex flex-row">
-        <h1 className="text-2xl font-bold mb-4">Admin Details</h1>
+    <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
+      
+      <div className="flex-1 overflow-x-auto overflow-y-hidden">
+
         {/* <button onClick={changeOtp}>Change OTP</button> */}
       </div>
 
-      <div className="overflow-x-auto">
+      <div className="h-full overflow-y-auto">
         <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+          <thead className="bg-[#5443c3] sticky top-0">
             <tr>
-              <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Email
               </th>
-              <th className="py-3 px-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
             {employees.map((employee) => (
               <tr key={employee._id}>
-                <td className="py-4 px-4 whitespace-nowrap">
+                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                   {employee.email}
                 </td>
-                <td className="py-4 px-4 whitespace-nowrap flex">
+                <td className="py-4 px-2 sm:px-4 whitespace-nowrap flex">
                   <button
                     onClick={() => handleEdit(employee)}
-                    className="mr-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-2 sm:px-4 rounded"
                   >
-                    Edit
+                    <FaEdit />
                   </button>
                   <button
                     onClick={() => handleDelete(employee._id)}
-                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 sm:px-4 rounded"
                   >
-                    Delete
+                <RiDeleteBin5Line />
                   </button>
                 </td>
               </tr>

@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import Table from "./Table";
-import Sidebar from "../admin/Sidebar";
+// import Table from "./Table";
+import TableSuper from "./TableSuper";
 import back19 from "../../assests/back19.png";
 import back15 from "../../assests/back15.png";
 import back13 from "../../assests/back13.png";
 import { BASE_URL } from "../../constants";
 import SuperAdminSidebar from '../SuperAdmin/SuperAdminSidebar';
+
 const data = {
   labels: ["Desktop", "Mobile", "Tablet"],
   datasets: [
@@ -68,7 +69,7 @@ const AtticDashboard = () => {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
           <div
-            className="p-4 rounded-lg shadow-lg"
+            className="p-4 rounded-lg shadow-lg bg-cover"
             style={{ backgroundImage: `url(${back15})` }}
           >
             <div className="lg:text-xl text-lg font-bold text-white">
@@ -77,7 +78,7 @@ const AtticDashboard = () => {
             <div className="text-2xl text-white">{employee.length}</div>
           </div>
           <div
-            className="p-4 rounded-lg shadow-lg"
+            className="p-4 rounded-lg shadow-lg  bg-cover"
             style={{ backgroundImage: `url(${back19})` }}
           >
             <div className="lg:text-xl text-lg font-bold text-white">
@@ -86,7 +87,7 @@ const AtticDashboard = () => {
             <div className="text-2xl text-white">{manager.length}</div>
           </div>
           <div
-            className="p-4 rounded-lg shadow-lg"
+            className="p-4 rounded-lg shadow-lg  bg-cover"
             style={{ backgroundImage: `url(${back13})` }}
           >
             <div className="lg:text-xl text-lg font-bold text-white">
@@ -96,7 +97,8 @@ const AtticDashboard = () => {
           </div>
         </div>
         <div className=" w-full">
-          <Table />
+          {/* <Table /> */}
+          <TableSuper/>
         </div>
       </div>
     </div>

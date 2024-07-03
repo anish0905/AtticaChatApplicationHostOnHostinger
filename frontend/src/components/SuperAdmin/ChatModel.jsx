@@ -13,7 +13,7 @@ export function ChatModel() {
  
   return (
     <React.Fragment>
-      <Button onClick={openDrawer} className="shadow-none">Open Drawer</Button>
+      <Button onClick={openDrawer} className="shadow-none ">Open Drawer</Button>
       <Drawer open={open} onClose={closeDrawer} className="p-4">
         
         <div className="flex gap-2">

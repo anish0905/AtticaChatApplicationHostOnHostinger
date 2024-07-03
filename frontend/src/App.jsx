@@ -21,7 +21,8 @@ import ManagerRegister from "./components/admin/ManagerRegister";
 import BillingTeamManagerLogin from "./components/admin/BillingTeamManagerLogin";
 import BillingTeamChat from "./components/BillingTeam/BillingTeamChat";
 import BillingRegistrationModal from "./components/admin/BillingRegistrationModal";
-import AtticDashboard from "./components/DashboardComponents/AtticDashboard"
+// import AtticDashboard from "./components/DashboardComponents/AtticDashboard"
+import AtticDashboard from "./components/SuperAdmin/AtticDashboard";
 import EmpGroupChat from "./components/employee/EmpGroupChat";
 import AdmintoAdmin from "./components/admin/Pages/AdmintoAdmin";
 import SuperAdmin from "./components/SuperAdmin/SuperAdmin";

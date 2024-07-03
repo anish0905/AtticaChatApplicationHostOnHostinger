@@ -191,6 +191,7 @@ const EmployeeDetails = () => {
             className="absolute top-3 left-3 text-gray-500 text-2xl"
           />
       </div>
+      
       <ToastContainer />
       <div className="flex-1 overflow-x-auto overflow-y-hidden">
         <div className="h-full overflow-y-auto">
