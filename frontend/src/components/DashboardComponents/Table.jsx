@@ -45,7 +45,8 @@ const Table = () => {
 
   return (
     <div className='flex flex-wrap w-full'>
-      <div className="p-4 rounded-lg shadow-lg overflow-auto border border-purple-900 w-full lg:w-1/2">
+      <div className="p-4 rounded-lg shadow-lg overflow-auto border border-purple-900 w-full "> 
+        {/* use this property to adjust the width lg:w-1/2 */}
         <div className="text-xl font-bold mb-4 text-[#5443c3]">Branch Manager Details</div>
         <table className="min-w-full bg-white border">
           <thead>

@@ -302,11 +302,13 @@ function AdmintoAdmin() {
           />
           <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
         </div>
+
+
         <div className="h-5/6 overflow-y-auto">
           {filteredAdmins.map((admin) => (
             <div key={admin._id}>
               <div
-                className="w-full h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
+                className="w-full  h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
                 onClick={() => handleClick(admin._id, admin.email)}
               >
                 <h1>{admin.email}</h1>
@@ -364,7 +366,7 @@ function AdmintoAdmin() {
                 <FaArrowLeft />
               </button>
 
-              <h1 className="text-2xl font-bold">Chat with {recipientName}</h1>
+              <h1 className=" flex flex-col text-2xl font-bold  p-4 gap-2 items-center justify-between flex-1 ">Chat with ({recipientName})</h1>
               <Link
                 to={"/"}
                 className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
@@ -376,17 +378,18 @@ function AdmintoAdmin() {
             </div>
           )}
 
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
+          <div   className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto relative"
+                style={{ maxHeight: "80vh" }}>
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex relative ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2  `}
+                className={`flex relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2  `}
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => handleLeave()}
               >
                 <div
-                  className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
-                    }`}
+                  className={` relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl" : "bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                    } py-2 px-4 rounded-lg max-w-lg`}
                 >            {/* //---------------> */}
                 {message.content && message.content.originalMessage && (
                  <div className="mb-2">

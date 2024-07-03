@@ -1,11 +1,10 @@
-import React from 'react';
 import { BiLogOut } from "react-icons/bi";
 import { BsChatSquareDots } from "react-icons/bs";
 import { RiContactsLine } from "react-icons/ri";
 import { useNavigate, useLocation } from 'react-router-dom';
 import logo from "../../assests/logo.png";
 import { CgProfile } from "react-icons/cg";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 
 
 const UserSidebar = ({ value }) => {
