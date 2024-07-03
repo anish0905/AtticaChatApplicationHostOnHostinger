@@ -14,6 +14,7 @@ import FetchAllEmpDeteails from "./Pages/FetchAllEmpDeteails";
 import ShowPopSms from "./Pages/ShowPopSms";
 import { FaLocationDot } from "react-icons/fa6";
 import GoogleMapsuper from "../SuperAdmin/GoogleMapsuper";
+import AdminFordWardModel from "./Pages/AdminFordWardModel";
 
 const senderName = localStorage.getItem('email');
 
@@ -309,7 +310,7 @@ function AdminEmpChat() {
       </div>
       <ShowPopSms playNotificationSound={playNotificationSound} loggedInUserId={loggedInUserId} />
       {showForwardModal && (
-        <ForwardModalAllUsers
+        <AdminFordWardModel
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
