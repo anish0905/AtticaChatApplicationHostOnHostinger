@@ -200,14 +200,14 @@ console.log("selectedSenderName  ",selectedSenderName)
       {/* Header */}
       <div className="flex-1 flex flex-col lg:flex-row">
         <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between">
            
-            <span className="text-2xl font-bold mb-4 text-[#5443c3]">Employee Chat</span>
+            <span className="text-[#5443c3] text-2xl lg:text-2xl font-bold">Choose the member to start Chat :</span>
          
           </div>
 
           {/* ------------------------------------------------- */}
-          <div className="relative mb-4">
+          {/* <div className="relative mb-4">
             <input
               type="text"
               placeholder="Search by name..."
@@ -219,7 +219,7 @@ console.log("selectedSenderName  ",selectedSenderName)
               size={20}
               className="absolute top-3 left-3 text-gray-500 text-2xl"
             />
-          </div>
+          </div> */}
 
           <FetchAllEmpDeteails handleClick={handleClick}/>
         </div>

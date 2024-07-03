@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../../constants';
-
+import { AiOutlineSearch} from "react-icons/ai";
 
 
 const FetchAllEmpDeteails = ({ handleClick }) => {
@@ -64,7 +64,7 @@ const FetchAllEmpDeteails = ({ handleClick }) => {
                         <p className='text-xl'>{getUserDisplayField(user)}</p>
                     </li>
                 )) : (
-                    <p>No users found</p>
+                    <p className='text-red-500'>No users found</p>
                 )}
             </ul>
         );
@@ -96,7 +96,7 @@ const FetchAllEmpDeteails = ({ handleClick }) => {
                 name="userRoles"
                 value={selectedRole}
                 onChange={(event) => setSelectedRole(event.target.value)}
-                className="mt-1 block text-4xl font-extrabold pl-3 pr-10 py-2 border-gray-300 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm w-full"
+                className="mt-1 block lg:text-xl font-bold text-base placeholder:font-extrabold pl-3 pr-10 py-2 border-gray-300 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm w-full"
             >
                 {Object.keys(roleEndpointMap).map((role) => (
                     <option key={role} value={role}>{role}</option>
@@ -108,10 +108,13 @@ const FetchAllEmpDeteails = ({ handleClick }) => {
                 placeholder="Search users..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="mt-2 block text-xl font-medium pl-3 w-full py-3 bg-slate-200 border-gray-400 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm"
-            />
+                className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+            />   <AiOutlineSearch
+            size={20}
+            className="absolute top-3 left-3 text-gray-500 text-2xl"
+          />
 
-            <div className="mt-4 overflow-y-auto" style={{ maxHeight: '600px' }}>
+            <div className="mt-4 overflow-y-auto" style={{ maxHeight: '900px' }}>
                 {loading ? <p>Loading...</p> : renderUserDetails()}
             </div>
         </div>
