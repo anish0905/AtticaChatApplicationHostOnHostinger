@@ -49,7 +49,7 @@ const HrLogin = () => {
     try {
       const resp = await axios.get(`${BASE_URL}/api/allUser/getbyId/${userId}`);
       setUserDetails(resp.data);
-      console.log(resp.data)
+      
       localStorage.setItem("userDetails",JSON.stringify(resp.data))
     } catch (error) {
       console.error("Fetch User Details Error:", error);

@@ -87,8 +87,7 @@ const loginUser = asyncHandler(async (req, res) => {
       .status(401)
       .json({ error: "Employee ID or password is not valid" });
   }
-  console.log(employeeAvailable);
-
+  
   // if (!employeeAvailable.access) {
   //   return res.status(401).json({ error: "Employee not authorized" });
   // }

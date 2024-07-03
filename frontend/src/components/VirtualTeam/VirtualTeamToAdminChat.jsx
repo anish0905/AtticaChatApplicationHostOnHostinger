@@ -48,6 +48,9 @@ function VirtualTeamToAdminChat() {
   const [isChatSelected, setIsChatSelected] = useState(false);
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
 
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+ 
+
 
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
@@ -103,6 +106,7 @@ function VirtualTeamToAdminChat() {
     const messageData = {
       sender: loggedInUserId,
       recipient,
+      senderName:userDetails.name,
       text: newMessage,
       image: attachment?.type?.startsWith("image/") ? attachment.url : null,
       video: attachment?.type?.startsWith("video/") ? attachment.url : null,
@@ -290,7 +294,7 @@ function VirtualTeamToAdminChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-      <Sidebar  value="BOUNCER" />
+      <Sidebar  value="VIRTUAL" />
       <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
         <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
@@ -469,7 +473,7 @@ function VirtualTeamToAdminChat() {
           >
             Send
           </button>
-          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} />
+          <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name} />
         </div>
       </div>
 

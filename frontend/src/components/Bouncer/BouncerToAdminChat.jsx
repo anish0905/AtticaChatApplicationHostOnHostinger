@@ -43,6 +43,9 @@ function BouncerToAdminChat() {
   const [latitude, setlatitude] = useState(null);
   const [longitude, setlongitude] = useState(null)
 
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
+
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
     setRecipient(id);
@@ -84,7 +87,7 @@ function BouncerToAdminChat() {
     fetchLocation(); // Call fetchLocation function
   }, []);
 
-console.log("dthhhhhhhfj",location)
+// console.log("dthhhhhhhfj",location)
   // Fetch all admins except the logged-in user
   useEffect(() => {
     axios
@@ -119,6 +122,7 @@ console.log("dthhhhhhhfj",location)
       sender: loggedInUserId,
       recipient,
       text: newMessage,
+      senderName:userDetails.name,
       image: attachment?.type?.startsWith("image/") ? attachment.url : null,
       video: attachment?.type?.startsWith("video/") ? attachment.url : null,
       document: attachment?.type === "application/pdf" ? attachment.url : null,
@@ -466,6 +470,7 @@ console.log("dthhhhhhhfj",location)
             admin={"admin"}
             latitude={latitude}
             longitude={longitude}
+            senderName={userDetails.name}
              // Pass the location prop here
           />
 
