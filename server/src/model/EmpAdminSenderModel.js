@@ -1,15 +1,14 @@
 const mongoose = require("mongoose");
 
-const empAdminSender = new mongoose.Schema(
+const empAdminSenderSchema = new mongoose.Schema(
   {
     sender: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    senderName:{
+    senderName: {
       type: String,
-
     },
     recipient: {
       type: mongoose.Schema.Types.ObjectId,
@@ -22,13 +21,11 @@ const empAdminSender = new mongoose.Schema(
         required: false,
       },
       originalMessage: {
-        type: "string",
-
+        type: String,
         required: false,
       },
       replyMsg: {
-        type: "string",
-
+        type: String,
         required: false,
       },
       image: {
@@ -43,17 +40,19 @@ const empAdminSender = new mongoose.Schema(
         type: String,
         required: false,
       },
-     
-       
-
     },
-    locations: [{
-      longitude: { type: Number, required: true },
-      latitude: { type: Number, required: true },
-    
-    }]
+    locations: [
+      {
+        longitude: {
+          type: Number,
+        },
+        latitude: {
+          type: Number,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
 
-module.exports = mongoose.model("EmpAdminSender", empAdminSender);
+module.exports = mongoose.model("EmpAdminSender", empAdminSenderSchema);
