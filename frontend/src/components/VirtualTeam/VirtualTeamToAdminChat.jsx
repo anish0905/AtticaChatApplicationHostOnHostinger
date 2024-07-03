@@ -15,10 +15,6 @@ import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 import { FaArrowLeft } from "react-icons/fa";
 
 
-
-
-
-
 function VirtualTeamToAdminChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");

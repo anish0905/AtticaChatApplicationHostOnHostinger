@@ -90,7 +90,7 @@ const UserSidebar = ({ value }) => {
       <div className="w-16 md:w-24 lg:w-32 h-16 md:h-16 lg:h-24 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
         <img className="m-2 md:m-4 lg:m-10" src={logo} alt="Logo" />
       </div>
-      <p className='text-white'>{userDetails?.name}</p> 
+      <p className='text-white text-base lg:text-xl'>{userDetails?.name}</p> 
    
     {/* __________________________user Details__________________ */}
 
