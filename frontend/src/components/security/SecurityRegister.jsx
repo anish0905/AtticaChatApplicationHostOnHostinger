@@ -52,7 +52,7 @@ const SecurityRegister = () => {
       <Sidebar />
       <div className="flex-1 p-6">
       <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
-          <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Software Team Details</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Security Team Details</h1>
           <div>
             <button
               onClick={() => setIsModalOpen(true)}

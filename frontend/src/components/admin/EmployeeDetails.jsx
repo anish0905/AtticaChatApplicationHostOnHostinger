@@ -5,6 +5,7 @@ import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Modal = ({ show, onClose, employee, onUpdate }) => {
   const [formData, setFormData] = useState({ ...employee });
@@ -112,14 +113,17 @@ const Modal = ({ show, onClose, employee, onUpdate }) => {
 
 const EmployeeDetails = () => {
   const [employees, setEmployees] = useState([]);
+  const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/api/employeeRegistration`);
         setEmployees(res.data);
+        setFilteredEmployees(res.data);
       } catch (error) {
         console.error("Error fetching employees", error);
       }
@@ -127,6 +131,13 @@ const EmployeeDetails = () => {
 
     fetchEmployees();
   }, []);
+
+  useEffect(() => {
+    const results = employees.filter(employee =>
+      employee.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredEmployees(results);
+  }, [searchTerm, employees]);
 
   const handleEdit = (employee) => {
     setSelectedEmployee(employee);
@@ -137,9 +148,9 @@ const EmployeeDetails = () => {
     try {
       alert("Are you sure? The data will be deleted permanently.");
       await axios.delete(`${BASE_URL}/api/employeeRegistration/${employeeId}`);
-      setEmployees(
-        employees.filter((employee) => employee.employeeId !== employeeId)
-      );
+      const updatedEmployees = employees.filter((employee) => employee.employeeId !== employeeId);
+      setEmployees(updatedEmployees);
+      setFilteredEmployees(updatedEmployees);
       toast.success('Employee deleted successfully');
     } catch (error) {
       console.error("Error deleting employee", error);
@@ -153,13 +164,11 @@ const EmployeeDetails = () => {
         `${BASE_URL}/api/employeeRegistration/${updatedEmployee.employeeId}`,
         updatedEmployee
       );
-      setEmployees(
-        employees.map((employee) =>
-          employee.employeeId === updatedEmployee.employeeId
-            ? res.data.updatedEmployee
-            : employee
-        )
+      const updatedEmployees = employees.map((employee) =>
+        employee.employeeId === updatedEmployee.employeeId ? res.data.updatedEmployee : employee
       );
+      setEmployees(updatedEmployees);
+      setFilteredEmployees(updatedEmployees);
       toast.success('Employee details updated successfully');
     } catch (error) {
       console.error("Error updating employee", error);
@@ -169,6 +178,19 @@ const EmployeeDetails = () => {
 
   return (
     <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
+      <div className="relative mb-4 w-full">
+        <input
+          type="text"
+          placeholder="Search by name"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+         className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+        />
+         <AiOutlineSearch
+            size={20}
+            className="absolute top-3 left-3 text-gray-500 text-2xl"
+          />
+      </div>
       <ToastContainer />
       <div className="flex-1 overflow-x-auto overflow-y-hidden">
         <div className="h-full overflow-y-auto">
@@ -199,7 +221,7 @@ const EmployeeDetails = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-              {employees.map((employee) => (
+              {filteredEmployees.map((employee) => (
                 <tr key={employee._id}>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">{employee.name}</td>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">

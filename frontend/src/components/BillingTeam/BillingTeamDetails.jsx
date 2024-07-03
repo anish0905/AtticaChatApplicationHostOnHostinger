@@ -5,6 +5,8 @@ import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { AiOutlineSearch } from "react-icons/ai";
+
 
 const Modal = ({ show, onClose, employee, onUpdate }) => {
   const [formData, setFormData] = useState({ ...employee });
@@ -73,13 +75,13 @@ const BillingTeamDetails = () => {
   const [employees, setEmployees] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchEmployees = async () => {
       try {
         const res = await axios.get(`${BASE_URL}/api/billingTeam/getAllUsers`);
         setEmployees(res.data);
-       
       } catch (error) {
         console.error("Error fetching employees", error);
       }
@@ -126,9 +128,30 @@ const BillingTeamDetails = () => {
     }
   };
 
+  const handleSearchChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredEmployees = employees.filter(employee =>
+    employee.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
       <ToastContainer />
+      <div className="relative mb-4 w-full">
+        <input
+          type="text"
+          placeholder="Search by name..."
+          className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+         <AiOutlineSearch
+            size={20}
+            className="absolute top-3 left-3 text-gray-500 text-2xl"
+          />
+      </div>
       <div className="flex-1 overflow-x-auto">
         <div className="h-full overflow-y-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -145,7 +168,7 @@ const BillingTeamDetails = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-              {employees?.map((employee) => (
+              {filteredEmployees.map((employee) => (
                 <tr key={employee._id}>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">{employee.name}</td>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">{employee.email}</td>

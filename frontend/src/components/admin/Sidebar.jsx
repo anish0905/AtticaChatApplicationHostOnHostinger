@@ -84,26 +84,26 @@ const Sidebar = () => {
         >
           <PersonAddIcon className="text-lg md:text-2xl lg:text-3xl" />
           <span
-            className="absolute lg:bottom-auto lg:left-full mt-48 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            className="absolute lg:bottom-auto lg:w-96 lg:left-full mt-48 lg:ml-0 lg:mt-2 whitespace-nowrap bg-blue-100 text-black border border-red-600 text-xs lg:text-lg md:text-sm rounded py-6 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 "
             style={{ display: showEmployeeOptions ? "block" : "none" }}
           >
             <div
               onClick={() => handleNavigation("/register")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <FcManager className="bg-white rounded-full  mr-2 my-2 text-2xl" />
               <span className="my-2">Employee Registration</span>
             </div>
             <div
               onClick={() => handleNavigation("/billingTeamRegister")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <FcSurvey className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Billing Team Registration</span>
             </div>
             <div
               onClick={() => handleNavigation("/managerRegister")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Manager Registration</span>
@@ -119,7 +119,7 @@ const Sidebar = () => {
 
             <div
               onClick={() => handleNavigation("/VirtualTeamReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Virtual Team Registration</span>
@@ -127,7 +127,7 @@ const Sidebar = () => {
 
             <div
               onClick={() => handleNavigation("/CallCenterReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Call Center Team Registration</span>
@@ -135,21 +135,21 @@ const Sidebar = () => {
 
             <div
               onClick={() => handleNavigation("/AccountsReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Accounts Team Registration</span>
             </div>
             <div
               onClick={() => handleNavigation("/MonitoringReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Monitoring Team Registration</span>
             </div>
             <div
               onClick={() => handleNavigation("/BouncerReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Bouncer Registration</span>
@@ -158,7 +158,7 @@ const Sidebar = () => {
 
             <div
               onClick={() => handleNavigation("/SoftwareReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Software Registration</span>
@@ -166,7 +166,7 @@ const Sidebar = () => {
 
             <div
               onClick={() => handleNavigation("/HrReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Hr Registration</span>
@@ -174,7 +174,7 @@ const Sidebar = () => {
 
             <div
               onClick={() => handleNavigation("/SecurityReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Security Registration</span>

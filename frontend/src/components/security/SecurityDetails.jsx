@@ -5,6 +5,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { AiOutlineSearch } from "react-icons/ai";
+
 
 const Modal = ({ show, onClose, HrTeam, onUpdate }) => {
   const [formData, setFormData] = useState({ ...HrTeam });
@@ -81,6 +83,7 @@ const SecurityDetails = () => {
   const [HrTeams, setHrTeams] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedHrTeam, setSelectedHrTeam] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const fetchHrTeams = async () => {
@@ -124,17 +127,34 @@ const SecurityDetails = () => {
           team._id === updatedHrTeam._id ? res.data.updatedHrTeam : team
         )
       );
-      window.location.reload(); // Fixed reload method
       toast.success('Virtual Team details updated successfully');
     } catch (error) {
       console.error("Error updating Virtual Team", error);
       toast.error('Failed to update Virtual Team');
     }
+    setShowModal(false);
   };
+
+  const filteredHrTeams = HrTeams.filter((team) =>
+    team.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
       <ToastContainer />
+      <div className="relative mb-4 w-full">
+        <input
+          type="text"
+          placeholder="Search by name..."
+      className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+           <AiOutlineSearch
+            size={20}
+            className="absolute top-3 left-3 text-gray-500 text-2xl"
+          />
+      </div>
       <div className="flex-1 overflow-x-auto overflow-y-hidden">
         <div className="h-full overflow-y-auto">
           <table className="min-w-full divide-y divide-gray-200">
@@ -155,7 +175,7 @@ const SecurityDetails = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
-              {HrTeams.map((team) => (
+              {filteredHrTeams.map((team) => (
                 <tr key={team._id}>
                   <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                     {team?._id}

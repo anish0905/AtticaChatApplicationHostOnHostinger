@@ -71,15 +71,15 @@ const totalBranches=uniqueBranches.size
         <div className="lg:text-4xl md:text-2xl text-4xl font-bold bg-[#5443c3] h-auto text-white w-full lg:h-24  mb-5 py-5 pl-5 flex flex-col items-left justify-start"  >
           Attic's Chat-up Dashboard</div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-          <div className="p-4 rounded-lg shadow-lg" style={{ backgroundImage:`url(${back15})` }}>
+          <div className="p-4 rounded-lg shadow-lg bg-cover" style={{ backgroundImage:`url(${back15})` }}>
             <div className="lg:text-xl text-lg font-bold text-white">No of Registered Employees</div>
             <div className="text-2xl text-white">{employee.length}</div>
           </div>
-          <div className="p-4 rounded-lg shadow-lg" style={{ backgroundImage: `url(${back19})` }}>
+          <div className="p-4 rounded-lg shadow-lg bg-cover" style={{ backgroundImage: `url(${back19})` }}>
             <div className="lg:text-xl text-lg font-bold text-white">No of Registered Branch Managers</div> 
             <div className="text-2xl text-white">{manager.length}</div>
           </div>
-          <div className="p-4 rounded-lg shadow-lg" style={{ backgroundImage: `url(${back13})` }}>
+          <div className="p-4 rounded-lg shadow-lg bg-cover" style={{ backgroundImage: `url(${back13})` }}>
             <div className="lg:text-xl text-lg font-bold text-white">No of Branches</div>
             <div className="text-2xl text-white">{totalBranches}</div>
           </div>
