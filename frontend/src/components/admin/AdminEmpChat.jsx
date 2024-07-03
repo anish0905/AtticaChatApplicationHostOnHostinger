@@ -12,6 +12,7 @@ import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ReplyModel from "../ReplyModel";
 import FetchAllEmpDeteails from "./Pages/FetchAllEmpDeteails";
 import ShowPopSms from "./Pages/ShowPopSms";
+import { FaLocationDot } from "react-icons/fa6";
 
 const senderName = localStorage.getItem('email');
 function AdminEmpChat() {
@@ -22,12 +23,11 @@ function AdminEmpChat() {
   const [recipient, setRecipient] = useState("");
   const [recipientName, setRecipientName] = useState("");
   const [attachment, setAttachment] = useState(null);
-  const [userSearchQuery, setUserSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
   const [unreadUsers, setUnreadUsers] = useState([]);
- 
+
   const [selectedSenderName, setSelectedSenderName] = useState("");
-  
+
   const [playNotificationSound] = useSound(notificationSound);
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
@@ -38,7 +38,7 @@ function AdminEmpChat() {
   const [replyMessage, setReplyMessage] = useState(null); //--------------->
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
 
-console.log("selectedSenderName  ",selectedSenderName)
+  console.log("selectedSenderName  ", selectedSenderName)
   // Function to handle click on employee to initiate chat
   const handleClick = (id, name) => {
     setRecipient(id);
@@ -122,9 +122,7 @@ console.log("selectedSenderName  ",selectedSenderName)
   };
 
   // Filtered list of users based on search query
-  const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
-  );
+
 
   // Fetch unread messages for all users at regular intervals
   useEffect(() => {
@@ -145,7 +143,7 @@ console.log("selectedSenderName  ",selectedSenderName)
         }
       };
 
-      
+
     }
   }, [users]);
 
@@ -203,27 +201,15 @@ console.log("selectedSenderName  ",selectedSenderName)
       <div className="flex-1 flex flex-col lg:flex-row">
         <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
           <div className="flex items-center justify-between mb-4">
-           
+
             <span className="text-2xl font-bold mb-4 text-[#5443c3]">Employee Chat</span>
-         
+
           </div>
 
           {/* ------------------------------------------------- */}
-          <div className="relative mb-4">
-            <input
-              type="text"
-              placeholder="Search by name..."
-              className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
-              value={userSearchQuery}
-              onChange={(e) => setUserSearchQuery(e.target.value)}
-            />
-            <AiOutlineSearch
-              size={20}
-              className="absolute top-3 left-3 text-gray-500 text-2xl"
-            />
-          </div>
 
-          <FetchAllEmpDeteails handleClick={handleClick}/>
+
+          <FetchAllEmpDeteails handleClick={handleClick} />
         </div>
 
 
@@ -249,83 +235,89 @@ console.log("selectedSenderName  ",selectedSenderName)
 
 
             {/* Messages */}
-          
+
             <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex relative ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2  `}
-                onMouseEnter={() => handleHover(index)}
-                onMouseLeave={() => handleLeave()}
-              >
+              {messages.map((message, index) => (
                 <div
-                  className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
-                    }`}
-                >            {/* //---------------> */}
-                {message.content && message.content.originalMessage && (
-                 <div className="mb-2">
-                   <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
-                     {message.content.originalMessage}
-                   </span>
-                 </div>
-               )} 
-                  {message.content && message.content.text && (
-                    <p className="text-sm">{message.content.text}</p>
-                  )}
-                  {message.content && message.content.image && (
-                    <>
-                      <img src={message.content.image} alt="Image" className="max-w-xs rounded" />
-                    </>
-                  )}
-                  {message.content && message.content.document && (
-                    <a
-                      href={message.content.document}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-orange-600 hover:underline"
-                    >
-                      <IoIosDocument className="text-9xl" />
-                    </a>
-                  )}
-                  {message.content && message.content.video && (
-                    <video controls className="max-w-xs text-orange-600 hover:underline">
-                      <source src={message.content.video} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  )}
-                  <span className="text-xs text-orange-600">
-                    {new Date(message.createdAt).toLocaleString()}
-                  </span>
-                  {
-                    hoveredMessage === index &&
-                    <>
-                      <AiOutlineDown
-                        className="absolute top-2 right-2 cursor-pointer"
-                        onClick={() => handleDropdownClick(index)}
-                      />
-                      {showDropdown === index && (
-                        <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
-                          <button
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => handleReply(message)}
-                          >
-                            Reply
-                          </button>
-                          <button
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => handleForward(message)}
-                          >
-                            Forward
-                          </button>
-                        </div>
-                      )}
-                    </>
-                  }
+                  key={index}
+                  className={`flex relative ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2  `}
+                  onMouseEnter={() => handleHover(index)}
+                  onMouseLeave={() => handleLeave()}
+                >
+                  <div
+                    className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
+                      }`}
+                  >            {/* //---------------> */}
+                    {message.content && message.content.originalMessage && (
+                      <div className="mb-2">
+                        <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                          {message.content.originalMessage}
+                        </span>
+                      </div>
+                    )}
+                    {message.content && message.content.text && (
+                      <p className="text-sm">{message.content.text}</p>
+                    )}
+                    {message.content && message.content.image && (
+                      <>
+                        <img src={message.content.image} alt="Image" className="max-w-xs rounded" />
+                      </>
+                    )}
+                    {message.content && message.content.lat && (
+                      <div className="text-5xl flex justify-center content-center items-center my-4 cursor-pointer">
+                        <FaLocationDot />
+                      </div>
+                    )}
+
+                    {message.content && message.content.document && (
+                      <a
+                        href={message.content.document}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-orange-600 hover:underline"
+                      >
+                        <IoIosDocument className="text-9xl" />
+                      </a>
+                    )}
+                    {message.content && message.content.video && (
+                      <video controls className="max-w-xs text-orange-600 hover:underline">
+                        <source src={message.content.video} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    )}
+                    <span className="text-xs text-orange-600">
+                      {new Date(message.createdAt).toLocaleString()}
+                    </span>
+                    {
+                      hoveredMessage === index &&
+                      <>
+                        <AiOutlineDown
+                          className="absolute top-2 right-2 cursor-pointer"
+                          onClick={() => handleDropdownClick(index)}
+                        />
+                        {showDropdown === index && (
+                          <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
+                            <button
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              onClick={() => handleReply(message)}
+                            >
+                              Reply
+                            </button>
+                            <button
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              onClick={() => handleForward(message)}
+                            >
+                              Forward
+                            </button>
+                          </div>
+                        )}
+                      </>
+                    }
+                  </div>
                 </div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
             {/* Input */}
             <div className="p-4 border-t flex justify-center items-center">
               <input
@@ -342,15 +334,15 @@ console.log("selectedSenderName  ",selectedSenderName)
                 >
                   <IoMdSend />
                 </button>
-                <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"}  senderName={senderName} />
+                <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={senderName} />
               </div>
             </div>
           </div>
         )}
       </div>
-      
-        <ShowPopSms playNotificationSound={playNotificationSound} loggedInUserId={loggedInUserId}  />
-     
+
+      <ShowPopSms playNotificationSound={playNotificationSound} loggedInUserId={loggedInUserId} />
+
       {showForwardModal && (
         <ForwardModalAllUsers
           users={users}
@@ -358,7 +350,7 @@ console.log("selectedSenderName  ",selectedSenderName)
           onForward={handleConfirmForward}
           onCancel={handleCancelForward}
           value="admin"
-       
+
         />
       )}
       {replyMessage && ( ////--------------------->

@@ -9,10 +9,19 @@ const cron = require("node-cron");
 
 const createMessage = async (req, res) => {
   const { sender, recipient, text,lat, lng,senderName } = req.body;
- 
+   
+
 
   try {
-    let content = { text,lat,lng };
+    const parsedLat = lat ? parseFloat(lat) : 0;
+    const parsedLng = lng ? parseFloat(lng) : 0;
+
+    // Check if parsedLat and parsedLng are valid numbers
+    if (isNaN(parsedLat) || isNaN(parsedLng)) {
+      return res.status(400).json({ message: "Invalid latitude or longitude values" });
+    }
+
+    let content = { text, lat: parsedLat, lng: parsedLng };
 
 
     // Upload image if it exists
