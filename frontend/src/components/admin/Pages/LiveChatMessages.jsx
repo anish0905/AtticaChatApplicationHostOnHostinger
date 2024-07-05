@@ -69,7 +69,7 @@ const LiveChatMessages = () => {
                     <span> : </span>
                   </p>
                   {msg.document && (
-                    <div className="text-8xl my-2">
+                    <div className="lg:text-8xl md:text-6xl text-4xl my-2">
                       <a
                         href={msg.document}
                         download
@@ -81,14 +81,14 @@ const LiveChatMessages = () => {
                     </div>
                   )}
                   {msg.video && (
-                    <div className="text-8xl my-2">
+                    <div className="lg:text-8xl md:text-6xl text-4xl my-2">
                       <video src={msg.video} controls></video>
                     </div>
                   )}
 
                   {msg.image && (
                     <div>
-                      <img src={msg.image} alt="" className="rounded-lg" />
+                      <img src={msg.image} alt="" className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32 my-2" />
                     </div>
                   )}
                   <p className="text-lg">{msg.messages}</p>

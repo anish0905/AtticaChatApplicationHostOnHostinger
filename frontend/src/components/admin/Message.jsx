@@ -181,12 +181,12 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                 {messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`lg:flex break-words whitespace-pre-wrap  ${msg.employeeId === adminId ? "justify-end" : "justify-start"
+                    className={` flex relative break-words whitespace-pre-wrap ${msg.employeeId === adminId ? "justify-end" : "justify-start"
                       } mb-2`}
                   >
                     <div
                       className={` lg:text-2xl md:text-xl text-sm  ${msg.employeeId === adminId ? " self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl " : "self-start bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-                        } py-2 px-4 rounded-lg max-w-lg`}
+                        } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                     >
                       <p className={` lg:text-lg md:text-lg text-sm font-bold ${msg.employeeId === adminId ? "text-green" : "text-[#5443c3]"
                         }`}>

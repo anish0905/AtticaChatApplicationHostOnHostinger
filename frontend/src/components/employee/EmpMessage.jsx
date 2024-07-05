@@ -115,9 +115,9 @@ const EmpMessage = () => {
                 <div
                   className={`relative ${
                     msg.employeeId === currentUserName
-                      ? "bg-white text-[#5443c3] rounded-br-3xl rounded-tl-3xl" 
-                      : "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl"
-                  } py-2 px-4 rounded-lg max-w-4xl`}
+                      ? " self-end bg-white text-[#5443c3] rounded-br-3xl rounded-tl-3xl" 
+                      : "self-start bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl"
+                  } py-2 px-4 rounded-lg lg:max-w-4xl max-w-[50%]`}
                 >
                   {msg.message && (
                     <p className="text-sm mb-1">
@@ -125,7 +125,7 @@ const EmpMessage = () => {
                     </p>
                   )}
                   {msg.Document && (
-                    <div className="text-2xl my-2">
+                    <div className="lg:text-8xl md:text-6xl text-4xl my-2">
                       <button className="focus:outline-none" onClick={() => handleFileDownload(msg.Document)}>
                         <IoMdDocument />
                       </button>
@@ -133,7 +133,7 @@ const EmpMessage = () => {
                   )}
                   {msg.Image && (
                     <div className="my-2">
-                      <img src={msg.Image} alt="" className="rounded-lg" />
+                      <img src={msg.Image} alt="" className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32 my-2" />
                     </div>
                   )}
                 </div>

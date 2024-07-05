@@ -352,7 +352,7 @@ function ManagerChat() {
 </div>
 )}
 
-<div className="flex-grow overflow-y-auto p-4 flex flex-col">
+<div className="flex flex-col flex-1 px-4 pt-4 relative overflow-y-auto" >
   {messages.map((message, index) => (
     <div
       key={message._id}

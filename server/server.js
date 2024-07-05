@@ -42,7 +42,7 @@ const chatSchema = new mongoose.Schema({
       video: String,
     },
   ], // Array containing employeeId, message, Image, and Document
-});
+},{timestamps:true});
 
 // Create Mongoose Model based on the schema
 const ChatModel = mongoose.model("Chat", chatSchema);

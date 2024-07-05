@@ -220,8 +220,8 @@ function AdminEmpChat() {
                   onMouseLeave={() => handleLeave()}
                 >
                   <div
-                    className={`relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl" : "bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-                      } py-2 px-4 rounded-lg max-w-lg`}
+                    className={`relative lg:text-2xl md:text-xl text-sm  ${message.sender === loggedInUserId ? " self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl" : " self-start bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                      } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                   >
                     {message.content && message.content.originalMessage && (
                       <div className="mb-2">
@@ -234,7 +234,7 @@ function AdminEmpChat() {
                       <p className="text-sm">{message.content.text}</p>
                     )}
                     {message.content && message.content.image && (
-                      <img src={message.content.image} alt="Image" className="max-w-xs rounded" />
+                      <img src={message.content.image} alt="Image" className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32" />
                     )}
                     {message.locations && message.locations.length > 0 && (
                       <div className="text-5xl flex justify-center content-center items-center my-4 cursor-pointer" onClick={() => handleLocationClick(message.locations)}>

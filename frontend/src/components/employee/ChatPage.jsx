@@ -278,7 +278,7 @@ function ChatPage() {
                   <img
                     src={message.content.image}
                     alt="Image"
-                    className="max-w-xs"
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32 my-2"
                   />
                 )}
                 {message.content && message.content.document && (
@@ -286,7 +286,7 @@ function ChatPage() {
                     href={message.content.document}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
+                    className="text-orange-500 lg:text-8xl md:text-6xl text-4xl my-2"
                   >
                     <IoIosDocument className="text-9xl" />
                   </a>
@@ -389,14 +389,14 @@ function ChatPage() {
       )}
 
 {showPopSms && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-4 rounded-lg shadow-lg border border-blue-500">
+  <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-blue-100 p-4 rounded-lg shadow-lg border border-[#5443c3] lg:max-w-[50%] w-full mx-4">
       <div className="flex items-center mb-4">
-        <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
+        <MdNotificationsActive className="text-yellow-500 w-6 h-6 mr-2" />
         <h3 className="text-lg font-semibold">New Message</h3>
       </div>
-      <p className="mb-2">From: {selectedSenderName}</p>
-      <p className="mb-4">Message: {popSms[0]?.content?.text}</p>
+      <p className="mb-2 text-green-600 font-bold text-2xl">From: {selectedSenderName}</p>
+      <p className="mb-4 text-xl break-words whitespace-pre-wrap">Message: {popSms[0]?.content?.text}</p>
       
       <button
         onClick={() => handleModalClose(popSms[0]?.sender)}
@@ -407,6 +407,7 @@ function ChatPage() {
     </div>
   </div>
 )}
+
 {showForwardModal && (
         <ForwardModalAllUsers   
           users={users}

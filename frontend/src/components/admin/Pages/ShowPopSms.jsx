@@ -56,8 +56,8 @@ const ShowPopSms = ({ loggedInUserId }) => {
   };
 
   return (
-    <div className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ${showPopSms ? 'block' : 'hidden'}`}>
-      <div className="bg-white p-4 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw] animate-pop-up">
+    <div className={`fixed inset-0  bg-opacity-50 flex items-center justify-center z-50 ${showPopSms ? 'block' : 'hidden'}`}>
+      <div className="bg-blue-100 p-4 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw] animate-pop-up">
         {loading && <p>Loading notifications...</p>}
         {error && <p className="text-red-500">{error}</p>}
         {popSms
@@ -65,21 +65,21 @@ const ShowPopSms = ({ loggedInUserId }) => {
           .map((sms) => (
             <div
               key={sms.id}
-              className="border border-gray-200 rounded-lg p-2 mb-2 shadow-sm relative"
+              className="border border-[#5443c3] rounded-lg p-2 mb-2 shadow-sm relative"
             >
               <div className="flex items-center gap-5 mb-1">
                 <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
-                <h1 className="text-xl font-bold text-green-600 text-center">
+                <h1 className="text-2xl font-bold text-green-600 text-center">
                   {sms.senderName}
                 </h1>
               </div>
-              <p className="text-base font-bold mb-1">{sms.content.text}</p>
-              <p className="text-sm text-gray-500 mb-2">
+              <p className="text-base font-bold mb-1 relative break-words whitespace-pre-wrap">{sms.content.text}</p>
+              <p className="text-sm text-gray-500 my-4">
                 {new Date(sms.createdAt).toLocaleDateString()}{" "}
                 {new Date(sms.createdAt).toLocaleTimeString()}
               </p>
               <button
-                className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                className="absolute top-2 right-2 text-red-500 hover:text-gray-700"
                 onClick={() => handleModalClose(sms.sender)}
                 aria-label="Close notification"
               >
