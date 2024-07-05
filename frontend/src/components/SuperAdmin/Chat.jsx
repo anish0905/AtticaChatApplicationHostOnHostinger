@@ -11,17 +11,33 @@ const Chat = () => {
 
     const sender = localStorage.getItem('user1');
     const recipient = localStorage.getItem('user2');
-    const loggedInUserId = sender; // Assuming the sender is the logged-in user
+     const selectedRole =localStorage.getItem("selectedRole");
+     const user2Name = localStorage.getItem("user2Name");
+     const user1Name = localStorage.getItem("user1Name");
+    const loggedInUserId = sender; 
 
     const fetchMessages = (sender, recipient) => {
-        axios
+      try {
+         if(selectedRole==="Admin"){
+          axios
+          .get(`${BASE_URL}/api/empadminsender/getmessages/${recipient}/${sender}`)
+          .then((response) => {``
+            setMessages(response.data);
+          })
+         
+         }
+         else{
+          axios
           .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
           .then((response) => {``
             setMessages(response.data);
           })
-          .catch((error) => {
-            console.error(error);
-          });
+  
+         }
+      } catch (error) {
+        console.error(error);
+        
+      }
     };
 
     useEffect(() => {
@@ -41,8 +57,13 @@ const Chat = () => {
     };
 
     return (
-        <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#f6f5fb] h-screen">
-             <h1  className="block font-medium bg-[#5443C3] px-4 py-4 rounded text-white text-xl mb-5 ">chat</h1>
+        <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#f6f5fb] h-screen overflow-hidden">
+             <h1  className=" flex justify-between font-medium content-center items-center  bg-[#5443C3] px-4 py-4 rounded text-white text-xl mb-5  ">
+               <p>Chat</p>
+               <p className='text-sm'> {user1Name} </p>
+               <p className='text-xs'>With</p>
+               <p className='text-sm'>{user2Name}</p>
+             </h1>
             {messages.map((message, index) => (
                 <div
                     key={message._id}
@@ -54,20 +75,20 @@ const Chat = () => {
                     onMouseLeave={() => setHoveredMessage(null)}
                 >
                     {message.content && message.content.originalMessage && (
-                        <div className="mb-2">
+                        <div className="mb-2  text-wrap">
                             <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
                                 {message.content.originalMessage}
                             </span>
                         </div>
                     )}
                     {message.content && message.content.text && (
-                        <p className="font-bold">{message.content.text}</p>
+                        <p className="font-bold text-wrap">{message.content.text}</p>
                     )}
                     {message.content && message.content.image && (
                         <img
                             src={message.content.image}
                             alt="Image"
-                            className="max-w-xs"
+                            className="min-w-xs"
                         />
                     )}
                     {message.content && message.content.document && (

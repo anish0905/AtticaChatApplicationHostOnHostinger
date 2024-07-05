@@ -69,3 +69,7 @@
       background-size: 80px 80px;
     }
   }
+
+  .chat-container {
+    color: white !important; /* This will apply white text color to all text inside the chat container */
+  }

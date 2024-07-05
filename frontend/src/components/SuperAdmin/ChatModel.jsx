@@ -1,26 +1,36 @@
-import React from "react";
-import {
-  Drawer,
-  Button,
-} from "@material-tailwind/react";
-import Chat from "./Chat";
- 
-export function ChatModel() {
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Drawer from '@mui/material/Drawer';
+import Button from '@mui/material/Button';
+import Divider from '@mui/material/Divider';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Chat from './Chat';
+
+export default function ChatModel() {
   const [open, setOpen] = React.useState(false);
- 
-  const openDrawer = () => setOpen(true);
-  const closeDrawer = () => setOpen(false);
- 
+  const isSmallScreen = useMediaQuery('(max-width:600px)');
+
+  const toggleDrawer = (newOpen) => () => {
+    setOpen(newOpen);
+  };
+
+  const DrawerList = (
+    <Box
+      sx={{ width: isSmallScreen ? 250 : 500 }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+    >
+      <Divider />
+      <Chat />
+    </Box>
+  );
+
   return (
-    <React.Fragment>
-      <Button onClick={openDrawer} className="shadow-none ">Open Drawer</Button>
-      <Drawer open={open} onClose={closeDrawer} className="p-4">
-        
-        <div className="flex gap-2">
-          <Chat/>  
-         
-        </div>
+    <div>
+      <Button onClick={toggleDrawer(true)} className="chat-container">Show Chat</Button>
+      <Drawer open={open} onClose={toggleDrawer(false)}>
+        {DrawerList}
       </Drawer>
-    </React.Fragment>
+    </div>
   );
 }
