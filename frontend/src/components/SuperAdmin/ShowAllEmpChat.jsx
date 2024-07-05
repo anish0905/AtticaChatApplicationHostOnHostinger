@@ -27,6 +27,8 @@ const ShowAllEmpChat = () => {
     };
 
     const endpoint = roleEndpointMap[selectedRole];
+    
+    localStorage.setItem("selectedRole", selectedRole);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -43,14 +45,15 @@ const ShowAllEmpChat = () => {
             }
         };
         fetchUsers();
-    }, [selectedRole]);
+    }, [selectedRole, endpoint]);
 
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
     };
 
-    const handleSelect = (userId) => {
+    const handleSelect = (userId, name) => {
         localStorage.setItem('user1', userId);
+        localStorage.setItem('user1Name', name);
         setSelectedUserId(prevSelectedUserId => {
             if (prevSelectedUserId === userId) {
                 Swal.fire({
@@ -63,7 +66,7 @@ const ShowAllEmpChat = () => {
             } else {
                 Swal.fire({
                     title: 'Selected',
-                    text: `User with ID ${userId} has been selected`,
+                    text: `User with ID ${userId} (${name}) has been selected`,
                     icon: 'success',
                     confirmButtonText: 'OK'
                 });
@@ -72,11 +75,20 @@ const ShowAllEmpChat = () => {
         });
     };
 
+    const getRoleSpecificField = (user) => {
+        switch (selectedRole) {
+            case 'Admin':
+                return user.email;
+            case 'Manager':
+                return user.manager_name;
+            default:
+                return user.name;
+        }
+    };
+
     const filteredUsers = users?.filter(user => {
         const query = searchQuery.toLowerCase();
-        const roleSpecificField = selectedRole === "Admin" ? user?.email :
-                                  selectedRole === "Manager" ? user?.manager_name :
-                                  user?.name;
+        const roleSpecificField = getRoleSpecificField(user);
         return roleSpecificField?.toLowerCase().includes(query);
     });
 
@@ -113,15 +125,13 @@ const ShowAllEmpChat = () => {
                         {filteredUsers.length > 0 ? filteredUsers.map(user => (
                             <li key={user._id} className='flex items-center justify-between gap-5 my-4'>
                                 <p className='text-xl'>
-                                    {selectedRole === "Admin" ? user.email :
-                                    selectedRole === "Manager" ? user.manager_name :
-                                    user.name}
+                                    {getRoleSpecificField(user)}
                                 </p>
                                 <button
                                     className={`px-2 py-1 rounded-md shadow-md text-white ${
                                         selectedUserId === user._id ? 'bg-blue-700' : 'bg-green-700'
                                     }`}
-                                    onClick={() => handleSelect(user._id)}
+                                    onClick={() => handleSelect(user._id, getRoleSpecificField(user))}
                                 >
                                     {selectedUserId === user._id ? 'Selected' : 'Select'}
                                 </button>

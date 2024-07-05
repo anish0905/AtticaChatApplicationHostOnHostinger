@@ -3,11 +3,12 @@ import SuperAdminSidebar from './SuperAdminSidebar';
 import axios from 'axios';
 import { BASE_URL } from "../../constants";
 import Swal from 'sweetalert2';
-import SellAllEmpChat from './ShowAllEmpChat';
+
 import ShowAllEmpChat from './ShowAllEmpChat';
 import ShowAllEmpChat2 from './ShowAllEmpChat2';
-import { Link } from 'react-router-dom';
-import { ChatModel } from './ChatModel';
+import ChatModel from './ChatModel';
+
+
 
 const BlockAccess = () => {
     const [selectedRole, setSelectedRole] = useState('Admin');
@@ -266,11 +267,11 @@ const BlockAccess = () => {
                         onClick={BlockBranchWisefun}>
                         Block All
                     </button>
-                    <button
+                    {/* <button
                         className='bg-green-700 px-4 py-2 rounded-md shadow-md text-white'
                         onClick={UnblockBranchWisefun}>
                         Unblock All
-                    </button>
+                    </button> */}
                 </div>
                 <div className="mt-4 overflow-y-auto " style={{ maxHeight: '750px' }}>
                     <ul className="block font-medium px-3 py-1 rounded text-base lg:w-full w-full">
@@ -310,7 +311,7 @@ const BlockAccess = () => {
                 </div>
 
                 <div className='bg-green-700 text-white rounded-md shadow-md fixed px-4 py-2 font-extrabold text-xl lg:mr-0 mr-10 bottom-5 right-5'>
-                <ChatModel/>
+               <ChatModel/>
             </div>
                
       
