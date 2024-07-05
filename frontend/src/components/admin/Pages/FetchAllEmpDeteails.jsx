@@ -11,6 +11,8 @@ const FetchAllEmpDeteails = ({ handleClick }) => {
     const [loading, setLoading] = useState(false);
     const [selectedUserId, setSelectedUserId] = useState(null);
 
+    localStorage.setItem('selectRole', selectedRole);
+
     const roleEndpointMap = {
         "Admin": "admin/getAllAdmin",
         "Employee": "employee/",

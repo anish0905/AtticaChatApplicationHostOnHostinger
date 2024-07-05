@@ -14,6 +14,7 @@ import FetchAllEmpDeteails from "./Pages/FetchAllEmpDeteails";
 import ShowPopSms from "./Pages/ShowPopSms";
 import { FaLocationDot } from "react-icons/fa6";
 import GoogleMapsuper from "../SuperAdmin/GoogleMapsuper";
+import AdminFordWardModel from "./Pages/AdminFordWardModel";
 
 const senderName = localStorage.getItem('email');
 
@@ -210,11 +211,11 @@ function AdminEmpChat() {
 
 
 
-            <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto" style={{ maxHeight: "80vh" }}>
+            <div className="flex flex-col flex-1 px-4 pt-4 relative overflow-y-auto" style={{ maxHeight: "80vh" }}>
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`flex relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2`}
+                  className={`flex  relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2`}
                   onMouseEnter={() => handleHover(index)}
                   onMouseLeave={() => handleLeave()}
                 >
@@ -311,7 +312,7 @@ function AdminEmpChat() {
       </div>
       <ShowPopSms playNotificationSound={playNotificationSound} loggedInUserId={loggedInUserId} />
       {showForwardModal && (
-        <ForwardModalAllUsers
+        <AdminFordWardModel
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleConfirmForward}
