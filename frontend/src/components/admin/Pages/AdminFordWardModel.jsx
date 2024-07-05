@@ -9,6 +9,7 @@ const AdminFordWardModel = ({ onCancel, forwardMessage }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const selectedRole = localStorage.getItem('selectRole');
+  const sender = localStorage.getItem("CurrentUserId")
 
   const roleEndpointMap = {
     "Admin": "admin/getAllAdmin",
@@ -68,6 +69,7 @@ const AdminFordWardModel = ({ onCancel, forwardMessage }) => {
     axios.post(`${BASE_URL}${endpoint}`, {
         messageId: forwardMessage._id,
         newRecipients: selectedUsers,
+        sender:sender
       })
       .then((response) => {
         // Handle success response if needed
