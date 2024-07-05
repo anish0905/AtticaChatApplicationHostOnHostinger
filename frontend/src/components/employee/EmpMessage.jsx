@@ -47,7 +47,7 @@ const EmpMessage = () => {
         fetchMessages();
 
         // Set up polling for new messages
-        const interval = setInterval(fetchMessages, 100); // Poll every 5 seconds
+        const interval = setInterval(fetchMessages, 5000); // Poll every 5 seconds
 
         return () => clearInterval(interval); // Clean up the interval
       }
@@ -105,19 +105,19 @@ const EmpMessage = () => {
           )}
         </div>
 
-        <div className="flex-1 p-4 overflow-y-auto">
+        <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto">
           {messages.length > 0 ? (
             messages.map((msg) => (
               <div
                 key={msg._id}
-                className={`flex ${msg.employeeId === currentUserName ? "justify-end" : "justify-start"} mb-2`}
+                className={`flex relative break-words whitespace-pre-wrap ${msg.employeeId === currentUserName ? "justify-start" : "justify-end"} mb-2`}
               >
                 <div
-                  className={`${
+                  className={`relative ${
                     msg.employeeId === currentUserName
-                      ? "bg-[#5443c3] text-white rounded-tr-3xl  rounded-bl-3xl"
-                      : "bg-white text-[#5443c3] rounded-br-3xl rounded-tl-3xl"
-                  } py-2 px-4 rounded-lg max-w-md`}
+                      ? "bg-white text-[#5443c3] rounded-br-3xl rounded-tl-3xl" 
+                      : "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl"
+                  } py-2 px-4 rounded-lg max-w-4xl`}
                 >
                   {msg.message && (
                     <p className="text-sm mb-1">

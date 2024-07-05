@@ -10,6 +10,7 @@ const ForwardMsgAllUsersToAdmin = ({
 }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const sender = localStorage.getItem("CurrentUserId")
 
   const handleUserSelection = (userId) => {
     setSelectedUsers((prevSelectedUsers) =>
@@ -25,6 +26,7 @@ const ForwardMsgAllUsersToAdmin = ({
       .post(`${BASE_URL}/api/empadminsender/forward`, {
         messageId: forwardMessage._id,
         newRecipients: selectedUsers,
+        sender:sender
       })
       .then((response) => {
         // Handle success response if needed

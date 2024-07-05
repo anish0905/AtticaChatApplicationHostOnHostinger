@@ -106,7 +106,7 @@ const GroupsList = () => {
       try {
         const { group, grade } = groupToDelete;
         const response = await fetch(
-         ` ${BASE_URL}/api/groups/${group}/${grade}`,
+          ` ${BASE_URL}/api/groups/${group}/${grade}`,
           {
             method: "DELETE",
             headers: {
@@ -175,7 +175,7 @@ const GroupsList = () => {
       <ToastContainer />
       <div className="flex flex-col w-full lg:w-[24vw] bg-[#ffffff] text-[#5443c3] border shadow shadow-blue-500/65">
         <div className="p-4 flex justify-between items-center">
-          <h1 className="text-2xl lg:text-3xl font-bold">Groups</h1>
+          <h1 className="lg:text-3xl md:text-2xl text-xl font-bold">Groups</h1>
           <button
             className="bg-[#5443c3] hover:bg-blue-400 text-white font-bold py-2 px-4 rounded"
             onClick={handleAddGroup}
@@ -191,7 +191,7 @@ const GroupsList = () => {
               onClick={() => handleGroupClick(group.group, group.grade)}
             >
               <div>
-                <h1 className="text-lg font-bold text-[#5443c3]">
+                <h1 className="lg:text-xl md:text-xl text-sm font-bold text-[#5443c3]">
                   {group.group}
                 </h1>
                 <p className="text-[#8b7ed5]">Grade: {group.grade}</p>
@@ -243,20 +243,20 @@ const GroupsList = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 lg:p-8 rounded-lg w-11/12 lg:w-auto">
-            <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+          <div className="bg-white p-4 lg:p-8 rounded-lg min-w-[50%] lg:min-w-[20%]">
+            <h2 className="lg:text-2xl md:text-xl sm:text-sm font-bold mb-4 text-[#5443c3]">
               Add Group
             </h2>
             <input
               type="text"
-              className="w-full p-2 mb-4 border rounded"
+              className=" w-full p-2 mb-4 border rounded lg:text-2xl md:text-xl sm:text-sm"
               placeholder="Group Name"
               value={newGroupName}
               onChange={handleInputChange}
             />
             <select
-              className="w-full p-2 mb-4 border rounded"
+              className="w-full p-2 mb-4 border rounded lg:text-2xl md:text-xl sm:text-sm"
               value={grade}
               onChange={handleGradeChange}
             >
@@ -264,15 +264,15 @@ const GroupsList = () => {
               <option value="B">B</option>
               <option value="C">C</option>
             </select>
-            <div className="flex justify-end">
+            <div className="flex justify-end ">
               <button
-                className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2"
+                className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2 min-w-[20%] lg:min-w-[20%]"
                 onClick={handleSubmit}
               >
                 Add
               </button>
               <button
-                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded min-w-[20%] lg:min-w-[20%]"
                 onClick={handleCloseModal}
               >
                 Cancel
@@ -284,20 +284,20 @@ const GroupsList = () => {
 
       {showConfirmation && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-4 lg:p-8 rounded-lg w-11/12 lg:w-auto">
-            <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">
+          <div className="bg-white p-4 lg:p-8 rounded-lg min-w-[30%] lg:min-w-[20%]">
+            <h2 className="lg:text-2xl md:text-xl sm:text-sm font-bold mb-4 text-[#5443c3]">
               Confirm Delete
             </h2>
-            <p className="mb-4">Are you sure you want to delete this group?</p>
+            <p className="mb-4 lg:text-2xl md:text-xl sm:text-sm">Are you sure you want to delete this group?</p>
             <div className="flex justify-end">
               <button
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2"
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded mr-2 lg:text-2xl md:text-xl sm:text-sm"
                 onClick={handleConfirmDelete}
               >
                 Delete
               </button>
               <button
-                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
+                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded lg:text-2xl md:text-xl sm:text-sm"
                 onClick={() => setShowConfirmation(false)}
               >
                 Cancel

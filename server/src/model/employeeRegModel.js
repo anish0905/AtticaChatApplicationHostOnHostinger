@@ -27,14 +27,8 @@ const employeeRegSchema = mongoose.Schema(
     },
     state: {
       type: String,
-      enum: [
-        "Karnataka",
-        "Andhra Pradesh",
-        "Tamil Nadu",
-        "Kerala",
-        "Pondicherry",
-      ],
-      default: "Karnataka",
+     
+      
     },
     language: {
       type: String,
@@ -42,18 +36,12 @@ const employeeRegSchema = mongoose.Schema(
     },
     grade: {
       type: String,
-      enum: ["A", "B", "C"],
+      
     },
     group: {
       type: String,
-      enum: [
-        "Karnataka Team",
-        "Andhra Pradesh Team",
-        "Tamil Nadu Team",
-        "Kerala Team",
-        "Pondicherry Team",
-      ],
-      default: "Karnataka Team",
+    
+     
     },
     isActive: {
       type: Boolean,

@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { BASE_URL } from "../../constants";
 import {  useNavigate } from "react-router-dom";
+
+
 const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -151,7 +153,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
       <div className="flex-1 flex flex-col w-full">
         <div className="flex flex-col flex-1 overflow-y-auto">
           {showPrompt && (
-            <div className="bg-yellow-200 p-4 mb-4 text-yellow-800 rounded">
+            <div className="bg-yellow-200 p-4 mb-4 text-yellow-800 rounded lg:text-2xl md:text-xl sm:text-sm">
               Please select a group and grade to message.
             </div>
           )}
@@ -161,7 +163,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
 
           {selectedGroupName && selectedGrade && (
             <div className="flex flex-col flex-1 bg-[#f6f5fb]">
-              <div className="text-[#ffffff] bg-[#5443c3] text-2xl p-4 flex gap-2 items-center justify-between">
+              <div className="text-[#ffffff] bg-[#5443c3] lg:text-2xl md:text-xl text-xl p-4 flex gap-2 items-center justify-between">
               <span onClick={() => navigate(-1)} className="cursor-pointer">
                   <IoArrowBack />
                 </span>
@@ -179,35 +181,35 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                 {messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={`flex break-words whitespace-pre-wrap ${msg.employeeId === adminId ? "justify-end" : "justify-start"
+                    className={`lg:flex break-words whitespace-pre-wrap  ${msg.employeeId === adminId ? "justify-end" : "justify-start"
                       } mb-2`}
                   >
                     <div
-                      className={`${msg.employeeId === adminId ? "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl" : "bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                      className={` lg:text-2xl md:text-xl text-sm  ${msg.employeeId === adminId ? " self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl " : "self-start bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                         } py-2 px-4 rounded-lg max-w-lg`}
                     >
-                      <p className={`text-sm font-bold ${msg.employeeId === adminId ? "text-green" : "text-purple-800"
+                      <p className={` lg:text-lg md:text-lg text-sm font-bold ${msg.employeeId === adminId ? "text-green" : "text-[#5443c3]"
                         }`}>
                         {msg.employeeId}
                         <span> : </span>
                       </p>
-                      <p className="text-sm">{msg.message}</p>
+                      <p className="lg:text-lg md:text-sm text-sm">{msg.message}</p>
                       {msg.Document && (
-                        <div className='text-8xl my-2 '>
+                        <div className='lg:text-8xl md:text-6xl text-4xl my-2 '>
                           <a href={msg.Document} download target="_blank" rel="noopener noreferrer">
                             <IoMdDocument />
                           </a>
                         </div>
                       )}
                       {msg.video && (
-                        <div className='text-8xl my-2'>
+                        <div className='lg:text-8xl md:text-6xl text-4xl my-2'>
                           <video src={msg.video} controls >
                           </video>
                         </div>
                       )}
                       {msg && msg.Image && (
                         <div>
-                          <img src={msg.Image} alt="" className='rounded-lg' />
+                          <img src={msg.Image} alt="" className='rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32' />
                         </div>
                       )}
                     </div>
@@ -219,7 +221,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
           )}
         </div>
 
-        <div className="mx-auto flex items-center p-4 sticky bottom-0 z-10 bg-[#f6f5fb] w-full shadow-purple-800">
+        <div className="mx-auto flex items-center p-4 sticky bottom-0 z-10 bg-[#f6f5fb] w-full shadow-[#5443c3]">
           <input
             type="text"
             className="flex-1 py-2 px-4 rounded-l-lg border-t border-b border-l text-gray-800 border-gray-200 bg-white w-full focus:outline-none placeholder-[#5443c3]"
