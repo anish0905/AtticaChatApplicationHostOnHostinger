@@ -5,6 +5,7 @@ import { BASE_URL } from '../../constants';
 const ForwardModalAllUsers = ({ users, onForward, onCancel, forwardMessage, value }) => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
+  const sender = localStorage.getItem("CurrentUserId")
 
   const handleUserSelection = (userId) => {
     setSelectedUsers((prevSelectedUsers) =>
@@ -21,6 +22,7 @@ const ForwardModalAllUsers = ({ users, onForward, onCancel, forwardMessage, valu
         .post(`${BASE_URL}/api/forward`, {
           messageId: forwardMessage._id,
           newRecipients: selectedUsers,
+          sender:sender
         })
         .then((response) => {
           // Handle success response if needed

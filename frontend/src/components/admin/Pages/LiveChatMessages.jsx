@@ -46,20 +46,21 @@ const LiveChatMessages = () => {
           <h2 className="text-lg font-bold p-4 bg-[#ffffff] text-[#5443c3] lg:hidden">
             Live Chat (Last 24 Hours)
           </h2>
-          <div className="flex flex-col flex-1 p-4">
+
+          <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto">
             {liveChatMessages.map((msg, index) => (
               <div
                 key={index}
-                className={`flex ${
+                className={`flex relative break-words whitespace-pre-wrap ${
                   msg.employeeId === adminId ? "justify-end" : "justify-start"
                 } mb-2`}
               >
                 <div
-                  className={`py-2 px-4 rounded-lg max-w-md ${
+                  className={`relative  ${
                     msg.employeeId === adminId
                       ? "self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl"
                       : "self-start bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-                  }`}
+                  } py-2 px-4 rounded-lg lg:max-w-4xl max-w-[50%]`}
                 >
                   <p className="text-sm font-bold">Group: {msg.group}</p>
                   <p className="text-sm font-bold">Grade: {msg.grade}</p>

@@ -7,9 +7,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import CsvFileUpload from '../utility/CsvFileUpload';
 
-
-
-
 export const Register = () => {
   const [form, setForm] = useState({
     name: '',
@@ -18,8 +15,8 @@ export const Register = () => {
     employeeId: '',
     state: '',
     language: '',
-    grade: '',
-    group: ''
+    grade: 'A', // default value
+    group: 'Karnataka Team' // default value
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,6 +39,8 @@ export const Register = () => {
       return;
     }
 
+    console.log("Form data before submission:", form); // Debugging log
+
     const token = localStorage.getItem('AdminId');
 
     try {
@@ -60,55 +59,14 @@ export const Register = () => {
         employeeId: '',
         state: '',
         language: '',
-        grade: '',
-        group: ''
+        grade: 'A', // default value
+        group: 'Karnataka Team' // default value
       });
     } catch (error) {
       console.log("An error occurred during registering a user", error);
       setError(error.response?.data?.error || "An unexpected error occurred");
     }
   };
-
-  // const handleFileUpload = async (e) => {
-  //   const file = e.target.files[0];
-  //   if (!file) return;
-
-  //   Papa.parse(file, {
-  //     header: true,
-  //     complete: async (results) => {
-  //       const data = results.data;
-  //       await processBatches(data);
-  //     },
-  //     error: (error) => {
-  //       console.error("Error parsing CSV file:", error);
-  //       setError("Error parsing CSV file");
-  //     }
-  //   });
-  // };
-
-  // const processBatches = async (data) => {
-  //   const token = localStorage.getItem('AdminId');
-  //   const totalBatches = Math.ceil(data.length );
-  //   // console.log("total   ",totalBatches)
-  //   for (let i = 0; i < totalBatches; i++) {
-  //     const batch = data.slice(i * BATCH_SIZE, (i + 1) * BATCH_SIZE);
-  //     console.log("batch;;;;  ",batch)
-  //     try {
-  //       await Promise.all(
-  //         batch.map(row => axios.post(`${emplyeRegistration}`, row, {
-  //           headers: {
-  //             Authorization: `Bearer ${token}`
-  //           }
-  //         }))
-  //       );
-  //       toast.success(`Batch ${i + 1} of ${totalBatches} registered successfully!`);
-  //     } catch (error) {
-  //       console.log(`An error occurred during registering batch ${i + 1}`, error);
-  //       setError(`An error occurred during registering batch ${i + 1}`);
-  //       break;
-  //     }
-  //   }
-  // };
 
   return (
     <div className="lg:flex block bg-[#f6f5fb]">
@@ -123,12 +81,6 @@ export const Register = () => {
             >
               Open Registration Form
             </button>
-            {/* <input
-              type="file"
-              accept=".csv"
-              onChange={handleFileUpload}
-              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 ml-2 mt-4 lg:mt-0"
-            /> */}
             <CsvFileUpload endpoint="/api/employeeRegistration/register" />
           </div>
         </div>
@@ -165,35 +117,30 @@ export const Register = () => {
                   <label className="block text-[#5443c3] text-sm font-bold mb-2" htmlFor="grade">
                     Grade
                   </label>
-                  <select
+                  <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="grade"
                     name="grade"
                     value={form.grade}
                     onChange={handleChange}
                   >
-                    <option value="A">A</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                  </select>
+            
+                  </input>
                 </div>
                 <div className="mb-4">
                   <label className="block text-[#5443c3] text-sm font-bold mb-2" htmlFor="group">
                     Team Name
                   </label>
-                  <select
+                  <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="group"
                     name="group"
                     value={form.group}
                     onChange={handleChange}
                   >
-                    <option value="Karnataka Team">Karnataka Team</option>
-                    <option value="Andhra Pradesh Team">Andhra Pradesh Team</option>
-                    <option value="Tamil Nadu Team">Tamil Nadu Team</option>
-                    <option value="Kerala Team">Kerala Team</option>
-                    <option value="Pondicherry Team">Pondicherry Team</option>
-                  </select>
+      
+          
+                  </input>
                 </div>
                 <div className="flex items-center justify-between">
                   <button

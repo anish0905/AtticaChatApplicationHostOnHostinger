@@ -229,7 +229,7 @@ const getNotificationId = async (req, res) => {
 
 const forwardMessage = async (req, res) => {
   try {
-    const { messageId, newRecipients } = req.body;
+    const { messageId, newRecipients,sender } = req.body;
     console.log(newRecipients)
     const originalMessage = await Message.findById(messageId);
 
@@ -240,7 +240,7 @@ const forwardMessage = async (req, res) => {
     const forwardedMessages = await Promise.all(
       newRecipients.map(async (recipient) => {
         const forwardedMessage = new Message({
-          sender: originalMessage.sender,
+          sender,
           recipient: [recipient], // Store recipients as an array
           content: originalMessage.content,
         });

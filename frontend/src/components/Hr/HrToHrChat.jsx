@@ -13,7 +13,8 @@ import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import Sidebar from "../AllUsers/UserSidebar";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers"
 import ReplyModel from "../ReplyModel";
-
+import { FaArrowLeft } from "react-icons/fa";
+import { IoMdSend } from "react-icons/io";
 
 
 function HrToHrChat() {
@@ -238,25 +239,26 @@ function HrToHrChat() {
       <Sidebar value="HR" />
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
-          <div className="flex items-center justify-between p-4 bg-blue-200 sticky top-0 z-10">
+          <div className="flex items-center justify-between p-4 bg-[#5443c3] text-white sticky top-0 z-10">
+           
+            <button
+              onClick={handleBackToEmployees}
+              className=" text-white text-4xl p-2 rounded-md"
+            >
+            <FaArrowLeft />
+            </button>
             <div>
               <h1 className="text-2xl font-bold">{recipientName}</h1>
             </div>
-            <button
-              onClick={handleBackToEmployees}
-              className="bg-red-500 text-white p-2 rounded-md"
-            >
-              Back
-            </button>
           </div>
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa]">
             {messages.map((message,index) => (
               <div
                 key={message._id}
-                className={`mb-4 p-4 rounded-lg max-w-[70%] relative ${
+                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${
                   message.sender === loggedInUserId
-                    ? "bg-blue-200 self-end"
-                    : "bg-gray-200 self-start"
+                    ? "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl self-end"
+                    :  "bg-white text-[#5443c3] rounded-tl-3xl rounded-br-3xl self-start"
                 }`}
 
                 onMouseEnter={() => handleHover(index)}
@@ -295,7 +297,7 @@ function HrToHrChat() {
                     Your browser does not support the video tag.
                   </video>
                 )}
-                <span className="text-xs text-gray-500">
+                <span className="text-xs text-orange-600">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
               
@@ -326,13 +328,13 @@ function HrToHrChat() {
             ))}
             <div ref={messagesEndRef} />
           </div>
-          <div className="flex items-center p-4 bg-white border-t border-gray-200 fixed bottom-0 w-full lg:static">
+          <div className="flex items-center p-4 bg-[#eef2fa] border-t border-gray-200 fixed bottom-0 w-full lg:static">
             <input
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type a message..."
-              className="flex-grow p-2 border rounded-lg mr-2"
+              className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
             />
             <input
               type="file"
@@ -345,24 +347,26 @@ function HrToHrChat() {
             </label>
             <button
               onClick={handleSendMessage}
-              className="bg-blue-500 text-white p-2 rounded-lg"
+               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
-              Send
+                 <IoMdSend />
             </button>
             <AllUsersFileModel  sender={loggedInUserId} recipient={recipient} />
           </div>
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto">
-          <div className="flex items-center mb-4">
-            <AiOutlineSearch className="text-gray-500 mr-2" />
+          <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All HR Employees</h1>
+          <div className=" relative flex items-center mb-4">
+            
             <input
               type="text"
               value={userSearchQuery}
               onChange={(e) => setUserSearchQuery(e.target.value)}
               placeholder="Search..."
-              className="flex-grow p-2 border rounded-lg"
+             className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
             />
+            <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
           </div>
           <ul>
             {users
@@ -372,7 +376,7 @@ function HrToHrChat() {
               .map((user) => (
                 <li
                   key={user._id}
-                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between ${
+                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] font-bold ${
                     unreadUsers.some(
                       (unreadUser) => unreadUser.userId === user._id
                     )

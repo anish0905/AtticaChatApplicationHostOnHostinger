@@ -1,22 +1,26 @@
 import React, { useState } from "react";
-import { CgProfile } from "react-icons/cg";
 import { BsChatSquareDots } from "react-icons/bs";
-import { MdGroups } from "react-icons/md";
-import { RiContactsLine } from "react-icons/ri";
 import { BiLogOut } from "react-icons/bi";
 import logo from "../../assests/logo.png";
-import { SiLivechat } from "react-icons/si";
 import { Link, useNavigate } from "react-router-dom";
 import { GrChatOption } from "react-icons/gr";
 import { MdDashboard } from "react-icons/md";
-import { FcManager } from "react-icons/fc";
-import { RiBillLine } from "react-icons/ri";
-import { GiPerson } from "react-icons/gi";
-import { FcBusinessman } from "react-icons/fc";
-import { FcSurvey } from "react-icons/fc";
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import { TbMessageForward } from "react-icons/tb";
 import { BiSolidMessageCheck } from "react-icons/bi";
+import { FaLaptop } from "react-icons/fa";
+import { GrVirtualMachine } from "react-icons/gr";
+import { MdAddCall } from "react-icons/md";
+import { MdAccountTree } from "react-icons/md";
+import { FaHourglassHalf } from "react-icons/fa";
+import { TbBounceLeft } from "react-icons/tb";
+import { GrCloudSoftware } from "react-icons/gr";
+import { GiHumanTarget } from "react-icons/gi";
+import { MdSecurity } from "react-icons/md";
+import { IoPersonSharp } from "react-icons/io5";
+import { FaMoneyBillTrendUp } from "react-icons/fa6";
+import { GrUserManager } from "react-icons/gr";
+
 const Sidebar = () => {
   const navigate = useNavigate();
   const [showEmployeeOptions, setShowEmployeeOptions] = useState(false);
@@ -91,21 +95,21 @@ const Sidebar = () => {
               onClick={() => handleNavigation("/register")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <FcManager className="bg-white rounded-full  mr-2 my-2 text-2xl" />
+              <IoPersonSharp className="bg-white rounded-full  mr-2 my-2 text-2xl" />
               <span className="my-2">Employee Registration</span>
             </div>
             <div
               onClick={() => handleNavigation("/billingTeamRegister")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <FcSurvey className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <FaMoneyBillTrendUp className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Billing Team Registration</span>
             </div>
             <div
               onClick={() => handleNavigation("/managerRegister")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <GrUserManager className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Manager Registration</span>
             </div>
 
@@ -113,7 +117,7 @@ const Sidebar = () => {
               onClick={() => handleNavigation("/DigitalMarketingReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
             >
-              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <FaLaptop className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Digital Marketing Team Registration</span>
             </div>
 
@@ -121,7 +125,7 @@ const Sidebar = () => {
               onClick={() => handleNavigation("/VirtualTeamReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <GrVirtualMachine className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Virtual Team Registration</span>
             </div>
 
@@ -129,7 +133,7 @@ const Sidebar = () => {
               onClick={() => handleNavigation("/CallCenterReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <MdAddCall className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Call Center Team Registration</span>
             </div>
 
@@ -137,21 +141,21 @@ const Sidebar = () => {
               onClick={() => handleNavigation("/AccountsReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <MdAccountTree className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Accounts Team Registration</span>
             </div>
             <div
               onClick={() => handleNavigation("/MonitoringReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <FaHourglassHalf className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Monitoring Team Registration</span>
             </div>
             <div
               onClick={() => handleNavigation("/BouncerReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <TbBounceLeft className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Bouncer Registration</span>
             </div>
 
@@ -160,7 +164,7 @@ const Sidebar = () => {
               onClick={() => handleNavigation("/SoftwareReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <GrCloudSoftware className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Software Registration</span>
             </div>
 
@@ -168,7 +172,7 @@ const Sidebar = () => {
               onClick={() => handleNavigation("/HrReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <GiHumanTarget className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Hr Registration</span>
             </div>
 
@@ -176,7 +180,7 @@ const Sidebar = () => {
               onClick={() => handleNavigation("/SecurityReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <FcBusinessman className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <MdSecurity className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Security Registration</span>
             </div>
           </span>

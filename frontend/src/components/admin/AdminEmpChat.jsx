@@ -214,12 +214,12 @@ function AdminEmpChat() {
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`flex break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2`}
+                  className={`flex relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2`}
                   onMouseEnter={() => handleHover(index)}
                   onMouseLeave={() => handleLeave()}
                 >
                   <div
-                    className={`${message.sender === loggedInUserId ? "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl" : "bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                    className={`relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl" : "bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                       } py-2 px-4 rounded-lg max-w-lg`}
                   >
                     {message.content && message.content.originalMessage && (
