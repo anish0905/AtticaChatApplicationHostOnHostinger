@@ -373,6 +373,13 @@ function EmpAdminChat() {
                   className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
                     }`}
                 >
+                 {message.content && message.content.originalMessage && (
+                  <div className="mb-2">
+                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      {message.content.originalMessage}
+                    </span>
+                  </div>
+                )}
 
                   {message.content && message.content.text && (
                     <p className="text-sm">{message.content.text}</p>

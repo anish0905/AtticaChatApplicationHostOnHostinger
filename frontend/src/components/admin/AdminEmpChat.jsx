@@ -211,11 +211,11 @@ function AdminEmpChat() {
 
 
 
-            <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto" style={{ maxHeight: "80vh" }}>
+            <div className="flex flex-col flex-1 px-4 pt-4 relative overflow-y-auto" style={{ maxHeight: "80vh" }}>
               {messages.map((message, index) => (
                 <div
                   key={index}
-                  className={`flex break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2`}
+                  className={`flex  relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2`}
                   onMouseEnter={() => handleHover(index)}
                   onMouseLeave={() => handleLeave()}
                 >
