@@ -43,7 +43,7 @@ const Sidebar = () => {
   ];
 
   return (
-    <div className="flex flex-row lg:flex-col h-[80px] lg:h-screen w-full lg:w-[100px] left-0 bg-[#5443c3] border-b lg:border-r shadow-md justify-between items-center py-[10px] lg:py-[20px] text-gray-500">
+    <div className="flex justify-evenly flex-row lg:flex-col h-[80px] lg:h-screen w-screen lg:w-[100px]  left-0 bg-[#5443c3] border-b lg:border-r shadow-md lg:justify-between items-center py-[10px] lg:py-[20px] text-gray-500">
       <div className="w-16 md:w-20 lg:w-24 h-12 md:h-16 lg:h-20 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
         <img className="m-2 md:m-4 lg:m-6" src={logo} alt="Logo" />
       </div>
@@ -80,7 +80,7 @@ const Sidebar = () => {
         <div
           onMouseEnter={() => setShowEmployeeOptions(true)}
           onMouseLeave={() => setShowEmployeeOptions(false)}
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer z-50 ${
+          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer z-50  ${
             employeeRoutes.includes(activeRoute)
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
@@ -88,7 +88,7 @@ const Sidebar = () => {
         >
           <PersonAddIcon className="text-lg md:text-2xl lg:text-3xl" />
           <span
-            className="absolute lg:bottom-auto lg:w-96 lg:left-full mt-48 lg:ml-0 lg:mt-2 whitespace-nowrap bg-[#f6f5fb] text-[#5443c3] border border-[#5443c3] text-xs lg:text-lg md:text-sm rounded py-6 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 "
+            className="absolute lg:bottom-auto lg:w-96 lg:left-full lg:-top-60 top-12 -right-20 lg:ml-0 lg:mt-2 whitespace-nowrap bg-[#f6f5fb] text-[#5443c3] border border-[#5443c3] text-xs lg:text-lg md:text-sm rounded py-6 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 "
             style={{ display: showEmployeeOptions ? "block" : "none" }}
           >
             <div

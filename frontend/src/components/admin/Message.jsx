@@ -175,7 +175,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
 
 
               <div
-                className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto"
+                className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto lg:mb-0 mb-10"
                 style={{ maxHeight: "80vh" }}
               >
                 {messages.map((msg, index) => (
@@ -209,7 +209,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                       )}
                       {msg && msg.Image && (
                         <div>
-                          <img src={msg.Image} alt="" className='rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32' />
+                          <img src={msg.Image} alt=""  />
                         </div>
                       )}
                     </div>

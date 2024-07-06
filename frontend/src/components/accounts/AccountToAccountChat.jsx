@@ -393,24 +393,25 @@ import { FaArrowLeft } from "react-icons/fa";
           </div>
         )}
 
-        {showPopSms && (
-          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-4 rounded-lg shadow-lg border border-blue-500">
-              <div className="flex items-center mb-4">
-                <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
-                <h3 className="text-lg font-semibold">New Message</h3>
-              </div>
-              <p className="mb-2">From: {selectedSenderName}</p>
-              <p className="mb-4">Message: {popSms[0]?.content?.text}</p>
-              <button
-                onClick={() => handleModalClose(popSms[0]?.sender)}
-                className="bg-blue-500 text-white p-2 rounded-lg"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
+{showPopSms && (
+  <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-blue-100 p-4 rounded-lg shadow-lg border border-[#5443c3] max-w-2xl w-full">
+      <div className="flex items-center mb-4">
+        <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
+        <h3 className="text-lg font-semibold">New Message</h3>
+      </div>
+      <p className="mb-2 text-green-600 font-bold text-2xl">From: {selectedSenderName}</p>
+      <p className="mb-4 break-words">Message: {popSms[0]?.content?.text}</p>
+      <button
+        onClick={() => handleModalClose(popSms[0]?.sender)}
+        className="bg-blue-500 text-white p-2 rounded-lg"
+      >
+        Close
+      </button>
+    </div>
+  </div>
+)}
+
         {showForwardModal && (
           <ForwardModalAllUsers
             users={users}

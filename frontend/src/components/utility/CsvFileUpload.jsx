@@ -65,7 +65,7 @@ const CSVFileUpload = ({ endpoint }) => {
         type="file"
         accept=".csv"
         onChange={handleFileUpload}
-        className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 ml-2 mt-4 lg:mt-0"
+        className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1  rounded-full h-10 ml-2 mt-4 lg:mt-0"
       />
       <ToastContainer />
     </>

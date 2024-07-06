@@ -491,24 +491,24 @@ function AccountToAdminChat() {
 
 
       {showPopSms && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white relative p-6 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw]">
+        <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-blue-100 relative p-6 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw]">
             {popSms.length > 0 &&
               popSms
                 .filter((sms) => sms.sender === selectedSender)
                 .map((sms) => (
-                  <div key={sms.id} className="relative border border-gray-200 rounded-lg p-2 mb-2 shadow-sm">
+                  <div key={sms.id} className="relative border border-[#5443c3] rounded-lg p-2 mb-2 shadow-sm">
                     <div className="flex items-center gap-5 mb-1">
                       <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
-                      <h1 className="text-xl font-bold text-green-600 text-center">{selectedSenderEmail}</h1>
+                      <h1 className="text-2xl font-bold text-green-600 text-center">{selectedSenderEmail}</h1>
                     </div>
-                    <p className="text-base font-bold mb-1">{sms.content.text}</p>
+                    <p className="text-base font-bold mb-1 relative break-words whitespace-pre-wrap">{sms.content.text}</p>
                     <p className="text-sm text-gray-500 mb-2">
                       {new Date(sms.createdAt).toLocaleDateString()}{" "}
                       {new Date(sms.createdAt).toLocaleTimeString()}
                     </p>
                     <button
-                      className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                      className="absolute top-2 right-2 text-red-500 hover:text-gray-700"
                       onClick={() => handleModalClose(sms.sender)}
                     >
                       Close
