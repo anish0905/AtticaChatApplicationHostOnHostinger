@@ -132,22 +132,13 @@ const blockAllAdmin = async (req, res) => {
 };
 
 const unblockAllAdmin = async (req, res) => {
-  try {
-    const admins = await Admin.find();
-    admins.forEach(async (admin) => {
-      admin.access = true;
-      await admin.save();
-    });
-    res.status(200).json({ message: "All Admins Access Unblocked successfully" });
-  } catch (error) {
-    // Handle errors and send an error response
-    console.error(error);
-    res.status(500).json({ message: "An error occurred while unblocking admins" });
-  }
+  const admins = await Admin.find();
+  admins.forEach(async (admin) => {
+    admin.access = true;
+    await admin.save();
+  });
+  res.status(200).json({ message: "All Admins Access Unblocked successfully" });
 };
-
-
-
 
 module.exports = {
   AdminRegistion,
