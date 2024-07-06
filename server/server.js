@@ -19,6 +19,7 @@ const locationRoutes = require("./src/routes/locationRoute.js");
 const employeeRoute = require("./src/routes/employeeRegRoutes.js");
 const notificationRouter = require("./src/routes/notificationRoutes.js");
 const allUserRoutes = require("./src/routes/allUserRoutes.js");
+const chatRoutes = require("./src/routes/chatRoutes.js");
 connectDb(); // Call the function to connect to the database
 
 const app = express();
@@ -28,224 +29,6 @@ app.use(cors()); // Allow Cross-Origin Resource Sharing (CORS)
 const port = process.env.PORT || 5002;
 
 app.use(express.json()); // Parse JSON bodies of incoming requests
-
-// Define Mongoose Schema for the chat
-const chatSchema = new mongoose.Schema({
-  group: String, // Group name
-  grade: String,
-  messages: [
-    {
-      employeeId: String,
-      message: String,
-      Image: String,
-      Document: String,
-      video: String,
-    },
-  ], // Array containing employeeId, message, Image, and Document
-},{timestamps:true});
-
-// Create Mongoose Model based on the schema
-const ChatModel = mongoose.model("Chat", chatSchema);
-
-// Set up multer storage configuration for file uploads
-
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./public/temp");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-
-// Set up multer upload configuration
-const upload = multer({ storage: storage });
-
-// API endpoint to send a new message with image and document uploads
-// API endpoint to send a new message with optional image and document uploads
-app.post(
-  "/api/messages",
-  upload.fields([{ name: "image" }, { name: "document" }, { name: "video" }]),
-  async (req, res) => {
-    try {
-      const { employeeId, message, group, grade } = req.body;
-
-      // Find the chat room by group name and grade
-      let chatRoom = await ChatModel.findOne({ group, grade });
-
-      if (!chatRoom) {
-        return res.status(400).json({
-          error: `Chat room with group "${group}" and grade "${grade}" does not exist`,
-        });
-      }
-
-      // Check if image, document, and video files are provided
-      const hasImage = req.files && req.files.image;
-      const hasDocument = req.files && req.files.document;
-      const hasVideo = req.files && req.files.video;
-
-      let imageUploadResult;
-      if (hasImage) {
-        const imageLocalPath = req.files.image[0].path;
-        imageUploadResult = await uploadOnCloudinary(imageLocalPath);
-        if (!imageUploadResult || !imageUploadResult.url) {
-          console.error(
-            "Image upload failed:",
-            imageUploadResult?.error || "Unknown error"
-          );
-          return res
-            .status(400)
-            .json({ error: "Image upload failed. Please try again." });
-        }
-      }
-
-      let documentUploadResult;
-      if (hasDocument) {
-        const documentLocalPath = req.files.document[0].path;
-        documentUploadResult = await uploadOnCloudinary(documentLocalPath);
-        if (!documentUploadResult || !documentUploadResult.url) {
-          console.error(
-            "Document upload failed:",
-            documentUploadResult?.error || "Unknown error"
-          );
-          return res
-            .status(400)
-            .json({ error: "Document upload failed. Please try again." });
-        }
-      }
-
-      let videoUploadResult;
-      if (hasVideo) {
-        const videoLocalPath = req.files.video[0].path;
-        videoUploadResult = await uploadOnCloudinary(videoLocalPath);
-        if (!videoUploadResult || !videoUploadResult.url) {
-          console.error(
-            "Video upload failed:",
-            videoUploadResult?.error || "Unknown error"
-          );
-          return res
-            .status(400)
-            .json({ error: "Video upload failed. Please try again." });
-        }
-      }
-
-      // console.log("11222222222221vidourl:",videoUploadResult.url);
-
-      // Add the new message to the chat room
-      const messageData = { employeeId, message };
-      if (hasImage) {
-        messageData.Image = imageUploadResult.url;
-      }
-      //  console.log(messageData.Image);
-      //  console.log(hasImage)
-      const imageUrl = messageData.Image;
-      if (hasDocument) {
-        messageData.Document = documentUploadResult.url;
-      }
-      const documentUrl = messageData.Document;
-      if (hasVideo) {
-        messageData.video = videoUploadResult.url;
-      }
-      const videoUrl = messageData.video;
-      // console.log(videoUrl);
-      chatRoom.messages.push(messageData);
-
-      const liveChats = new liveChat({
-        group: chatRoom.group,
-        grade: chatRoom.grade,
-        employeeId: employeeId,
-        messages: message,
-        image: imageUrl,
-        video: videoUrl,
-        document: documentUrl,
-      });
-      // console.log(liveChats);
-      await liveChats.save();
-
-      // Save the updated chat room
-      await chatRoom.save();
-      // console.log(chatRoom);
-
-      res.status(201).json({ message: "Message sent successfully" });
-    } catch (error) {
-      console.error("Error sending message:", error);
-      res.status(500).json({ error: "Internal server error" });
-    }
-  }
-);
-
-// API endpoint to fetch chat messages for a specific group
-app.get("/api/messages", async (req, res) => {
-  try {
-    const { group, grade } = req.query;
-
-    // Fetch messages only for the specified group and grade
-    const messages = await ChatModel.findOne({ group, grade });
-
-    if (!messages) {
-      return res
-        .status(404)
-        .json({ error: "Messages not found for the specified group" });
-    }
-
-    res.json(messages); // Send the messages as JSON response
-  } catch (error) {
-    console.error("Error fetching messages:", error);
-    res.status(500).json({ error: "Internal server error" }); // Send 500 status code in case of error
-  }
-});
-
-// API endpoint to create a new group
-app.post("/api/groups", async (req, res) => {
-  try {
-    const { groupName, grade } = req.body;
-
-    // Check if the group name and grade are provided
-    if (!groupName || !grade) {
-      return res
-        .status(400)
-        .json({ error: "Group name and grade are required" });
-    }
-
-    // Check if the group with the same name and grade already exists
-    const existingGroup = await ChatModel.findOne({ group: groupName, grade });
-    if (existingGroup) {
-      return res.status(400).json({
-        error: `Group with name "${group}" and grade "${grade}" already exists`,
-      });
-    }
-
-    // Create a new group with the provided group name and grade
-    const newGroup = new ChatModel({ group: groupName, grade, messages: [] });
-
-    // Save the new group to the database
-    await newGroup.save();
-
-    res.status(201).json({ message: "Group created successfully" });
-  } catch (error) {
-    console.error("Error creating group:", error);
-    res.status(500).json({ error: "Internal server error" }); // Send 500 status code in case of error
-  }
-});
-
-app.delete("/api/groups/:groupName/:grade", async (req, res) => {
-  const { groupName, grade } = req.params;
-  try {
-    // Find and delete the group
-    const result = await ChatModel.deleteOne({
-      group: groupName,
-      grade: grade,
-    });
-    if (result.deletedCount === 1) {
-      res.json({ message: "Group deleted successfully" });
-    } else {
-      res.status(404).json({ error: "Group not found" });
-    }
-  } catch (error) {
-    console.error("Error deleting group:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
 
 // API endpoint to fetch distinct group names and grades
 app.get("/api/groups", async (req, res) => {
@@ -371,6 +154,9 @@ app.get("/api/groups/mark-messages-read/:id", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+//group Chat Message
+app.use("/api/chat", chatRoutes);
 
 // Mounting routes for admin and employee registration
 app.use("/api/employeeRegistration", require("./src/routes/employeeRegRoutes"));
