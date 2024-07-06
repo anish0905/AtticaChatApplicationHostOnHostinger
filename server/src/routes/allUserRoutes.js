@@ -15,6 +15,7 @@ router.post("/virtualTeam/login", authController.loginVirtualTeam);
 router.post("/monitoring/login", authController.loginMonitoringTeam);
 router.post("/Security/login", authController.loginSecurity);
 router.post("/bouncers/login", authController.loginBouncers);
+router.post("/TE/login", authController.loginTE);
 
 // Route to get user count by role
 router.get("/counts/by-role", authController.getUsersCountByRole);

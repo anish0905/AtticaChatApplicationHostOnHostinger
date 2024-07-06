@@ -21,42 +21,37 @@ const FirstPage = () => {
     navigate("/BillingTeamManagerLogin");
   };
 
-  const handleAccountsLogin=()=>{
-    navigate('/accounts')
-  }
+  const handleAccountsLogin = () => {
+    navigate("/accounts");
+  };
 
-  const handleSoftwareLogin=()=>{///callCenter
-    navigate('/software')
-  }
+  const handleSoftwareLogin = () => {
+    ///callCenter
+    navigate("/software");
+  };
 
-  const handleHrLogin=()=>{
-    navigate('/HrLogin')
-  }
+  const handleHrLogin = () => {
+    navigate("/HrLogin");
+  };
 
+  const handleMonitoringTeamLogin = () => {
+    navigate("/monitoringTeam");
+  };
 
-const handleMonitoringTeamLogin=()=>{
-  navigate('/monitoringTeam')
-}
+  const handleBouncersLogin = () => {
+    navigate("/bouncerLogin");
+  };
 
+  const handleSecurityLogin = () => {
+    navigate("/security");
+  };
+  const handleVirtualTeamLogin = () => {
+    navigate("/virtualTeam");
+  };
 
-const handleBouncersLogin=()=>{
-  navigate('/bouncerLogin')
-}
-
-
-const handleSecurityLogin=()=>{
-  navigate('/security')
-}
-  const handleVirtualTeamLogin=()=>{
-    navigate('/virtualTeam')
-  }
-
-  const handleCallCenterLogin=()=>{
-    navigate('/callCenter')
-  }
-
-
-
+  const handleCallCenterLogin = () => {
+    navigate("/callCenter");
+  };
 
   return (
     <div className="relative min-h-screen flex items-center justify-center bg-[#824ece] overflow-hidden">
@@ -118,7 +113,7 @@ const handleSecurityLogin=()=>{
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-              onClick={ handleAccountsLogin}
+              onClick={handleAccountsLogin}
             >
               Accounts
             </button>
@@ -130,34 +125,31 @@ const handleSecurityLogin=()=>{
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-                onClick={handleHrLogin}
+              onClick={handleHrLogin}
             >
               HR
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-               onClick={handleCallCenterLogin}
+              onClick={handleCallCenterLogin}
             >
               Call Center
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
               onClick={handleVirtualTeamLogin}
-             
             >
               Virtual Team
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
               onClick={handleMonitoringTeamLogin}
-              
             >
               Monitoring Team
             </button>
             <button
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
               onClick={handleBouncersLogin}
-             
             >
               Bouncers/Drivers
             </button>
@@ -167,11 +159,18 @@ const handleSecurityLogin=()=>{
             >
               Security/CCTV
             </button>
-            <Link to={"/DigitalTeamLogin"}
+            <Link
+              to={"/DigitalTeamLogin"}
               className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
-            
             >
               Digital Marketing
+            </Link>
+
+            <Link
+              to={"/te"}
+              className="bg-purple-500 hover:bg-purple-700 text-white font-bold text-md sm:text-xl py-2 sm:py-4 px-4 sm:px-4 rounded-2xl focus:outline-none focus:shadow-outline transition-all duration-200 transform hover:scale-110"
+            >
+              TE
             </Link>
           </div>
         </div>
@@ -181,5 +180,3 @@ const handleSecurityLogin=()=>{
 };
 
 export default FirstPage;
-
-

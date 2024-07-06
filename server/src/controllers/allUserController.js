@@ -395,6 +395,54 @@ exports.loginSecurity = async (req, res) => {
   }
 };
 
+exports.loginTE = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find the user in the database with the provided email and role "TE"
+    const user = await User.findOne({ email, role: "TE" });
+
+    // If user not found, return 400 Bad Request with error message
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Check if the user's access is true. If not, return 401 Unauthorized
+    if (!user.access) {
+      return res.status(401).json({ error: "TE not authorized" });
+    }
+
+    // Compare the provided password with the hashed password stored in the database
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    // If passwords do not match, return 400 Bad Request with error message
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid password" });
+    }
+
+    // If email and password are correct, generate a JWT token
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "ACCESS_TOKEN_SECRET",
+      { expiresIn: "1h" }
+    );
+
+    // Return 200 OK with token and success message
+    res
+      .status(200)
+      .json({
+        token,
+        message: "TE logged in successfully",
+        _id: user._id,
+        success: true,
+        role: user.role,
+      });
+  } catch (error) {
+    // If any error occurs during the process, return 500 Internal Server Error with error message
+    res.status(500).json({ message: error.message });
+  }
+};
+
 exports.getAllDigitalTeams = async function (req, res) {
   try {
     const users = await User.find({ role: "Digital Marketing" }).select(
