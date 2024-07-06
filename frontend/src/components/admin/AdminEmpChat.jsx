@@ -93,7 +93,7 @@ function AdminEmpChat() {
     const messageData = {
       sender: loggedInUserId,
       recipient,
-      senderName,
+      senderName:localStorage.getItem("AdminId"),
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
       document: attachment?.type.startsWith("application/")
@@ -183,9 +183,11 @@ function AdminEmpChat() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col lg:flex-row h-screen relative">
+      
       <Sidebar />
-      <div className="flex-1 flex flex-col lg:flex-row ">
+    
+      <div className="flex-1 flex flex-col lg:flex-row   ">
         <div className={`flex flex-col bg-white text-black p-4  w-full border shadow shadow-blue-500/65 lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
           <div className="flex items-center justify-between lg:mb-4">
             <span className="lg:text-2xl md:text-2xl sm:text-xl font-bold mb-4 text-[#5443c3]">Employee Chat</span>
@@ -195,7 +197,7 @@ function AdminEmpChat() {
 
         {isChatSelected && (
           <div className="flex-1 flex flex-col justify-between bg-[#f6f5fb]">
-            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+            <div className="text-[#5443c3]  sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
               {isChatSelected && (
                 <div className="text-2xl p-4 flex gap-2 items-center justify-between">
                   <button
