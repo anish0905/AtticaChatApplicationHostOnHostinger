@@ -185,7 +185,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                       } mb-2`}
                   >
                     <div
-                      className={` lg:text-2xl md:text-xl text-sm  ${msg.employeeId === adminId ? " self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl " : "self-start bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                      className={` lg:text-2xl md:text-xl text-sm  ${msg.employeeId === adminId ? " self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl " : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                         } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                     >
                       <p className={` lg:text-lg md:text-lg text-sm font-bold ${msg.employeeId === adminId ? "text-green" : "text-[#5443c3]"
@@ -224,7 +224,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
         <div className="mx-auto flex items-center p-4 sticky bottom-0 z-10 bg-[#f6f5fb] w-full shadow-[#5443c3]">
           <input
             type="text"
-            className="flex-1 py-2 px-4 rounded-l-lg border-t border-b border-l text-gray-800 border-gray-200 bg-white w-full focus:outline-none placeholder-[#5443c3]"
+            className="flex-1 py-2 px-4 rounded-l-lg border-t border-b border-l border-[#5443c3] text-gray-800 bg-white w-full focus:outline-none placeholder-[#5443c3]"
             placeholder="Type your message..."
             value={message}
             onChange={(e) => setMessage(e.target.value)}

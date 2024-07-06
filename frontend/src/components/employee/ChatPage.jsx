@@ -238,27 +238,27 @@ function ChatPage() {
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
       <EmployeeSidebar />
       {showChat ? (
-        <div className="w-full  flex flex-col justify-between overflow-hidden">
-          <div className="flex items-center justify-between p-4 bg-[#5443c3] text-white sticky top-0 z-10">
+        <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
+          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10">
           <button
               onClick={handleBackToEmployees}
-              className=" text-white text-4xl p-2 rounded-md"
+              className="  lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
             >
               <FaArrowLeft />
             </button>
           
-              <h1 className="text-2xl font-bold">{recipientName}</h1>
+              <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
             
           
           </div>
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa]">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa]">
             {messages.map((message,index) => (
               <div
                 key={message._id}
                 className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${
                   message.sender === loggedInUserId
-                    ? "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl self-end"
-                    : "bg-white text-[#5443c3] rounded-tl-3xl rounded-br-3xl self-start"
+                    ? "bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl self-end"
+                    : "bg-white text-[#9184e9] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl self-start"
                 }`}
 
                 onMouseEnter={() => handleHover(index)}
@@ -266,13 +266,13 @@ function ChatPage() {
               >  
                {message.content && message.content.originalMessage && (
                   <div className="mb-2">
-                    <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                    <span className="bg-green-300 px-2 py-1 text-xs text-white rounded">
                       {message.content.originalMessage}
                     </span>
                   </div>
                 )}
                 {message.content && message.content.text && (
-                  <p className="font-bold">{message.content.text}</p>
+                  <p className="font-medium lg:text-xl md:text-xl text-sm ">{message.content.text}</p>
                 )}
                 {message.content && message.content.image && (
                   <img
@@ -297,7 +297,7 @@ function ChatPage() {
                     Your browser does not support the video tag.
                   </video>
                 )}
-                <span className="text-xs text-orange-600">
+                <span className="text-xs text-black">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
               
@@ -309,7 +309,7 @@ function ChatPage() {
                   )}
             
                   {showDropdown === index && (
-                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                    <div className="absolute top-8 right-2 bg-white  rounded shadow-lg z-10">
                       <button
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => handleReply(message)}
@@ -328,6 +328,7 @@ function ChatPage() {
             ))}
             <div ref={messagesEndRef} />
           </div>
+
           <div className="flex items-center p-4 bg-[#eef2fa] border-t border-gray-200 fixed bottom-0 w-full lg:static">
             <input
               type="text"
@@ -348,7 +349,7 @@ function ChatPage() {
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto">
-             <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Employees</h1>
+             <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Employees</h1>
           <div className=" relative flex items-center mb-4">
             <input
               type="text"
@@ -367,7 +368,7 @@ function ChatPage() {
               .map((user) => (
                 <li
                   key={user._id}
-                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] font-bold ${
+                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${
                     unreadUsers.some(
                       (unreadUser) => unreadUser.userId === user._id
                     )

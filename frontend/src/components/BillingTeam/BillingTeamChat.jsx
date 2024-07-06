@@ -346,15 +346,15 @@ function BillingTeamChat() {
           </div>
         </div>
       ) : (
-        <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto border-[#5443c3] shadow-lg">
-           <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Manager</h1>
+        <div className="w-full lg:w-1/4 h-screen bg-white p-4 overflow-y-auto border-[#5443c3] shadow-lg">
+           <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Manager</h1>
           <div className=" relative flex items-center mb-4 ">
             <input
               type="text"
               value={userSearchQuery}
               onChange={(e) => setUserSearchQuery(e.target.value)}
               placeholder="Search by names"
-              className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+              className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg"
             />
              <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
           </div>

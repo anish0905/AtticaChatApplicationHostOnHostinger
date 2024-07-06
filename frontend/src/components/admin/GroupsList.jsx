@@ -173,7 +173,7 @@ const GroupsList = () => {
   return (
     <div className="flex flex-col lg:flex-row h-screen">
       <ToastContainer />
-      <div className="flex flex-col w-full lg:w-[24vw] bg-[#ffffff] text-[#5443c3] border shadow shadow-blue-500/65">
+      <div className="flex flex-col w-full lg:w-[24vw] bg-[#ffffff] text-[#5443c3] lg:border shadow lg:shadow-blue-500/65">
         <div className="p-4 flex justify-between items-center">
           <h1 className="lg:text-3xl md:text-2xl text-xl font-bold">Groups</h1>
           <button
@@ -243,20 +243,20 @@ const GroupsList = () => {
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 ">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50  ">
           <div className="bg-white p-4 lg:p-8 rounded-lg min-w-[50%] lg:min-w-[20%]">
             <h2 className="lg:text-2xl md:text-xl sm:text-sm font-bold mb-4 text-[#5443c3]">
               Add Group
             </h2>
             <input
               type="text"
-              className=" w-full p-2 mb-4 border rounded lg:text-2xl md:text-xl sm:text-sm"
+              className=" w-full p-2 mb-4 border-2 border-[#5443c3] rounded lg:text-2xl md:text-xl sm:text-sm"
               placeholder="Group Name"
               value={newGroupName}
               onChange={handleInputChange}
             />
             <select
-              className="w-full p-2 mb-4 border rounded lg:text-2xl md:text-xl sm:text-sm"
+              className="w-full p-2 mb-4 border-2 border-[#5443c3] rounded lg:text-2xl md:text-xl sm:text-sm"
               value={grade}
               onChange={handleGradeChange}
             >

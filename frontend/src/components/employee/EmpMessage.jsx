@@ -89,18 +89,18 @@ const EmpMessage = () => {
   const [newMessage, setNewMessage] = useState("");
 
   return (
-    <div className="flex h-screen w-full">
+    <div className="flex h-screen lg:w-[95vw] w-full absolute">
       {/* Chat Section */}
-      <div className="flex-1 flex flex-col w-full bg-[#f6f5fb]">
-        <div className="text-[#ffffff] bg-[#5443c3] lg:text-2xl text-sm p-4 flex gap-2 items-center justify-between lg:mx-2">
+      <div className="flex-1 flex flex-col w-full bg-[#f6f5fb] mt-5">
+        <div className="lg:text-[#ffffff] lg:bg-[#5443c3] bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] lg:text-2xl text-sm p-4 flex gap-2 items-center justify-between lg:mx-2 relative">
           <IoArrowBack
             className="mr-2 cursor-pointer"
             onClick={() => setMessages([])}
           />
           {employees.length > 0 && (
             <>
-              <h2 className="text-xl font-bold">Group: {employees[0].group}</h2>
-              <h2 className="text-xl font-bold">Grade: {employees[0].grade}</h2>
+              <h2 className="lg:text-2xl text-sm font-bold">Group: {employees[0].group}</h2>
+              <h2 className="lg:text-2xl text-sm font-bold">Grade: {employees[0].grade}</h2>
             </>
           )}
         </div>
@@ -115,7 +115,7 @@ const EmpMessage = () => {
                 <div
                   className={`relative ${
                     msg.employeeId === currentUserName
-                      ? " self-end bg-white text-[#5443c3] rounded-br-3xl rounded-tl-3xl" 
+                      ? " self-end bg-white text-[#5443c3] border-2 border-[#5443c3] rounded-br-3xl rounded-tl-3xl" 
                       : "self-start bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl"
                   } py-2 px-4 rounded-lg lg:max-w-4xl max-w-[50%]`}
                 >
@@ -145,17 +145,17 @@ const EmpMessage = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className="p-4 bg-[#f6f5fb] shadow-md">
-          <div className="flex items-center border border-gray-300 rounded-lg">
+        <div className=" bg-[#f6f5fb] shadow-md">
+          <div className="flex relative items-center border border-gray-300 rounded-lg mt-5  mb-5">
             <input
               type="text"
-              className="flex-1 py-2 px-4 rounded-l-lg border-t border-b border-l text-gray-800 border-gray-200 bg-white w-full focus:outline-none placeholder-[#5443c3]"
+              className="flex py-2 px-4 rounded-l-lg border-t border-b border-l text-gray-800  border-[#5443c3] bg-white w-full focus:outline-none placeholder-[#5443c3]"
               placeholder="Type a message..."
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
             />
             <button
-              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r-lg"
+              className="bg-[#5443c3] hover:bg-blue-700 border-2 border-[#5443c3] text-white font-bold py-2 px-4 rounded-r-lg  "
               onClick={sendMessage}
               disabled={!newMessage.trim()}
             >

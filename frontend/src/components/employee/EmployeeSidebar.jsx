@@ -77,7 +77,7 @@ const EmployeeSidebar = () => {
             <CgProfile className="text-lg md:text-2xl lg:text-3xl"/>
   
             {showTooltip && (
-              <div className="absolute top-full left-0 mt-2 p-4 bg-white text-black text-sm md:text-md rounded shadow-md z-10 items-start">
+              <div className="absolute top-full left-0 mt-2 p-4  bg-black text-white text-sm md:text-md rounded shadow-md z-10 items-start">
                 <p>Name: {userDetails.name}</p>
               </div>
             )}

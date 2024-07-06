@@ -261,15 +261,15 @@ function ManagerChat() {
   return (
     <div>
       <GPSTracker managerId={loggedInUserId} />
-      <div className="flex flex-col lg:flex-row h-screen">
+      <div className="flex flex-col lg:flex-row h-screen relative">
         <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
-          <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Billing Team</h1>
+          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Billing Team</h1>
           <div className="relative mb-4">
             <input
               type="text"
               value={userSearchQuery}
               onChange={(e) => setUserSearchQuery(e.target.value)}
-              className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+              className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg"
               placeholder="Search by name..."
             />
             <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
@@ -279,11 +279,11 @@ function ManagerChat() {
 
 
           
-          <div className="h-5/6 overflow-y-auto">
+          <div className="h-screen overflow-y-auto">
             {filteredUsers.map((user) => (
               <div key={user._id}>
                 <div
-                 className="w-full h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
+                 className="w-full h-auto lg:font-medium font-base rounded-md bg-[#eef2fa] text-[#5443c3] mb-2 lg:text-2xl text-xl block items-center p-2 cursor-pointer"
                   onClick={() => handleClick(user._id, user.name)}
                 >
                   <h1>{user.name}</h1>
@@ -293,14 +293,14 @@ function ManagerChat() {
                       unreadUser.data.map((message) => (
                         <div
                           key={message._id}
-                           className="text-orange-600 flex justify-between items-center content-center gap-5 mt-2"
+                           className="text-orange-600 relative break-words whitespace-pre-wrap gap-5my-2"
                           onClick={() => handleShowMessage(user._id)}
                         >
                           {!showMessages[user._id] ? (
                             <>
                               <>
                                 {message.content.text && (
-                                  <p className="pe-2 text-base">
+                                  <p className="pe-2 text-base mb-2">
                                     {message.content.text}
                                   </p>
                                 )}
@@ -334,18 +334,18 @@ function ManagerChat() {
 
 
 {isChatSelected && (
-<div className="w-full lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
+<div className="w-full h-screen lg:w-min-[30%] flex flex-col justify-between bg-[#f6f5fb]">
 {isChatSelected && (
-  <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+  <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
      <button  className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
                 onClick={handleBackToUserList}
                 >
-                <FaArrowLeft />
+                <FaArrowLeft className="text-xl lg:text-2xl"/>
                 </button>
-  <h1 className="text-2xl font-bold">Chat with {recipientName}</h1>
+  <h1 className="text-xl lg:text-2xl font-bold">Chat with {recipientName}</h1>
   <Link
     to="/"
-    className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
+    className=" text-xl lg:text-2xl group relative flex items-center justify-end font-extrabold rounded-full p-3 md:p-5"
   >
     <BiLogOut />
   </Link>
@@ -356,9 +356,9 @@ function ManagerChat() {
   {messages.map((message, index) => (
     <div
       key={message._id}
-      className={`mb-4 p-4 rounded-lg max-w-[70%] relative ${message.sender === loggedInUserId
-          ? "bg-blue-200 self-end"
-          : "bg-gray-200 self-start"
+      className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
+          ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+          : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
         }`}
 
       onMouseEnter={() => handleHover(index)}
@@ -397,7 +397,7 @@ function ManagerChat() {
           Your browser does not support the video tag.
         </video>
       )}
-      <span className="text-xs text-gray-500">
+      <span className="text-xs text-black">
         {new Date(message.createdAt).toLocaleString()}
       </span>
 
@@ -459,17 +459,17 @@ function ManagerChat() {
 )}
       </div>
       {showPopSms && (
-  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-white p-4 rounded-lg shadow-lg border border-blue-500">
+  <div className="fixed inset-0bg-opacity-50  items-center justify-center w-1/2 z-50 top-56 lg:left-96 mx-24">
+    <div className="bg-white p-4 rounded-lg shadow-lg border-2 border-[#5443c3]">
       <div className="flex items-center mb-4">
         <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
-        <h3 className="text-lg font-semibold">New Message</h3>
+        <h3 className="text-lg font-semibold text-[#5443c3]">New Message</h3>
       </div>
-      <p className="mb-2">From: {selectedSenderName}</p>
-      <p className="mb-4">Message: {popSms[0]?.content?.text}</p>
+      <p className="mb-2 text-[#5443c3] font-bold">From: {selectedSenderName}</p>
+      <p className="mb-4 relative break-words whitespace-pre-wrap ">Message: {popSms[0]?.content?.text}</p>
       <button
         onClick={() => handleModalClose(popSms[0]?.sender)}
-        className="bg-blue-500 text-white p-2 rounded-lg"
+        className="hover:bg-blue-500 bg-[#5443c3] text-white p-2 rounded-lg"
       >
         Close
       </button>

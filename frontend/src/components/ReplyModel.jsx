@@ -55,13 +55,13 @@ const ReplyModel = ({ message, sender, recipient, isVisible, onClose,value }) =>
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             
-            <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-                <h2 className="text-xl font-bold mb-4">Reply to {message.content.text}</h2>
+            <div className="bg-white border-2 border-[#5443c3] p-6 rounded-lg shadow-lg w-full max-w-xs">
+                <h2 className="text-xl font-bold mb-4 text-[#5443c3]">Reply to {message.content.text}</h2>
                 <textarea
                     value={replyMessage}
                     onChange={(e) => setReplyMessage(e.target.value)}
                     placeholder="Type your reply here..."
-                    className="w-full p-2 border rounded mb-4"
+                    className="w-full p-2 rounded mb-4 border-2 border-[#5443c3]"
                     disabled={loading}
                 />
 
@@ -75,7 +75,7 @@ const ReplyModel = ({ message, sender, recipient, isVisible, onClose,value }) =>
                     </button>
                     <button
                         onClick={postReplyMessage}
-                        className="bg-blue-500 text-white p-2 rounded"
+                        className="bg-[#5443c3] text-white p-2 rounded"
                         disabled={loading}
                     >
                         {loading ? 'Sending...' : 'Send Reply'}

@@ -187,8 +187,8 @@ function AdminEmpChat() {
       <Sidebar />
       <div className="flex-1 flex flex-col lg:flex-row ">
         <div className={`flex flex-col bg-white text-black p-4  w-full border shadow shadow-blue-500/65 lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
-          <div className="flex items-center justify-between mb-4">
-            <span className="text-2xl font-bold mb-4 text-[#5443c3]">Employee Chat</span>
+          <div className="flex items-center justify-between lg:mb-4">
+            <span className="lg:text-2xl md:text-2xl sm:text-xl font-bold mb-4 text-[#5443c3]">Employee Chat</span>
           </div>
           <FetchAllEmpDeteails handleClick={handleClick} />
         </div>
@@ -220,12 +220,12 @@ function AdminEmpChat() {
                   onMouseLeave={() => handleLeave()}
                 >
                   <div
-                    className={`relative lg:text-2xl md:text-xl text-sm  ${message.sender === loggedInUserId ? " self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl" : " self-start bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                    className={`relative lg:text-2xl md:text-xl text-2xl  ${message.sender === loggedInUserId ? " self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl" : " self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                       } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                   >
                     {message.content && message.content.originalMessage && (
                       <div className="mb-2">
-                        <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                        <span className="bg-green-300 px-2 py-1 text-xs text-black rounded">
                           {message.content.originalMessage}
                         </span>
                       </div>
@@ -257,7 +257,7 @@ function AdminEmpChat() {
                         Your browser does not support the video tag.
                       </video>
                     )}
-                    <span className="text-xs text-orange-600">
+                    <span className="text-xs text-black">
                       {new Date(message.createdAt).toLocaleString()}
                     </span>
                     {hoveredMessage === index && (
@@ -297,15 +297,26 @@ function AdminEmpChat() {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
               />
-              <div className="flex items-center">
-                <button
-                  className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                  onClick={handleSendMessage}
-                >
-                  <IoMdSend />
-                </button>
-                <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={senderName} />
-              </div>
+          <div className="flex items-center space-x-2">
+
+
+  <div className="flex items-center space-x-2">
+    <button
+      className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
+      onClick={handleSendMessage}
+    >
+      <IoMdSend />
+    </button>
+    <AllUsersFileModel
+      sender={loggedInUserId}
+      recipient={recipient}
+      admin="admin"
+      senderName={senderName}
+      className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
+    />
+  </div>
+</div>
+
             </div>
           </div>
         )}

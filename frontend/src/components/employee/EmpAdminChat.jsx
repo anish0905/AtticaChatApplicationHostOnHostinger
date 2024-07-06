@@ -266,25 +266,26 @@ function EmpAdminChat() {
 
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col lg:flex-row h-screen relative">
       <EmployeeSidebar />
       <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
-        <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
+        <h1 className="lg:text-2xl md:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
         <div className="relative mb-4">
           <input
             type="text"
             value={adminSearchQuery}
             onChange={(e) => setAdminSearchQuery(e.target.value)}
-            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg"
             placeholder="Search by email..."
           />
           <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
         </div>
-        <div className="h-5/6 overflow-y-auto">
+        
+        <div className="h-screen overflow-y-auto">
           {filteredAdmins.map((admin) => (
             <div key={admin._id}>
               <div
-                className="w-full h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
+                className="w-full lg:text-2xl md:text-2xl text-xl h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4  block items-center p-4 cursor-pointer"
                 onClick={() => handleClick(admin._id, admin.email)}
               >
                 <h1>{admin.email}</h1>
@@ -294,7 +295,7 @@ function EmpAdminChat() {
                     unreadUser.data.map((message) => (
                       <div
                         key={message._id}
-                        className="text-orange-600 flex justify-between items-center content-center gap-5 mt-2"
+                        className="text-orange-600 relative break-words whitespace-pre-wrap my-2 "
                         onClick={() => handleShowMessage(admin._id)}
                       >
                         {!showMessages[admin._id] ? (
@@ -336,21 +337,21 @@ function EmpAdminChat() {
 
 
       {isChatSelected && (
-        <div className="w-full lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
+        <div className="w-full h-screen lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
 
           {isChatSelected && (
-            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row items-center justify-between">
               <button
-                className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+                className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg  mt-2 "
                 onClick={handleBackToUserList}
               >
                 <FaArrowLeft />
               </button>
 
-              <h1 className="text-2xl font-bold">Chat with {recipientName}</h1>
+              <h1 className="lg:text-2xl text-base font-bold justify-center">Chat with {recipientName}</h1>
               <Link
                 to={"/"}
-                className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
+                className="group relative flex items-center justify-end font-extrabold  rounded-full p-3 md:p-5"
               >
                 {/* <BiLogOut /> */}
               </Link>
@@ -368,7 +369,7 @@ function EmpAdminChat() {
                 onMouseLeave={() => handleLeave()}
               >
                 <div
-                  className={`relative lg:text-2xl md:text-xl text-sm  ${message.sender === loggedInUserId ? " bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
+                  className={`relative lg:text-2xl md:text-xl text-sm  ${message.sender === loggedInUserId ? " bg-[#9184e9] text-white self-end rounded-tr-3xl rounded-bl-3xl border-2 border-[#5443c3] " : "bg-white text-[#5443c3] border-2 border-[#5443c3]  self-start rounded-tl-3xl rounded-br-3xl relative"
                     } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                 >
                  {message.content && message.content.originalMessage && (
@@ -405,7 +406,7 @@ function EmpAdminChat() {
                       Your browser does not support the video tag.
                     </video>
                   )}
-                  <span className="text-xs text-orange-600">
+                  <span className="text-xs text-black">
                     {message.sender === loggedInUserId && new Date(message.createdAt).toLocaleString()}
                   </span>
 
@@ -435,12 +436,13 @@ function EmpAdminChat() {
             ))}
             <div ref={messagesEndRef} />
           </div>
-          <div className="flex items-center p-4 bg-[#f6f5fb] fixed bottom-0 lg:static w-full">
+
+          <div className="flex items-center p-4 bg-[#f6f5fb]  bottom-0 lg:static w-full relative">
             <input
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
-              className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
+              className="flex-grow p-2 rounded-lg mr-2 border-2 border-[#5443c3]"
               placeholder="Type a message..."
             />
             <input

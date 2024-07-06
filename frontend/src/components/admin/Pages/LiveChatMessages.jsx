@@ -59,7 +59,7 @@ const LiveChatMessages = () => {
                   className={`relative  ${
                     msg.employeeId === adminId
                       ? "self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl"
-                      : "self-start bg-[#ffffff] text-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                      : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                   } py-2 px-4 rounded-lg lg:max-w-4xl max-w-[50%]`}
                 >
                   <p className="text-sm font-bold">Group: {msg.group}</p>

@@ -81,7 +81,7 @@ export const Register = () => {
             >
               Open Registration Form
             </button>
-            <CsvFileUpload endpoint="/api/employeeRegistration/register" className="lg:text-xl text-xs" />
+            <CsvFileUpload endpoint="/api/employeeRegistration/register" className="lg:text-xl text-xs w-1/2" />
           </div>
         </div>
         <EmployeeDetails />

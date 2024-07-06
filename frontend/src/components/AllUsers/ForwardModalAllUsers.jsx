@@ -55,14 +55,14 @@ const ForwardModalAllUsers = ({ users, onForward, onCancel, forwardMessage, valu
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="bg-white p-4 rounded shadow-lg w-full max-w-md">
-        <h2 className="text-xl mb-4">Forward Message To:</h2>
+      <div className="bg-white p-4 rounded shadow-lg w-full border-2 border-[#5443c3] max-w-xs">
+        <h2 className="text-xl mb-4 text-[#5443c3] ">Forward Message To:</h2>
         <input
           type="text"
           placeholder="Search users..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="mb-4 p-2 w-full border border-gray-300 rounded"
+          className="mb-4 p-2 w-full  rounded border-2 border-[#5443c3]"
         />
         <div className="mb-4 max-h-60 overflow-y-auto">
           {filteredUsers.map((user) => (
@@ -72,7 +72,7 @@ const ForwardModalAllUsers = ({ users, onForward, onCancel, forwardMessage, valu
                 checked={selectedUsers.includes(user._id)}
                 onChange={() => handleUserSelection(user._id)}
               />
-              <span className="ml-2">{user.name}</span>
+              <span className="ml-2 ">{user.name}</span>
             </div>
           ))}
         </div>
@@ -84,7 +84,7 @@ const ForwardModalAllUsers = ({ users, onForward, onCancel, forwardMessage, valu
             Cancel
           </button>
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded"
+            className="hover:bg-blue-500 bg-[#5443c3] text-white px-4 py-2 rounded"
             onClick={handleForward}
           >
             Forward

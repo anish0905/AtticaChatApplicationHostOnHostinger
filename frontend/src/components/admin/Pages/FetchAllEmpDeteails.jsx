@@ -92,13 +92,13 @@ const FetchAllEmpDeteails = ({ handleClick }) => {
     });
 
     return (
-        <div className="flex-grow p-4 w-full">
+        <div className="flex-grow w-full">
             <select
                 id="userRoles"
                 name="userRoles"
                 value={selectedRole}
                 onChange={(event) => setSelectedRole(event.target.value)}
-                className="mt-1 block lg:text-xl font-bold text-base placeholder:font-extrabold pl-3 pr-10 py-2 border-purple-300 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm w-full"
+                className="lg:mb-5 mb-3 block lg:text-xl font-bold text-base placeholder:font-extrabold pl-3 pr-10 h-10 border-purple-300 focus:outline-none rounded focus:ring-indigo-600 focus:border-indigo-500 sm:text-sm w-full"
             >
                 {Object.keys(roleEndpointMap).map((role) => (
                     <option key={role} value={role}>{role}</option>
@@ -110,11 +110,8 @@ const FetchAllEmpDeteails = ({ handleClick }) => {
                 placeholder="Search users..."
                 value={searchQuery}
                 onChange={handleSearchChange}
-                className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
-            />   <AiOutlineSearch
-            size={20}
-            className="absolute top-3 left-3 text-gray-500 text-2xl"
-          />
+                className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg"
+            />  
 
             <div className="mt-4 overflow-y-auto" style={{ maxHeight: '900px' }}>
                 {loading ? <p>Loading...</p> : renderUserDetails()}
