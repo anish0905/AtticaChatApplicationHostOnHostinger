@@ -35,15 +35,15 @@ const ForwardMessageModalBillingTeam = ({ users, onForward, onCancel, forwardMes
   );
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-      <div className="bg-white p-4 rounded shadow-lg w-full max-w-md">
-        <h2 className="text-xl mb-4">Forward Message To:</h2>
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50 ">
+      <div className="bg-white p-4 rounded shadow-lg w-full max-w-xs border-2 border-[#5443c3]">
+        <h2 className="text-xl mb-4 text-[#5443c3]">Forward Message To:</h2>
         <input
           type="text"
           placeholder="Search..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="mb-4 p-2 border border-gray-300 rounded w-full"
+          className="mb-4 p-2  rounded w-full border-2 border-[#5443c3]"
         />
         <div className="mb-4 max-h-48 overflow-y-auto">
           {filteredUsers.map((user) => (
@@ -65,7 +65,7 @@ const ForwardMessageModalBillingTeam = ({ users, onForward, onCancel, forwardMes
             Cancel
           </button>
           <button
-            className={`bg-blue-500 text-white px-4 py-2 rounded ${selectedUsers.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}`}
+            className={`hover:bg-blue-500 bg-[#5443c3] text-white px-4 py-2 rounded ${selectedUsers.length === 0 ? 'cursor-not-allowed' : ''}`}
             onClick={handleForward}
             disabled={selectedUsers.length === 0} // Disable button if no users selected
           >
