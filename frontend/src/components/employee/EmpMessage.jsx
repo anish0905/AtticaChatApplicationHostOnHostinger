@@ -2,19 +2,19 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { IoMdDocument, IoMdSend } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
+import notificationTone from "../../assests/notification_ding.mp3";
 import { BASE_URL } from "../../constants";
-import notificationTone from "../../assests/notification_ding.mp3"
 
 const EmpMessage = () => {
   const [employees, setEmployees] = useState([]);
   const [messages, setMessages] = useState([]);
-  const messagesEndRef = useRef(null);
-  const currentUserId = localStorage.getItem("CurrentUserId");
   const [currentUserName, setCurrentUserName] = useState(""); // Assuming the current user is "AMMU BABU"
   const [newMessage, setNewMessage] = useState("");
   const [userGrade, setUserGrade] = useState("");
   const [lastMessageCount, setLastMessageCount] = useState(0); // Track the last count of messages
   const [initialLoad, setInitialLoad] = useState(true); // Track if it's the initial load
+  const messagesEndRef = useRef(null);
+  const notificationSoundRef = useRef(null);
 
   // Fetch user details from local storage and set the grade
   useEffect(() => {
@@ -42,7 +42,8 @@ const EmpMessage = () => {
 
   // Fetch messages from the API based on the selected employee
   useEffect(() => {
-    if (employees.length > 0) {
+    const currentUserId = localStorage.getItem("CurrentUserId");
+    if (employees.length > 0 && currentUserId) {
       const selectedEmployee = employees.find((emp) => emp._id === currentUserId);
       if (selectedEmployee) {
         const fetchMessages = async () => {
@@ -58,11 +59,13 @@ const EmpMessage = () => {
             if (initialLoad) {
               setLastMessageCount(newMessages.length);
               setInitialLoad(false);
-            } else if (newMessages.length > lastMessageCount) {
+            } else {
               const newMessagesCount = newMessages.length - lastMessageCount;
-              const newMessagesToShow = newMessages.slice(-newMessagesCount);
-              showNotifications(newMessagesToShow);
-              setLastMessageCount(newMessages.length);
+              if (newMessagesCount > 0) {
+                const newMessagesToShow = newMessages.slice(-newMessagesCount);
+                showNotifications(newMessagesToShow);
+                setLastMessageCount(newMessages.length);
+              }
             }
 
             setMessages(newMessages);
@@ -79,7 +82,7 @@ const EmpMessage = () => {
         return () => clearInterval(interval); // Clean up the interval
       }
     }
-  }, [employees, currentUserId, lastMessageCount, initialLoad]);
+  }, [employees, lastMessageCount, initialLoad]);
 
   // Scroll to the bottom of the messages list
   useEffect(() => {
@@ -96,27 +99,27 @@ const EmpMessage = () => {
   }, []);
 
   const showNotifications = (newMessages) => {
-    console.log("Notification permission:", Notification.permission);
-    console.log("Notification tone path:", notificationTone);
-    
     if (Notification.permission === "granted") {
       newMessages.forEach((message) => {
-        const notification = new Notification("New Message", {
-          body: `${message.employeeId}: ${message.message}`,
-        });
-        notification.onclick = () => {
-          window.focus();
-        };
-        
-        // Create an audio element and play the sound
-        const audio = new Audio(notificationTone);
-        console.log("Audio element:", audio);
-        
-        audio.play().then(() => {
-          console.log("Audio played successfully");
-        }).catch((error) => {
-          console.error("Error playing audio:", error);
-        });
+        if (message.employeeId !== currentUserName) {
+          const notification = new Notification("New Message", {
+            body: `${message.employeeId}: ${message.message}`,
+          });
+          notification.onclick = () => {
+            window.focus();
+          };
+
+          // Play notification sound
+          playNotificationSound();
+        }
+      });
+    }
+  };
+
+  const playNotificationSound = () => {
+    if (notificationSoundRef.current) {
+      notificationSoundRef.current.play().catch((error) => {
+        console.error("Error playing notification sound:", error);
       });
     }
   };
@@ -127,6 +130,12 @@ const EmpMessage = () => {
 
   const sendMessage = async () => {
     try {
+      const currentUserId = localStorage.getItem("CurrentUserId");
+      if (!currentUserId) {
+        console.error("CurrentUserId not found in localStorage.");
+        return;
+      }
+
       const selectedEmployee = employees.find((emp) => emp._id === currentUserId);
       if (!selectedEmployee) {
         console.error("No employee found for current user.");
@@ -152,7 +161,7 @@ const EmpMessage = () => {
       <div className="flex-1 flex flex-col w-full bg-[#f6f5fb]">
         <div className="lg:text-[#ffffff] lg:bg-[#5443c3] bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] lg:text-2xl text-sm p-4 flex gap-2 items-center justify-between lg:mx-2 relative">
           <IoArrowBack
-            className="mr-2 cursor-pointer "
+            className="mr-2 cursor-pointer"
             onClick={() => setMessages([])}
           />
           {employees.length > 0 && (
@@ -173,7 +182,7 @@ const EmpMessage = () => {
                 <div
                   className={`relative ${
                     msg.employeeId === currentUserName
-                      ? " self-end bg-white text-[#5443c3] border-2 border-[#5443c3] rounded-br-3xl rounded-tl-3xl" 
+                      ? " self-end bg-white text-[#5443c3] border-2 border-[#5443c3] rounded-br-3xl rounded-tl-3xl"
                       : "self-start bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl"
                   } py-2 px-4 rounded-lg lg:max-w-4xl max-w-[50%]`}
                 >
@@ -203,17 +212,17 @@ const EmpMessage = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className=" bg-[#f6f5fb] shadow-md ">
-          <div className="flex relative items-center border border-gray-300 rounded-lg  ">
+        <div className=" bg-[#f6f5fb] shadow-md">
+          <div className="flex relative items-center border border-gray-300 rounded-lg mt-5 mb-5">
             <input
               type="text"
-              className="flex py-2 px-4 rounded-l-lg border-t border-b border-l text-gray-800  border-[#5443c3] bg-white w-full focus:outline-none placeholder-[#5443c3]"
+              className="flex py-2 px-4 rounded-l-lg border-t border-b border-l text-gray-800 border-[#5443c3] bg-white w-full focus:outline-none placeholder-[#5443c3]"
               placeholder="Type a message..."
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
             />
             <button
-              className="bg-[#5443c3] hover:bg-blue-700 border-2 border-[#5443c3] text-white font-bold py-2 px-4 rounded-r-lg  "
+              className="bg-[#5443c3] hover:bg-blue-700 border-2 border-[#5443c3] text-white font-bold py-2 px-4 rounded-r-lg"
               onClick={sendMessage}
               disabled={!newMessage.trim()}
             >
@@ -222,6 +231,7 @@ const EmpMessage = () => {
           </div>
         </div>
       </div>
+      <audio ref={notificationSoundRef} src={notificationTone} />
     </div>
   );
 };
