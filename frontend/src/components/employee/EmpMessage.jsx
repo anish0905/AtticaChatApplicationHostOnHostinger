@@ -3,13 +3,28 @@ import axios from "axios";
 import { IoMdDocument, IoMdSend } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
 import { BASE_URL } from "../../constants";
+import notificationTone from "../../assests/notification_ding.mp3"
 
 const EmpMessage = () => {
   const [employees, setEmployees] = useState([]);
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
   const currentUserId = localStorage.getItem("CurrentUserId");
-  const currentUserName = "AMMU BABU"; // Assuming the current user is "AMMU BABU"
+  const [currentUserName, setCurrentUserName] = useState(""); // Assuming the current user is "AMMU BABU"
+  const [newMessage, setNewMessage] = useState("");
+  const [userGrade, setUserGrade] = useState("");
+  const [lastMessageCount, setLastMessageCount] = useState(0); // Track the last count of messages
+  const [initialLoad, setInitialLoad] = useState(true); // Track if it's the initial load
+
+  // Fetch user details from local storage and set the grade
+  useEffect(() => {
+    const userDetails = localStorage.getItem("userDetails");
+    if (userDetails) {
+      const userDetailsObj = JSON.parse(userDetails);
+      setUserGrade(userDetailsObj.grade);
+      setCurrentUserName(userDetailsObj.name);
+    }
+  }, []);
 
   // Fetch employees from the API
   useEffect(() => {
@@ -38,7 +53,19 @@ const EmpMessage = () => {
                 grade: selectedEmployee.grade,
               },
             });
-            setMessages(response.data.messages);
+            const newMessages = response.data.messages;
+
+            if (initialLoad) {
+              setLastMessageCount(newMessages.length);
+              setInitialLoad(false);
+            } else if (newMessages.length > lastMessageCount) {
+              const newMessagesCount = newMessages.length - lastMessageCount;
+              const newMessagesToShow = newMessages.slice(-newMessagesCount);
+              showNotifications(newMessagesToShow);
+              setLastMessageCount(newMessages.length);
+            }
+
+            setMessages(newMessages);
           } catch (error) {
             console.error("Error fetching messages:", error);
           }
@@ -52,7 +79,7 @@ const EmpMessage = () => {
         return () => clearInterval(interval); // Clean up the interval
       }
     }
-  }, [employees, currentUserId]);
+  }, [employees, currentUserId, lastMessageCount, initialLoad]);
 
   // Scroll to the bottom of the messages list
   useEffect(() => {
@@ -60,6 +87,39 @@ const EmpMessage = () => {
       messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
+
+  // Request Notification permission on component mount
+  useEffect(() => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, []);
+
+  const showNotifications = (newMessages) => {
+    console.log("Notification permission:", Notification.permission);
+    console.log("Notification tone path:", notificationTone);
+    
+    if (Notification.permission === "granted") {
+      newMessages.forEach((message) => {
+        const notification = new Notification("New Message", {
+          body: `${message.employeeId}: ${message.message}`,
+        });
+        notification.onclick = () => {
+          window.focus();
+        };
+        
+        // Create an audio element and play the sound
+        const audio = new Audio(notificationTone);
+        console.log("Audio element:", audio);
+        
+        audio.play().then(() => {
+          console.log("Audio played successfully");
+        }).catch((error) => {
+          console.error("Error playing audio:", error);
+        });
+      });
+    }
+  };
 
   const handleFileDownload = (url) => {
     window.open(url, "_blank");
@@ -86,21 +146,19 @@ const EmpMessage = () => {
     }
   };
 
-  const [newMessage, setNewMessage] = useState("");
-
   return (
     <div className="flex h-screen lg:w-[95vw] w-full absolute">
       {/* Chat Section */}
-      <div className="flex-1 flex flex-col w-full bg-[#f6f5fb] mt-5">
+      <div className="flex-1 flex flex-col w-full bg-[#f6f5fb]">
         <div className="lg:text-[#ffffff] lg:bg-[#5443c3] bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] lg:text-2xl text-sm p-4 flex gap-2 items-center justify-between lg:mx-2 relative">
           <IoArrowBack
-            className="mr-2 cursor-pointer"
+            className="mr-2 cursor-pointer "
             onClick={() => setMessages([])}
           />
           {employees.length > 0 && (
             <>
               <h2 className="lg:text-2xl text-sm font-bold">Group: {employees[0].group}</h2>
-              <h2 className="lg:text-2xl text-sm font-bold">Grade: {employees[0].grade}</h2>
+              <h2 className="lg:text-2xl text-sm font-bold">Grade: {userGrade}</h2>
             </>
           )}
         </div>
@@ -145,8 +203,8 @@ const EmpMessage = () => {
           <div ref={messagesEndRef} />
         </div>
 
-        <div className=" bg-[#f6f5fb] shadow-md">
-          <div className="flex relative items-center border border-gray-300 rounded-lg mt-5  mb-5">
+        <div className=" bg-[#f6f5fb] shadow-md ">
+          <div className="flex relative items-center border border-gray-300 rounded-lg  ">
             <input
               type="text"
               className="flex py-2 px-4 rounded-l-lg border-t border-b border-l text-gray-800  border-[#5443c3] bg-white w-full focus:outline-none placeholder-[#5443c3]"

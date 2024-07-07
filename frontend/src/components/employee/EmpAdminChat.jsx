@@ -269,16 +269,16 @@ function EmpAdminChat() {
     <div className="flex flex-col lg:flex-row h-screen relative">
       <EmployeeSidebar />
       <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
-        <h1 className="lg:text-2xl md:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
-        <div className="relative mb-4">
+        <h1 className="lg:text-2xl md:text-2xl text-xl font-bold mb-4 text-[#5443c3]  mb-0 text-center ">All Admins</h1>
+        <div className="relative mb-4 my-2 ">
           <input
             type="text"
             value={adminSearchQuery}
             onChange={(e) => setAdminSearchQuery(e.target.value)}
-            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg"
+            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg "
             placeholder="Search by email..."
           />
-          <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
+          <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl " />
         </div>
         
         <div className="h-screen overflow-y-auto">
