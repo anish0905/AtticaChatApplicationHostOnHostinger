@@ -73,6 +73,10 @@ const UserSidebar = ({ value }) => {
       case "SECURITY":
         navigate("/SecurityToAdminChat");
         break;
+      case "TE":
+        navigate("/techattoadmin");
+        break;
+
       default:
         navigate("/");
     }
@@ -103,7 +107,8 @@ const UserSidebar = ({ value }) => {
             isActive("/DigitalMarketingChatToDigitalMarketing") ||
             isActive("/monitoringTeamChat") ||
             isActive("/VirtualTeamToVirtualTeam") ||
-            isActive("/SecurityChat")
+            isActive("/SecurityChat") ||
+            isActive("/TEChat")
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
           }`}
@@ -124,7 +129,8 @@ const UserSidebar = ({ value }) => {
             isActive("/DigitalMarketingToAdminChat") ||
             isActive("/MonitoringTeamToAdminChat") ||
             isActive("/VirtualTeamToAdminChat") ||
-            isActive("/SecurityToAdminChat")
+            isActive("/SecurityToAdminChat") ||
+            isActive("/techattoadmin")
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
           }`}

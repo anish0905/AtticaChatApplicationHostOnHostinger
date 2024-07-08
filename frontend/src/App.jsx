@@ -73,6 +73,7 @@ import Chat from "./components/SuperAdmin/Chat";
 import TElogin from "./components/TE/TElogin";
 import AdminLogin1 from "./components/admin2/AdminLogin1";
 import TEChat from "./components/TE/TEChat";
+import TEChatToAdmin from "./components/TE/TEChatToAdmin";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -179,6 +180,7 @@ const App = () => {
 
           <Route path="/te" element={<TElogin />} />
           <Route path="/TEChat" element={<TEChat />} />
+          <Route path="/techattoadmin" element={<TEChatToAdmin />} />
 
           <Route path="/SoftwareReg" element={<SoftwareReg />} />
           <Route path="/SoftwareLogin" element={<SoftwareLogin />} />
