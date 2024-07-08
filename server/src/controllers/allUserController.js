@@ -428,15 +428,13 @@ exports.loginTE = async (req, res) => {
     );
 
     // Return 200 OK with token and success message
-    res
-      .status(200)
-      .json({
-        token,
-        message: "TE logged in successfully",
-        _id: user._id,
-        success: true,
-        role: user.role,
-      });
+    res.status(200).json({
+      token,
+      message: "TE logged in successfully",
+      _id: user._id,
+      success: true,
+      role: user.role,
+    });
   } catch (error) {
     // If any error occurs during the process, return 500 Internal Server Error with error message
     res.status(500).json({ message: error.message });
@@ -526,6 +524,14 @@ exports.getAllSecurity = async function (req, res) {
 exports.getAllHR = async function (req, res) {
   try {
     const users = await User.find({ role: "HR" }).select("-password");
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
+exports.getAllTE = async function (req, res) {
+  try {
+    const users = await User.find({ role: "TE" }).select("-password");
     res.json(users);
   } catch (err) {
     res.status(500).send(err);

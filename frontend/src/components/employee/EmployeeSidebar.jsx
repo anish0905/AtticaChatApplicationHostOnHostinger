@@ -7,6 +7,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CgProfile } from "react-icons/cg"; // Import Profile Icon
 import logo from "../../assests/logo.png"           
 import { BiSolidMessageCheck } from "react-icons/bi";
+import Notification from '../utility/Notification';
+
 
 const EmployeeSidebar = () => {
   const navigate = useNavigate();
@@ -30,6 +32,8 @@ const EmployeeSidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
+    <>
+    <Notification/>
     <div className="flex relative z-40 lg:static  flex-row lg:flex-col h-[80px] lg:h-screen w-full lg:w-[100px] left-0 bg-[#5443c3] border-b lg:border-r shadow-md justify-between items-center py-[10px] lg:py-[20px] text-gray-500">
       <div className="w-16 md:w-20 lg:w-24 h-12 md:h-16 lg:h-20 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
         <img className="m-2 md:m-4 lg:m-6" src={logo} alt="Logo" />
@@ -92,6 +96,7 @@ const EmployeeSidebar = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

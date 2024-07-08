@@ -1,30 +1,31 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { BASE_URL } from "../../../constants";
-import Swal from 'sweetalert2'; // Import SweetAlert2 for notifications
+import Swal from "sweetalert2"; // Import SweetAlert2 for notifications
 
 const AdminFordWardModel = ({ onCancel, forwardMessage }) => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedUsers, setSelectedUsers] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const selectedRole = localStorage.getItem('selectRole');
-  const sender = localStorage.getItem("CurrentUserId")
+  const [searchQuery, setSearchQuery] = useState("");
+  const selectedRole = localStorage.getItem("selectRole");
+  const sender = localStorage.getItem("CurrentUserId");
 
   const roleEndpointMap = {
-    "Admin": "admin/getAllAdmin",
-    "Employee": "employee/",
-    "Manager": "manager/getAllManagers",
+    Admin: "admin/getAllAdmin",
+    Employee: "employee/",
+    Manager: "manager/getAllManagers",
     "Billing Team": "billingTeam/getAllUsers",
-    "Accounts": "allUser/getAllAccountantTeam",
-    "Software": "allUser/getAllSoftwareTeam",
-    "HR": "allUser/getAllHRTeam",
+    Accounts: "allUser/getAllAccountantTeam",
+    Software: "allUser/getAllSoftwareTeam",
+    HR: "allUser/getAllHRTeam",
     "Call Center": "allUser/getAllCallCenterTeam",
     "Virtual Team": "allUser/getAllVirtualTeam",
     "Monitoring Team": "allUser/getAllMonitoringTeam",
-    "Bouncers": "allUser/getAllBouncersTeam",
-    "Security": "allUser/getAllSecurityTeam",
-    "Digital Marketing": "allUser/getAllDigitalMarketingTeam"
+    Bouncers: "allUser/getAllBouncersTeam",
+    Security: "allUser/getAllSecurityTeam",
+    "Digital Marketing": "allUser/getAllDigitalMarketingTeam",
+    TE: "allUser/getAllTE",
   };
 
   useEffect(() => {
@@ -47,7 +48,7 @@ const AdminFordWardModel = ({ onCancel, forwardMessage }) => {
 
   const handleUserSelection = (userId) => {
     if (selectedUsers.includes(userId)) {
-      setSelectedUsers(selectedUsers.filter(id => id !== userId));
+      setSelectedUsers(selectedUsers.filter((id) => id !== userId));
     } else {
       setSelectedUsers([...selectedUsers, userId]);
     }
@@ -65,38 +66,45 @@ const AdminFordWardModel = ({ onCancel, forwardMessage }) => {
   };
 
   const handleForward = () => {
-    const endpoint = selectedRole === "Admin" ? '/api/empadminsender/forward' : '/api/empadminsender/forward';
-    axios.post(`${BASE_URL}${endpoint}`, {
+    const endpoint =
+      selectedRole === "Admin"
+        ? "/api/empadminsender/forward"
+        : "/api/empadminsender/forward";
+    axios
+      .post(`${BASE_URL}${endpoint}`, {
         messageId: forwardMessage._id,
         newRecipients: selectedUsers,
-        sender:sender
+        sender: sender,
       })
       .then((response) => {
         // Handle success response if needed
-        console.log('Message forwarded successfully!', response.data);
+        console.log("Message forwarded successfully!", response.data);
         Swal.fire({
-          icon: 'success',
-          title: 'Message Forwarded',
-          text: 'The message has been forwarded successfully.',
+          icon: "success",
+          title: "Message Forwarded",
+          text: "The message has been forwarded successfully.",
         });
         onCancel();
       })
       .catch((error) => {
         // Handle error if any
-        console.error('Error forwarding message:', error);
+        console.error("Error forwarding message:", error);
         Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to forward the message.',
+          icon: "error",
+          title: "Error",
+          text: "Failed to forward the message.",
         });
       });
   };
 
-  const filteredUsers = users?.filter(user => {
+  const filteredUsers = users?.filter((user) => {
     const query = searchQuery.toLowerCase();
-    const roleSpecificField = selectedRole === "Admin" ? user?.email :
-                              selectedRole === "Manager" ? user?.manager_name :
-                              user?.name;
+    const roleSpecificField =
+      selectedRole === "Admin"
+        ? user?.email
+        : selectedRole === "Manager"
+        ? user?.manager_name
+        : user?.name;
     return roleSpecificField?.toLowerCase().includes(query);
   });
 
