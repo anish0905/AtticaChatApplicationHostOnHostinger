@@ -265,7 +265,7 @@ function AdminEmpChat() {
                     {hoveredMessage === index && (
                       <>
                         <AiOutlineDown
-                          className="absolute top-2 right-2 cursor-pointer"
+                          className="absolute top-2 right-2 cursor-pointer font-bold"
                           onClick={() => handleDropdownClick(index)}
                         />
                         {showDropdown === index && (

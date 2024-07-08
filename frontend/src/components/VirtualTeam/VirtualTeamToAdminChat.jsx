@@ -13,6 +13,7 @@ import ReplyModel from "../ReplyModel";//--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 import { FaArrowLeft } from "react-icons/fa";
+import { IoMdSend } from "react-icons/io";
 
 
 function VirtualTeamToAdminChat() {
@@ -289,25 +290,25 @@ function VirtualTeamToAdminChat() {
 
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col lg:flex-row h-screen relative">
       <Sidebar  value="VIRTUAL" />
-      <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
-        <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
-        <div className="relative mb-4">
+      <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 border border-[#5443c3] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
+        <h1 className="lg:text-2xl md:text-2xl text-xl font-bold mb-4 text-[#5443c3] text-left ">All Admins</h1>
+        <div className="relative mb-4 my-2">
           <input
             type="text"
             value={adminSearchQuery}
             onChange={(e) => setAdminSearchQuery(e.target.value)}
-            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg "
             placeholder="Search by email..."
           />
-          <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
+          <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl " />
         </div>
-        <div className="h-5/6 overflow-y-auto">
+        <div className="h-screen overflow-y-auto">
           {filteredAdmins.map((admin) => (
             <div key={admin._id}>
               <div
-                className="w-full h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
+               className="w-full lg:text-xl md:text-2xl text-sm h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4  block items-center p-4 cursor-pointer"
                 onClick={() => handleClick(admin._id, admin.email)}
               >
                 <h1>{admin.email}</h1>
@@ -317,7 +318,7 @@ function VirtualTeamToAdminChat() {
                     unreadUser.data.map((message) => (
                       <div
                         key={message._id}
-                        className="text-orange-600 flex justify-between items-center content-center gap-5 mt-2"
+                        className="text-orange-600 relative break-words whitespace-pre-wrap my-2 "
                         onClick={() => handleShowMessage(admin._id)}
                       >
                         {!showMessages[admin._id] ? (
@@ -348,22 +349,22 @@ function VirtualTeamToAdminChat() {
       </div>
 
       {isChatSelected && (
-        <div className="w-full lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
+        <div className="w-full h-screen lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb] ">
         
         {isChatSelected && (
- <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+ <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between">
  
- <button  className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+ <button  className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg mt-2"
                 onClick={handleBackToUserList}
                 >
                 <FaArrowLeft />
                 </button>
 
  
- <h1 className="text-2xl font-bold">Chat with {recipientName}</h1>
+ <h1 className="lg:text-2xl text-base font-bold ml-auto">Chat with {recipientName}</h1>
  <Link
    to={"/"}
-   className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
+   className="group relative flex items-center justify-end font-extrabold rounded-full p-3 md:p-5"
  >
    {/* <BiLogOut /> */}
  </Link>
@@ -372,17 +373,17 @@ function VirtualTeamToAdminChat() {
         )}
         
        
-        <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
+        <div className="flex flex-col flex-1 px-4 pt-4 relative overflow-y-auto" style={{ maxHeight: "80vh" }}>
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex relative ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2  `}
+              className={`flex  relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start'} mb-2  `}
               onMouseEnter={() => handleHover(index)}
               onMouseLeave={() => handleLeave()}
             >
               <div
-                className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
-                  }`}
+                className={`relative lg:text-2xl md:text-xl text-sm  ${message.sender === loggedInUserId ? " bg-[#9184e9] text-white self-end rounded-tr-3xl rounded-bl-3xl border-2 border-[#5443c3] " : "bg-white text-[#5443c3] border-2 border-[#5443c3]  self-start rounded-tl-3xl rounded-br-3xl relative"
+                } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
               >
                 {message.content && message.content.originalMessage && (
                   <div className="mb-2">
@@ -396,7 +397,8 @@ function VirtualTeamToAdminChat() {
                 )}
                 {message.content && message.content.image && (
                   <>
-                    <img src={message.content.image} alt="Image" className="max-w-xs rounded" />
+                    <img src={message.content.image} alt="Image" 
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32" />
                   </>
                 )}
                 {message.content && message.content.document && (
@@ -415,7 +417,7 @@ function VirtualTeamToAdminChat() {
                     Your browser does not support the video tag.
                   </video>
                 )}
-                <span className="text-xs text-orange-600">
+                <span className="text-xs text-black">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
                 {
@@ -426,7 +428,7 @@ function VirtualTeamToAdminChat() {
                       onClick={() => handleDropdownClick(index)}
                     />
                     {showDropdown === index && (
-                      <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
+                      <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
                         <button
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                           onClick={() => handleReply(message)}
@@ -448,12 +450,12 @@ function VirtualTeamToAdminChat() {
           ))}
           <div ref={messagesEndRef} />
         </div>
-        <div className="flex items-center p-4 bg-[#f6f5fb] w-full fixed bottom-0 lg:static">
+        <div className="flex items-center p-4 bg-[#f6f5fb]  bottom-0 lg:static w-full relative">
           <input
             type="text"
             value={newMessage}
             onChange={(e) => setNewMessage(e.target.value)}
-            className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
+            className="flex-grow p-2 rounded-lg mr-2 border-2 border-[#5443c3]"
             placeholder="Type a message..."
           />
           <input
@@ -466,8 +468,9 @@ function VirtualTeamToAdminChat() {
           <button
             onClick={handleSendMessage}
             className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            
           >
-            Send
+                        <IoMdSend />
           </button>
           <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name} />
         </div>
@@ -477,24 +480,25 @@ function VirtualTeamToAdminChat() {
 
       
       {showPopSms && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white relative p-6 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw]">
+        <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
+          <div  className={`bg-blue-100 relative p-6 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw]`}>
             {popSms.length > 0 &&
               popSms
                 .filter((sms) => sms.sender === selectedSender)
                 .map((sms) => (
-                  <div key={sms.id} className="relative border border-gray-200 rounded-lg p-2 mb-2 shadow-sm">
+                  <div key={sms.id} 
+                  className="relative border border-[#5443c3] rounded-lg p-2 mb-2 shadow-sm">
                     <div className="flex items-center gap-5 mb-1">
                       <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
-                      <h1 className="text-xl font-bold text-green-600 text-center">{selectedSenderEmail}</h1>
+                      <h1 className="text-2xl font-bold text-green-600 text-center">{selectedSenderEmail}</h1>
                     </div>
-                    <p className="text-base font-bold mb-1">{sms.content.text}</p>
-                    <p className="text-sm text-gray-500 mb-2">
+                    <p className="text-base font-bold mb-1 relative break-words whitespace-pre-wrap ">{sms.content.text}</p>
+                    <p className="text-sm text-gray-500 my-4">
                       {new Date(sms.createdAt).toLocaleDateString()}{" "}
                       {new Date(sms.createdAt).toLocaleTimeString()}
                     </p>
                     <button
-                      className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                      className="absolute top-2 right-2 text-red-500 hover:text-gray-700"
                       onClick={() => handleModalClose(sms.sender)}
                     >
                       Close
