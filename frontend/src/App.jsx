@@ -71,7 +71,6 @@ import Sidebar from "./components/AllUsers/UserSidebar";
 import BlockAccess from "./components/SuperAdmin/BlockAccess";
 import Chat from "./components/SuperAdmin/Chat";
 import TElogin from "./components/TE/TElogin";
-import AdminLogin1 from "./components/admin2/AdminLogin1";
 import TEChat from "./components/TE/TEChat";
 import TEChatToAdmin from "./components/TE/TEChatToAdmin";
 
@@ -81,7 +80,6 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<FirstPage />} />
-        <Route path="/admin2" element={<AdminLogin1 />} />
         <Route path="/login" element={<Login />} />
         <Route path="/adminlogin" element={<AdminLogin />} />
         <Route path="/kitkat" element={<SuperAdminLogin />} />
