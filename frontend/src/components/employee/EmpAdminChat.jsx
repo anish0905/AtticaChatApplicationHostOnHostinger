@@ -268,8 +268,8 @@ function EmpAdminChat() {
   return (
     <div className="flex flex-col lg:flex-row h-screen relative">
       <EmployeeSidebar />
-      <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
-        <h1 className="lg:text-2xl md:text-2xl text-xl font-bold mb-4 text-[#5443c3]  mb-0 text-center ">All Admins</h1>
+      <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 border border-[#5443c3] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
+        <h1 className="lg:text-2xl md:text-2xl text-xl font-bold mb-4 text-[#5443c3] text-left">All Admins</h1>
         <div className="relative mb-4 my-2 ">
           <input
             type="text"
@@ -281,11 +281,11 @@ function EmpAdminChat() {
           <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl " />
         </div>
         
-        <div className="h-screen overflow-y-auto">
+        <div className="h-screen overflow-y-auto ">
           {filteredAdmins.map((admin) => (
             <div key={admin._id}>
               <div
-                className="w-full lg:text-2xl md:text-2xl text-xl h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4  block items-center p-4 cursor-pointer"
+                className="w-full lg:text-xl md:text-2xl text-sm h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4  block items-center p-4 cursor-pointer"
                 onClick={() => handleClick(admin._id, admin.email)}
               >
                 <h1>{admin.email}</h1>
@@ -337,25 +337,24 @@ function EmpAdminChat() {
 
 
       {isChatSelected && (
-        <div className="w-full h-screen lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
+        <div className="w-full h-screen lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb] ">
 
           {isChatSelected && (
-            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row items-center justify-between">
-              <button
-                className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg  mt-2 "
-                onClick={handleBackToUserList}
-              >
-                <FaArrowLeft />
-              </button>
-
-              <h1 className="lg:text-2xl text-base font-bold justify-center">Chat with {recipientName}</h1>
-              <Link
-                to={"/"}
-                className="group relative flex items-center justify-end font-extrabold  rounded-full p-3 md:p-5"
-              >
-                {/* <BiLogOut /> */}
-              </Link>
-            </div>
+            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between">
+            <button
+              className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg mt-2"
+              onClick={handleBackToUserList}
+            >
+              <FaArrowLeft />
+            </button>
+            <h1 className="lg:text-2xl text-base font-bold ml-auto">Chat with {recipientName}</h1>
+            <Link
+              to={"/"}
+              className="group relative flex items-center justify-end font-extrabold rounded-full p-3 md:p-5"
+            >
+              {/* <BiLogOut /> */}
+            </Link>
+          </div>
           )}
 
 
@@ -490,7 +489,7 @@ function EmpAdminChat() {
                           <p className="text-base font-bold mb-1 relative break-words whitespace-pre-wrap ">
                             {sms.content.text}
                           </p>
-                          <p className="text-sm text-gray-500 my-4">
+                          <p className="text-sm text-gray-500 mb-2">
                             {new Date(sms.createdAt).toLocaleDateString()}{" "}
                             {new Date(sms.createdAt).toLocaleTimeString()}
                           </p>
@@ -532,3 +531,5 @@ function EmpAdminChat() {
 }
 
 export default EmpAdminChat;
+
+
