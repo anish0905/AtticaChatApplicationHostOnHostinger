@@ -232,7 +232,7 @@ function DigitalToDigitalTamChat() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
       <Sidebar value="DIGITALMARKETING" />
       {showChat ? (
         <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
@@ -240,7 +240,7 @@ function DigitalToDigitalTamChat() {
           
             <button
               onClick={handleBackToEmployees}
-               className=" text-white text-4xl p-2 rounded-md"
+              className=" text-white text-4xl p-2 rounded-md"
             >
             <FaArrowLeft className="lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white lg:text-2xl text-xl"/>
             </button>
@@ -248,7 +248,7 @@ function DigitalToDigitalTamChat() {
               <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
            
           </div>
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa]" >
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] mb-20 lg:mb-0 h-screen" >
             {messages.map((message, index) => (
               <div
                 key={message._id}
@@ -269,7 +269,7 @@ function DigitalToDigitalTamChat() {
                   </div>
                 )}
                 {message.content && message.content.text && (
-                  <p className="font-bold lg:text-2xl text-sm ">
+                  <p className="font-bold lg:text-base text-xs ">
                     
                     {message.content.text}</p>
                 )}
@@ -357,7 +357,7 @@ function DigitalToDigitalTamChat() {
       ) : (
         <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto">
           <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Digital Marketing Employees</h1>
-          <div className=" relative flex items-center mb-4">
+          <div className="relative flex items-center mb-4">
             
             <input
               type="text"
@@ -376,10 +376,10 @@ function DigitalToDigitalTamChat() {
               .map((user) => (
                 <li
                   key={user._id}
-                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] font-bold  ${unreadUsers.some(
+                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between lg:text-xl text-sm text-[#5443c3] font-bold  ${unreadUsers.some(
                     (unreadUser) => unreadUser.userId === user._id
                   )
-                      ? "bg-blue-200"
+                      ? "bg-blue-100"
                       : "bg-gray-200"
                     } ${recipient === user._id ? "bg-green-200" : ""}`}
                   onClick={() => handleClick(user._id, user.name)}

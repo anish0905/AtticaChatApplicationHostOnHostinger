@@ -290,6 +290,18 @@ const replyToMessage = async (req, res) => {
   }
 };
 
+const getuserAllMessages = async(req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const messages = await Message.find({ recipient: userId })
+    .sort({ createdAt: -1 });
+    res.json(messages);
+  } catch (error) {
+    console.error("Error fetching messages:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+}
+
 module.exports = {
   createMessage,
   getMessages,
@@ -299,5 +311,6 @@ module.exports = {
   getNotificationId,
   forwardMessage,
   replyToMessage,
-  getMessagesByUser
+  getMessagesByUser,
+  getuserAllMessages
 };
