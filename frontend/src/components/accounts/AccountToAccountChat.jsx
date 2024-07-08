@@ -235,7 +235,7 @@ import { FaArrowLeft } from "react-icons/fa";
 
 
     return (
-      <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
+      <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
         <UserSidebar value="ACCOUNT" />
         {showChat ? (
           <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
@@ -248,7 +248,7 @@ import { FaArrowLeft } from "react-icons/fa";
               </button>
               <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
             </div>
-            <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa]">
+            <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] mb-20 lg:mb-0 h-screen">
               {messages.map((message, index) => (
                 <div
                   key={message._id}
@@ -268,7 +268,7 @@ import { FaArrowLeft } from "react-icons/fa";
                     </div>
                   )}
                   {message.content && message.content.text && (
-                    <p className="font-bold lg:text-2xl text-sm ">{message.content.text}</p>
+                    <p className="font-bold lg:text-base text-xs ">{message.content.text}</p>
                   )}
                   {message.content && message.content.image && (
                     <img
