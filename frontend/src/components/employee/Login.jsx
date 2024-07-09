@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import logo from "../../assests/logo.png";
 import babusirr from "../../assests/babusirr.png";
+import img21 from '../../assests/img21.png'
 import back4 from "../../assests/back4.png";
 import { BASE_URL } from "../../constants";
 
@@ -59,15 +60,15 @@ const Login = () => {
  
   return (
     <div
-      className="flex items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-6 lg:p-8"
+      className="flex items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-6 lg:p-8 fixed bottom-0 lg:relative lg:bottom-0 w-full"
       style={{ backgroundImage: `url(${back4})` }}
     >
       <div className="flex flex-col lg:flex-row items-center justify-center w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
         <div className="w-full lg:w-1/2 flex items-center justify-center p-4 sm:p-6 lg:p-8">
           <img
-            src={babusirr}
+            src={img21}
             alt="Babusir"
-            className="object-cover w-full max-w-md h-auto rounded-full "
+            className="object-cover w-1/4 lg:w-full max-w-md h-auto rounded-full "
           />
         </div>
 
