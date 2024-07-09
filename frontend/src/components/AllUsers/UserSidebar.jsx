@@ -11,8 +11,8 @@ const UserSidebar = ({ value }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [showTooltip, setShowTooltip] = useState(false);
-
-  const handleChat = () => {
+   console.log("value    ",value)
+  const handleChat = () => {   //LOGISTIC
     switch (value) {
       case "HR":
         navigate("/HrToHrChat");
@@ -41,7 +41,9 @@ const UserSidebar = ({ value }) => {
       case "TE":
         navigate("/TEChat");
         break;
-
+      case "LOGISTIC": 
+          navigate("/LogisticChat");
+          break;
       default:
         navigate("/");
     }
@@ -76,7 +78,9 @@ const UserSidebar = ({ value }) => {
       case "TE":
         navigate("/techattoadmin");
         break;
-
+        case "LOGISTIC":
+          navigate("/LogisticToAdminChat");
+          break;
       default:
         navigate("/");
     }

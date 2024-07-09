@@ -16,6 +16,7 @@ router.post("/monitoring/login", authController.loginMonitoringTeam);
 router.post("/Security/login", authController.loginSecurity);
 router.post("/bouncers/login", authController.loginBouncers);
 router.post("/TE/login", authController.loginTE);
+router.post("/Logistic/login", authController.loginLogistic);
 
 // Route to get user count by role
 router.get("/counts/by-role", authController.getUsersCountByRole);
@@ -39,6 +40,7 @@ router.get("/getAllSecurityTeam", authController.getAllSecurity);
 router.get("/getAllBouncersTeam", authController.getAllBouncers);
 
 router.get("/getAllTE", authController.getAllTE);
+router.get("/getAllLogistic", authController.getAllLogistic);
 
 router.get("/getbyId/:id", authController.getById);
 router.delete("/delete/:id", authController.deleteById);
