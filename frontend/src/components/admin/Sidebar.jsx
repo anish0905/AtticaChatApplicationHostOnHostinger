@@ -51,7 +51,7 @@ const Sidebar = () => {
       <div className="flex flex-row lg:flex-col gap-2 md:gap-3 lg:gap-5 relative">
         <div
           onClick={() => handleNavigation("/admindashboard")}
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer ${
             activeRoute === "/atticDashboard"
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
@@ -65,7 +65,7 @@ const Sidebar = () => {
 
         <div
           onClick={() => handleNavigation("/Groups")}
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${
             activeRoute === "/Groups"
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
@@ -77,10 +77,13 @@ const Sidebar = () => {
           </span>
         </div>
 
+
+
+
         <div
           onMouseEnter={() => setShowEmployeeOptions(true)}
           onMouseLeave={() => setShowEmployeeOptions(false)}
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer z-50  ${
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer z-50  ${
             employeeRoutes.includes(activeRoute)
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
@@ -187,7 +190,7 @@ const Sidebar = () => {
 
         <div
           onClick={() => handleNavigation("/livemesages")}
-          className={`group relative flex items-center rounded-full z-50 p-2 md:p-4 lg:p-5 cursor-pointer ${
+          className={`group relative flex items-center lg:rounded-full rounded-lg z-50 p-2 md:p-4 lg:p-5 cursor-pointer ${
             activeRoute === "/livemesages"
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
@@ -199,38 +202,29 @@ const Sidebar = () => {
           </span>
         </div>
 
-        <Link
-          to="/adminToemp"
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${
+
+
+
+
+        <div
+          onClick={() => handleNavigation("/adminToemp")}
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${
             activeRoute === "/adminToemp"
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
           }`}
         >
           <BsChatSquareDots className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Employee Chat
+          <span className="absolute lg:bottom-auto lg:left-full -right-7 mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          Employee Chat
           </span>
-        </Link>
+        </div>
 
-        {/* <Link
-          to="/adminToadmin"
-          className={`group relative flex items-center rounded-full p-2 md:p-4 z-50 lg:p-5 cursor-pointer ${
-            activeRoute === "/adminToadmin"
-              ? "bg-blue-500 text-white"
-              : "bg-[#fffefd]"
-          }`}
-        >
-          <BiSolidMessageCheck  className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Admin Chat
-          </span>
-        </Link> */}
       </div>
 
       <div
         onClick={handleLogout}
-        className="group relative flex items-center bg-[#fffefd] rounded-full p-2 md:p-4 lg:p-5 cursor-pointer"
+        className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-2 md:p-4 lg:p-5 cursor-pointer"
       >
         <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
         <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

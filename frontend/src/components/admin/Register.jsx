@@ -69,19 +69,19 @@ export const Register = () => {
   };
 
   return (
-    <div className="lg:flex block bg-[#f6f5fb]">
+    <div className="lg:flex block bg-[#f6f5fb] ">
       <Sidebar />
-      <div className="flex-1 p-6">
-        <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
+      <div className="flex-1 p-6 ">
+        <div className="flex justify-between mb-4 flex-col lg:flex-row"> //change//
           <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Employee Details</h1>
-          <div className='flex justify-center items-center content-center  '>
+          <div className='flex justify-center items-center content-center '>//change//
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:px-4 py-1 px-2 lg:text-xl text-xs rounded-full h-10 mr-2 mt-4 lg:mt-0"
-            >
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:px-4 py-1 px-2 lg:text-xl text-xs lg:rounded-full w-full h-12 mr-2 mt-4 lg:mt-0">//change//
+            
               Open Registration Form
             </button>
-            <CsvFileUpload endpoint="/api/employeeRegistration/register" className="lg:text-xl text-xs w-1/2" />
+            <CsvFileUpload endpoint="/api/employeeRegistration/register"/>
           </div>
         </div>
         <EmployeeDetails />

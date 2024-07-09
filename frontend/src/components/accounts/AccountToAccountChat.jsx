@@ -352,7 +352,7 @@ import { FaArrowLeft } from "react-icons/fa";
             </div>
           </div>
         ) : (
-          <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto">
+          <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto h-screen">
             <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Accounts Employees</h1>
             <div className="relative flex items-center mb-4">
 

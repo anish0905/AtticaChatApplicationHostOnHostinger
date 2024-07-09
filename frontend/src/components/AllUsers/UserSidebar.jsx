@@ -144,18 +144,18 @@ const UserSidebar = ({ value }) => {
 
       <div className="flex flex-row lg:flex-col gap-[10px] sm:gap-[10px] md:gap-[10px] lg:gap-[40px] relative">
         <div className="flex items-center flex-col">
-          <div className="group relative flex items-center bg-[#fffefd] hover:bg-blue-500 rounded-full p-3 md:p-5 ">
+          <div className="group relative flex items-center bg-[#fffefd] hover:bg-orange-200 rounded-full p-3 md:p-5 ">
             <div
               className="group relative"
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
             >
               <CgProfile />
-              <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-white text-black text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {/* <span className="absolute top-full lg:top-auto lg:left-full  ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-white text-black text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 Profile
-              </span>
+              </span> */}
               {showTooltip && (
-                <div className="absolute top-full left-0 mt-2 p-4 bg-black text-white text-sm md:text-md rounded shadow-md z-10 items-start">
+                <div className="absolute top-full lg:-top-full lg:ml-5 lg:left-full mt-2 p-4 bg-black text-white -left-14 text-sm md:text-md rounded shadow-md z-10 items-start">
                   <p>Email: {userDetails.email}</p>
                   <p>Name: {userDetails.name}</p>
                   <p>Role: {userDetails.role}</p>
@@ -170,7 +170,7 @@ const UserSidebar = ({ value }) => {
 
         <div
           onClick={handleLogout}
-          className="group relative flex items-center bg-[#fffefd] hover:bg-blue-500 rounded-full p-3 md:p-5 "
+          className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-3 md:p-5 "
         >
           <BiLogOut />
           <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
