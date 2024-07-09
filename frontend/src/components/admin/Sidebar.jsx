@@ -185,6 +185,13 @@ const Sidebar = () => {
               <MdSecurity className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Security Registration</span>
             </div>
+            <div
+              onClick={() => handleNavigation("/LogisticReg")}
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
+            >
+              <MdSecurity className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <span className="my-2">Logistic Registration</span>
+            </div>
           </span>
         </div>
 

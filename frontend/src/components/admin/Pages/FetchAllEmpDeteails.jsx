@@ -27,6 +27,7 @@ const FetchAllEmpDeteails = ({ handleClick }) => {
     Security: "allUser/getAllSecurityTeam",
     "Digital Marketing": "allUser/getAllDigitalMarketingTeam",
     TE: "allUser/getAllTE",
+    Logistic : "allUser/getAllLogistic"
   };
 
   useEffect(() => {

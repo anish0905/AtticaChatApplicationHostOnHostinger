@@ -73,6 +73,10 @@ import Chat from "./components/SuperAdmin/Chat";
 import TElogin from "./components/TE/TElogin";
 import TEChat from "./components/TE/TEChat";
 import TEChatToAdmin from "./components/TE/TEChatToAdmin";
+import LogisticLogin from "./components/Logistic/LogisticLogin";
+import LogisticReg from "./components/Logistic/LogisticReg";
+import LogisticChat from "./components/Logistic/LogisticChat";
+import LogisticToAdmin from "./components/Logistic/LogisticToAdmin";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -195,6 +199,13 @@ const App = () => {
           <Route path="/SecurityReg" element={<SecurityRegister />} />
 
           <Route path="/Sidebar" element={<Sidebar />} />
+
+
+          <Route path="/LogisticLogin" element={<LogisticLogin/>} />
+          <Route path="/LogisticReg" element={<LogisticReg/>} />
+          <Route path="/LogisticChat" element={<LogisticChat />} />
+          <Route path="/LogisticToAdminChat" element={<LogisticToAdmin />} />
+
 
           {isSuperAdminLoggedIn ? (
             <>
