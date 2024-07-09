@@ -1,4 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import logo from "../../assests/logo.png";
+import babusirr from "../../assests/babusirr.png";
+import back4 from "../../assests/back4.png";
+import { BASE_URL } from "../../constants";
 
 const TElogin = () => {
   const [email, setEmail] = useState("");
@@ -16,17 +22,17 @@ const TElogin = () => {
     setError("");
 
     try {
-      const response = await axios.post(
-        `${BASE_URL}/api/loginallUser/TE/login`,
-        { email, password }
-      );
+      const response = await axios.post(`${BASE_URL}/api/allUser/TE/login`, {
+        email,
+        password,
+      });
       setLoading(false);
       localStorage.setItem("token", response.data.accessToken);
       console.log("response.data   ", response.data);
       //localStorage.setItem('EmployeeId', response.data._id);
       localStorage.setItem("CurrentUserId", response.data._id);
       fetchUserDetails(response.data._id);
-      navigate("/DigitalMarketingChatToDigitalMarketing");
+      navigate("/TEChat");
     } catch (err) {
       setLoading(false);
       console.error("Error:", err);

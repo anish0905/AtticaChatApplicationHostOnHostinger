@@ -238,23 +238,23 @@ import { FaArrowLeft } from "react-icons/fa";
       <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
         <UserSidebar value="ACCOUNT" />
         {showChat ? (
-          <div className="w-full  flex flex-col justify-between overflow-hidden">
-            <div className="flex items-center justify-between p-4 bg-[#5443c3] text-white sticky top-0 z-10">
+          <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
+            <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white border-2 border-[#5443c3] my-2 mx-2 sticky top-0 z-10">
               <button
                 onClick={handleBackToEmployees}
                 className=" text-white text-4xl p-2 rounded-md"
               >
-                <FaArrowLeft />
+                <FaArrowLeft className="lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white lg:text-2xl text-xl"/>
               </button>
-              <h1 className="text-2xl font-bold">{recipientName}</h1>
+              <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
             </div>
-            <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa]">
+            <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] mb-20 lg:mb-0 h-screen">
               {messages.map((message, index) => (
                 <div
                   key={message._id}
                   className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
-                      ? "bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl self-end"
-                      : "bg-white text-[#5443c3] rounded-tl-3xl rounded-br-3xl self-start"
+                      ? " self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+                      : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                     }`}
 
                   onMouseEnter={() => handleHover(index)}
@@ -262,19 +262,19 @@ import { FaArrowLeft } from "react-icons/fa";
                 >
                   {message.content && message.content.originalMessage && (
                     <div className="mb-2">
-                      <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                      <span className="bg-green-300 px-2 py-1 text-xs text-white rounded">
                         {message.content.originalMessage}
                       </span>
                     </div>
                   )}
                   {message.content && message.content.text && (
-                    <p className="font-bold">{message.content.text}</p>
+                    <p className="font-bold lg:text-base text-xs ">{message.content.text}</p>
                   )}
                   {message.content && message.content.image && (
                     <img
                       src={message.content.image}
                       alt="Image"
-                      className="max-w-xs"
+                      className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
                     />
                   )}
                   {message.content && message.content.document && (
@@ -282,7 +282,7 @@ import { FaArrowLeft } from "react-icons/fa";
                       href={message.content.document}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline"
+                      className="text-orange-500 hover:underline"
                     >
                       <IoIosDocument className="text-9xl" />
                     </a>
@@ -293,7 +293,7 @@ import { FaArrowLeft } from "react-icons/fa";
                       Your browser does not support the video tag.
                     </video>
                   )}
-                  <span className="text-xs text-orange-600">
+                  <span className="text-xs text-black">
                     {new Date(message.createdAt).toLocaleString()}
                   </span>
 
@@ -331,7 +331,7 @@ import { FaArrowLeft } from "react-icons/fa";
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 placeholder="Type a message..."
-                className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
+                className="flex-grow p-2 border-2 rounded-lg mr-2 border-[#5443c3]"
               />
               <input
                 type="file"
@@ -339,9 +339,9 @@ import { FaArrowLeft } from "react-icons/fa";
                 className="hidden"
                 id="file-upload"
               />
-              <label htmlFor="file-upload">
+              {/* <label htmlFor="file-upload">
                 <FaPaperclip className="text-gray-500 hover:text-gray-700 cursor-pointer mr-2" />
-              </label>
+              </label> */}
               <button
                 onClick={handleSendMessage}
                 className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -353,7 +353,7 @@ import { FaArrowLeft } from "react-icons/fa";
           </div>
         ) : (
           <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto">
-            <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Accounts Employees</h1>
+            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Accounts Employees</h1>
             <div className="relative flex items-center mb-4">
 
               <input
@@ -361,7 +361,7 @@ import { FaArrowLeft } from "react-icons/fa";
                 value={userSearchQuery}
                 onChange={(e) => setUserSearchQuery(e.target.value)}
                 placeholder="Search..."
-                className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+                className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg"
               />
               <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
             </div>
@@ -373,10 +373,10 @@ import { FaArrowLeft } from "react-icons/fa";
                 .map((user) => (
                   <li
                     key={user._id}
-                    className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] font-bold ${unreadUsers.some(
+                    className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between lg:text-xl text-sm text-[#5443c3] font-bold ${unreadUsers.some(
                       (unreadUser) => unreadUser.userId === user._id
                     )
-                        ? "bg-blue-200"
+                        ? "bg-blue-100"
                         : "bg-gray-200"
                       } ${recipient === user._id ? "bg-green-200" : ""}`}
                     onClick={() => handleClick(user._id, user.name)}
@@ -395,7 +395,7 @@ import { FaArrowLeft } from "react-icons/fa";
 
 {showPopSms && (
   <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-blue-100 p-4 rounded-lg shadow-lg border border-[#5443c3] max-w-2xl w-full">
+    <div className="bg-blue-100 p-4 rounded-lg shadow-lg border border-[#5443c3] max-w-2xl lg:w-full w-80">
       <div className="flex items-center mb-4">
         <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
         <h3 className="text-lg font-semibold">New Message</h3>

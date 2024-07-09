@@ -5,7 +5,7 @@ import logo from "../../assests/logo.png";
 import { Link, useNavigate } from "react-router-dom";
 import { GrChatOption } from "react-icons/gr";
 import { MdDashboard } from "react-icons/md";
-import PersonAddIcon from '@mui/icons-material/PersonAdd';
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { TbMessageForward } from "react-icons/tb";
 import { BiSolidMessageCheck } from "react-icons/bi";
 import { FaLaptop } from "react-icons/fa";
@@ -159,7 +159,6 @@ const Sidebar = () => {
               <span className="my-2">Bouncer Registration</span>
             </div>
 
-
             <div
               onClick={() => handleNavigation("/SoftwareReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
@@ -186,7 +185,6 @@ const Sidebar = () => {
           </span>
         </div>
 
-       
         <div
           onClick={() => handleNavigation("/livemesages")}
           className={`group relative flex items-center rounded-full z-50 p-2 md:p-4 lg:p-5 cursor-pointer ${
@@ -195,7 +193,7 @@ const Sidebar = () => {
               : "bg-[#fffefd]"
           }`}
         >
-          <TbMessageForward  className="text-lg md:text-2xl lg:text-3xl" />
+          <TbMessageForward className="text-lg md:text-2xl lg:text-3xl" />
           <span className="absolute lg:bottom-auto lg:left-full mt-16 z-50 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Live Chat
           </span>

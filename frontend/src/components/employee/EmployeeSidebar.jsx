@@ -7,6 +7,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CgProfile } from "react-icons/cg"; // Import Profile Icon
 import logo from "../../assests/logo.png"           
 import { BiSolidMessageCheck } from "react-icons/bi";
+import Notification from '../utility/Notification';
+
 
 const EmployeeSidebar = () => {
   const navigate = useNavigate();
@@ -30,7 +32,9 @@ const EmployeeSidebar = () => {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="flex flex-row lg:flex-col h-[80px] lg:h-screen w-full lg:w-[100px] left-0 bg-[#5443c3] border-b lg:border-r shadow-md justify-between items-center py-[10px] lg:py-[20px] text-gray-500">
+    <>
+    <Notification/>
+    <div className="flex relative z-40 lg:static  flex-row lg:flex-col h-[80px] lg:h-screen w-full lg:w-[100px] left-0 bg-[#5443c3] border-b lg:border-r shadow-md justify-between items-center py-[10px] lg:py-[20px] text-gray-500">
       <div className="w-16 md:w-20 lg:w-24 h-12 md:h-16 lg:h-20 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
         <img className="m-2 md:m-4 lg:m-6" src={logo} alt="Logo" />
       </div>
@@ -40,7 +44,7 @@ const EmployeeSidebar = () => {
           onClick={handleGroup} 
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/empgroupchat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
         >
-          <GrChatOption className="text-lg md:text-2xl lg:text-3xl"/>
+          <GrChatOption className="text-lg md:text-2xl lg:text-3xl "/>
           <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Group Chat
           </span>
@@ -92,6 +96,7 @@ const EmployeeSidebar = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

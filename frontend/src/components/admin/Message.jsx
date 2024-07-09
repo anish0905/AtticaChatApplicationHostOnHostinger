@@ -6,8 +6,8 @@ import UploadImageModal from "./Pages/UploadImageModal";
 import { useParams } from "react-router-dom";
 import { IoArrowBack } from "react-icons/io5";
 import { BASE_URL } from "../../constants";
-import {  useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import notificationTone from "../../assests/notification_ding.mp3";
 
 const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade }) => {
   const [message, setMessage] = useState("");
@@ -16,7 +16,9 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
   const [notification, setNotification] = useState(null);
   const [showPopSms, setShowPopSms] = useState(false);
   const [popSmsContent, setPopSmsContent] = useState({});
+  const [lastMessageCount, setLastMessageCount] = useState(0);
   const messagesEndRef = useRef(null);
+  const notificationSoundRef = useRef(null);
   const adminId = localStorage.getItem("AdminId");
 
   const navigate = useNavigate();
@@ -43,6 +45,13 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
     return () => clearInterval(interval);
   }, []);
 
+  // Request Notification permission on component mount
+  useEffect(() => {
+    if (Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+  }, []);
+
   const fetchMessages = async () => {
     if (selectedGroupName && selectedGrade) {
       try {
@@ -54,6 +63,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
         });
 
         const data = response.data;
+
         if (data && data.messages) {
           setMessages(data.messages);
         } else {
@@ -79,10 +89,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
         grade: selectedGrade,
       };
 
-      const response = await axios.post(
-        `${BASE_URL}/api/messages`,
-        newMessage
-      );
+      const response = await axios.post(`${BASE_URL}/api/messages`, newMessage);
 
       if (response.status === 201) {
         // Update messages state with the new message
@@ -110,15 +117,14 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
       const data = response.data;
       if (data && data.messages && data.messages.length > messages.length) {
         const newMessages = data.messages.slice(messages.length);
-        const foreignMessage = newMessages.find(
-          (msg) => msg.employeeId !== adminId
-        );
+        const foreignMessage = newMessages.find((msg) => msg.employeeId !== adminId);
 
         if (foreignMessage) {
           setNotification({
             employeeId: foreignMessage.employeeId,
             message: foreignMessage.message,
           });
+          showNotifications(newMessages);
         }
         setMessages(data.messages);
       }
@@ -148,6 +154,32 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
+  const showNotifications = (newMessages) => {
+    if (Notification.permission === "granted") {
+      newMessages.forEach((message) => {
+        if (message.employeeId !== adminId) {
+          const notification = new Notification("New Message", {
+            body: `${message.employeeId}: ${message.message}`,
+          });
+          notification.onclick = () => {
+            window.focus();
+          };
+
+          // Play notification sound
+          playNotificationSound();
+        }
+      });
+    }
+  };
+
+  const playNotificationSound = () => {
+    if (notificationSoundRef.current) {
+      notificationSoundRef.current.play().catch((error) => {
+        console.error("Error playing notification sound:", error);
+      });
+    }
+  };
+
   return (
     <div className="flex flex-row h-screen lg:w-[70vw] w-[100vw]">
       <div className="flex-1 flex flex-col w-full">
@@ -158,13 +190,10 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
             </div>
           )}
 
-
-
-
           {selectedGroupName && selectedGrade && (
             <div className="flex flex-col flex-1 bg-[#f6f5fb]">
               <div className="text-[#ffffff] bg-[#5443c3] lg:text-2xl md:text-xl text-xl p-4 flex gap-2 items-center justify-between">
-              <span onClick={() => navigate(-1)} className="cursor-pointer">
+                <span onClick={() => navigate(-1)} className="cursor-pointer">
                   <IoArrowBack />
                 </span>
                 <div className="flex flex-row">
@@ -173,7 +202,6 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                 </div>
               </div>
 
-
               <div
                 className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto lg:mb-0 mb-10"
                 style={{ maxHeight: "80vh" }}
@@ -181,35 +209,41 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                 {messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={` flex relative break-words whitespace-pre-wrap ${msg.employeeId === adminId ? "justify-end" : "justify-start"
-                      } mb-2`}
+                    className={` flex relative break-words whitespace-pre-wrap ${
+                      msg.employeeId === adminId ? "justify-end" : "justify-start"
+                    } mb-2`}
                   >
                     <div
-                      className={` lg:text-2xl md:text-xl text-sm  ${msg.employeeId === adminId ? " self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl " : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-                        } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
+                      className={` lg:text-2xl md:text-xl text-sm  ${
+                        msg.employeeId === adminId
+                          ? " self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl "
+                          : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                      } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                     >
-                      <p className={` lg:text-lg md:text-lg text-sm font-bold ${msg.employeeId === adminId ? "text-green" : "text-[#5443c3]"
-                        }`}>
+                      <p
+                        className={` lg:text-lg md:text-lg text-sm font-bold ${
+                          msg.employeeId === adminId ? "text-green" : "text-[#5443c3]"
+                        }`}
+                      >
                         {msg.employeeId}
                         <span> : </span>
                       </p>
                       <p className="lg:text-lg md:text-sm text-sm">{msg.message}</p>
                       {msg.Document && (
-                        <div className='lg:text-8xl md:text-6xl text-4xl my-2 '>
+                        <div className="lg:text-8xl md:text-6xl text-4xl my-2">
                           <a href={msg.Document} download target="_blank" rel="noopener noreferrer">
                             <IoMdDocument />
                           </a>
                         </div>
                       )}
                       {msg.video && (
-                        <div className='lg:text-8xl md:text-6xl text-4xl my-2'>
-                          <video src={msg.video} controls >
-                          </video>
+                        <div className="lg:text-8xl md:text-6xl text-4xl my-2">
+                          <video src={msg.video} controls></video>
                         </div>
                       )}
                       {msg && msg.Image && (
                         <div>
-                          <img src={msg.Image} alt=""  />
+                          <img src={msg.Image} alt="" />
                         </div>
                       )}
                     </div>
@@ -221,36 +255,42 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
           )}
         </div>
 
-        <div className="mx-auto flex items-center p-4 sticky bottom-0 z-10 bg-[#f6f5fb] w-full shadow-[#5443c3]">
+        <div className="mx-auto flex items-center p-4 sticky bottom-0 z-10 bg-[#f6f5fb] w-full">
           <input
             type="text"
-            className="flex-1 py-2 px-4 rounded-l-lg border-t border-b border-l border-[#5443c3] text-gray-800 bg-white w-full focus:outline-none placeholder-[#5443c3]"
-            placeholder="Type your message..."
+            className="border border-gray-300 rounded px-4 py-2 mr-2 flex-1"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            placeholder="Type your message..."
           />
           <button
-            className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-r-lg"
+            className="bg-[#5443c3] text-white rounded px-4 py-2 flex items-center justify-center"
             onClick={sendMessage}
           >
             <IoMdSend />
           </button>
-          <UploadImageModal selectedGroupName={selectedGroupName} selectedGrade={selectedGrade} />
+          <button
+            className="bg-[#5443c3] text-white rounded px-4 py-2 flex items-center justify-center"
+            onClick={() => setShowPopSms(true)}
+          >
+            <IoMdDocument />
+          </button>
         </div>
       </div>
+      <UploadImageModal showModal={showPopSms} setShowModal={setShowPopSms} />
+
+      <audio ref={notificationSoundRef} src={notificationTone} preload="auto" />
 
       {showPopSms && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg relative w-[80vw] md:w-[50vw]">
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-              onClick={() => setShowPopSms(false)}
-            >
-              &times;
-            </button>
-            <p className="font-bold">{popSmsContent.employeeId}:</p>
-            <p>{popSmsContent.message}</p>
-          </div>
+        <div className="fixed bottom-0 right-0 mb-4 mr-4 bg-white p-4 rounded shadow-lg z-50">
+          <p className="font-bold">Employee ID: {popSmsContent.employeeId}</p>
+          <p>Message: {popSmsContent.message}</p>
+          <button
+            className="mt-2 px-4 py-2 bg-[#5443c3] text-white rounded"
+            onClick={() => setShowPopSms(false)}
+          >
+            Close
+          </button>
         </div>
       )}
     </div>
@@ -258,5 +298,3 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
 };
 
 export default Message;
-
-

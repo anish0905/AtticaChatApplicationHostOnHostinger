@@ -4,11 +4,11 @@ import EmpMessage from './EmpMessage';
 
 const EmpGroupChat = () => {
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col lg:flex-row">
       <div >
         <EmployeeSidebar />
       </div>
-      <div className="flex-1 bg-white overflow-y-auto">
+      <div className="flex-1 bg-white overflow-hidden ">
         <EmpMessage />
       </div>
     </div>
