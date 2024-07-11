@@ -55,7 +55,7 @@ const  SecurityLogin = () => {
 
   return (
     <div
-    className="flex items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-6 lg:p-8"
+    className="flex items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-6 lg:p-8 fixed bottom-0 lg:relative  lg:bottom-0 w-full"
     style={{ background: 'linear-gradient(to right,#f6d365,#fda085)' }}
   >
     <div className="flex flex-col lg:flex-row items-center justify-center w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
@@ -63,7 +63,7 @@ const  SecurityLogin = () => {
         <img
           src={babusirr}
           alt="Babusir"
-          className="object-cover w-full max-w-md h-auto rounded-full"
+          className="object-cover  w-1/4 lg:w-full max-w-md h-auto rounded-full"
         />
       </div>
 
