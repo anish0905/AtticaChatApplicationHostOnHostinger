@@ -13,7 +13,7 @@ const ShowPopSms = ({ loggedInUserId }) => {
 
   const fetchPopSms = async () => {
     try {
-      const response = await axios.get(`${BASE_URL}/api/getNotification/${loggedInUserId}`);
+      const response = await axios.get(`${BASE_URL}${loggedInUserId}`);
       const data = response.data;
       console.log('Admin Notification Data:', data);
       setPopSms(data);

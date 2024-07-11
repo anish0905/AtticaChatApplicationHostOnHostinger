@@ -56,7 +56,7 @@ const AccountsLogin = () => {
 
   return (
     <div
-      className="flex items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-6 lg:p-8 fixed bottom-0 lg:relative  lg:bottom-0 w-full"
+      className="flex items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-6 lg:p-8"
       style={{ background: 'linear-gradient(to right,#20BDFF, #A5FECB)' }}
     >
       <div className="flex flex-col lg:flex-row items-center justify-center w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden">
@@ -64,7 +64,7 @@ const AccountsLogin = () => {
           <img
             src={img21}
             alt="Babusir"
-            className="object-cover w-1/4 lg:w-full max-w-md h-auto rounded-full"
+            className="object-cover w-full max-w-md h-auto rounded-full"
           />
         </div>
 

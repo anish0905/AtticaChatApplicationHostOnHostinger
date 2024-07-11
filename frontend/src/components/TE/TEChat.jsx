@@ -233,27 +233,28 @@ function TEChat() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
       <UserSidebar value="TE" />
       {showChat ? (
         <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white border-2 border-[#5443c3] my-2 mx-2 sticky top-0 z-10">
             <button
               onClick={handleBackToEmployees}
-             className=" text-white text-4xl p-2 rounded-md"
+              className=" text-white text-4xl p-2 rounded-md"
             >
-              <FaArrowLeft className="lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white lg:text-2xl text-xl"/>
+              <FaArrowLeft className="lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white lg:text-2xl text-xl" />
             </button>
 
             <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
           </div>
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] mb-20 lg:mb-0 h-screen">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa]">
             {messages.map((message, index) => (
               <div
                 key={message._id}
-                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
-                  ? " self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-                  : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${
+                  message.sender === loggedInUserId
+                    ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+                    : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                 }`}
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
@@ -266,7 +267,7 @@ function TEChat() {
                   </div>
                 )}
                 {message.content && message.content.text && (
-                  <p className="font-bold lg:text-base text-xs ">
+                  <p className="font-bold lg:text-2xl text-sm">
                     {message.content.text}
                   </p>
                 )}
@@ -330,7 +331,7 @@ function TEChat() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type a message..."
-              className="flex-grow p-2 border-2 rounded-lg mr-2 border-[#5443c3]"
+              className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
             />
             <input
               type="file"
@@ -351,17 +352,17 @@ function TEChat() {
           </div>
         </div>
       ) : (
-        <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto h-screen">
+        <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto ">
           <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">
             TE
           </h1>
-          <div className="relative flex items-center mb-4">
+          <div className=" relative flex items-center mb-4">
             <input
               type="text"
               value={userSearchQuery}
               onChange={(e) => setUserSearchQuery(e.target.value)}
               placeholder="Search..."
-              className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg"
+              className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
             />
             <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
           </div>
@@ -373,7 +374,7 @@ function TEChat() {
               .map((user) => (
                 <li
                   key={user._id}
-                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between lg:text-xl text-sm text-[#5443c3] font-bold ${
+                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] font-bold ${
                     unreadUsers.some(
                       (unreadUser) => unreadUser.userId === user._id
                     )
@@ -395,7 +396,7 @@ function TEChat() {
       )}
 
       {showPopSms && (
-        <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-blue-100 p-4 rounded-lg shadow-lg border border-[#5443c3] max-w-2xl lg:w-full w-80">
             <div className="flex items-center mb-4">
               <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />

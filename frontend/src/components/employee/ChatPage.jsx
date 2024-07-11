@@ -40,6 +40,8 @@ function ChatPage() {
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
 
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
     setRecipient(id);
@@ -84,6 +86,7 @@ function ChatPage() {
 
     const messageData = {
       sender: loggedInUserId,
+      senderName:userDetails.name,
       recipient: recipient,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
@@ -233,6 +236,8 @@ function ChatPage() {
     setShowForwardModal(false);
   };
 
+  
+
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
@@ -344,7 +349,7 @@ function ChatPage() {
             >
               <IoMdSend />
             </button>
-            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
         </div>
       ) : (

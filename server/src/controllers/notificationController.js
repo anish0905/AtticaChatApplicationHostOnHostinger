@@ -44,5 +44,18 @@ const deleteNotification = async (req, res) => {
   }
 };
 
+const deleteNotificationByRecipient = async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "Notification id is required" });
+    }
+    await Notification.deleteMany({ recipient: id });
+    res.status(200).json({ message: "Notifications deleted" });
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
 
-module.exports = { getNotificationId, deleteNotification };
+
+module.exports = { getNotificationId, deleteNotification,deleteNotificationByRecipient };

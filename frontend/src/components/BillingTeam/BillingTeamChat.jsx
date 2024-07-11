@@ -42,6 +42,8 @@ function BillingTeamChat() {
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
 
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
     setRecipient(id);
@@ -86,6 +88,7 @@ function BillingTeamChat() {
 
     const messageData = {
       sender: loggedInUserId,
+      senderName: userDetails.name,
       recipient: recipient,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,

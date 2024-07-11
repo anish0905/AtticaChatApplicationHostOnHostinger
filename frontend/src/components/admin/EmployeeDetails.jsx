@@ -177,46 +177,46 @@ const EmployeeDetails = () => {
   };
 
   return (
-    <div className="flex flex-col h-[950px] overflow-y-auto w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
+    <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
       <div className="relative mb-4 w-full">
         <input
           type="text"
           placeholder="Search by name"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-         className="w-full lg:h-10 h-8 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+         className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
         />
          <AiOutlineSearch
-            size={15}
-            className="absolute top-3 left-3 text-gray-500 text-xl "
+            size={20}
+            className="absolute top-3 left-3 text-gray-500 text-2xl"
           />
       </div>
       
       <ToastContainer />
       <div className="flex-1 overflow-x-auto overflow-y-hidden">
-        <div className="h-[850px] overflow-y-auto">
-          <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
+        <div className="h-full overflow-y-auto">
+          <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-[#5443c3] sticky top-0">
               <tr>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Name
                 </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
-                  Emp ID
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Employee ID
                 </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   State
                 </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Language
                 </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Grade
                 </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Team Name
                 </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -224,23 +224,23 @@ const EmployeeDetails = () => {
             <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
               {filteredEmployees.map((employee) => (
                 <tr key={employee._id}>
-                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">{employee.name}</td>
-                  <td className="py-4 px-2 sm:px-4  text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">{employee.name}</td>
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                     {employee.employeeId}
                   </td>
-                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                     {employee.state}
                   </td>
-                  <td className="py-4 px-2 sm:px-4  text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                     {employee.language}
                   </td>
-                  <td className="py-4 px-2 sm:px-4  text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                     {employee.grade}
                   </td>
-                  <td className="py-4 px-2 sm:px-4  text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
                     {employee.group}
                   </td>
-                  <td className="py-4 px-2 whitespace-nowrap sm:px-4 lex text-xs lg:text-sm ">
+                  <td className="py-4 px-2 sm:px-4 whitespace-nowrap flex">
                     <button
                       onClick={() => handleEdit(employee)}
                       className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-2 sm:px-4 rounded"

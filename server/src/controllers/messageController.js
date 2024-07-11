@@ -5,7 +5,7 @@ const { uploadOnCloudinary } = require("../utils/cloudinary.js");
 const Notification = require("../model/notificationModel.js");
 
 const createMessage = async (req, res) => {
-  const { sender, recipient, text } = req.body;
+  const { sender, recipient, text,senderName } = req.body;
 
   if (!sender || !recipient) {
     return res
@@ -79,6 +79,7 @@ const createMessage = async (req, res) => {
 
     const message = new Message({
       sender,
+      senderName,
       recipient,
       content,
     });
@@ -89,6 +90,7 @@ const createMessage = async (req, res) => {
 
     const notification = new Notification({
       sender,
+      senderName,
       recipient,
       content,
     });

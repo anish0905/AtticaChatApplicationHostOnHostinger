@@ -374,6 +374,7 @@ function AccountToAdminChat() {
             {/* <BiLogOut /> */}
           </Link>
         </div>
+
               )}
 
        
@@ -386,10 +387,8 @@ function AccountToAdminChat() {
               onMouseLeave={() => handleLeave()}
             >
               <div
-                  className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
-                    ? " self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-                    : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-                  }`}
+                className={`relative lg:text-2xl md:text-xl text-sm ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
+                  } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
               >
                   {/* //---------------> */}
                  {message.content && message.content.originalMessage && (
@@ -482,9 +481,14 @@ function AccountToAdminChat() {
           <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name}/>
         </div>
       </div>
+
+
           )
+        
       }
       
+
+
 
 
       {showPopSms && (

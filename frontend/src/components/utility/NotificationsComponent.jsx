@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
 import Notification_tone from "../../assests/notification_ding.mp3";
 
-const Notification = () => {
+const NotificationsComponent = ({name,text}) => {
+  console.log(name, text);
   useEffect(() => {
     // Request Notification permission on component mount
     if (Notification.permission !== "granted") {
@@ -24,7 +25,7 @@ const Notification = () => {
         notification.onclick = () => {
           window.focus();
         };
-        notifications.push(notification); // Push each notification to the array
+        notifications.push(notification); 
 
         // Play notification sound
         playNotificationSound();
@@ -40,22 +41,20 @@ const Notification = () => {
   // Array to store references to notifications
   let notifications = [];
 
-  // Example usage or integration with your application
-  // Replace with your actual data or use case
   const newMessages = [
-    { employeeId: '001', message: 'Hello from John' },
-    { employeeId: '002', message: 'New update available' },
-    // Add more messages here as needed
+    { employeeId: name, message: text },
+    
   ];
+
+  useEffect(()=>{
+    showNotifications(newMessages);
+  },[name,text])
 
   return (
     <div>
-      <h1>Notification Example</h1>
-      <button onClick={() => showNotifications(newMessages)}>
-        Show Notifications
-      </button>
+      
     </div>
   );
 };
 
-export default Notification;
+export default NotificationsComponent;

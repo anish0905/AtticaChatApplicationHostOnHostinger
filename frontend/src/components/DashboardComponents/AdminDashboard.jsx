@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Sidebar from '../admin/Sidebar';
 import back19 from '../../assests/back19.png';
-// import back15 from '../../assests/back15.png';
-import shade2 from '../../assests/shade2.png';
+import back15 from '../../assests/back15.png';
 import back13 from '../../assests/back15.png';
-import shade1 from '../../assests/shade1.png';
 import { BASE_URL } from "../../constants";
 import Table from "./Table";
 
@@ -67,11 +65,11 @@ const AdminDashboard = () => {
         <Sidebar />
       </div>
       <div className="flex-1 px-2 mt-4  bg-opacity-75 bg-white relative">
-        <div className="lg:text-4xl md:text-2xl rounded text-2xl font-bold  h-auto text-white w-full lg:h-24 mb-5 py-5 pl-5 flex flex-col items-center justify-start" style={{ backgroundImage: `url(${shade1})` }}>
+        <div className="lg:text-4xl md:text-2xl rounded text-2xl font-bold bg-[#5443c3] h-auto text-white w-full lg:h-24 mb-5 py-5 pl-5 flex flex-col items-left justify-start">
           Attic's Chat-up Dashboard
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
-          <div className="p-4 rounded-lg shadow-lg bg-cover" style={{ backgroundImage: `url(${shade2})`, opacity:0.5}}>
+          <div className="p-4 rounded-lg shadow-lg bg-cover" style={{ backgroundImage: `url(${back15})` }}>
             <div className="lg:text-xl md:text-xl text-sm font-bold text-white">No of Registered Employees</div>
             <div className="text-2xl text-white">{employee.length}</div>
           </div>

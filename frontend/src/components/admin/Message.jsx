@@ -216,7 +216,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                     <div
                       className={` lg:text-2xl md:text-xl text-sm  ${
                         msg.employeeId === adminId
-                          ? " self-end bg-[#9184e9] border-2 border-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl "
+                          ? " self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl "
                           : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                       } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                     >
@@ -258,7 +258,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
         <div className="mx-auto flex items-center p-4 sticky bottom-0 z-10 bg-[#f6f5fb] w-full">
           <input
             type="text"
-            className="border-2 border-[#5443c3] rounded px-4 py-2 mr-2 flex-1"
+            className="border border-gray-300 rounded px-4 py-2 mr-2 flex-1"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message..."
@@ -270,15 +270,14 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
             <IoMdSend />
           </button>
           <button
-            className="text-white bg-blue-500  rounded px-4 py-2 flex items-center justify-center mx-2"
+            className="bg-[#5443c3] text-white rounded px-4 py-2 flex items-center justify-center"
             onClick={() => setShowPopSms(true)}
           >
             <IoMdDocument />
           </button>
-          <UploadImageModal showModal={showPopSms} setShowModal={setShowPopSms} />
         </div>
       </div>
-      
+      <UploadImageModal showModal={showPopSms} setShowModal={setShowPopSms} />
 
       <audio ref={notificationSoundRef} src={notificationTone} preload="auto" />
 
@@ -287,7 +286,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
           <p className="font-bold">Employee ID: {popSmsContent.employeeId}</p>
           <p>Message: {popSmsContent.message}</p>
           <button
-            className="mt-2 px-1 py-1 bg-[#5443c3] text-white rounded"
+            className="mt-2 px-4 py-2 bg-[#5443c3] text-white rounded"
             onClick={() => setShowPopSms(false)}
           >
             Close

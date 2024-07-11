@@ -14,5 +14,3 @@ export default defineConfig({
     chunkSizeWarningLimit: 1600, // Adjust the chunk size warning limit
   },
 });
-
-

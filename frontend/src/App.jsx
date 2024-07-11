@@ -1,3 +1,4 @@
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import AuthRequired from "./components/authentication/AuthRequired";
@@ -77,6 +78,12 @@ import LogisticLogin from "./components/Logistic/LogisticLogin";
 import LogisticReg from "./components/Logistic/LogisticReg";
 import LogisticChat from "./components/Logistic/LogisticChat";
 import LogisticToAdmin from "./components/Logistic/LogisticToAdmin";
+// import PopNotification from "./components/utility/PopNotification";
+// import Notification from "./components/utility/Notification";
+// import NotificationsComponent from "./components/utility/NotificationsComponent";
+import FetchApiComponent from "./components/utility/FetchApiComponent";
+import NotificationHandler from "../src/components/utility/GroupNotification"
+import GroupNotification from "../src/components/utility/GroupNotification";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -236,6 +243,10 @@ const App = () => {
           </Route>
         </Route>
       </Routes>
+      {/* <Notification/> */}
+      {/* <PopNotification/> */}
+      <FetchApiComponent/>
+      <GroupNotification/>
     </BrowserRouter>
   );
 };
