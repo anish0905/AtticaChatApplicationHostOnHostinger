@@ -2,15 +2,15 @@
 const express = require("express");
 const router = express.Router();
 const {
-  saveLocation,
-  getLocation,
   TeSaveLocation,
   TeGetLocationByDate,
+  ManagerSaveLocation,
+  ManagerGetLocationByDate,
 } = require("../controllers/locationController");
 
 // Save location
-router.post("/", saveLocation);
-router.get("/get/:id", getLocation);
+router.post("/managerlocation", ManagerSaveLocation);
+router.get("/get-managerlocation/:userId/:date", ManagerGetLocationByDate);
 
 router.post("/te-location", TeSaveLocation);
 // Route to get location data by date
