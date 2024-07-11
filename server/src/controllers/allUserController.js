@@ -33,6 +33,15 @@ exports.registerUser = async (req, res) => {
   }
 };
 
+// export const deleteAllUsers = async (req, res) => {
+//   try {
+//     await User.deleteMany({});
+//     res.status(200).json({ message: "All users deleted successfully" });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+
 exports.getUsersCountByRole = async (req, res) => {
   try {
     // Aggregate users by role and count the number of users in each role
@@ -441,7 +450,6 @@ exports.loginTE = async (req, res) => {
   }
 };
 
-
 exports.loginLogistic = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -593,7 +601,6 @@ exports.getAllLogistic = async function (req, res) {
     res.status(500).send(err);
   }
 };
-
 
 exports.deleteById = async function (req, res) {
   try {
