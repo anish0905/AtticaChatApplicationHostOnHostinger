@@ -177,18 +177,18 @@ const EmpMessage = () => {
             messages.map((msg) => (
               <div
                 key={msg._id}
-                className={`flex relative break-words whitespace-pre-wrap ${msg.employeeId === currentUserName ? "justify-start" : "justify-end"} mb-2`}
+                className={`flex relative break-words whitespace-pre-wrap ${msg.employeeId === currentUserName ? "justify-end" : "justify-start"} mb-2`}
               >
                 <div
-                  className={`relative ${
+                  className={`relative lg:text-3xl md:text-xl text-sm  ${
                     msg.employeeId === currentUserName
-                      ? " self-end bg-white text-[#5443c3] border-2 border-[#5443c3] rounded-br-3xl rounded-tl-3xl"
-                      : "self-start bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl"
+                      ? " self-end  bg-[#e1dff3] text-[#5443c3] rounded-tr-3xl rounded-bl-3xl border border-[#5443c3]"
+                      : "self-start bg-white text-[#5443c3] border border-[#5443c3] rounded-br-3xl rounded-tl-3xl"
                   } py-2 px-4 rounded-lg lg:max-w-4xl max-w-[50%]`}
                 >
                   {msg.message && (
                     <p className="text-sm mb-1">
-                      <span className="font-bold">{msg.employeeId}:</span> {msg.message}
+                      <span className="font-bold  font-bold">{msg.employeeId}:</span> {msg.message}
                     </p>
                   )}
                   {msg.Document && (
@@ -213,16 +213,16 @@ const EmpMessage = () => {
         </div>
 
         <div className=" bg-[#f6f5fb] shadow-md">
-          <div className="flex relative items-center border border-gray-300 rounded-lg mt-5 mb-5">
+          <div className="flex items-center p-2 lg:p-4 bg-[#eef2fa] border-t border-gray-200 fixed bottom-0 w-full lg:static">
             <input
               type="text"
-              className="flex py-2 px-4 rounded-l-lg border-t border-b border-l text-gray-800 border-[#5443c3] bg-white w-full focus:outline-none placeholder-[#5443c3]"
+              className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
               placeholder="Type a message..."
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
             />
             <button
-              className="bg-[#5443c3] hover:bg-blue-700 border-2 border-[#5443c3] text-white font-bold py-2 px-4 rounded-r-lg"
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer"
               onClick={sendMessage}
               disabled={!newMessage.trim()}
             >
@@ -237,3 +237,5 @@ const EmpMessage = () => {
 };
 
 export default EmpMessage;
+
+
