@@ -102,7 +102,7 @@ const Chat = () => {
                         </a>
                     )}
                     {message.content && message.content.video && (
-                        <video controls className="max-w-xs">
+                        <video controls className="min-w-xs">
                             <source src={message.content.video} type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>
