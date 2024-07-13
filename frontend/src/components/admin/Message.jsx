@@ -181,7 +181,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
   };
 
   return (
-    <div className="flex flex-row h-screen lg:w-[70vw] w-[100vw]">
+    <div className="flex flex-row  h-screen lg:w-[71vw] w-[100vw]">
       <div className="flex-1 flex flex-col w-full">
         <div className="flex flex-col flex-1 overflow-y-auto">
           {showPrompt && (
@@ -216,7 +216,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                     <div
                       className={` lg:text-2xl md:text-xl text-sm  ${
                         msg.employeeId === adminId
-                          ? " self-end bg-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl "
+                          ? " self-end bg-[#9184e9] border-2 border-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl "
                           : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                       } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                     >
@@ -243,7 +243,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                       )}
                       {msg && msg.Image && (
                         <div>
-                          <img src={msg.Image} alt="" />
+                          <img src={msg.Image} alt="" className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32" />
                         </div>
                       )}
                     </div>
@@ -255,29 +255,30 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
           )}
         </div>
 
-        <div className="mx-auto flex items-center p-4 sticky bottom-0 z-10 bg-[#f6f5fb] w-full">
+        <div className="mx-auto flex items-center p-4 sticky bottom-0  bg-[#f6f5fb] w-full">
           <input
             type="text"
-            className="border border-gray-300 rounded px-4 py-2 mr-2 flex-1"
+            className="border border-[#5443c3] rounded px-4 py-2 mr-2 flex-1"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Type your message..."
           />
           <button
-            className="bg-[#5443c3] text-white rounded px-4 py-2 flex items-center justify-center"
+           className="bg-[#5443c3] text-white rounded px-4 py-2 flex items-center justify-center"
             onClick={sendMessage}
           >
             <IoMdSend />
           </button>
-          <button
-            className="bg-[#5443c3] text-white rounded px-4 py-2 flex items-center justify-center"
+          {/* <button
+           className="text-white bg-blue-500  rounded px-4 py-2 flex items-center justify-center mx-2"
             onClick={() => setShowPopSms(true)}
           >
             <IoMdDocument />
-          </button>
+          </button> */}
+          <UploadImageModal selectedGroupName={selectedGroupName} selectedGrade={selectedGrade} />
         </div>
       </div>
-      <UploadImageModal showModal={showPopSms} setShowModal={setShowPopSms} />
+     
 
       <audio ref={notificationSoundRef} src={notificationTone} preload="auto" />
 
@@ -286,7 +287,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
           <p className="font-bold">Employee ID: {popSmsContent.employeeId}</p>
           <p>Message: {popSmsContent.message}</p>
           <button
-            className="mt-2 px-4 py-2 bg-[#5443c3] text-white rounded"
+            className="mt-2  bg-[#5443c3] text-white rounded"
             onClick={() => setShowPopSms(false)}
           >
             Close
