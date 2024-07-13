@@ -18,6 +18,7 @@ export default function UploadImageModal({ selectedGroupName, selectedGrade }) {
   const imageInputRef = React.useRef(null);
   const documentInputRef = React.useRef(null);
   const videoInputRef = React.useRef(null);
+  
   console.log(selectedGroupName, selectedGrade);
 
   const adminId = localStorage.getItem("AdminId");

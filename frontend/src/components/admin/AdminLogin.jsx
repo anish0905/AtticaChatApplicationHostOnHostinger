@@ -32,6 +32,8 @@ const AdminLogin = () => {
       localStorage.setItem("token", response.data.accessToken);
       localStorage.setItem("AdminId", email);
       localStorage.setItem("CurrentUserId", response.data.data._id);
+      localStorage.setItem('userAdmin',JSON.stringify(response.data.data.email))
+      
       navigate("/admindashboard");
     } catch (err) {
       setLoading(false);
