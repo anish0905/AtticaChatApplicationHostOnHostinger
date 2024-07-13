@@ -20,11 +20,16 @@ import { MdSecurity } from "react-icons/md";
 import { IoPersonSharp } from "react-icons/io5";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
 import { GrUserManager } from "react-icons/gr";
+import { CgProfile } from "react-icons/cg";
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const [showEmployeeOptions, setShowEmployeeOptions] = useState(false);
-  const [activeRoute, setActiveRoute] = useState("/atticDashboard"); // Default active route
+  const [activeRoute, setActiveRoute] = useState("/atticDashboard");
+  const [showTooltip, setShowTooltip] = useState(false);
+  const userAdmin=JSON.parse(localStorage.getItem('userAdmin'))
+
+  // Default active route
 
   const handleNavigation = (route) => {
     setActiveRoute(route);
@@ -215,24 +220,40 @@ const Sidebar = () => {
           }`}
         >
           <BsChatSquareDots className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full -right-7 mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 z-50 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Employee Chat
           </span>
         </div>
 
       </div>
 
+      <div className="flex flex-row lg:flex-col">
+      <div
+             
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer bg-white`}
+           
+        >
+          <CgProfile className="text-lg md:text-2xl lg:text-3xl" />
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 z-50 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+           {userAdmin}
+          </span>
+        </div>
+
       <div
         onClick={handleLogout}
-        className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-2 md:p-4 lg:p-5 cursor-pointer"
+        className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-2 md:p-4 lg:p-5 cursor-pointer lg:mt-2"
       >
         <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
         <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Logout
         </span>
       </div>
+      </div>
     </div>
   );
 };
 
 export default Sidebar;
+
+
+

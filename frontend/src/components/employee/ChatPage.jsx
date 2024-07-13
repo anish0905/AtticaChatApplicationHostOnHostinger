@@ -214,10 +214,10 @@ function ChatPage() {
             {messages.map((message,index) => (
               <div
                 key={message._id}
-                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${
+                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap lg:text-3xl md:text-xl text-sm font-bold ${
                   message.sender === loggedInUserId
-                    ? "bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl self-end"
-                    : "bg-white text-[#9184e9] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl self-start"
+                    ? "bg-[#e1dff3] text-[#5443c3] border border-[#5443c3] rounded-tr-3xl rounded-bl-3xl self-end"
+                    : "bg-white text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl self-start"
                 }`}
 
                 onMouseEnter={() => handleHover(index)}
@@ -251,12 +251,12 @@ function ChatPage() {
                   </a>
                 )}
                 {message.content && message.content.video && (
-                  <video controls className="max-w-xs">
+                  <video controls className="max-w-xs lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32 text-4xl">
                     <source src={message.content.video} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 )}
-                <span className="text-xs text-black">
+                <span className="text-xs text-gray-500">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
               

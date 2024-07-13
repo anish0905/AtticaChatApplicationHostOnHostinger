@@ -350,7 +350,7 @@ function EmpAdminChat() {
                 onMouseLeave={() => handleLeave()}
               >
                 <div
-                  className={`relative lg:text-2xl md:text-xl text-sm ${message.sender === loggedInUserId ? " bg-[#9184e9] text-white self-end rounded-tr-3xl rounded-bl-3xl border-2 border-[#5443c3] " : "bg-white text-[#5443c3] border-2 border-[#5443c3]  self-start rounded-tl-3xl rounded-br-3xl relative"
+                  className={`relative lg:text-3xl md:text-xl text-sm font-bold ${message.sender === loggedInUserId ? " bg-[#e1dff3] border border-[#5443c3] text-[#5443c3] self-end rounded-tr-3xl rounded-bl-3xl " : "bg-white text-[#5443c3] border border-[#5443c3]  self-start rounded-tl-3xl rounded-br-3xl relative"
                     } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                 >
                   {/* //---------------> */}
@@ -375,18 +375,18 @@ function EmpAdminChat() {
                       href={message.content.document}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-orange-600 hover:underline"
+                      className="text-orange-600 hover:underline lg:text-8xl md:text-6xl text-4xl"
                     >
                       <IoIosDocument className="text-9xl" />
                     </a>
                   )}
                   {message.content && message.content.video && (
-                    <video controls className="max-w-xs text-orange-600 hover:underline">
+                    <video controls className="max-w-xs text-orange-600 hover:underline lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32 text-4xl">
                       <source src={message.content.video} type="video/mp4" />
                       Your browser does not support the video tag.
                     </video>
                   )}
-                  <span className="text-xs text-black">
+                  <span className="text-xs font-medium text-gray-500">
                     {new Date(message.createdAt).toLocaleString()}
                   </span>
                   {
