@@ -84,6 +84,7 @@ import LogisticToAdmin from "./components/Logistic/LogisticToAdmin";
 import FetchApiComponent from "./components/utility/FetchApiComponent";
 import NotificationHandler from "../src/components/utility/GroupNotification"
 import GroupNotification from "../src/components/utility/GroupNotification";
+import GlobalNotification from "./components/utility/GlobalNotification";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -247,6 +248,7 @@ const App = () => {
       {/* <PopNotification/> */}
       <FetchApiComponent/>
       <GroupNotification/>
+      <GlobalNotification/>
     </BrowserRouter>
   );
 };

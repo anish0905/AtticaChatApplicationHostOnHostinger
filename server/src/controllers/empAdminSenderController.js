@@ -6,56 +6,97 @@ const { ObjectId } = require("mongodb");
 const fs = require("fs");
 const Notification = require("../model/notificationModel.js");
 const cron = require("node-cron");
+const mongoose = require('mongoose');
 
 const createMessage = async (req, res) => {
-  const { sender, recipient, text, lat, lng, senderName } = req.body;
+  const { sender, recipient, text, latitude, longitude, senderName  } = req.body;
+  console.log(latitude,longitude)
 
   try {
     let content = { text };
-    let locations = {}; // Initialize locations object outside the conditional
 
-    if (lat) { // Check if lat is provided
-      locations = {
-        longitude: parseFloat(lng),
-        latitude: parseFloat(lat),
-      };
-    }
+    const hasImage = req.files && req.files.image;
+    const hasDocument = req.files && req.files.document;
+    const hasVideo = req.files && req.files.video;
 
-    const fileTypes = ['image', 'document', 'video'];
-    for (const fileType of fileTypes) {
-      if (req.files && req.files[fileType]) {
-        const localPath = req.files[fileType][0].path;
-        if (!fs.existsSync(localPath)) {
-          console.error(`${fileType} file does not exist at path: ${localPath}`);
-          return res.status(400).json({ error: `${fileType} file not found at path: ${localPath}` });
+    if (hasImage) {
+      const imageLocalPath = req.files.image[0].path;
+      if (fs.existsSync(imageLocalPath)) {
+        const imageUploadResult = await uploadOnCloudinary(imageLocalPath);
+        if (imageUploadResult?.url) {
+          // content.image = imageUploadResult.url;
+          if (latitude && longitude) {
+            content.imageWithLocation = JSON.stringify({
+              url: imageUploadResult.url,
+              latitude: parseFloat(latitude),
+              longitude: parseFloat(longitude),
+            });
+          } else {
+            content.image = imageUploadResult.url;
+          }
+        } else {
+          return res
+            .status(400)
+            .json({ error: "Image upload failed. Please try again." });
         }
-        const uploadResult = await uploadOnCloudinary(localPath);
-        if (!uploadResult || !uploadResult.url) {
-          console.error(`${fileType} upload failed:`, uploadResult?.error || "Unknown error");
-          return res.status(400).json({ error: `${fileType} upload failed. Please try again.` });
-        }
-        content[fileType] = uploadResult.url;
+      } else {
+        return res
+          .status(400)
+          .json({ error: `Image file not found at path: ${imageLocalPath}` });
       }
     }
 
-   if(lat){
-    const message = new MessageRes({
+    if (hasDocument) {
+      const documentLocalPath = req.files.document[0].path;
+      if (fs.existsSync(documentLocalPath)) {
+        const documentUploadResult = await uploadOnCloudinary(documentLocalPath);
+        if (documentUploadResult?.url) {
+          content.document = documentUploadResult.url;
+        } else {
+          return res
+            .status(400)
+            .json({ error: "Document upload failed. Please try again." });
+        }
+      } else {
+        return res.status(400).json({
+          error: `Document file not found at path: ${documentLocalPath}`,
+        });
+      }
+    }
+
+    if (hasVideo) {
+      const videoLocalPath = req.files.video[0].path;
+      if (fs.existsSync(videoLocalPath)) {
+        const videoUploadResult = await uploadOnCloudinary(videoLocalPath);
+        if (videoUploadResult?.url) {
+          content.video = videoUploadResult.url;
+        } else {
+          return res
+            .status(400)
+            .json({ error: "Video upload failed. Please try again." });
+        }
+      } else {
+        return res
+          .status(400)
+          .json({ error: `Video file not found at path: ${videoLocalPath}` });
+      }
+    }
+
+    
+
+    const message = new  MessageRes({
       sender,
       senderName,
       recipient,
       content,
-      locations, 
+      
     });
-   }
-   const message = new MessageRes({
-    sender,
-    senderName,
-    recipient,
-    content,
-   
-  });
 
-    await message.save();
+    const result =await message.save();
+
+    console.log(result)
+
+
 
     const notification = new Notification({
       sender,
@@ -65,7 +106,7 @@ const createMessage = async (req, res) => {
     });
 
     await notification.save();
-    
+
     res.status(201).json({ message: "Message sent", data: message });
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -293,6 +334,23 @@ const replyToMessage = async (req, res) => {
   }
 };
 
+const getuserAllMessagesNotification = async (req, res) => {
+  const userId = req.params.userId;
+
+  // Validate the userId
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ error: 'Invalid user ID' });
+  }
+
+  try {
+    const messages = await MessageRes.find({ recipient: userId }); // Fetch messages where recipient matches userId
+    res.status(200).json(messages); // Send the messages as JSON response
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).json({ error: 'Internal server error' }); // Send 500 status code in case of error
+  }
+}
+
 module.exports = {
   createMessage,
   getMessagesEmp,
@@ -303,4 +361,5 @@ module.exports = {
   markMessagesReadEmp,
   forwardMessage,
   replyToMessage,
+  getuserAllMessagesNotification
 };

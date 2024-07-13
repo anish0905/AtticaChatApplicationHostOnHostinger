@@ -177,8 +177,9 @@ function AdminEmpChat() {
     setMessages([]);
   };
 
-  const handleLocationClick = (locations) => {
-    setLocation(locations);
+  const handleLocationClick = (latitude,longitude) => {
+   let loc = [{latitude,longitude}]
+    setLocation(loc);
     setShowMap(true);
   };
 
@@ -238,8 +239,17 @@ function AdminEmpChat() {
                     {message.content && message.content.image && (
                       <img src={message.content.image} alt="Image" className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32" />
                     )}
-                    {message.locations && message.locations.length > 0 && (
-                      <div className="text-5xl flex justify-center content-center items-center my-4 cursor-pointer" onClick={() => handleLocationClick(message.locations)}>
+                     {message.content && message.content.imageWithLocation && (
+                    <>
+                      <img
+                        src={JSON.parse(message.content.imageWithLocation).url}
+                        alt="Image"
+                        className="max-w-xs rounded"
+                      />
+                    </>
+                  )}
+                    {message.content &&message.content.imageWithLocation  && (
+                      <div className="text-5xl flex justify-center content-center items-center my-4 cursor-pointer" onClick={() => handleLocationClick(JSON.parse(message.content.imageWithLocation).latitude,JSON.parse(message.content.imageWithLocation).longitude)}>
                         <FaLocationDot />
                       </div>
                     )}
@@ -323,7 +333,6 @@ function AdminEmpChat() {
           </div>
         )}
       </div>
-      <ShowPopSms playNotificationSound={playNotificationSound} loggedInUserId={loggedInUserId} />
       {showForwardModal && (
         <AdminFordWardModel
           users={users}

@@ -8,8 +8,6 @@ import { FaVideo, FaImage } from "react-icons/fa";
 import GPSTracker from "./Gps.jsx"; // Adjust the import path as necessary
 import { BASE_URL } from '../../constants';
 import ForwardMessageModal from './ForwardMessageModal';
-import useSound from "use-sound";
-import notificationSound from "../../assests/sound.wav";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel.jsx";
 import ReplyModel from "../../components/ReplyModel";
 import { MdNotificationsActive } from "react-icons/md";
@@ -33,13 +31,8 @@ function ManagerChat() {
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
-  const [selectedUsers, setSelectedUsers] = useState([]);
   const [showForwardModal, setShowForwardModal] = useState(false);
-  const [showPopSms, setShowPopSms] = useState(false);
-  const [popSms, setPopSms] = useState([]);
-  const [selectedSender, setSelectedSender] = useState("");
   const [selectedSenderName, setSelectedSenderName] = useState("");
-  const [playNotificationSound] = useSound(notificationSound);// State for controlling modal visibility
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [isChatSelected, setIsChatSelected] = useState(false);
@@ -210,43 +203,6 @@ function ManagerChat() {
     setShowForwardModal(false);
   };
 
-  const fetchPopSms = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/getNotification/${loggedInUserId}`);
-      const data = response.data;
-      console.log(data);
-      setPopSms(data);
-      if (data.length > 0) {
-        const senderId = data[0].sender;
-        setSelectedSender(senderId);
-        setShowPopSms(true);
-        const empDetails = await axios.get(`${BASE_URL}/api/billingTeam/getUserById/${senderId}`);
-        // console.log(empDetails.data.user.name)
-         setSelectedSenderName(empDetails.data.user.name);
-         console.log(selectedSenderName)
-        console.log("Playing notification sound");
-        playNotificationSound();
-      }
-    } catch (error) {
-      console.error("Error fetching pop SMS:", error);
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(fetchPopSms, 5000);
-    return () => clearInterval(interval);
-  }, [loggedInUserId, playNotificationSound]);
-
-  const handleModalClose = (senderId) => {
-    axios
-      .delete(`${BASE_URL}/api/deleteNotification/${senderId}`)
-      .then(() => {
-        setShowPopSms(false);
-      })
-      .catch((error) => {
-        console.error("Error deleting notification:", error);
-      });
-  };
 
 
   const handleBackToUserList = () => {
@@ -442,11 +398,6 @@ function ManagerChat() {
     className="hidden"
     id="file-upload"
   />
-  {/* <label htmlFor="file-upload" className="cursor-pointer p-2">
-    <span className="bg-gray-200 hover:bg-gray-300 p-2 rounded">
-      Attach
-    </span>
-  </label> */}
   <button
     onClick={handleSendMessage}
     className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

@@ -30,10 +30,6 @@ function BouncerToAdminChat() {
   const [unreadUsers, setUnreadUsers] = useState([]);
   const [unreadUsersAdmin, setUnreadUsersAdmin] = useState([]);
   const [showMessages, setShowMessages] = useState({});
-  const [showPopSms, setShowPopSms] = useState(false);
-  const [popSms, setPopSms] = useState([]);
-  const [selectedSender, setSelectedSender] = useState("");
-  const [selectedSenderEmail, setSelectedSenderEmail] = useState("");
   const [playNotificationSound] = useSound(notificationSound);
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
@@ -230,42 +226,7 @@ function BouncerToAdminChat() {
   };
 
   // Fetch pop-up SMS notifications for logged-in user
-  const fetchPopSms = async () => {
-    try {
-      const response = await axios.get(`${BASE_URL}/api/getNotification/${loggedInUserId}`);
-      const data = response.data;
-      setPopSms(data);
-      if (data.length > 0) {
-        const senderId = data[0].sender;
-        setSelectedSender(senderId);
-        setShowPopSms(true);
-        const adminDetails = await axios.get(`${BASE_URL}/api/admin/admin/${senderId}`)
-        setSelectedSenderEmail(adminDetails.data.email);
-        playNotificationSound();
-      }
-    } catch (error) {
-      console.error("Error fetching pop SMS:", error);
-    }
-  };
-
-  // Fetch pop-up SMS notifications at regular intervals
-  useEffect(() => {
-    const interval = setInterval(fetchPopSms, 5000);
-    return () => clearInterval(interval);
-  }, [loggedInUserId, playNotificationSound]);
-
-  // Function to handle closure of pop-up SMS modal
-  const handleModalClose = (senderId) => {
-    axios
-      .delete(`${BASE_URL}/api/deleteNotification/${senderId}`)
-      .then(() => {
-        setShowPopSms(false);
-      })
-      .catch((error) => {
-        console.error("Error deleting notification:", error);
-      });
-  };
-
+  
   const handleHover = (index) => {
     setHoveredMessage(index);
   };
@@ -416,6 +377,15 @@ function BouncerToAdminChat() {
              <img src={message.content.image} alt="Image" className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32" />
            </>
          )}
+          {message.content && message.content.imageWithLocation && (
+                    <>
+                      <img
+                        src={JSON.parse(message.content.imageWithLocation).url}
+                        alt="Image"
+                        className="max-w-xs rounded"
+                      />
+                    </>
+                  )}
          {message.content && message.content.document && (
            <a
              href={message.content.document}
@@ -499,35 +469,6 @@ function BouncerToAdminChat() {
 
  </div>
 </div>
-      )}
-     
-      {showPopSms && (
-        <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
-          <div className={`bg-blue-100 relative p-6 rounded-lg shadow-lg w-[80vw] md:w-[50vw] lg:w-[30vw]`}>
-            {popSms.length > 0 &&
-              popSms
-                .filter((sms) => sms.sender === selectedSender)
-                .map((sms) => (
-                  <div key={sms.id} className="relative border border-[#5443c3] rounded-lg p-2 mb-2 shadow-sm">
-                    <div className="flex items-center gap-5 mb-1">
-                      <i className="fas fa-bell text-yellow-500 text-sm mr-2"></i>
-                      <h1 className="text-2xl font-bold text-green-600 text-center">{selectedSenderEmail}</h1>
-                    </div>
-                    <p className="text-base font-bold mb-1 relative break-words whitespace-pre-wrap">{sms.content.text}</p>
-                    <p className="text-sm text-gray-500 mb-2">
-                      {new Date(sms.createdAt).toLocaleDateString()}{" "}
-                      {new Date(sms.createdAt).toLocaleTimeString()}
-                    </p>
-                    <button
-                      className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                      onClick={() => handleModalClose(sms.sender)}
-                    >
-                      Close
-                    </button>
-                  </div>
-                ))}
-          </div>
-        </div>
       )}
       {showForwardModal && (
         <ForwardMsgAllUsersToAdmin

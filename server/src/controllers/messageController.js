@@ -3,6 +3,7 @@ const { ObjectId } = require("mongodb");
 const fs = require("fs");
 const { uploadOnCloudinary } = require("../utils/cloudinary.js");
 const Notification = require("../model/notificationModel.js");
+const mongoose = require("mongoose")
 
 const createMessage = async (req, res) => {
   const { sender, recipient, text,senderName } = req.body;
@@ -304,6 +305,24 @@ const getuserAllMessages = async(req, res, next) => {
   }
 }
 
+const getuserAllMessagesNotification= async (req, res) => {
+  const userId = req.params.userId;
+
+  // Validate the userId
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ error: 'Invalid user ID' });
+  }
+
+  try {
+    const messages = await Message.find({ recipient: userId }); // Fetch messages where recipient matches userId
+    res.status(200).json(messages); // Send the messages as JSON response
+  } catch (error) {
+    console.error('Error fetching messages:', error);
+    res.status(500).json({ error: 'Internal server error' }); // Send 500 status code in case of error
+  }
+}
+
+
 module.exports = {
   createMessage,
   getMessages,
@@ -314,5 +333,6 @@ module.exports = {
   forwardMessage,
   replyToMessage,
   getMessagesByUser,
-  getuserAllMessages
+  getuserAllMessages,
+  getuserAllMessagesNotification
 };

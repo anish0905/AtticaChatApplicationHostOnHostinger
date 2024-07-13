@@ -5,12 +5,10 @@ import NotificationsComponent from './NotificationsComponent';
 
 const FetchApiComponent = () => {
     const [messages, setMessages] = useState([]);
-    const userId = localStorage.getItem('CurrentUserId');
-
     useEffect(() => {
         const fetchMessages = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/api/getNotification/${userId}`);
+                const response = await axios.get(`${BASE_URL}/api/getNotification/${ localStorage.getItem('CurrentUserId')}`);
                 setMessages(response.data);
                 console.log("Notfication Api" + response.data);
             } catch (error) {
@@ -22,7 +20,9 @@ const FetchApiComponent = () => {
         const interval = setInterval(fetchMessages, 2000);
 
         return () => clearInterval(interval);
-    }, [userId]);
+    }, []);
+
+
 
     return (
         <div>
@@ -30,9 +30,10 @@ const FetchApiComponent = () => {
                 <NotificationsComponent 
                     key={index}
                     name={message.senderName}
-                    text={message.content.text} 
+                    text={message?.content?.text} 
                 />
             ))}
+            {/* <GlobalNotification/> */}
         </div>
     );
 };

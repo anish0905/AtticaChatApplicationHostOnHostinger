@@ -28,10 +28,6 @@ function BillingTeamChat() {
   const [userSearchQuery, setUserSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
   const [unreadUsers, setUnreadUsers] = useState([]);
-  const [showPopSms, setShowPopSms] = useState(false);
-  const [popSms, setPopSms] = useState([]);
-  const [selectedSender, setSelectedSender] = useState("");
-  const [selectedSenderName, setSelectedSenderName] = useState("");
   const [isMobileView, setIsMobileView] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [playNotificationSound] = useSound(notificationSound);
@@ -143,49 +139,7 @@ function BillingTeamChat() {
     }
   }, [users]);
 
-  const fetchPopSms = async () => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/getNotification/${loggedInUserId}
-      `);
-      const data = response.data;
-      setPopSms(data);
-      if (data.length > 0) {
-        const senderId = data[0].sender;
-        setSelectedSender(senderId);
-        setShowPopSms(true);
-        const empDetails = await axios.get(
-          `${BASE_URL}/api/manager/getManagerById/${senderId}
-        `);
-        console.log("empDetails", empDetails);
-        setSelectedSenderName(empDetails.data.
-          manager_name
-        );
-
-        // Play notification sound
-        playNotificationSound();
-      }
-    } catch (error) {
-      console.error("Error fetching pop SMS:", error);
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(fetchPopSms, 2000);
-    return () => clearInterval(interval);
-  }, [loggedInUserId, playNotificationSound]);
-
-  const handleModalClose = async (senderId) => {
-    try {
-      const resp = await axios.delete(`${BASE_URL}/api/deleteNotification/${senderId}`);
-      // Handle the response if needed, e.g., check resp.status or resp.data
-      setShowPopSms(false);
-    } catch (error) {
-      console.error('Error deleting notification:', error);
-      // Handle the error, e.g., show an error message to the user
-    }
-  };
-
+  
 
   const handleBackToEmployees = () => {
     setShowChat(false);
@@ -401,25 +355,6 @@ function BillingTeamChat() {
                 </li>
               ))}
           </ul>
-        </div>
-      )}
-
-      {showPopSms && (
-        <div className="fixed inset-0bg-opacity-50  items-center justify-center w-1/2 z-50 top-56 lg:left-96 mx-24">
-          <div className="bg-white p-4 rounded-lg shadow-lg border-2 border-[#5443c3]">
-            <div className="flex items-center mb-4">
-              <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
-              <h3 className="text-lg font-semibold text-[#5443c3]">New Message</h3>
-            </div>
-            <p className="mb-2 text-[#5443c3] font-bold">From: {selectedSenderName}</p>
-            <p className="mb-4 relative break-words whitespace-pre-wrap">Message: {popSms[0]?.content?.text}</p>
-            <button
-              onClick={() => handleModalClose(popSms[0]?.sender)}
-              className="hover:bg-blue-500 bg-[#5443c3] text-white p-2 rounded-lg"
-            >
-              Close
-            </button>
-          </div>
         </div>
       )}
       {showForwardModal && (

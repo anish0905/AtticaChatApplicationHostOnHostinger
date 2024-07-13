@@ -2,12 +2,10 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
 import { IoIosDocument } from "react-icons/io";
-import { FaPaperclip } from "react-icons/fa";
 import EmployeeSidebar from "./EmployeeSidebar";
 import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
-import { MdNotificationsActive } from "react-icons/md";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import ReplyModel from "../ReplyModel";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
@@ -26,10 +24,6 @@ function ChatPage() {
   const [userSearchQuery, setUserSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
   const [unreadUsers, setUnreadUsers] = useState([]);
-  const [showPopSms, setShowPopSms] = useState(false);
-  const [popSms, setPopSms] = useState([]);
-  const [selectedSender, setSelectedSender] = useState("");
-  const [selectedSenderName, setSelectedSenderName] = useState("");
   const [isMobileView, setIsMobileView] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [playNotificationSound] = useSound(notificationSound);
@@ -144,46 +138,6 @@ function ChatPage() {
     }
   }, [users]);
 
-  const fetchPopSms = async () => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/getNotification/${loggedInUserId}
-      `);
-      const data = response.data;
-      setPopSms(data);
-      if (data.length > 0) {
-        const senderId = data[0].sender;
-        setSelectedSender(senderId);
-        setShowPopSms(true);
-        const empDetails = await axios.get(
-          `${BASE_URL}/api/employee/a/${senderId}
-        `);
-        setSelectedSenderName(empDetails.data.name);
-
-        // Play notification sound
-        playNotificationSound();
-      }
-    } catch (error) {
-      console.error("Error fetching pop SMS:", error);
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(fetchPopSms, 2000);
-    return () => clearInterval(interval);
-  }, [loggedInUserId, playNotificationSound]);
-
-  const handleModalClose = async (senderId) => {
-    try {
-      const resp = await axios.delete(`${BASE_URL}/api/deleteNotification/${senderId}`);
-      // Handle the response if needed, e.g., check resp.status or resp.data
-      setShowPopSms(false);
-    } catch (error) {
-      console.error('Error deleting notification:', error);
-      // Handle the error, e.g., show an error message to the user
-    }
-  };
-  
 
   const handleBackToEmployees = () => {
     setShowChat(false);
@@ -394,25 +348,7 @@ function ChatPage() {
         </div>
       )}
 
-{showPopSms && (
-  <div className="fixed inset-0 bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-blue-100 p-4 rounded-lg shadow-lg border border-[#5443c3] lg:max-w-[50%] w-full mx-4">
-      <div className="flex items-center mb-4">
-        <MdNotificationsActive className="text-yellow-500 w-6 h-6 mr-2" />
-        <h3 className="text-lg font-semibold">New Message</h3>
-      </div>
-      <p className="mb-2 text-green-600 font-bold text-2xl">From: {selectedSenderName}</p>
-      <p className="mb-4 text-xl break-words whitespace-pre-wrap">Message: {popSms[0]?.content?.text}</p>
-      
-      <button
-        onClick={() => handleModalClose(popSms[0]?.sender)}
-        className="bg-blue-500 text-white p-2 rounded-lg"
-      >
-        Close
-      </button>
-    </div>
-  </div>
-)}
+
 
 {showForwardModal && (
         <ForwardModalAllUsers   

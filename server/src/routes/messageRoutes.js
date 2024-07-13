@@ -10,7 +10,8 @@ const {
   forwardMessage,
   replyToMessage,
   getMessagesByUser,
-  getuserAllMessages 
+  getuserAllMessages ,
+  getuserAllMessagesNotification
 } = require("../controllers/messageController.js");
 const { upload } = require("../middleware/multer.middlewear.js");
 // Adjust the path as necessary
@@ -32,5 +33,6 @@ router.get("/getAllByUser/:userId1", getMessagesByUser);
 router.delete("/delmessages/:id", deleteMessage);
 router.get("/getNotificationId", getNotificationId);
  router.get("/notifications/:userId", getuserAllMessages );
+ router.get("/messages/user/:userId",getuserAllMessagesNotification)
 // router.get("/notifications/:senderId/:recipientId", getNotificationId);
 module.exports = router;

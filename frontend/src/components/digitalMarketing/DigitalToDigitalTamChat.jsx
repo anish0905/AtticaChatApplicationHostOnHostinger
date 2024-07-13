@@ -2,11 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { IoIosDocument } from "react-icons/io";
-import { FaPaperclip } from "react-icons/fa";
 import { BASE_URL } from "../../constants";
-import { useSound } from "use-sound";
-import notificationSound from "../../assests/sound.wav";
-import { MdNotificationsActive } from "react-icons/md";
 import ReplyModel from "../../components/ReplyModel";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
@@ -26,13 +22,8 @@ function DigitalToDigitalTamChat() {
   const [userSearchQuery, setUserSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
   const [unreadUsers, setUnreadUsers] = useState([]);
-  const [showPopSms, setShowPopSms] = useState(false);
-  const [popSms, setPopSms] = useState([]);
-  const [selectedSender, setSelectedSender] = useState("");
-  const [selectedSenderName, setSelectedSenderName] = useState("");
   const [isMobileView, setIsMobileView] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [playNotificationSound] = useSound(notificationSound);
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
@@ -141,45 +132,7 @@ function DigitalToDigitalTamChat() {
     }
   }, [users]);
 
-  const fetchPopSms = async () => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/getNotification/${loggedInUserId}`
-      );
-      const data = response.data;
-      setPopSms(data);
-      if (data.length > 0) {
-        const senderId = data[0].sender;
-        setSelectedSender(senderId);
-        setShowPopSms(true);
-        const empDetails = await axios.get(
-          `${BASE_URL}/api/allUser/getbyId/${senderId}`
-        );
-        setSelectedSenderName(empDetails.data.name);
-
-        // Play notification sound
-        playNotificationSound();
-      }
-    } catch (error) {
-      console.error("Error fetching pop SMS:", error);
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(fetchPopSms, 2000);
-    return () => clearInterval(interval);
-  }, [loggedInUserId, playNotificationSound]);
-
-  const handleModalClose = (senderId) => {
-    axios
-      .delete(`${BASE_URL}/api/deleteNotification/${senderId}`)
-      .then(() => {
-        setShowPopSms(false);
-      })
-      .catch((error) => {
-        console.error("Error deleting notification:", error);
-      });
-  };
+ 
 
   const handleBackToEmployees = () => {
     setShowChat(false);
@@ -396,24 +349,6 @@ function DigitalToDigitalTamChat() {
         </div>
       )}
 
-{showPopSms && (
-  <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-blue-100 p-4 rounded-lg shadow-lg border border-[#5443c3] max-w-2xl lg:w-full w-80">
-      <div className="flex items-center mb-4">
-        <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
-        <h3 className="text-lg font-semibold">New Message</h3>
-      </div>
-      <p className="mb-2 text-green-600 font-bold text-2xl">From: {selectedSenderName}</p>
-      <p className="mb-4 break-words">Message: {popSms[0]?.content?.text}</p>
-      <button
-        onClick={() => handleModalClose(popSms[0]?.sender)}
-        className="bg-blue-500 text-white p-2 rounded-lg"
-      >
-        Close
-      </button>
-    </div>
-  </div>
-)}
       {showForwardModal && (
         <ForwardModalAllUsers
           users={users}

@@ -65,6 +65,7 @@ const GroupNotification = () => {
                 const newMessagesToShow = newMessages.slice(-newMessagesCount);
                 showNotifications(newMessagesToShow);
                 setLastMessageCount(newMessages.length);
+                console.log(lastMessageCount)
               }
             }
 

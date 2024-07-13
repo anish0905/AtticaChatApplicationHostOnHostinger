@@ -32,6 +32,18 @@ const empAdminSenderSchema = new mongoose.Schema(
         type: String,
         required: false,
       },
+      imageWithLocation: {
+        type:String, // Store image data as Buffer
+        // MIME type of the image
+        latitude: {
+          type: Number,
+          required: false,
+        },
+        longitude: {
+          type: Number,
+          required: false,
+        },
+      },
       document: {
         type: String,
         required: false,
@@ -41,16 +53,7 @@ const empAdminSenderSchema = new mongoose.Schema(
         required: false,
       },
     },
-    locations: [
-      {
-        longitude: {
-          type: Number,
-        },
-        latitude: {
-          type: Number,
-        },
-      },
-    ],
+   
   },
   { timestamps: true }
 );

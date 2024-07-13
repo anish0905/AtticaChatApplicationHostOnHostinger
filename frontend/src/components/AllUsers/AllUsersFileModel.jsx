@@ -15,6 +15,7 @@ import { FaFolderPlus } from 'react-icons/fa';
 import { BASE_URL } from '../../constants';
 
 export default function AllUsersFileModel({ sender, recipient, admin, latitude, longitude,senderName }) {
+  console.log("latitude, longitude",latitude,"   ",longitude)
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);
@@ -104,13 +105,13 @@ export default function AllUsersFileModel({ sender, recipient, admin, latitude, 
       formData.append(fieldName, file);
       formData.append('sender', sender);
       formData.append('recipient', recipient);
-      formData.append('lat', latitude);
-      formData.append('lng', longitude);
+      formData.append('latitude', latitude.toString()); // Ensure latitude is sent as string if needed
+      formData.append('longitude', longitude.toString()); // Ensure longitude is sent as string if needed
       formData.append('senderName', senderName);
-
+  
       setLoading(true);
       setError(null);
-
+  
       try {
         let response;
         if (admin === 'admin') {
@@ -126,17 +127,18 @@ export default function AllUsersFileModel({ sender, recipient, admin, latitude, 
             },
           });
         }
-        console.log('File uploaded successfully:', response.data);
+        console.log('File with location uploaded successfully:', response.data);
       } catch (error) {
-        console.error('Error uploading file:', error);
-        setError('Error uploading file. Please try again.');
+        console.error('Error uploading file with location:', error);
+        setError('Error uploading file with location. Please try again.');
       } finally {
         setLoading(false);
       }
-
+  
       event.target.value = null;
     }
   };
+  
 
   return (
     <Stack direction="row" spacing={2}>

@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
 import Notification_tone from "../../assests/notification_ding.mp3";
 
-const NotificationsComponent = ({name,text}) => {
-  console.log(name, text);
+const NotificationsComponent = ({ name, text }) => {
   useEffect(() => {
     // Request Notification permission on component mount
     if (Notification.permission !== "granted") {
@@ -16,20 +15,23 @@ const NotificationsComponent = ({name,text}) => {
     }
   }, []);
 
-  const showNotifications = (newMessages) => {
-    if (Notification.permission === "granted") {
-      newMessages.forEach((message) => {
-        const notification = new Notification("New Message", {
-          body: `${message.employeeId}: ${message.message}`,
-        });
-        notification.onclick = () => {
-          window.focus();
-        };
-        notifications.push(notification); 
+  useEffect(() => {
+    if (name && text) {
+      showNotification({ name, text });
+    }
+  }, [name, text]);
 
-        // Play notification sound
-        playNotificationSound();
+  const showNotification = (message) => {
+    if (Notification.permission === "granted") {
+      const notification = new Notification("New Message", {
+        body: `${message.name}: ${message.text}`,
       });
+      notification.onclick = () => {
+        window.focus();
+      };
+
+      // Play notification sound
+      playNotificationSound();
     }
   };
 
@@ -38,23 +40,7 @@ const NotificationsComponent = ({name,text}) => {
     notificationSound.play();
   };
 
-  // Array to store references to notifications
-  let notifications = [];
-
-  const newMessages = [
-    { employeeId: name, message: text },
-    
-  ];
-
-  useEffect(()=>{
-    showNotifications(newMessages);
-  },[name,text])
-
-  return (
-    <div>
-      
-    </div>
-  );
+  return null;
 };
 
 export default NotificationsComponent;
