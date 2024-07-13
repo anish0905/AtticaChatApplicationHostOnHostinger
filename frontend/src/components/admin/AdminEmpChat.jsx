@@ -223,7 +223,7 @@ function AdminEmpChat() {
                   onMouseLeave={() => handleLeave()}
                 >
                   <div
-                    className={`relative lg:text-2xl md:text-xl text-2xl  ${message.sender === loggedInUserId ? " self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl" : " self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                    className={`relative lg:text-3xl md:text-xl text-sm font-bold  ${message.sender === loggedInUserId ? " self-end bg-[#e1dff3] text-[#5443c3] border border-[#5443c3] rounded-tr-3xl rounded-bl-3xl" : " self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                       } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                   >
                     {message.content && message.content.originalMessage && (
@@ -264,12 +264,12 @@ function AdminEmpChat() {
                       </a>
                     )}
                     {message.content && message.content.video && (
-                      <video controls className="max-w-xs text-orange-600 hover:underline">
+                      <video controls className="max-w-xs text-orange-600 rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32">
                         <source src={message.content.video} type="video/mp4" />
                         Your browser does not support the video tag.
                       </video>
                     )}
-                    <span className="text-xs text-black">
+                    <span className="text-xs font-base  text-gray-500">
                       {new Date(message.createdAt).toLocaleString()}
                     </span>
                     {hoveredMessage === index && (

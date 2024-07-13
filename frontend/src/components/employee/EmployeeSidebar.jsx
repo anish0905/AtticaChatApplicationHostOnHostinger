@@ -85,7 +85,7 @@ const EmployeeSidebar = () => {
             </div>
           </div>
 
-          <div onClick={handleLogout} className="group relative flex items-center bg-[#fffefd] rounded-full p-3 md:p-5">
+          <div onClick={handleLogout} className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-3 md:p-5">
             <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
             <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               Logout

@@ -214,7 +214,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                     } mb-2`}
                   >
                     <div
-                      className={` lg:text-2xl md:text-xl text-sm  ${
+                      className={` lg:text-3xl md:text-xl text-sm font-bold ${
                         msg.employeeId === adminId
                           ? " self-end bg-[#9184e9] border-2 border-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl "
                           : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
