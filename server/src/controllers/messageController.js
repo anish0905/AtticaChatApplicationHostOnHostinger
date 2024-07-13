@@ -6,7 +6,8 @@ const Notification = require("../model/notificationModel.js");
 const mongoose = require("mongoose")
 
 const createMessage = async (req, res) => {
-  const { sender, recipient, text,senderName } = req.body;
+  const { sender, recipient, text,senderName , camera } = req.body;
+  // console.log(camera)
 
   if (!sender || !recipient) {
     return res
@@ -15,7 +16,7 @@ const createMessage = async (req, res) => {
   }
 
   try {
-    let content = { text };
+    let content = { text, camera };
 
     // Check for files and upload if they exist
     const hasImage = req.files && req.files.image;
