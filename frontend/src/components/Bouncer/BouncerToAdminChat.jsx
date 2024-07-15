@@ -4,7 +4,7 @@ import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import { FaVideo, FaImage } from "react-icons/fa";
+import { FaVideo, FaImage, FaCamera } from "react-icons/fa";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
 import { BASE_URL } from "../../constants";
@@ -14,6 +14,7 @@ import Sidebar from "../AllUsers/UserSidebar"
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
+import Camera from "../Camera/Camera";
 
 function BouncerToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -41,6 +42,7 @@ function BouncerToAdminChat() {
   const [longitude, setlongitude] = useState(null)
   const [isChatSelected, setIsChatSelected] = useState(false);
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
+  const [showCamera, setShowCamera] = useState(false);
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -270,6 +272,15 @@ function BouncerToAdminChat() {
     setMessages([]);
   };
 
+  const handleCapture = (imageSrc) => {
+    setAttachment({ url: imageSrc, type: "image/jpeg" });
+    setShowCamera(false);
+  };
+
+  const handleCloseCamera = () => {
+    setShowCamera(false);
+  };
+
 
   return (
     <div className="flex flex-col lg:flex-row h-screen relative">
@@ -402,6 +413,13 @@ function BouncerToAdminChat() {
              Your browser does not support the video tag.
            </video>
          )}
+         {message.content && message.content.camera && (
+                  <img
+                    src={message.content.camera}
+                    alt="Image"
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                  />
+                )}
          <span className="text-xs text-black">
            {new Date(message.createdAt).toLocaleString()}
          </span>
@@ -434,6 +452,11 @@ function BouncerToAdminChat() {
      </div>
    ))}
    <div ref={messagesEndRef} />
+   {showCamera && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} admin={"admin"} />
+              </div>
+            )}
  </div>
  <div className="flex items-center p-4 bg-[#f6f5fb]  bottom-0 lg:static w-full relative">
    <input
@@ -449,6 +472,12 @@ function BouncerToAdminChat() {
      className="hidden"
      id="file-upload"
    />
+   <button
+              onClick={() => setShowCamera(true)}
+              className="mr-2 text-xl"
+            >
+              <FaCamera />
+            </button>
 
    <button
      onClick={handleSendMessage}

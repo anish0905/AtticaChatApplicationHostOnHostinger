@@ -3,13 +3,14 @@ import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import { FaVideo, FaImage } from "react-icons/fa";
+import { FaVideo, FaImage, FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../../constants";
 import { FaArrowLeft } from "react-icons/fa";
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 import Sidebar from "../AllUsers/UserSidebar";
 import ReplyModel from "../ReplyModel"; //--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
+import Camera from "../Camera/Camera";
 
 function TEChatToAdmin() {
   const [messages, setMessages] = useState([]);
@@ -35,6 +36,8 @@ function TEChatToAdmin() {
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
+  const [showCamera, setShowCamera] = useState(false); 
+
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
 
@@ -263,6 +266,15 @@ function TEChatToAdmin() {
     setMessages([]);
   };
 
+  const handleCapture = (imageSrc) => {
+    setAttachment({ url: imageSrc, type: "image/jpeg" });
+    setShowCamera(false);
+  };
+
+  const handleCloseCamera = () => {
+    setShowCamera(false);
+  };
+
   return (
     <div className="flex flex-col lg:flex-row h-screen">
       <Sidebar value="TE" />
@@ -399,6 +411,13 @@ function TEChatToAdmin() {
                       />
                     </>
                   )}
+                    {message.content && message.content. camera && (
+                  <img
+                    src={message.content.camera}
+                    alt="Image"
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                  />
+                )} 
                   {message.content && message.content.document && (
                     <a
                       href={message.content.document}
@@ -450,6 +469,11 @@ function TEChatToAdmin() {
               </div>
             ))}
             <div ref={messagesEndRef} />
+            {showCamera && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} admin={"admin"} />
+              </div>
+            )}
           </div>
           <div className="flex items-center p-4 bg-[#f6f5fb] fixed bottom-0 lg:static w-full">
             <input
@@ -465,6 +489,12 @@ function TEChatToAdmin() {
               className="hidden"
               id="file-upload"
             />
+             <button
+              onClick={() => setShowCamera(true)}
+              className="mr-2 text-xl"
+            >
+              <FaCamera />
+            </button>
 
             <button
               onClick={handleSendMessage}

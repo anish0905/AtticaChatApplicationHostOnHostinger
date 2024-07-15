@@ -4,7 +4,7 @@ import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import { FaVideo, FaImage } from "react-icons/fa";
+import { FaVideo, FaImage, FaCamera } from "react-icons/fa";
 import GPSTracker from "./Gps.jsx"; // Adjust the import path as necessary
 import { BASE_URL } from '../../constants';
 import ForwardMessageModal from './ForwardMessageModal';
@@ -13,6 +13,7 @@ import ReplyModel from "../../components/ReplyModel";
 import { MdNotificationsActive } from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
 import { FaArrowLeft } from "react-icons/fa";
+import Camera from "../Camera/Camera.jsx";
 
 function ManagerChat() {
   const [messages, setMessages] = useState([]);
@@ -37,6 +38,7 @@ function ManagerChat() {
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [isChatSelected, setIsChatSelected] = useState(false);
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
+  const [showCamera, setShowCamera] = useState(false);
 
 
   const handleClick = (id, name) => {
@@ -75,7 +77,8 @@ function ManagerChat() {
 
   useEffect(() => {
     if (loggedInUserId && recipient) {
-      fetchMessages(loggedInUserId, recipient);
+      const intervalId = setInterval(() => fetchMessages(loggedInUserId, recipient), 2000);
+      return () => clearInterval(intervalId);
     }
   }, [loggedInUserId, recipient]);
 
@@ -213,6 +216,16 @@ function ManagerChat() {
     setMessages([]);
   };
 
+  const handleCapture = (imageSrc) => {
+    setAttachment({ url: imageSrc, type: "image/jpeg" });
+    setShowCamera(false);
+  };
+
+  const handleCloseCamera = () => {
+    setShowCamera(false);
+  };
+
+
 
   return (
     <div>
@@ -234,12 +247,12 @@ function ManagerChat() {
 
 
 
-          
+
           <div className="h-screen overflow-y-auto">
             {filteredUsers.map((user) => (
               <div key={user._id}>
                 <div
-                 className="w-full h-auto lg:font-medium font-base rounded-md bg-[#eef2fa] text-[#5443c3] mb-2 lg:text-2xl text-xl block items-center p-2 cursor-pointer"
+                  className="w-full h-auto lg:font-medium font-base rounded-md bg-[#eef2fa] text-[#5443c3] mb-2 lg:text-2xl text-xl block items-center p-2 cursor-pointer"
                   onClick={() => handleClick(user._id, user.name)}
                 >
                   <h1>{user.name}</h1>
@@ -249,7 +262,7 @@ function ManagerChat() {
                       unreadUser.data.map((message) => (
                         <div
                           key={message._id}
-                           className="text-orange-600 relative break-words whitespace-pre-wrap gap-5my-2"
+                          className="text-orange-600 relative break-words whitespace-pre-wrap gap-5my-2"
                           onClick={() => handleShowMessage(user._id)}
                         >
                           {!showMessages[user._id] ? (
@@ -289,144 +302,145 @@ function ManagerChat() {
 
 
 
-{isChatSelected && (
-<div className="w-full h-screen lg:w-min-[30%] flex flex-col justify-between bg-[#f6f5fb]">
-{isChatSelected && (
-  <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
-     <button  className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
-                onClick={handleBackToUserList}
+        {isChatSelected && (
+          <div className="w-full h-screen lg:w-min-[30%] flex flex-col justify-between bg-[#f6f5fb]">
+            {isChatSelected && (
+              <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+                <button className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+                  onClick={handleBackToUserList}
                 >
-                <FaArrowLeft className="text-xl lg:text-2xl"/>
+                  <FaArrowLeft className="text-xl lg:text-2xl" />
                 </button>
-  <h1 className="text-xl lg:text-2xl font-bold">Chat with {recipientName}</h1>
-  <Link
-    to="/"
-    className=" text-xl lg:text-2xl group relative flex items-center justify-end font-extrabold rounded-full p-3 md:p-5"
-  >
-    <BiLogOut />
-  </Link>
-</div>
-)}
+                <h1 className="text-xl lg:text-2xl font-bold">Chat with {recipientName}</h1>
+                <Link
+                  to="/"
+                  className=" text-xl lg:text-2xl group relative flex items-center justify-end font-extrabold rounded-full p-3 md:p-5"
+                >
+                  <BiLogOut />
+                </Link>
+              </div>
+            )}
 
-<div className="flex flex-col flex-1 px-4 pt-4 relative overflow-y-auto" >
-  {messages.map((message, index) => (
-    <div
-      key={message._id}
-      className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
-          ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-          : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-        }`}
+            <div className="flex flex-col flex-1 px-4 pt-4 relative overflow-y-auto" >
+              {messages.map((message, index) => (
+                <div
+                  key={message._id}
+                  className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
+                    ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+                    : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                    }`}
 
-      onMouseEnter={() => handleHover(index)}
-      onMouseLeave={() => setHoveredMessage(null)}
-    >
-      {message.content && message.content.originalMessage && (
-        <div className="mb-2">
-          <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
-            {message.content.originalMessage}
-          </span>
-        </div>
-      )}
-      {message.content && message.content.text && (
-        <p className="font-bold">{message.content.text}</p>
-      )}
-      {message.content && message.content.image && (
-        <img
-          src={message.content.image}
-          alt="Image"
-          className="max-w-xs"
-        />
-      )}
-      {message.content && message.content.document && (
-        <a
-          href={message.content.document}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="text-blue-500 hover:underline"
-        >
-          <IoIosDocument className="text-9xl" />
-        </a>
-      )}
-      {message.content && message.content.video && (
-        <video controls className="max-w-xs">
-          <source src={message.content.video} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-      )}
-      <span className="text-xs text-black">
-        {new Date(message.createdAt).toLocaleString()}
-      </span>
+                  onMouseEnter={() => handleHover(index)}
+                  onMouseLeave={() => setHoveredMessage(null)}
+                >
+                  {message.content && message.content.originalMessage && (
+                    <div className="mb-2">
+                      <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
+                        {message.content.originalMessage}
+                      </span>
+                    </div>
+                  )}
+                  {message.content && message.content.text && (
+                    <p className="font-bold">{message.content.text}</p>
+                  )}
+                  {message.content && message.content.image && (
+                    <img
+                      src={message.content.image}
+                      alt="Image"
+                      className="max-w-xs"
+                    />
+                  )}
+                  {message.content && message.content.document && (
+                    <a
+                      href={message.content.document}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
+                      <IoIosDocument className="text-9xl" />
+                    </a>
+                  )}
+                  {message.content && message.content.camera && (
+                  <img
+                    src={message.content.camera}
+                    alt="Image"
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                  />
+                )}
+                  {message.content && message.content.video && (
+                    <video controls className="max-w-xs">
+                      <source src={message.content.video} type="video/mp4" />
+                      Your browser does not support the video tag.
+                    </video>
+                  )}
+                  <span className="text-xs text-black">
+                    {new Date(message.createdAt).toLocaleString()}
+                  </span>
 
-      {hoveredMessage === index && (
-        <AiOutlineDown
-          className="absolute top-2 right-2 cursor-pointer"
-          onClick={() => handleDropdownClick(index)}
-        />
-      )}
+                  {hoveredMessage === index && (
+                    <AiOutlineDown
+                      className="absolute top-2 right-2 cursor-pointer"
+                      onClick={() => handleDropdownClick(index)}
+                    />
+                  )}
 
-      {showDropdown === index && (
-        <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
-          <button
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            onClick={() => handleReply(message)}
-          >
-            Reply
-          </button>
-          <button
-            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            onClick={() => handleForward(message)}
-          >
-            Forward
-          </button>
-        </div>
-      )}
-    </div>
-  ))}
-  <div ref={messagesEndRef} />
-</div>
-<div className="flex items-center p-4 bg-[#f6f5fb] w-full">
-  <input
-    type="text"
-    value={newMessage}
-    onChange={(e) => setNewMessage(e.target.value)}
-    className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
-    placeholder="Type a message..."
-  />
-  <input
-    type="file"
-    onChange={handleAttachmentChange}
-    className="hidden"
-    id="file-upload"
-  />
-  <button
-    onClick={handleSendMessage}
-    className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-  >
-   <IoMdSend />
-  </button>
-  <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
-</div>
-</div>
-)}
+                  {showDropdown === index && (
+                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleReply(message)}
+                      >
+                        Reply
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleForward(message)}
+                      >
+                        Forward
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+              {showCamera && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient}  />
+              </div>
+            )}
+            </div>
+            <div className="flex items-center p-4 bg-[#f6f5fb] w-full">
+              <input
+                type="text"
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
+                placeholder="Type a message..."
+              />
+              <input
+                type="file"
+                onChange={handleAttachmentChange}
+                className="hidden"
+                id="file-upload"
+              />
+               <button
+              onClick={() => setShowCamera(true)}
+              className="mr-2 text-xl"
+            >
+              <FaCamera />
+            </button>
+              <button
+                onClick={handleSendMessage}
+                className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                <IoMdSend />
+              </button>
+              <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
+            </div>
+          </div>
+        )}
       </div>
-      {showPopSms && (
-  <div className="fixed inset-0bg-opacity-50  items-center justify-center w-1/2 z-50 top-56 lg:left-96 mx-24">
-    <div className="bg-white p-4 rounded-lg shadow-lg border-2 border-[#5443c3]">
-      <div className="flex items-center mb-4">
-        <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
-        <h3 className="text-lg font-semibold text-[#5443c3]">New Message</h3>
-      </div>
-      <p className="mb-2 text-[#5443c3] font-bold">From: {selectedSenderName}</p>
-      <p className="mb-4 relative break-words whitespace-pre-wrap ">Message: {popSms[0]?.content?.text}</p>
-      <button
-        onClick={() => handleModalClose(popSms[0]?.sender)}
-        className="hover:bg-blue-500 bg-[#5443c3] text-white p-2 rounded-lg"
-      >
-        Close
-      </button>
-    </div>
-  </div>
-)}
+
       {showForwardModal && (
         <ForwardMessageModal
           users={users}
@@ -435,7 +449,7 @@ function ManagerChat() {
           onCancel={handleCancelForward}
         />
       )}
-          {replyMessage && (
+      {replyMessage && (
         <ReplyModel
           message={replyMessage}
           sender={loggedInUserId}

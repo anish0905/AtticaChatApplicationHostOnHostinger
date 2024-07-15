@@ -5,7 +5,7 @@ import { useSound } from "use-sound";
 import notificationSound from '../../assests/sound.wav';
 import { BASE_URL } from "../../constants";
 import Sidebar from "./Sidebar";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoIosDocument, IoMdSend } from "react-icons/io";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
@@ -15,6 +15,7 @@ import ShowPopSms from "./Pages/ShowPopSms";
 import { FaLocationDot } from "react-icons/fa6";
 import GoogleMapsuper from "../SuperAdmin/GoogleMapsuper";
 import AdminFordWardModel from "./Pages/AdminFordWardModel";
+import Camera from "../Camera/Camera";
 
 const senderName = localStorage.getItem('email');
 
@@ -40,6 +41,8 @@ function AdminEmpChat() {
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showMap, setShowMap] = useState(false);
   const [location, setLocation] = useState([]);
+  const [showCamera, setShowCamera] = useState(false);
+
 
   // Debugging logs
   console.log("location: ", location);
@@ -93,7 +96,7 @@ function AdminEmpChat() {
     const messageData = {
       sender: loggedInUserId,
       recipient,
-      senderName:localStorage.getItem("AdminId"),
+      senderName: localStorage.getItem("AdminId"),
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
       document: attachment?.type.startsWith("application/")
@@ -177,17 +180,26 @@ function AdminEmpChat() {
     setMessages([]);
   };
 
-  const handleLocationClick = (latitude,longitude) => {
-   let loc = [{latitude,longitude}]
+  const handleLocationClick = (latitude, longitude) => {
+    let loc = [{ latitude, longitude }]
     setLocation(loc);
     setShowMap(true);
   };
 
+  const handleCapture = (imageSrc) => {
+    setAttachment({ url: imageSrc, type: "image/jpeg" });
+    setShowCamera(false);
+  };
+
+  const handleCloseCamera = () => {
+    setShowCamera(false);
+  };
+
   return (
     <div className="flex flex-col lg:flex-row h-screen relative">
-      
+
       <Sidebar />
-    
+
       <div className="flex-1 flex flex-col lg:flex-row   ">
         <div className={`flex flex-col bg-white text-black p-4  w-full border shadow shadow-blue-500/65 lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
           <div className="flex items-center justify-between lg:mb-4">
@@ -239,17 +251,17 @@ function AdminEmpChat() {
                     {message.content && message.content.image && (
                       <img src={message.content.image} alt="Image" className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32" />
                     )}
-                     {message.content && message.content.imageWithLocation && (
-                    <>
-                      <img
-                        src={JSON.parse(message.content.imageWithLocation).url}
-                        alt="Image"
-                        className="max-w-xs rounded"
-                      />
-                    </>
-                  )}
-                    {message.content &&message.content.imageWithLocation  && (
-                      <div className="text-5xl flex justify-center content-center items-center my-4 cursor-pointer" onClick={() => handleLocationClick(JSON.parse(message.content.imageWithLocation).latitude,JSON.parse(message.content.imageWithLocation).longitude)}>
+                    {message.content && message.content.imageWithLocation && (
+                      <>
+                        <img
+                          src={JSON.parse(message.content.imageWithLocation).url}
+                          alt="Image"
+                          className="max-w-xs rounded"
+                        />
+                      </>
+                    )}
+                    {message.content && message.content.imageWithLocation && (
+                      <div className="text-5xl flex justify-center content-center items-center my-4 cursor-pointer" onClick={() => handleLocationClick(JSON.parse(message.content.imageWithLocation).latitude, JSON.parse(message.content.imageWithLocation).longitude)}>
                         <FaLocationDot />
                       </div>
                     )}
@@ -262,6 +274,13 @@ function AdminEmpChat() {
                       >
                         <IoIosDocument className="text-9xl" />
                       </a>
+                    )}
+                    {message.content && message.content.camera && (
+                      <img
+                        src={message.content.camera}
+                        alt="Image"
+                        className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                      />
                     )}
                     {message.content && message.content.video && (
                       <video controls className="max-w-xs text-orange-600 rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32">
@@ -300,6 +319,11 @@ function AdminEmpChat() {
                 </div>
               ))}
               <div ref={messagesEndRef} />
+              {showCamera && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                  <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} admin={"admin"} />
+                </div>
+              )}
             </div>
             <div className="p-4 border-t flex justify-center items-center">
               <input
@@ -309,25 +333,30 @@ function AdminEmpChat() {
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
               />
-          <div className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
+                <button
+                  onClick={() => setShowCamera(true)}
+                  className="mr-2 text-xl"
+                >
+                  <FaCamera />
+                </button>
 
-
-  <div className="flex items-center space-x-2">
-    <button
-      className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
-      onClick={handleSendMessage}
-    >
-      <IoMdSend />
-    </button>
-    <AllUsersFileModel
-      sender={loggedInUserId}
-      recipient={recipient}
-      admin="admin"
-      senderName={senderName}
-      className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
-    />
-  </div>
-</div>
+                <div className="flex items-center space-x-2">
+                  <button
+                    className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
+                    onClick={handleSendMessage}
+                  >
+                    <IoMdSend />
+                  </button>
+                  <AllUsersFileModel
+                    sender={loggedInUserId}
+                    recipient={recipient}
+                    admin="admin"
+                    senderName={senderName}
+                    className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
+                  />
+                </div>
+              </div>
 
             </div>
           </div>

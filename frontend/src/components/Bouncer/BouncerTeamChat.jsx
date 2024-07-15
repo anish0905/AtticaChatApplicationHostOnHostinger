@@ -1,18 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
-import { IoIosDocument } from "react-icons/io";
-import { FaPaperclip } from "react-icons/fa";
+import { IoIosDocument } from "react-icons/io";;
 import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
-import notificationSound from "../../assests/sound.wav";
-import { MdNotificationsActive } from "react-icons/md";
 import Sidebar from "../AllUsers/UserSidebar"
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import ReplyModel from "../../components/ReplyModel";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
+import Camera from "../Camera/Camera";
 
 function BouncerTeamChat() {
   const [messages, setMessages] = useState([]);
@@ -26,13 +24,8 @@ function BouncerTeamChat() {
   const [userSearchQuery, setUserSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
   const [unreadUsers, setUnreadUsers] = useState([]);
-  const [showPopSms, setShowPopSms] = useState(false);
-  const [popSms, setPopSms] = useState([]);
-  const [selectedSender, setSelectedSender] = useState("");
-  const [selectedSenderName, setSelectedSenderName] = useState("");
   const [isMobileView, setIsMobileView] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [playNotificationSound] = useSound(notificationSound);
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
@@ -40,6 +33,8 @@ function BouncerTeamChat() {
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [showCamera, setShowCamera] = useState(false);
+
 
 
   const handleClick = (id, name) => {
@@ -197,6 +192,15 @@ function BouncerTeamChat() {
     setShowForwardModal(false);
   };
 
+  const handleCapture = (imageSrc) => {
+    setAttachment({ url: imageSrc, type: "image/jpeg" });
+    setShowCamera(false);
+  };
+
+  const handleCloseCamera = () => {
+    setShowCamera(false);
+  };
+
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
@@ -248,6 +252,13 @@ function BouncerTeamChat() {
                     className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
                   />
                 )}
+                 {message.content && message.content.camera && (
+                  <img
+                    src={message.content.camera}
+                    alt="Image"
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                  />
+                )}
                 {message.content && message.content.document && (
                   <a
                     href={message.content.document}
@@ -295,6 +306,11 @@ function BouncerTeamChat() {
               </div>
             ))}
             <div ref={messagesEndRef} />
+            {showCamera && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} />
+              </div>
+            )}
           </div>
           <div className="flex items-center p-4 bg-white border-t border-gray-200 fixed bottom-0 w-full lg:static">
             <input
@@ -310,9 +326,12 @@ function BouncerTeamChat() {
               className="hidden"
               id="file-upload"
             />
-            {/* <label htmlFor="file-upload">
-              <FaPaperclip className="text-gray-500 hover:text-gray-700 cursor-pointer mr-2" />
-            </label> */}
+             <button
+              onClick={() => setShowCamera(true)}
+              className="mr-2 text-xl"
+            >
+              <FaCamera/>
+            </button>
             <button
               onClick={handleSendMessage}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

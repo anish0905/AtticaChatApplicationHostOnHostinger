@@ -6,14 +6,13 @@ import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
 import { IoIosDocument } from "react-icons/io";
 import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
-import notificationSound from "../../assests/sound.wav";
-import { MdNotificationsActive } from "react-icons/md";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import Sidebar from "../AllUsers/UserSidebar";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers"
 import ReplyModel from "../ReplyModel";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
+import Camera from "../Camera/Camera";
 
 
 function HrToHrChat() {
@@ -28,19 +27,15 @@ function HrToHrChat() {
   const [userSearchQuery, setUserSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
   const [unreadUsers, setUnreadUsers] = useState([]);
-  const [showPopSms, setShowPopSms] = useState(false);
-  const [popSms, setPopSms] = useState([]);
-  const [selectedSender, setSelectedSender] = useState("");
-  const [selectedSenderName, setSelectedSenderName] = useState("");
   const [isMobileView, setIsMobileView] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [playNotificationSound] = useSound(notificationSound);
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -141,46 +136,8 @@ function HrToHrChat() {
     }
   }, [users]);
 
-  const fetchPopSms = async () => {
-    try {
-      const response = await axios.get(
-        `${BASE_URL}/api/getNotification/${loggedInUserId}`
-      );
-      const data = response.data;
-      setPopSms(data);
-      if (data.length > 0) {
-        const senderId = data[0].sender;
-        setSelectedSender(senderId);
-        setShowPopSms(true);
-        const empDetails = await axios.get(
-          `${BASE_URL}/api/allUser/getbyId/${senderId}`
-        );
-        setSelectedSenderName(empDetails.data.name);
-
-        // Play notification sound
-        playNotificationSound();
-      }
-    } catch (error) {
-      console.error("Error fetching pop SMS:", error);
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(fetchPopSms, 2000);
-    return () => clearInterval(interval);
-  }, [loggedInUserId, playNotificationSound]);
-
-  const handleModalClose = (senderId) => {
-    axios
-      .delete(`${BASE_URL}/api/deleteNotification/${senderId}`)
-      .then(() => {
-        setShowPopSms(false);
-      })
-      .catch((error) => {
-        console.error("Error deleting notification:", error);
-      });
-  };
-
+  
+  
   const handleBackToEmployees = () => {
     setShowChat(false);
     setRecipient("");
@@ -230,6 +187,15 @@ function HrToHrChat() {
 
   const handleCancelForward = () => {
     setShowForwardModal(false);
+  };
+
+  const handleCapture = (imageSrc) => {
+    setAttachment({ url: imageSrc, type: "image/jpeg" });
+    setShowCamera(false);
+  };
+
+  const handleCloseCamera = () => {
+    setShowCamera(false);
   };
 
 
@@ -290,6 +256,13 @@ function HrToHrChat() {
                     <IoIosDocument className="text-9xl" />
                   </a>
                 )}
+                 {message.content && message.content.camera && (
+                  <img
+                    src={message.content.camera}
+                    alt="Image"
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                  />
+                )}
                 {message.content && message.content.video && (
                   <video controls className="max-w-xs">
                     <source src={message.content.video} type="video/mp4" />
@@ -326,6 +299,11 @@ function HrToHrChat() {
               </div>
             ))}
             <div ref={messagesEndRef} />
+            {showCamera && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient}  />
+              </div>
+            )}
           </div>
           <div className="flex items-center p-4 bg-[#eef2fa] border-t border-gray-200 fixed bottom-0 w-full lg:static">
             <input
@@ -341,9 +319,12 @@ function HrToHrChat() {
               className="hidden"
               id="file-upload"
             />
-            {/* <label htmlFor="file-upload">
-              <FaPaperclip className="text-gray-500 hover:text-gray-700 cursor-pointer mr-2" />
-            </label> */}
+              <button
+              onClick={() => setShowCamera(true)}
+              className="mr-2 text-xl"
+            >
+              <FaCamera />
+            </button>
             <button
               onClick={handleSendMessage}
                className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -396,24 +377,7 @@ function HrToHrChat() {
         </div>
       )}
 
-{showPopSms && (
-  <div className="fixed inset-0  bg-opacity-50 flex items-center justify-center z-50">
-    <div className="bg-blue-100 p-4 rounded-lg shadow-lg border border-[#5443c3] max-w-2xl lg:w-full w-80">
-      <div className="flex items-center mb-4">
-        <MdNotificationsActive className="text-blue-500 w-6 h-6 mr-2" />
-        <h3 className="text-lg font-semibold">New Message</h3>
-      </div>
-      <p className="mb-2 text-green-600 font-bold text-2xl">From: {selectedSenderName}</p>
-      <p className="mb-4 break-words">Message: {popSms[0]?.content?.text}</p>
-      <button
-        onClick={() => handleModalClose(popSms[0]?.sender)}
-        className="bg-blue-500 text-white p-2 rounded-lg"
-      >
-        Close
-      </button>
-    </div>
-  </div>
-)}
+
 {showForwardModal && (
         < ForwardModalAllUsers    
           users={users}

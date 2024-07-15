@@ -9,8 +9,9 @@ import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import UserSidebar from "../AllUsers/UserSidebar";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import ReplyModel from "../ReplyModel";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
+import Camera from "../Camera/Camera";
 
 function LogisticChat() {
   const [messages, setMessages] = useState([]);
@@ -33,6 +34,7 @@ function LogisticChat() {
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -136,7 +138,7 @@ function LogisticChat() {
     }
   }, [users]);
 
-  
+
 
   const handleBackToEmployees = () => {
     setShowChat(false);
@@ -188,6 +190,15 @@ function LogisticChat() {
     setShowForwardModal(false);
   };
 
+  const handleCapture = (imageSrc) => {
+    setAttachment({ url: imageSrc, type: "image/jpeg" });
+    setShowCamera(false);
+  };
+
+  const handleCloseCamera = () => {
+    setShowCamera(false);
+  };
+
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
       <UserSidebar value="LOGISTIC" />
@@ -207,11 +218,10 @@ function LogisticChat() {
             {messages.map((message, index) => (
               <div
                 key={message._id}
-                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${
-                  message.sender === loggedInUserId
+                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
                     ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
                     : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-                }`}
+                  }`}
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
               >
@@ -243,6 +253,13 @@ function LogisticChat() {
                   >
                     <IoIosDocument className="text-9xl" />
                   </a>
+                )}
+                {message.content && message.content.camera && (
+                  <img
+                    src={message.content.camera}
+                    alt="Image"
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                  />
                 )}
                 {message.content && message.content.video && (
                   <video controls className="max-w-xs">
@@ -280,6 +297,11 @@ function LogisticChat() {
               </div>
             ))}
             <div ref={messagesEndRef} />
+            {showCamera && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} />
+              </div>
+            )}
           </div>
           <div className="flex items-center p-4 bg-[#eef2fa] border-t border-gray-200 fixed bottom-0 w-full lg:static">
             <input
@@ -295,9 +317,12 @@ function LogisticChat() {
               className="hidden"
               id="file-upload"
             />
-            {/* <label htmlFor="file-upload">
-              <FaPaperclip className="text-gray-500 hover:text-gray-700 cursor-pointer mr-2" />
-            </label> */}
+            <button
+              onClick={() => setShowCamera(true)}
+              className="mr-2 text-xl"
+            >
+              <FaCamera />
+            </button>
             <button
               onClick={handleSendMessage}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -330,13 +355,12 @@ function LogisticChat() {
               .map((user) => (
                 <li
                   key={user._id}
-                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] font-bold ${
-                    unreadUsers.some(
-                      (unreadUser) => unreadUser.userId === user._id
-                    )
+                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] font-bold ${unreadUsers.some(
+                    (unreadUser) => unreadUser.userId === user._id
+                  )
                       ? "bg-blue-100"
                       : "bg-gray-200"
-                  } ${recipient === user._id ? "bg-green-200" : ""}`}
+                    } ${recipient === user._id ? "bg-green-200" : ""}`}
                   onClick={() => handleClick(user._id, user.name)}
                 >
                   <span>{user.name}</span>

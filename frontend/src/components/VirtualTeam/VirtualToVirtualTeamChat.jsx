@@ -32,7 +32,7 @@ function VirtualToVirtualTeamChat() {
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
-  const [capturedImage, setCapturedImage] = useState(null);
+
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
     setRecipient(id);
@@ -240,6 +240,13 @@ function VirtualToVirtualTeamChat() {
                     className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
                   />
                 )}
+                   {message.content && message.content. camera && (
+                  <img
+                    src={message.content.camera}
+                    alt="Image"
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                  />
+                )}
 
                 {message.content && message.content. camera && (
                   <img
@@ -296,7 +303,7 @@ function VirtualToVirtualTeamChat() {
             <div ref={messagesEndRef} />
             {showCamera && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} />
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient}  />
               </div>
             )}
 
@@ -321,6 +328,7 @@ function VirtualToVirtualTeamChat() {
             >
               <FaCamera />
             </button>
+
             <button
               onClick={handleSendMessage}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
