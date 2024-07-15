@@ -172,7 +172,18 @@ const EmpMessage = () => {
           )}
         </div>
 
-        <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto">
+
+
+
+
+
+
+
+
+
+
+
+        <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto mb-16 lg:mb-0">
           {messages.length > 0 ? (
             messages.map((msg) => (
               <div
@@ -180,7 +191,7 @@ const EmpMessage = () => {
                 className={`flex relative break-words whitespace-pre-wrap ${msg.employeeId === currentUserName ? "justify-end" : "justify-start"} mb-2`}
               >
                 <div
-                  className={`relative lg:text-3xl md:text-xl text-sm  ${
+                  className={`relative lg:text-3xl md:text-xl text-sm font-bold ${
                     msg.employeeId === currentUserName
                       ? " self-end  bg-[#e1dff3] text-[#5443c3] rounded-tr-3xl rounded-bl-3xl border border-[#5443c3]"
                       : "self-start bg-white text-[#5443c3] border border-[#5443c3] rounded-br-3xl rounded-tl-3xl"
@@ -188,7 +199,7 @@ const EmpMessage = () => {
                 >
                   {msg.message && (
                     <p className="text-sm mb-1">
-                      <span className="font-bold  font-bold">{msg.employeeId}:</span> {msg.message}
+                      <span className="lg:text-base md:text-lg text-sm font-normal my-5">{msg.employeeId}:<br></br></span> {msg.message}
                     </p>
                   )}
                   {msg.Document && (

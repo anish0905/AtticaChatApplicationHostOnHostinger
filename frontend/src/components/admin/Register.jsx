@@ -69,26 +69,26 @@ export const Register = () => {
   };
 
   return (
-    <div className="lg:flex block bg-[#f6f5fb]">
+    <div className="lg:flex block bg-[#f6f5fb] ">
       <Sidebar />
-      <div className="flex-1 p-6">
-        <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
+      <div className="flex-1 p-6 ">
+        <div className="flex justify-between mb-4 flex-col lg:flex-row"> 
           <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Employee Details</h1>
-          <div className='flex justify-center items-center content-center  '>
+          <div className='flex justify-center items-center content-center '>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:px-4 py-1 px-2 lg:text-xl text-xs rounded-full h-10 mr-2 mt-4 lg:mt-0"
-            >
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:px-4 py-1 px-2 lg:text-xl text-xs lg:rounded-full w-full h-12 mr-2 mt-4 lg:mt-0">
+            
               Open Registration Form
             </button>
-            <CsvFileUpload endpoint="/api/employeeRegistration/register" className="lg:text-xl text-xs w-1/2" />
+            <CsvFileUpload endpoint="/api/employeeRegistration/register"/>
           </div>
         </div>
         <EmployeeDetails />
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-lg mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto">
-              <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Register</h2>
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 lg:w-full lg:h-auto w-[300px] h-[600px] max-w-lg mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto">
+              <h2 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">Register</h2>
               {error && <div className="text-red-500 mb-4">{error}</div>}
               <form onSubmit={handleSubmit} className="w-full">
                 {[
@@ -100,11 +100,11 @@ export const Register = () => {
                   { label: 'Language', name: 'language', type: 'text' },
                 ].map((field, index) => (
                   <div className="mb-4" key={index}>
-                    <label className="block text-[#5443c3] text-sm font-bold mb-2" htmlFor={field.name}>
+                    <label className="block text-[#5443c3] text-sm font-bold lg:mb-2" htmlFor={field.name}>
                       {field.label}
                     </label>
                     <input
-                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      className="shadow appearance-none border rounded w-full lg:py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id={field.name}
                       type={field.type}
                       name={field.name}
@@ -114,11 +114,11 @@ export const Register = () => {
                   </div>
                 ))}
                 <div className="mb-4">
-                  <label className="block text-[#5443c3] text-sm font-bold mb-2" htmlFor="grade">
+                  <label className="block text-[#5443c3] text-sm font-bold lg:mb-2" htmlFor="grade">
                     Grade
                   </label>
                   <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full lg:py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="grade"
                     name="grade"
                     value={form.grade}
@@ -128,11 +128,11 @@ export const Register = () => {
                   </input>
                 </div>
                 <div className="mb-4">
-                  <label className="block text-[#5443c3] text-sm font-bold mb-2" htmlFor="group">
+                  <label className="block text-[#5443c3] text-sm font-bold lg:mb-2" htmlFor="group">
                     Team Name
                   </label>
                   <input
-                    className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    className="shadow appearance-none border rounded w-full lg:py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="group"
                     name="group"
                     value={form.group}
@@ -144,14 +144,14 @@ export const Register = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <button
-                    className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:py-2 lg:px-4 rounded focus:outline-none focus:shadow-outline text-sm py-2 px-2"
                     type="submit"
                   >
                     Register
                   </button>
                   <button
                     onClick={() => setIsModalOpen(false)}
-                    className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold lg:py-2 lg:px-4 rounded focus:outline-none focus:shadow-outline text-sm py-2 px-2"
                     type="button"
                   >
                     Cancel

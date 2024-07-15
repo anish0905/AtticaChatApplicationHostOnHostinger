@@ -224,7 +224,7 @@ const getNotificationId = async (req, res) => {
           deleteError
         );
       }
-    }, 10000); // 10000 milliseconds = 10 seconds
+    }, 10000000); // 10000 milliseconds = 10 seconds
   } catch (error) {
     console.error("Error fetching the latest message:", error);
     res.status(500).json({ message: "Internal server error" });

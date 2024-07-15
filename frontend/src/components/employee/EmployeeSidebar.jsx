@@ -69,7 +69,7 @@ const EmployeeSidebar = () => {
         </div>
 
         <div className="flex flex-row lg:flex-col items-center gap-2 md:gap-3 lg:gap-5 cursor-pointer">
-          <div className="group relative flex items-center bg-[#fffefd] rounded-full p-3 md:p-5">
+          <div className="group relative flex items-center bg-green-300 hover:bg-green-500 rounded-full p-3 md:p-5">
             <div
               className="group relative"
               onMouseEnter={() => setShowTooltip(true)}
@@ -78,14 +78,18 @@ const EmployeeSidebar = () => {
               <CgProfile className="text-lg md:text-2xl lg:text-3xl" />
 
               {showTooltip && (
-                <div className="absolute top-full left-0 mt-2 p-4 bg-black text-white text-sm md:text-md rounded shadow-md z-10 items-start">
+                <div className="absolute lg:bottom-auto lg:left-full mt-4 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   <p>Name: {userDetails.name}</p>
                 </div>
+                
               )}
             </div>
           </div>
+          <p className="text-white text-base lg:text-xl items-center hidden lg:flex">
+            {userDetails?.name}
+          </p>
 
-          <div onClick={handleLogout} className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-3 md:p-5">
+          <div onClick={handleLogout} className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-3 md:p-5 m-1">
             <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
             <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
               Logout
