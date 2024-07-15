@@ -229,13 +229,13 @@ function BillingTeamChat() {
 
           </div>
 
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa] mb-20">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa] mb-20 lg:mb-0">
             {messages.map((message, index) => (
               <div
                 key={message._id}
                 className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
-                  ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-                  : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                  ? "self-end bg-[#e1dff3] text-[#5443c3] border border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+                  : "self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                   }`}
 
                 onMouseEnter={() => handleHover(index)}
@@ -263,13 +263,13 @@ function BillingTeamChat() {
                     href={message.content.document}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-orange-500 hover:underline"
+                    className="text-orange-500 hover:underline lg:text-8xl md:text-6xl text-4xl"
                   >
                     <IoIosDocument className="text-9xl" />
                   </a>
                 )}
                 {message.content && message.content.video && (
-                  <video controls className="max-w-xs">
+                  <video controls className="max-w-xs lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32 text-4xl">
                     <source src={message.content.video} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
@@ -282,6 +282,7 @@ function BillingTeamChat() {
                   />
                 )}
                 <span className="text-xs text-black">
+                <span className="text-xs font-base  text-gray-500">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
 

@@ -7,7 +7,6 @@ import { GrChatOption } from "react-icons/gr";
 import { MdDashboard } from "react-icons/md";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import { TbMessageForward } from "react-icons/tb";
-import { BiSolidMessageCheck } from "react-icons/bi";
 import { FaLaptop } from "react-icons/fa";
 import { GrVirtualMachine } from "react-icons/gr";
 import { MdAddCall } from "react-icons/md";
@@ -21,6 +20,7 @@ import { IoPersonSharp } from "react-icons/io5";
 import { FaMoneyBillTrendUp } from "react-icons/fa6";
 import { GrUserManager } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
+import { GiLogicGateAnd } from "react-icons/gi";
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -191,7 +191,7 @@ const Sidebar = () => {
               onClick={() => handleNavigation("/LogisticReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
-              <MdSecurity className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <GiLogicGateAnd className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Logistic Registration</span>
             </div>
           </span>
@@ -230,18 +230,18 @@ const Sidebar = () => {
       <div className="flex flex-row lg:flex-col">
       <div
              
-          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer bg-white`}
+          className={`group relative flex items-center bg-green-300 hover:bg-green-500 rounded-full  p-2 md:p-4 lg:p-5 z-50 cursor-pointer lg:mt-2 m-1`}
            
         >
           <CgProfile className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 z-50 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
            {userAdmin}
           </span>
         </div>
-
+      
       <div
         onClick={handleLogout}
-        className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-2 md:p-4 lg:p-5 cursor-pointer lg:mt-2"
+        className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-2 md:p-4 lg:p-5 cursor-pointer lg:mt-2 m-1"
       >
         <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
         <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

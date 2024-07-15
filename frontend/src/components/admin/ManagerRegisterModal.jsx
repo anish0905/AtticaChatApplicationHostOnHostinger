@@ -57,21 +57,16 @@ const ManagerRegisterModal = () => {
     <div className="lg:flex block bg-[#f6f5fb]">
     <Sidebar />
     <div className="flex-1 p-6">
-    <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
+    <div className="flex justify-between mb-4 flex-col lg:flex-row">
           <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Manager Details</h1>
-          <div>
+          <div className='flex justify-center items-center content-center '>
             <button
               onClick={() => setIsModalOpen(true)}
-              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:px-4 py-1 px-2 lg:text-xl text-xs lg:rounded-full w-full h-12 mr-2 mt-4 lg:mt-0"
             >
               Open Registration Form
             </button>
-            {/* <input
-              type="file"
-              accept=".csv"
-              onChange={handleFileUpload}
-              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 ml-2 mt-4 lg:mt-0"
-            /> */}
+       
             <CsvFileUpload endpoint="/api/manager/register" />
           </div>
         </div>
@@ -79,7 +74,7 @@ const ManagerRegisterModal = () => {
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
           <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-4xl mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto">
-            <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Register for Manager</h2>
+            <h2 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">Register for Manager</h2>
             {error && <div className="text-red-500 mb-4">{error}</div>}
             <form onSubmit={handleSubmit} className="w-full">
               <div className="flex flex-col md:flex-row md:space-x-4">
@@ -93,11 +88,11 @@ const ManagerRegisterModal = () => {
                     { label: "Manager Address", name: "manager_address", type: "text" }
                   ].map((field, index) => (
                     <div className="mb-4" key={index}>
-                      <label className="block text-[#5443c3] text-sm font-bold mb-2" htmlFor={field.name}>
+                      <label className="block text-[#5443c3] text-sm font-bold lg:mb-2" htmlFor={field.name} htmlFor={field.name}>
                         {field.label}
                       </label>
                       <input
-                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                         className="shadow appearance-none border rounded w-full lg:py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id={field.name}
                         type={field.type}
                         name={field.name}
@@ -108,7 +103,7 @@ const ManagerRegisterModal = () => {
                     </div>
                   ))}
                 </div>
-                <div className="md:w-1/2">
+                <div className="md:w-full">
                   {[
                     { label: "Branch City", name: "branch_city", type: "text" },
                     { label: "Branch State", name: "branch_state", type: "text" },
@@ -133,16 +128,16 @@ const ManagerRegisterModal = () => {
                   ))}
                 </div>
               </div>
-              <div className="flex justify-between mt-4">
+              <div className="flex items-center justify-between">
                 <button
                   type="submit"
-                  className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                  className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:py-2 lg:px-4 rounded focus:outline-none focus:shadow-outline text-sm py-2 px-2"
                 >
                   Register
                 </button>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                   className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold lg:py-2 lg:px-4 rounded focus:outline-none focus:shadow-outline text-sm py-2 px-2"
                   type="button"
                 >
                   Cancel
@@ -153,6 +148,7 @@ const ManagerRegisterModal = () => {
         </div>
         
         )}
+        
       </div>
     </div>
   );

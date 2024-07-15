@@ -17,6 +17,9 @@ const UserSidebar = ({ value }) => {
       case "HR":
         navigate("/HrToHrChat");
         break;
+        case "CALLCENTER":
+          navigate("/CallCenterToCallCenter");
+          break;
       case "ACCOUNT":
         navigate("/AccountToAccountChat");
         break;
@@ -54,6 +57,9 @@ const UserSidebar = ({ value }) => {
       case "HR":
         navigate("/HrToAdminChat");
         break;
+        case "CALLCENTER":
+          navigate("/CallCenterToAdminChat");
+          break;
       case "ACCOUNT":
         navigate("/AccountToAdminChat");
         break;
@@ -105,6 +111,7 @@ const UserSidebar = ({ value }) => {
           onClick={handleChat}
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${
             isActive("/HrToHrChat") ||
+            isActive("/CallCenterToCallCenter") ||
             isActive("/AccountToAccountChat") ||
             isActive("/SoftwareToSoftwareChat") ||
             isActive("/bouncerChat") ||
@@ -127,6 +134,7 @@ const UserSidebar = ({ value }) => {
           onClick={handleAdminChat}
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${
             isActive("/HrToAdminChat") ||
+            isActive("/CallCenterToAdminChat") ||
             isActive("/AccountToAdminChat") ||
             isActive("/SoftwareToAdminChat") ||
             isActive("/BouncerToAdminChat") ||
@@ -148,18 +156,18 @@ const UserSidebar = ({ value }) => {
 
       <div className="flex flex-row lg:flex-col gap-[10px] sm:gap-[10px] md:gap-[10px] lg:gap-[40px] relative">
         <div className="flex items-center flex-col">
-          <div className="group relative flex items-center bg-[#fffefd] hover:bg-blue-500 rounded-full p-3 md:p-5 ">
+          <div className="group relative flex items-center bg-green-300 hover:bg-green-500 rounded-full p-3 md:p-5 ">
             <div
               className="group relative"
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
             >
               <CgProfile />
-              <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-white text-black text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {/* <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-white text-black text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 Profile
-              </span>
+              </span> */}
               {showTooltip && (
-                <div className="absolute top-full left-0 mt-2 p-4 bg-black text-white text-sm md:text-md rounded shadow-md z-10 items-start">
+                <div className="absolute top-full left-0 mt-5 p-4 bg-black text-white text-sm md:text-md rounded shadow-md z-10 items-start">
                   <p>Email: {userDetails.email}</p>
                   <p>Name: {userDetails.name}</p>
                   <p>Role: {userDetails.role}</p>
@@ -174,10 +182,10 @@ const UserSidebar = ({ value }) => {
 
         <div
           onClick={handleLogout}
-          className="group relative flex items-center bg-[#fffefd] hover:bg-blue-500 rounded-full p-3 md:p-5 "
+          className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-3 md:p-5 "
         >
-          <BiLogOut />
-          <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 m-1 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Logout
           </span>
         </div>

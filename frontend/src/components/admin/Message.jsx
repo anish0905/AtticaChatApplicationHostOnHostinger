@@ -214,21 +214,21 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                     } mb-2`}
                   >
                     <div
-                      className={` lg:text-3xl md:text-xl text-sm font-bold ${
+                      className={` lg:text-2xl md:text-xl text-sm font-bold ${
                         msg.employeeId === adminId
-                          ? " self-end bg-[#9184e9] border-2 border-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl "
-                          : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                          ? " self-end bg-[#9184e9] border border-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl "
+                          : "self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                       } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                     >
                       <p
-                        className={` lg:text-lg md:text-lg text-sm font-bold ${
+                        className={` lg:text-sm md:text-lg text-sm font-normal mb-2 ${
                           msg.employeeId === adminId ? "text-green" : "text-[#5443c3]"
                         }`}
                       >
                         {msg.employeeId}
                         <span> : </span>
                       </p>
-                      <p className="lg:text-lg md:text-sm text-sm">{msg.message}</p>
+                      <p className="lg:text-xl md:text-sm text-sm">{msg.message}</p>
                       {msg.Document && (
                         <div className="lg:text-8xl md:text-6xl text-4xl my-2">
                           <a href={msg.Document} download target="_blank" rel="noopener noreferrer">
@@ -237,7 +237,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                         </div>
                       )}
                       {msg.video && (
-                        <div className="lg:text-8xl md:text-6xl text-4xl my-2">
+                        <div className="lrounded-lg h-auto w-auto my-2">
                           <video src={msg.video} controls></video>
                         </div>
                       )}

@@ -66,7 +66,7 @@ const LiveChatMessages = () => {
                 >
                   <p className="text-sm font-medium text-red-600 mb-5">Group: {msg.group} -(Grade: {msg.grade})</p>
                   {/* <p className="text-sm font-medium text-red-600 "></p> */}
-                  <p className="text-xl font-semibold text-[#5443c3]">
+                  <p className="lg:text-sm md:text-lg text-sm font-normal text-[#5443c3]">
                     {msg.employeeId}
                     <span> : </span>
                   </p>
@@ -83,14 +83,14 @@ const LiveChatMessages = () => {
                     </div>
                   )}
                   {msg.video && (
-                    <div className="lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32 text-4xl my-3">
+                    <div className="h-auto w-auto text-4xl my-3">
                       <video src={msg.video} controls></video>
                     </div>
                   )}
 
                   {msg.image && (
                     <div>
-                      <img src={msg.image} alt="" className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32 my-3" />
+                      <img src={msg.image} alt="" className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-auto w-auto my-3" />
                     </div>
                   )}
                   <p className="text-lg ">{msg.messages}</p>
