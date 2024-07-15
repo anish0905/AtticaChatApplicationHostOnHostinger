@@ -190,19 +190,43 @@ const currentManager = async (req, res) => {
 };
 
 const accessBlock = async (req, res) => {
-  const { id } = req.params;
-  const manager = await ManagerDetails.find();
-  manager.access = false;
-  await manager.save();
-  res.status(200).json({ message: "Access Blocked Successfully" });
+  try {
+    const managers = await ManagerDetails.find();
+
+    if (managers.length === 0) {
+      return res.status(404).json({ message: "No managers found" });
+    }
+
+    // Update the access field for each manager
+    for (let manager of managers) {
+      manager.access = false;
+      await manager.save();
+    }
+
+    res.status(200).json({ message: "Access Blocked Successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 const accessUnblock = async (req, res) => {
-  const { id } = req.params;
-  const manager = await ManagerDetails.find();
-  manager.access = true;
-  await manager.save();
-  res.status(200).json({ message: "Access Unblocked Successfully" });
+  try {
+    const managers = await ManagerDetails.find();
+
+    if (managers.length === 0) {
+      return res.status(404).json({ message: "No managers found" });
+    }
+
+    // Update the access field for each manager
+    for (let manager of managers) {
+      manager.access = true;
+      await manager.save();
+    }
+
+    res.status(200).json({ message: "Access Unblocked Successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 const blockAllManager = async (req, res) => {

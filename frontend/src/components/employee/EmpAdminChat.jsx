@@ -3,17 +3,15 @@ import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import { FaVideo, FaImage } from "react-icons/fa";
-import { useSound } from "use-sound";
-import notificationSound from "../../assests/sound.wav";
+import { FaVideo, FaImage, FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../../constants";
 import { FaArrowLeft } from "react-icons/fa";
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
-import Sidebar from "../AllUsers/UserSidebar"
 import ReplyModel from "../ReplyModel";//--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import { IoMdSend } from "react-icons/io";
 import EmployeeSidebar from "./EmployeeSidebar";
+import Camera from "../Camera/Camera";
 
 function EmpAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -23,16 +21,12 @@ function EmpAdminChat() {
   const [recipient, setRecipient] = useState("");
   const [recipientName, setRecipientName] = useState("");
   const [attachment, setAttachment] = useState(null);
-
   const [adminSearchQuery, setAdminSearchQuery] = useState("");
   const messagesEndRef = useRef(null);
   const [admins, setAdmins] = useState([]);
   const [unreadUsers, setUnreadUsers] = useState([]);
   const [unreadUsersAdmin, setUnreadUsersAdmin] = useState([]);
   const [showMessages, setShowMessages] = useState({});
- 
-
-  const [playNotificationSound] = useSound(notificationSound);
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
@@ -41,6 +35,8 @@ function EmpAdminChat() {
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
   const [isChatSelected, setIsChatSelected] = useState(false);
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
+  const [showCamera, setShowCamera] = useState(false);
+
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -251,6 +247,15 @@ function EmpAdminChat() {
     setMessages([]);
   };
 
+  const handleCapture = (imageSrc) => {
+    setAttachment({ url: imageSrc, type: "image/jpeg" });
+    setShowCamera(false);
+  };
+
+  const handleCloseCamera = () => {
+    setShowCamera(false);
+  };
+
 
   return (
     <div className="flex flex-col lg:flex-row h-screen relative">
@@ -361,7 +366,13 @@ function EmpAdminChat() {
                       </span>
                     </div>
                   )}
-                  {/* //---------------> */}
+                 {message.content && message.content.camera && (
+                  <img
+                    src={message.content.camera}
+                    alt="Image"
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                  />
+                )}
                   {message.content && message.content.text && (
                     <p className="text-sm">{message.content.text}</p>
                   )}
@@ -419,6 +430,11 @@ function EmpAdminChat() {
               </div>
             ))}
             <div ref={messagesEndRef} />
+            {showCamera && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} admin={"admin"} />
+              </div>
+            )}
           </div>
           <div className="flex items-center p-4 bg-[#f6f5fb]  bottom-0 lg:static w-full relative">
             <input
@@ -434,6 +450,13 @@ function EmpAdminChat() {
               className="hidden"
               id="file-upload"
             />
+            <button
+              onClick={() => setShowCamera(true)}
+              className="mr-2 text-xl"
+            >
+              <FaCamera />
+            </button>
+            
 
             <button
               onClick={handleSendMessage}

@@ -663,22 +663,47 @@ exports.updateById = async function (req, res) {
 
 //////////////////////////??///////////////////////////////////
 exports.accessBlock = async (req, res) => {
-  const { id } = req.params;
-  const manager = await ManagerDetails.find();
-  manager.access = false;
-  await manager.save();
-  res.status(200).json({ message: "Access Blocked Successfully" });
+  try {
+    const users = await User.find();
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found" });
+    }
+
+    // Update the access field for each user
+    for (let user of users) {
+      user.access = false;
+      await user.save();
+    }
+
+    res.status(200).json({ message: "Access Blocked Successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
+
 exports.accessUnblock = async (req, res) => {
-  const { id } = req.params;
-  const manager = await ManagerDetails.find();
-  manager.access = true;
-  await manager.save();
-  res.status(200).json({ message: "Access Unblocked Successfully" });
+  try {
+    const users = await User.find();
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found" });
+    }
+
+    // Update the access field for each user
+    for (let user of users) {
+      user.access = true;
+      await user.save();
+    }
+
+    res.status(200).json({ message: "Access Unblocked Successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };
 
 exports.blockAllUser = async (req, res) => {
-  const manager = await ManagerDetails.find();
+  const manager = await User.find();
   manager.forEach(async (m) => {
     m.access = false;
     await m.save();
@@ -687,7 +712,7 @@ exports.blockAllUser = async (req, res) => {
 };
 
 exports.unblockAllUser = async (req, res) => {
-  const manager = await ManagerDetails.find();
+  const manager = await User.find();
   manager.forEach(async (m) => {
     m.access = true;
     await m.save();

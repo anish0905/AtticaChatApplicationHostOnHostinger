@@ -4,13 +4,12 @@ import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
 import { IoIosDocument } from "react-icons/io";
 import EmployeeSidebar from "./EmployeeSidebar";
 import { BASE_URL } from "../../constants";
-import { useSound } from "use-sound";
-import notificationSound from "../../assests/sound.wav";
 import ForwardModalAllUsers from "../AllUsers/ForwardModalAllUsers";
 import ReplyModel from "../ReplyModel";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
+import Camera from "../Camera/Camera";
 
 function ChatPage() {
   const [messages, setMessages] = useState([]);
@@ -26,13 +25,13 @@ function ChatPage() {
   const [unreadUsers, setUnreadUsers] = useState([]);
   const [isMobileView, setIsMobileView] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [playNotificationSound] = useSound(notificationSound);
   const [hoveredMessage, setHoveredMessage] = useState(null);
   const [showDropdown, setShowDropdown] = useState(null);
   const [forwardMessage, setForwardMessage] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -190,7 +189,14 @@ function ChatPage() {
     setShowForwardModal(false);
   };
 
-  
+  const handleCapture = (imageSrc) => {
+    setAttachment({ url: imageSrc, type: "image/jpeg" });
+    setShowCamera(false);
+  };
+
+  const handleCloseCamera = () => {
+    setShowCamera(false);
+  };
 
 
   return (
@@ -240,6 +246,13 @@ function ChatPage() {
                     className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32 my-2"
                   />
                 )}
+                 {message.content && message.content.camera && (
+                  <img
+                    src={message.content.camera}
+                    alt="Image"
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                  />
+                )}
                 {message.content && message.content.document && (
                   <a
                     href={message.content.document}
@@ -286,6 +299,11 @@ function ChatPage() {
               </div>
             ))}
             <div ref={messagesEndRef} />
+            {showCamera && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} />
+              </div>
+            )}
           </div>
 
           <div className="flex items-center p-4 bg-[#eef2fa] border-t border-gray-200 fixed bottom-0 w-full lg:static">
@@ -296,6 +314,12 @@ function ChatPage() {
               placeholder="Type a message..."
                className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
             />
+             <button
+              onClick={() => setShowCamera(true)}
+              className="mr-2 text-xl"
+            >
+              <FaCamera />
+            </button>
            
             <button
               onClick={handleSendMessage}

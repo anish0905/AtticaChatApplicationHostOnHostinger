@@ -11,33 +11,35 @@ const Chat = () => {
 
     const sender = localStorage.getItem('user1');
     const recipient = localStorage.getItem('user2');
-     const selectedRole =localStorage.getItem("selectedRole");
-     const user2Name = localStorage.getItem("user2Name");
-     const user1Name = localStorage.getItem("user1Name");
-    const loggedInUserId = sender; 
+    const selectedRole = localStorage.getItem("selectedRole");
+    const user2Name = localStorage.getItem("user2Name");
+    const user1Name = localStorage.getItem("user1Name");
+    const loggedInUserId = sender;
 
     const fetchMessages = (sender, recipient) => {
-      try {
-         if(selectedRole==="Admin"){
-          axios
-          .get(`${BASE_URL}/api/empadminsender/getmessages/${recipient}/${sender}`)
-          .then((response) => {``
-            setMessages(response.data);
-          })
-         
-         }
-         else{
-          axios
-          .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
-          .then((response) => {``
-            setMessages(response.data);
-          })
-  
-         }
-      } catch (error) {
-        console.error(error);
-        
-      }
+        try {
+            if (selectedRole === "Admin") {
+                axios
+                    .get(`${BASE_URL}/api/empadminsender/getadminmessages/${recipient}/${sender}`)
+                    .then((response) => {
+                        ``
+                        setMessages(response.data);
+                    })
+
+            }
+            else {
+                axios
+                    .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
+                    .then((response) => {
+                        ``
+                        setMessages(response.data);
+                    })
+
+            }
+        } catch (error) {
+            console.error(error);
+
+        }
     };
     // fkjkjkj
 
@@ -59,19 +61,19 @@ const Chat = () => {
 
     return (
         <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#f6f5fb] h-screen overflow-hidden">
-             <h1  className=" flex justify-between font-medium content-center items-center  bg-[#5443C3] px-4 py-4 rounded text-white text-xl mb-5  ">
-               <p>Chat</p>
-               <p className='text-sm'> {user1Name} </p>
-               <p className='text-xs'>With</p>
-               <p className='text-sm'>{user2Name}</p>
-             </h1>
+            <h1 className=" flex justify-between font-medium content-center items-center  bg-[#5443C3] px-4 py-4 rounded text-white text-xl mb-5  ">
+                <p>Chat</p>
+                <p className='text-sm'> {user1Name} </p>
+                <p className='text-xs'>With</p>
+                <p className='text-sm'>{user2Name}</p>
+            </h1>
             {messages.map((message, index) => (
                 <div
                     key={message._id}
                     className={`mb-4 p-4 rounded-lg max-w-[70%] relative ${message.sender === loggedInUserId
                         ? 'bg-[#5443C3] text-white rounded-tr-3xl rounded-bl-3xl self-end'
                         : 'bg-white text-[#5443C3] rounded-tl-3xl rounded-br-3xl self-start'
-                    }`}
+                        }`}
                     onMouseEnter={() => handleHover(index)}
                     onMouseLeave={() => setHoveredMessage(null)}
                 >
@@ -90,6 +92,13 @@ const Chat = () => {
                             src={message.content.image}
                             alt="Image"
                             className="min-w-xs"
+                        />
+                    )}
+                    {message.content && message.content.camera && (
+                        <img
+                            src={message.content.camera}
+                            alt="Image"
+                            className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
                         />
                     )}
                     {message.content && message.content.document && (

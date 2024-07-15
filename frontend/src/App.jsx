@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./App.css";
 import AuthRequired from "./components/authentication/AuthRequired";
@@ -82,7 +81,7 @@ import LogisticToAdmin from "./components/Logistic/LogisticToAdmin";
 // import Notification from "./components/utility/Notification";
 // import NotificationsComponent from "./components/utility/NotificationsComponent";
 import FetchApiComponent from "./components/utility/FetchApiComponent";
-import NotificationHandler from "../src/components/utility/GroupNotification"
+import NotificationHandler from "../src/components/utility/GroupNotification";
 import GroupNotification from "../src/components/utility/GroupNotification";
 import GlobalNotification from "./components/utility/GlobalNotification";
 
@@ -208,12 +207,10 @@ const App = () => {
 
           <Route path="/Sidebar" element={<Sidebar />} />
 
-
-          <Route path="/LogisticLogin" element={<LogisticLogin/>} />
-          <Route path="/LogisticReg" element={<LogisticReg/>} />
+          <Route path="/LogisticLogin" element={<LogisticLogin />} />
+          <Route path="/LogisticReg" element={<LogisticReg />} />
           <Route path="/LogisticChat" element={<LogisticChat />} />
           <Route path="/LogisticToAdminChat" element={<LogisticToAdmin />} />
-
 
           {isSuperAdminLoggedIn ? (
             <>
@@ -246,9 +243,9 @@ const App = () => {
       </Routes>
       {/* <Notification/> */}
       {/* <PopNotification/> */}
-      <FetchApiComponent/>
-      <GroupNotification/>
-      <GlobalNotification/>
+      {/* <FetchApiComponent/> */}
+      <GroupNotification />
+      <GlobalNotification />
     </BrowserRouter>
   );
 };

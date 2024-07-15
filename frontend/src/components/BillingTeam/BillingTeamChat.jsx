@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { IoIosDocument } from "react-icons/io";
-import { FaPaperclip } from "react-icons/fa";
+import { FaCamera, FaPaperclip } from "react-icons/fa";
 import { BASE_URL } from "../../constants";
 import { useSound } from "use-sound";
 import notificationSound from "../../assests/sound.wav";
@@ -15,6 +15,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
+import Camera from "../Camera/Camera";
 
 function BillingTeamChat() {
   const [messages, setMessages] = useState([]);
@@ -37,6 +38,7 @@ function BillingTeamChat() {
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
+  const [showCamera, setShowCamera] = useState(false);
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -192,6 +194,15 @@ function BillingTeamChat() {
     setShowForwardModal(false);
   };
 
+  const handleCapture = (imageSrc) => {
+    setAttachment({ url: imageSrc, type: "image/jpeg" });
+    setShowCamera(false);
+  };
+
+  const handleCloseCamera = () => {
+    setShowCamera(false);
+  };
+
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
@@ -263,6 +274,14 @@ function BillingTeamChat() {
                     Your browser does not support the video tag.
                   </video>
                 )}
+                 {message.content && message.content.camera && (
+                  <img
+                    src={message.content.camera}
+                    alt="Image"
+                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                  />
+                )}
+                <span className="text-xs text-black">
                 <span className="text-xs font-base  text-gray-500">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
@@ -293,6 +312,11 @@ function BillingTeamChat() {
               </div>
             ))}
             <div ref={messagesEndRef} />
+            {showCamera && (
+              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} />
+              </div>
+            )}
           </div>
           <div className="flex items-center p-4 bg-[#eef2fa] border-t border-gray-200  fixed bottom-0 w-full lg:static">
             <input
@@ -302,6 +326,12 @@ function BillingTeamChat() {
               placeholder="Type a message..."
               className="flex-grow p-2 border-2 rounded-lg mr-2 border-[#5443c3]"
             />
+             <button
+              onClick={() => setShowCamera(true)}
+              className="mr-2 text-xl"
+            >
+              <FaCamera />
+            </button>
 
             <button
 

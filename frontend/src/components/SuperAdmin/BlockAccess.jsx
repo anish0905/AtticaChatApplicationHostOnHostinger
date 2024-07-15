@@ -287,10 +287,11 @@ const BlockAccess = () => {
             Block All
           </button>
           {/* <button
-                        className='bg-green-700 px-4 py-2 rounded-md shadow-md text-white'
-                        onClick={UnblockBranchWisefun}>
-                        Unblock All
-                    </button> */}
+            className="bg-green-700 px-4 py-2 rounded-md shadow-md text-white"
+            onClick={UnblockBranchWisefun}
+          >
+            Unblock All
+          </button> */}
         </div>
         <div className="mt-4 overflow-y-auto " style={{ maxHeight: "750px" }}>
           <ul className="block font-medium px-3 py-1 rounded text-base lg:w-full w-full">
