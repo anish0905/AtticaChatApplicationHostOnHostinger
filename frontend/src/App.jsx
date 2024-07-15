@@ -246,7 +246,7 @@ const App = () => {
       </Routes>
       {/* <Notification/> */}
       {/* <PopNotification/> */}
-      <FetchApiComponent/>
+      {/* <FetchApiComponent/> */}
       <GroupNotification/>
       <GlobalNotification/>
     </BrowserRouter>

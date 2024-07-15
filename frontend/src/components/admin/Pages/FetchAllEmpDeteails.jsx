@@ -125,7 +125,7 @@ const FetchAllEmpDeteails = ({ handleClick }) => {
         className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg"
       />
 
-      <div className="mt-4 overflow-y-auto" style={{ maxHeight: "900px" }}>
+      <div className="mt-4 overflow-y-auto" style={{ maxHeight: "700px" }}>
         {loading ? <p>Loading...</p> : renderUserDetails()}
       </div>
     </div>

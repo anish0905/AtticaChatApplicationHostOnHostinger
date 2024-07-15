@@ -52,6 +52,11 @@ const empAdminSenderSchema = new mongoose.Schema(
         type: String,
         required: false,
       },
+      camera:{
+        type: String,
+        required: false,
+        default: null
+      }
     },
    
   },

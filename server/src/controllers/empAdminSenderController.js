@@ -9,11 +9,11 @@ const cron = require("node-cron");
 const mongoose = require('mongoose');
 
 const createMessage = async (req, res) => {
-  const { sender, recipient, text, latitude, longitude, senderName  } = req.body;
-  console.log(latitude,longitude)
+  const { sender, recipient, text, latitude, longitude, senderName, camera  } = req.body;
+  // console.log(latitude,longitude)
 
   try {
-    let content = { text };
+    let content = { text,camera };
 
     const hasImage = req.files && req.files.image;
     const hasDocument = req.files && req.files.document;
@@ -94,7 +94,8 @@ const createMessage = async (req, res) => {
 
     const result =await message.save();
 
-    console.log(result)
+    
+
 
 
 

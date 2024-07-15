@@ -1,9 +1,12 @@
 // src/components/Camera.jsx
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import axios from "axios";
 import { BASE_URL } from "../../constants";
-const Camera = ({ onCapture, onClose ,recipient,loggedInUserId}) => {
+
+const Camera = ({ onCapture, onClose, recipient, loggedInUserId, admin }) => {
   const videoRef = useRef(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const startCamera = async () => {
@@ -12,8 +15,10 @@ const Camera = ({ onCapture, onClose ,recipient,loggedInUserId}) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
         }
+        setLoading(false);
       } catch (error) {
-        console.error('Error accessing camera:', error);
+        setError('Error accessing camera. Please check your device settings.');
+        setLoading(false);
       }
     };
 
@@ -39,7 +44,6 @@ const Camera = ({ onCapture, onClose ,recipient,loggedInUserId}) => {
       
       // Convert canvas to base64 image URL
       const imageDataUrl = canvas.toDataURL('image/jpeg');
-      // console.log(imageDataUrl, "imageDataUrl");
       
       // Construct messageData and send immediately
       const messageData = {
@@ -47,9 +51,12 @@ const Camera = ({ onCapture, onClose ,recipient,loggedInUserId}) => {
         recipient: recipient,
         camera: imageDataUrl,
       };
-  
+
+      const url = admin === "admin" ? `${BASE_URL}/api/empadminsender/createMessage` : `${BASE_URL}/api/postmessages/`;
+      console.log('Sending to URL:', url); // Debugging line to check the URL
+
       axios
-        .post(`${BASE_URL}/api/postmessages`, messageData)
+        .post(url, messageData)
         .then((response) => {
           console.log("Message sent successfully:", response.data);
           onClose(); // Close any UI after sending
@@ -59,25 +66,42 @@ const Camera = ({ onCapture, onClose ,recipient,loggedInUserId}) => {
         });
     }
   };
-  
+
+  if (error) {
+    return (
+      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-75">
+        <p className="text-white">{error}</p>
+        <button onClick={onClose} className="px-4 py-2 mt-4 bg-red-500 text-white rounded-lg">
+          Close
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-75">
-      <video
-        ref={videoRef}
-        autoPlay
-        className="w-full max-w-md rounded-lg"
-      />
+      {loading ? (
+        <p className="text-white">Loading camera...</p>
+      ) : (
+        <video
+          ref={videoRef}
+          autoPlay
+          className="w-full max-w-md rounded-lg"
+          aria-label="Camera feed"
+        />
+      )}
       <div className="mt-4 flex space-x-4">
         <button
           onClick={handleCapture}
           className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+          aria-label="Capture image"
         >
           Capture
         </button>
         <button
           onClick={onClose}
           className="px-4 py-2 bg-red-500 text-white rounded-lg"
+          aria-label="Close camera"
         >
           Close
         </button>
