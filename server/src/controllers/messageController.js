@@ -2,11 +2,11 @@ const Message = require("../model/messageModel.js");
 const { ObjectId } = require("mongodb");
 const fs = require("fs");
 const { uploadOnCloudinary } = require("../utils/cloudinary.js");
-const Notification = require("../model/notificationModel.js");
-const mongoose = require("mongoose")
+
+const mongoose = require("mongoose");
 
 const createMessage = async (req, res) => {
-  const { sender, recipient, text,senderName , camera } = req.body;
+  const { sender, recipient, text, senderName, camera } = req.body;
   // console.log(camera)
 
   if (!sender || !recipient) {
@@ -86,9 +86,7 @@ const createMessage = async (req, res) => {
       content,
     });
 
-
     await message.save();
-    
 
     const notification = new Notification({
       sender,
@@ -96,9 +94,9 @@ const createMessage = async (req, res) => {
       recipient,
       content,
     });
-    
-   const result =await notification.save();
-  //  console.log(result);
+
+    const result = await notification.save();
+    //  console.log(result);
     res.status(201).json({ message: "Message sent", data: message });
   } catch (error) {
     console.error("Error creating message:", error);
@@ -128,23 +126,22 @@ const getMessages = async (req, res) => {
 };
 
 const getMessagesByUser = async (req, res) => {
-  const { userId1} = req.params;
+  const { userId1 } = req.params;
 
   if (!ObjectId.isValid(userId1)) {
     return res.status(400).json({ message: "Invalid user IDs" });
   }
 
   try {
-    const messages = await Message.find({recipient: userId1
-      
-    }).sort({ createdAt: 1 });
+    const messages = await Message.find({ recipient: userId1 }).sort({
+      createdAt: 1,
+    });
 
     res.status(200).json(messages);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
-
 
 const deleteMessage = async (req, res) => {
   const { id } = req.params;
@@ -197,44 +194,10 @@ const markMessagesRead = async (req, res) => {
   }
 };
 
-
-// Fetch the latest message and delete it after 10 seconds
-const getNotificationId = async (req, res) => {
-  try {
-    // Find the latest message
-    const lastMessage = await Message.findOne().sort({ createdAt: -1 }).exec();
-
-    if (!lastMessage) {
-      return res.status(404).json({ message: "No message found" });
-    }
-
-    // Send the message to the client
-    res.status(200).json(lastMessage);
-
-    // Schedule the message deletion after 10 seconds
-    setTimeout(async () => {
-      try {
-        await Message.findByIdAndDelete(lastMessage._id);
-        console.log(
-          `Message with ID ${lastMessage._id} deleted after 10 seconds`
-        );
-      } catch (deleteError) {
-        console.error(
-          `Failed to delete message with ID ${lastMessage._id}:`,
-          deleteError
-        );
-      }
-    }, 10000); // 10000 milliseconds = 10 seconds
-  } catch (error) {
-    console.error("Error fetching the latest message:", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-};
-
 const forwardMessage = async (req, res) => {
   try {
-    const { messageId, newRecipients,sender } = req.body;
-    console.log(newRecipients)
+    const { messageId, newRecipients, sender } = req.body;
+    console.log(newRecipients);
     const originalMessage = await Message.findById(messageId);
 
     if (!originalMessage) {
@@ -261,7 +224,8 @@ const forwardMessage = async (req, res) => {
 
 const replyToMessage = async (req, res) => {
   try {
-    const { parentMessageId, sender, recipient, text,image,document,video } = req.body;
+    const { parentMessageId, sender, recipient, text, image, document, video } =
+      req.body;
 
     // Find the parent message by ID
     const parentMessage = await Message.findById(parentMessageId);
@@ -276,8 +240,11 @@ const replyToMessage = async (req, res) => {
       sender,
       recipient,
       content: {
-        text,image,document,video,
-          originalMessage:
+        text,
+        image,
+        document,
+        video,
+        originalMessage:
           parentMessage.content.text ||
           parentMessage.content.originalMessage ||
           "",
@@ -294,35 +261,35 @@ const replyToMessage = async (req, res) => {
   }
 };
 
-const getuserAllMessages = async(req, res, next) => {
+const getuserAllMessages = async (req, res, next) => {
   try {
     const { userId } = req.params;
-    const messages = await Message.find({ recipient: userId })
-    .sort({ createdAt: -1 });
+    const messages = await Message.find({ recipient: userId }).sort({
+      createdAt: -1,
+    });
     res.json(messages);
   } catch (error) {
     console.error("Error fetching messages:", error);
     res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 
-const getuserAllMessagesNotification= async (req, res) => {
+const getuserAllMessagesNotification = async (req, res) => {
   const userId = req.params.userId;
 
   // Validate the userId
   if (!mongoose.Types.ObjectId.isValid(userId)) {
-    return res.status(400).json({ error: 'Invalid user ID' });
+    return res.status(400).json({ error: "Invalid user ID" });
   }
 
   try {
     const messages = await Message.find({ recipient: userId }); // Fetch messages where recipient matches userId
     res.status(200).json(messages); // Send the messages as JSON response
   } catch (error) {
-    console.error('Error fetching messages:', error);
-    res.status(500).json({ error: 'Internal server error' }); // Send 500 status code in case of error
+    console.error("Error fetching messages:", error);
+    res.status(500).json({ error: "Internal server error" }); // Send 500 status code in case of error
   }
-}
-
+};
 
 module.exports = {
   createMessage,
@@ -330,10 +297,10 @@ module.exports = {
   deleteMessage,
   unreadMessages,
   markMessagesRead,
-  getNotificationId,
+
   forwardMessage,
   replyToMessage,
   getMessagesByUser,
   getuserAllMessages,
-  getuserAllMessagesNotification
+  getuserAllMessagesNotification,
 };

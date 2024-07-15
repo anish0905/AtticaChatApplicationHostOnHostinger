@@ -67,7 +67,10 @@ const billingTeamRegistration = async (req, res, next) => {
     const { password: userPassword, ...userWithoutPassword } = result._doc;
 
     // Respond with success message
-    res.status(201).json({ message: "User registered successfully", user: userWithoutPassword });
+    res.status(201).json({
+      message: "User registered successfully",
+      user: userWithoutPassword,
+    });
   } catch (error) {
     // Log the error for debugging
     console.error(error);
@@ -125,7 +128,7 @@ const generateToken = (userId) => {
 const getAllUsers = async (req, res) => {
   try {
     const users = await BillingTeamUser.find();
-    
+
     res.status(200).json(users);
   } catch (error) {
     res.status(500).json({
@@ -183,7 +186,10 @@ const updateUserById = async (req, res) => {
       { new: true }
     );
     const { password: userPassword, ...userWithoutPassword } = updatedUser._doc;
-    res.status(200).json({ message: "User updated successfully", user: userWithoutPassword });
+    res.status(200).json({
+      message: "User updated successfully",
+      user: userWithoutPassword,
+    });
   } catch (error) {
     res.status(500).json({
       message: "An error occurred while updating user",
@@ -205,13 +211,64 @@ const getUserById = async (req, res) => {
       return res.status(400).json({ message: "User not found" });
     }
     const { password, ...userWithoutPassword } = user._doc;
-    res.status(200).json({ message: "User fetched successfully", user: userWithoutPassword });
+    res.status(200).json({
+      message: "User fetched successfully",
+      user: userWithoutPassword,
+    });
   } catch (error) {
     res.status(500).json({
       message: "An error occurred while fetching user",
       error: error.message,
     });
   }
+};
+const accessBlock = async (req, res) => {
+  try {
+    const users = await BillingTeamUser.find();
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found" });
+    }
+
+    // Update the access field for each user
+    for (let user of users) {
+      user.access = false;
+      await user.save();
+    }
+
+    res.status(200).json({ message: "Access Blocked Successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const accessUnblock = async (req, res) => {
+  try {
+    const users = await BillingTeamUser.find();
+
+    if (users.length === 0) {
+      return res.status(404).json({ message: "No users found" });
+    }
+
+    // Update the access field for each user
+    for (let user of users) {
+      user.access = true;
+      await user.save();
+    }
+
+    res.status(200).json({ message: "Access Unblocked Successfully" });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+const blockAllUser = async (req, res) => {
+  const manager = await BillingTeamUser.find();
+  manager.forEach(async (m) => {
+    m.access = false;
+    await m.save();
+  });
+  res.status(200).json({ message: "All Managers Access Blocked Successfully" });
 };
 
 module.exports = {
@@ -222,4 +279,7 @@ module.exports = {
   updateUserById,
   delUserbyId,
   getAllUsers,
+  accessUnblock,
+  accessBlock,
+  blockAllUser,
 };
