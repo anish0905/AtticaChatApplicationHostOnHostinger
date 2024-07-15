@@ -36,6 +36,8 @@ function LogisticChat() {
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
 
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
     setRecipient(id);
@@ -84,6 +86,7 @@ function LogisticChat() {
     const messageData = {
       sender: loggedInUserId,
       recipient: recipient,
+      senderName: userDetails.name,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
       document: attachment?.type.startsWith("application/")
@@ -329,7 +332,7 @@ function LogisticChat() {
             >
               <IoMdSend />
             </button>
-            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={ userDetails.name}/>
           </div>
         </div>
       ) : (
@@ -380,6 +383,7 @@ function LogisticChat() {
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+          senderName={ userDetails.name}
         />
       )}
       {replyMessage && (
@@ -388,6 +392,7 @@ function LogisticChat() {
           sender={loggedInUserId}
           recipient={recipient}
           isVisible={showReplyModal}
+          senderName={ userDetails.name}
           onClose={() => setShowReplyModal(false)}
         />
       )}

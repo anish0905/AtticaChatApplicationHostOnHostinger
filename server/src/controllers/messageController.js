@@ -88,15 +88,6 @@ const createMessage = async (req, res) => {
 
     await message.save();
 
-    const notification = new Notification({
-      sender,
-      senderName,
-      recipient,
-      content,
-    });
-
-    const result = await notification.save();
-    //  console.log(result);
     res.status(201).json({ message: "Message sent", data: message });
   } catch (error) {
     console.error("Error creating message:", error);
@@ -297,7 +288,6 @@ module.exports = {
   deleteMessage,
   unreadMessages,
   markMessagesRead,
-
   forwardMessage,
   replyToMessage,
   getMessagesByUser,

@@ -94,6 +94,10 @@ const billingTeamLogin = async (req, res) => {
       return res.status(400).json({ message: "Admin not found" });
     }
 
+    if(!user.access)
+{
+  return res.status(401).json({ error: "Admin not authorized" });
+}
     // Check if the password matches
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
+import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { IoIosDocument } from "react-icons/io";
 import { BASE_URL } from "../../constants";
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
@@ -35,6 +35,8 @@ function SecurityToSecurityChat() {
   const [replyMessage, setReplyMessage] = useState(null); //--------------->
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------
   const [showCamera, setShowCamera] = useState(false);
+
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -81,6 +83,7 @@ function SecurityToSecurityChat() {
     const messageData = {
       sender: loggedInUserId,
       recipient: recipient,
+      senderName: userDetails.name,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
       document: attachment?.type.startsWith("application/")
@@ -203,26 +206,25 @@ function SecurityToSecurityChat() {
       {showChat ? (
         <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white border-2 border-[#5443c3] my-2 mx-2 sticky top-0 z-10">
-      
+
             <button
               onClick={handleBackToEmployees}
-            className=" text-white text-4xl p-2 rounded-md"
+              className=" text-white text-4xl p-2 rounded-md"
             >
-            <FaArrowLeft  className="lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white lg:text-2xl text-xl"/>
+              <FaArrowLeft className="lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white lg:text-2xl text-xl" />
             </button>
-          
-              <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
-         
+
+            <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
+
           </div>
           <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] mb-20 lg:mb-0 h-screen">
-            {messages.map((message,index) => (
+            {messages.map((message, index) => (
               <div
                 key={message._id}
-                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${
-                  message.sender === loggedInUserId
+                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
                     ? " self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-                    :  "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-                }`}
+                    : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                  }`}
 
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
@@ -236,7 +238,7 @@ function SecurityToSecurityChat() {
                 )}
                 {message.content && message.content.text && (
                   <p className="font-bold lg:text-base text-xs">
-                    
+
                     {message.content.text}</p>
                 )}
                 {message.content && message.content.image && (
@@ -246,7 +248,7 @@ function SecurityToSecurityChat() {
                     className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
                   />
                 )}
-                 {message.content && message.content. camera && (
+                {message.content && message.content.camera && (
                   <img
                     src={message.content.camera}
                     alt="Image"
@@ -258,7 +260,7 @@ function SecurityToSecurityChat() {
                     href={message.content.document}
                     target="_blank"
                     rel="noopener noreferrer"
-                   className="text-orange-500 hover:underline"
+                    className="text-orange-500 hover:underline"
                   >
                     <IoIosDocument className="text-9xl" />
                   </a>
@@ -272,36 +274,36 @@ function SecurityToSecurityChat() {
                 <span className="text-xs text-black">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
-              
+
                 {hoveredMessage === index && (
-                    <AiOutlineDown
-                      className="absolute top-2 right-2 cursor-pointer"
-                      onClick={() => handleDropdownClick(index)}
-                    />
-                  )}
-            
-                  {showDropdown === index && (
-                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleReply(message)}
-                      >
-                        Reply
-                      </button>
-                      <button
-                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleForward(message)}
-                      >
-                        Forward
-                      </button>
-                    </div>
-                  )}
+                  <AiOutlineDown
+                    className="absolute top-2 right-2 cursor-pointer"
+                    onClick={() => handleDropdownClick(index)}
+                  />
+                )}
+
+                {showDropdown === index && (
+                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleReply(message)}
+                    >
+                      Reply
+                    </button>
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleForward(message)}
+                    >
+                      Forward
+                    </button>
+                  </div>
+                )}
               </div>
             ))}
             <div ref={messagesEndRef} />
             {showCamera && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient}  />
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} />
               </div>
             )}
           </div>
@@ -328,18 +330,18 @@ function SecurityToSecurityChat() {
 
             <button
               onClick={handleSendMessage}
-            className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
-            <IoMdSend />
+              <IoMdSend />
             </button>
-            <AllUsersFileModel  sender={loggedInUserId} recipient={recipient} />
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto">
           <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Security Employees</h1>
           <div className="relative flex items-center mb-4">
-            
+
             <input
               type="text"
               value={userSearchQuery}
@@ -357,13 +359,12 @@ function SecurityToSecurityChat() {
               .map((user) => (
                 <li
                   key={user._id}
-                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between lg:text-xl text-sm text-[#5443c3] font-bold ${
-                    unreadUsers.some(
-                      (unreadUser) => unreadUser.userId === user._id
-                    )
+                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between lg:text-xl text-sm text-[#5443c3] font-bold ${unreadUsers.some(
+                    (unreadUser) => unreadUser.userId === user._id
+                  )
                       ? "bg-blue-100"
                       : "bg-gray-200"
-                  } ${recipient === user._id ? "bg-green-200" : ""}`}
+                    } ${recipient === user._id ? "bg-green-200" : ""}`}
                   onClick={() => handleClick(user._id, user.name)}
                 >
                   <span>{user.name}</span>
@@ -377,12 +378,13 @@ function SecurityToSecurityChat() {
           </ul>
         </div>
       )}
-{showForwardModal && (
-        < ForwardModalAllUsers    
+      {showForwardModal && (
+        < ForwardModalAllUsers
           users={users}
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+          senderName={userDetails.name}
         />
       )}
       {replyMessage && ( ////--------------------->
@@ -393,6 +395,7 @@ function SecurityToSecurityChat() {
           isVisible={showReplyModal}
           onClose={() => setShowReplyModal(false)}
           value={"Security"}
+          senderName={userDetails.name}
 
         />
       )}

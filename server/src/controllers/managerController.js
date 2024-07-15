@@ -76,6 +76,10 @@ const loginManager = async (req, res) => {
       return res.status(400).json({ message: "Manager not found" });
     }
 
+    if(!manager.access){
+      return res.status(401).json({ error: "Manager not authorized" });
+    }
+
     const isMatch = await manager.matchPassword(manager_password);
     if (!isMatch) {
       return res.status(400).json({ message: "Invalid credentials" });

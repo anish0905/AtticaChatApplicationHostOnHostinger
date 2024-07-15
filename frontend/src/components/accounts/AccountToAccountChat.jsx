@@ -42,6 +42,8 @@ import Camera from "../Camera/Camera";
     const [showReplyModal, setShowReplyModal] = useState(false);
     const [showCamera, setShowCamera] = useState(false);
 
+    const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
     const handleClick = (id, name) => {
       setSender(loggedInUserId);
       setRecipient(id);
@@ -86,6 +88,7 @@ import Camera from "../Camera/Camera";
 
       const messageData = {
         sender: loggedInUserId,
+        senderName: userDetails.name,
         recipient: recipient,
         text: newMessage,
         image: attachment?.type.startsWith("image/") ? attachment.url : null,
@@ -333,7 +336,7 @@ import Camera from "../Camera/Camera";
               >
                 <IoMdSend />
               </button>
-              <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
+              <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
             </div>
           </div>
         ) : (

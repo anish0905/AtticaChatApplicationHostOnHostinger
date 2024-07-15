@@ -33,6 +33,8 @@ function MonitoringTeamChat() {
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
 
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
     setRecipient(id);
@@ -79,6 +81,7 @@ function MonitoringTeamChat() {
     const messageData = {
       sender: loggedInUserId,
       recipient: recipient,
+      senderName: userDetails.name,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
       document: attachment?.type.startsWith("application/")
@@ -331,7 +334,7 @@ function MonitoringTeamChat() {
             >
               <IoMdSend />
             </button>
-            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
         </div>
       ) : (
@@ -381,6 +384,7 @@ function MonitoringTeamChat() {
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+          senderName={userDetails.name}
         />
       )}
       {replyMessage && (
@@ -389,6 +393,7 @@ function MonitoringTeamChat() {
           sender={loggedInUserId}
           recipient={recipient}
           isVisible={showReplyModal}
+          senderName={userDetails.name}
           onClose={() => setShowReplyModal(false)}
 
         />

@@ -36,6 +36,8 @@ function HrToHrChat() {
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -82,6 +84,7 @@ function HrToHrChat() {
     const messageData = {
       sender: loggedInUserId,
       recipient: recipient,
+      senderName: userDetails.name,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
       document: attachment?.type.startsWith("application/")
@@ -331,7 +334,7 @@ function HrToHrChat() {
             >
                  <IoMdSend />
             </button>
-            <AllUsersFileModel  sender={loggedInUserId} recipient={recipient} />
+            <AllUsersFileModel  sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
         </div>
       ) : (
@@ -384,12 +387,14 @@ function HrToHrChat() {
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+          senderName={userDetails?.name}
         />
       )}
         {replyMessage && (
         <ReplyModel
           message={replyMessage}
           sender={loggedInUserId}
+          senderName={userDetails?.name}
           recipient={recipient}
           isVisible={showReplyModal}
           onClose={() => setShowReplyModal(false)}

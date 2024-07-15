@@ -37,6 +37,8 @@ function SoftwareToSoftware() {
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
 
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -83,6 +85,7 @@ function SoftwareToSoftware() {
     const messageData = {
       sender: loggedInUserId,
       recipient: recipient,
+      senderName :userDetails.name,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
       document: attachment?.type.startsWith("application/")
@@ -331,7 +334,7 @@ function SoftwareToSoftware() {
             >
                 <IoMdSend />
             </button>
-            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
         </div>
       ) : (
@@ -382,6 +385,7 @@ function SoftwareToSoftware() {
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+          senderName={userDetails.name}
         />
       )}
       {replyMessage && (
@@ -390,6 +394,7 @@ function SoftwareToSoftware() {
           sender={loggedInUserId}
           recipient={recipient}
           isVisible={showReplyModal}
+          senderName={userDetails.name}
           onClose={() => setShowReplyModal(false)}
 
         />

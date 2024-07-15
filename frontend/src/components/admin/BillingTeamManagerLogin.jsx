@@ -24,10 +24,22 @@ const BillingTeamManagerLogin = () => {
       localStorage.setItem("CurrentUserId", response.data.user._id);
       localStorage.setItem("token", response.data.accessToken);
       localStorage.setItem("email", email);
+      fetchUserDetails(response.data.user._id);
       navigate("/BillingTeamChat");
-      // Handle successful login (e.g., redirect to dashboard)
+      
     } catch (error) {
       setError(error.response.data.message);
+    }
+  };
+
+  const fetchUserDetails = async (userId) => {
+    try {
+      const resp = await axios.get(`${BASE_URL}/api/billingTeam/getUserById/${userId}`);
+  
+      localStorage.setItem("userDetails",JSON.stringify(resp.data))
+    } catch (error) {
+      console.error("Fetch User Details Error:", error);
+      // Handle error gracefully, set userDetails to null or {}
     }
   };
 

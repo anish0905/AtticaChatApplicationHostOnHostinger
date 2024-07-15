@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { IoMdDocument, IoMdSend } from "react-icons/io";
-import { IoArrowBack } from "react-icons/io5";
 import notificationTone from "../../assests/notification_ding.mp3";
 import { BASE_URL } from "../../constants";
 

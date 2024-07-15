@@ -40,6 +40,7 @@ function ManagerChat() {
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
   const [showCamera, setShowCamera] = useState(false);
 
+  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const handleClick = (id, name) => {
     setRecipient(id);
@@ -109,6 +110,7 @@ function ManagerChat() {
 
     const messageData = {
       sender: loggedInUserId,
+      senderName: userDetails.manager_name,
       recipient: recipient,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
@@ -435,7 +437,7 @@ function ManagerChat() {
               >
                 <IoMdSend />
               </button>
-              <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
+              <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.manager_name} />
             </div>
           </div>
         )}
@@ -447,6 +449,7 @@ function ManagerChat() {
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
+          senderName={userDetails.manager_name}
         />
       )}
       {replyMessage && (
@@ -456,6 +459,7 @@ function ManagerChat() {
           recipient={recipient}
           isVisible={showReplyModal}
           onClose={() => setShowReplyModal(false)}
+          senderName={userDetails.manager_name}
 
         />
       )}

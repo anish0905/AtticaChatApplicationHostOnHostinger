@@ -21,12 +21,25 @@ const ManagerLogin = () => {
             localStorage.setItem("CurrentUserId",response.data.id)
             localStorage.setItem("token",response.data.accessToken)
             localStorage.setItem("email",email)
+            fetchUserDetails(response.data.id);
             navigate("/managerChat")
             // Handle successful login (e.g., redirect to dashboard)
         } catch (error) {
             setError(error.response.data.message);
         }
     };
+
+    const fetchUserDetails = async (userId) => {
+        try {
+          const resp = await axios.get(`${BASE_URL}/api/manager/getManagerById/${userId}`);
+      
+          localStorage.setItem("userDetails",JSON.stringify(resp.data))
+        } catch (error) {
+          console.error("Fetch User Details Error:", error);
+          // Handle error gracefully, set userDetails to null or {}
+        }
+      };
+    
 
     return (
 

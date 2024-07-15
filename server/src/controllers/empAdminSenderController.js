@@ -94,15 +94,6 @@ const createMessage = async (req, res) => {
 
     const result = await message.save();
 
-    const notification = new Notification({
-      sender,
-      recipient,
-      senderName,
-      content,
-    });
-
-    await notification.save();
-
     res.status(201).json({ message: "Message sent", data: message });
   } catch (error) {
     res.status(400).json({ message: error.message });
