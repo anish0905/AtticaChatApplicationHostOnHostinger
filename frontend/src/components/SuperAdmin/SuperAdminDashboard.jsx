@@ -57,7 +57,7 @@ const SuperAdminDashboard = () => {
     <div className="lg:flex block bg-[#f6f5fb]">
       <Sidebar />
       <div className="flex-1 p-6">
-        <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
+        <div className="flex items-center justify-between mb-4 flex-col lg:flex-col">
         <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Admin Details</h1>
        <div>
          <button

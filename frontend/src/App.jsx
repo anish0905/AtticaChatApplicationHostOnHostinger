@@ -87,6 +87,7 @@ import GlobalNotification from "./components/utility/GlobalNotification";
 import TEDashboard from "./components/SuperAdmin/TEDashboard";
 import AnnouncementByAdmin from "./components/admin/AnnouncementByAdmin";
 import FetchAllAnnouncement from "./components/admin/FetchAllAnnouncement";
+import SuperAdminDashboard from "./components/SuperAdmin/SuperAdminDashboard";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -220,7 +221,7 @@ const App = () => {
 
           {isSuperAdminLoggedIn ? (
             <>
-              <Route path="/superAdminDashboard" element={<AtticDashboard/>} />
+              <Route path="/superAdminDashboard" element={<SuperAdminDashboard/>} />
               <Route
                 path="/superAdminGroups"
                 element={<SuperAdminGroupList />}
