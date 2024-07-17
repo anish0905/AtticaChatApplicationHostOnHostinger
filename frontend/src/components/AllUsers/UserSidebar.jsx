@@ -146,21 +146,23 @@ const UserSidebar = ({ value,newNotificationCount }) => {
     }
   };
  
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchAnnounce();
-       
         setAnnouncements(data); 
+  
       } catch (error) {
         console.error('Error fetching announcements:', error);
       }
     };
 
-    fetchData();   
-    
-})
+    fetchData(); // Fetch immediately on component mount
+
+    const intervalId = setInterval(fetchData, 10000); // Fetch every 5 seconds
+
+    return () => clearInterval(intervalId); // Clear interval on component unmount
+  }, []);
  
 
  

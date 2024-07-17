@@ -33,21 +33,23 @@ const EmployeeSidebar = () => {
   };
 
   const isActive = (path) => location.pathname === path;
-
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchAnnounce();
-        console.log("sidbar", data)
-        setAnnouncements(data); // Set announcements state with fetched data
+        setAnnouncements(data); 
+  
       } catch (error) {
         console.error('Error fetching announcements:', error);
       }
     };
 
-    fetchData();   
-    
-})
+    fetchData(); // Fetch immediately on component mount
+
+    const intervalId = setInterval(fetchData, 10000); // Fetch every 5 seconds
+
+    return () => clearInterval(intervalId); // Clear interval on component unmount
+  }, []);
 
   return (
     <>

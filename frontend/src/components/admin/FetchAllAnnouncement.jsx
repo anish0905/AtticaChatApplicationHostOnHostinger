@@ -25,6 +25,7 @@ function FetchAllAnnouncement() {
     axios
       .get(`${BASE_URL}/api/announce/getAllAnnounce/`)
       .then((response) => {
+        console.log("gtgt68yyyyyyyyghy",response);
         setMessages(response.data);
         setNewNotificationCount(response.data.length); // Set initial notification count
         scrollToBottom();
