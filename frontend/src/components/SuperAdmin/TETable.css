@@ -1,0 +1,45 @@
+/* TETable.css */
+
+.table-container {
+    background-color: #f9fafb;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .table th {
+    background-color: #5443c3;
+    color: white;
+  }
+  
+  .table td {
+    color: #4b5563;
+  }
+  
+  .table tbody tr:hover {
+    background-color: #f3f4f6;
+  }
+  
+  .cursor-pointer {
+    cursor: pointer;
+    color: #3b82f6;
+    text-decoration: underline;
+  }
+  
+  .date-picker {
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    padding: 4px 8px;
+    width: 100%;
+  }
+  

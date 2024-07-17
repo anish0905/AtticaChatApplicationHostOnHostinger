@@ -105,7 +105,7 @@ const AtticDashboard = () => {
         )}
 
         {/* Table or component based on selected view */}
-        <div className="w-full">
+        <div className="w-screen">
           {viewOption === "manager" && <TableSuper />}
           {viewOption === "TE" && <TETable />}
         </div>

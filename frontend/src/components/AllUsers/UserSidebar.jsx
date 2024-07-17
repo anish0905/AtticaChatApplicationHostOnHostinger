@@ -151,8 +151,8 @@ const UserSidebar = ({ value,newNotificationCount }) => {
     const fetchData = async () => {
       try {
         const data = await fetchAnnounce();
-        console.log("sidbar", data)
-        setAnnouncements(data); // Set announcements state with fetched data
+       
+        setAnnouncements(data); 
       } catch (error) {
         console.error('Error fetching announcements:', error);
       }

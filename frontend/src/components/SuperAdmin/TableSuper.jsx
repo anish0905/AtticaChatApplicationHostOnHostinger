@@ -55,7 +55,7 @@ const TableSuper = () => {
 
   return (
     <div className='flex flex-wrap w-full'>
-      <div className="p-4 rounded-lg shadow-lg overflow-auto border border-purple-900 w-full lg:w-1/2">
+      <div className="p-4 rounded-lg shadow-lg overflow-auto border border-purple-900 w-full ">
         <div className="text-xl font-bold mb-4 text-[#5443c3]">Branch Manager Details</div>
         <table className="min-w-full bg-white border">
           <thead>
@@ -107,7 +107,7 @@ const TableSuper = () => {
         </table>
       </div>
       {showMap && location.length > 0 && (
-        <div className="w-full lg:w-1/2 p-4">
+        <div className="w-full p-4">
           <GoogleMapsuper locations={location} onClose={() => setShowMap(false)} className="w-full"/>
         </div>
       )}

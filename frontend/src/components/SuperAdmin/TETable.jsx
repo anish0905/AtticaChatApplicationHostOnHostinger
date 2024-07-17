@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import GoogleMapsuper from "./GoogleMapsuper";
+import GoogleMapsuper from './GoogleMapsuper';
 import { BASE_URL } from '../../constants';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import './TETable.css'; // Assuming you have a CSS file for custom styles
 
 const TETable = () => {
   const [TE, setTE] = useState([]);
   const [selectedTE, setSelectedTE] = useState(null);
   const [location, setLocation] = useState([]);
-  const [showMap, setShowMap] = useState(false); // State to control the visibility of the map
-  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]); // Default to today's date
-  const [locationNotFound, setLocationNotFound] = useState(false); // State to manage location not found message
+  const [showMap, setShowMap] = useState(false);
+  const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const [locationNotFound, setLocationNotFound] = useState(false);
 
   useEffect(() => {
     const fetchAllTE = async () => {
@@ -29,43 +32,20 @@ const TETable = () => {
   }, []);
 
   const openModal = async (id) => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/location/get-location/${id}/${selectedDate}`);
-      if (response.ok) {
-        const data = await response.json();
-        if (data.dateLocation.locations.length > 0) {
-          setLocation(data.dateLocation.locations);
-          setSelectedTE(id);
-          setShowMap(true);
-          setLocationNotFound(false); // Reset location not found state
-        } else {
-          setLocation([]); // Clear any previous location data
-          setShowMap(false);
-          setLocationNotFound(true);
-        }
-      } else {
-        console.error('Failed to fetch location');
-        setLocation([]);
-        setLocationNotFound(true);
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      setLocation([]);
-      setLocationNotFound(true);
-    }
+    await fetchLocations(id, selectedDate);
   };
 
-  const fetchLocations = async () => {
+  const fetchLocations = async (id, date) => {
     try {
-      const response = await fetch(`${BASE_URL}/api/location/get-location/${selectedTE}/${selectedDate}`);
+      const response = await fetch(`${BASE_URL}/api/location/get-location/${id || selectedTE}/${date}`);
       if (response.ok) {
         const data = await response.json();
         if (data.dateLocation.locations.length > 0) {
           setLocation(data.dateLocation.locations);
           setShowMap(true);
-          setLocationNotFound(false); // Reset location not found state
+          setLocationNotFound(false);
         } else {
-          setLocation([]); // Clear any previous location data
+          setLocation([]);
           setShowMap(false);
           setLocationNotFound(true);
         }
@@ -82,30 +62,38 @@ const TETable = () => {
   };
 
   return (
-    <div className='flex flex-wrap w-full'>
-      <div className="p-4 rounded-lg shadow-lg overflow-auto border border-purple-900 w-full lg:w-1/2">
+    <div className="flex flex-wrap w-full">
+      <div className="p-4 rounded-lg shadow-lg overflow-auto border border-purple-900 w-full bg-white">
         <div className="text-xl font-bold mb-4 text-[#5443c3]">Branch TE Details</div>
-        <table className="min-w-full bg-white border">
+        <table className="min-w-full bg-white border-collapse">
           <thead>
             <tr>
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">TE Id</th>
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Name</th>
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Emp Mail ID</th>
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Location</th>
+              <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Select Date</th>
             </tr>
           </thead>
           <tbody>
             {TE.map((item, index) => (
-              <tr key={index}>
+              <tr key={index} className="hover:bg-gray-100">
                 <td className="py-2 px-4 border-b text-[#5443c3]">{item._id}</td>
                 <td className="py-2 px-4 border-b text-[#5443c3]">{item.name}</td>
                 <td className="py-2 px-4 border-b text-[#5443c3]">{item.email}</td>
                 <td
-                  className="py-2 px-4 border-b text-decoration-line: underline"
-                  style={{ color: 'blue', cursor: 'pointer' }}
+                  className="py-2 px-4 border-b text-blue-600 underline cursor-pointer"
                   onClick={() => openModal(item._id)}
                 >
                   Click here
+                </td>
+                <td className="py-2 px-4 border-b">
+                  <DatePicker 
+                    selected={new Date(selectedDate)} 
+                    onChange={(date) => setSelectedDate(date.toISOString().split('T')[0])} 
+                    dateFormat="yyyy-MM-dd"
+                    className="border rounded px-2 py-1"
+                  />
                 </td>
               </tr>
             ))}
@@ -114,34 +102,18 @@ const TETable = () => {
       </div>
       {showMap && (
         <div className="w-full lg:w-1/2 p-4">
-          <div className="mb-4">
-            <label htmlFor="datePicker" className="text-lg font-semibold text-[#5443c3]">Select Date:</label>
-            <input
-              type="date"
-              id="datePicker"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="ml-2 p-1 border border-gray-300 rounded-md"
-            />
-            <button
-              onClick={fetchLocations}
-              className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600"
-            >
-              Fetch Locations
-            </button>
-          </div>
           {location.length > 0 ? (
-            <GoogleMapsuper locations={location} onClose={() => setShowMap(false)} className="w-full"/>
+            <GoogleMapsuper locations={location} onClose={() => setShowMap(false)} className="w-full" />
           ) : (
             <div className="text-red-600 font-semibold">No locations found for the selected date.</div>
           )}
         </div>
       )}
-      {/* {locationNotFound && (
+      {locationNotFound && (
         <div className="w-full lg:w-1/2 p-4">
           <div className="text-red-600 font-semibold">No locations found for the selected date.</div>
         </div>
-      )} */}
+      )}
     </div>
   );
 };

@@ -11,6 +11,7 @@ import Sidebar from "../AllUsers/UserSidebar";
 import ReplyModel from "../ReplyModel"; //--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import Camera from "../Camera/Camera";
+import GPSTracker from "../manager/Gps";
 
 function TEChatToAdmin() {
   const [messages, setMessages] = useState([]);
@@ -45,6 +46,7 @@ function TEChatToAdmin() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
+          console.log("geolocation", position.latitude, position.longitude)
           setLatitude(position.coords.latitude);
           setLongitude(position.coords.longitude);
         },
@@ -57,8 +59,7 @@ function TEChatToAdmin() {
     }
   }, []);
 
-  console.log("logggg   ",)
-  // Function to handle click on admin or employee to initiate chat
+  
   const handleClick = (id, name) => {
     setRecipient(id);
     setRecipientName(name);
@@ -277,6 +278,7 @@ function TEChatToAdmin() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
+      <GPSTracker managerId={loggedInUserId} />
       <Sidebar value="TE" />
       <div
         className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? "hidden lg:flex" : "flex"
