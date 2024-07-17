@@ -84,6 +84,9 @@ import FetchApiComponent from "./components/utility/FetchApiComponent";
 import NotificationHandler from "../src/components/utility/GroupNotification";
 import GroupNotification from "../src/components/utility/GroupNotification";
 import GlobalNotification from "./components/utility/GlobalNotification";
+import TEDashboard from "./components/SuperAdmin/TEDashboard";
+import AnnouncementByAdmin from "./components/admin/AnnouncementByAdmin";
+import FetchAllAnnouncement from "./components/admin/FetchAllAnnouncement";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -207,6 +210,9 @@ const App = () => {
 
           <Route path="/Sidebar" element={<Sidebar />} />
 
+          <Route path="/announcement" element={<AnnouncementByAdmin />} />
+          <Route path="/fetchAllAnnouncement/:route" element={<FetchAllAnnouncement />} />
+
           <Route path="/LogisticLogin" element={<LogisticLogin />} />
           <Route path="/LogisticReg" element={<LogisticReg />} />
           <Route path="/LogisticChat" element={<LogisticChat />} />
@@ -214,7 +220,7 @@ const App = () => {
 
           {isSuperAdminLoggedIn ? (
             <>
-              <Route path="/superAdminDashboard" element={<SuperAdmin />} />
+              <Route path="/superAdminDashboard" element={<AtticDashboard/>} />
               <Route
                 path="/superAdminGroups"
                 element={<SuperAdminGroupList />}

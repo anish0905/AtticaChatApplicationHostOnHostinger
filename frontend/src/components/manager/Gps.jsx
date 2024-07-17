@@ -51,8 +51,8 @@ const GPSTracker = ({ managerId }) => {
           const currentLocation = { lat, lng, address:data.results[0].formatted };
           console.log("lhhhhhhhhhh    ",lat,lng)
           axios
-          .post(`${BASE_URL}/api/location`, {
-            managerId,
+          .post(`${BASE_URL}/api/location/managerlocation`, {
+            userId:managerId,
             longitude : lng,
             latitude : lat,
             address,

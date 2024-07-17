@@ -15,7 +15,7 @@ import { FaFolderPlus } from 'react-icons/fa';
 import { BASE_URL } from '../../constants';
 
 export default function AllUsersFileModel({ sender, recipient, admin, latitude, longitude,senderName }) {
-  console.log("latitude, longitude",latitude,"   ",longitude)
+  // console.log("latitude, longitude",latitude,"   ",longitude)
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState(null);

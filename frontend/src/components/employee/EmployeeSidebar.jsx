@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { BiLogOut } from "react-icons/bi";
 import { BsChatSquareDots } from "react-icons/bs";
 import { GrChatOption } from "react-icons/gr";
@@ -7,13 +7,14 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { CgProfile } from "react-icons/cg";
 import logo from "../../assests/logo.png";
 import { BiSolidMessageCheck } from "react-icons/bi";
-
+import { IoMdNotificationsOutline } from "react-icons/io";
+import fetchAnnounce from '../utility/fetchAnnounce';
 const EmployeeSidebar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const [showTooltip, setShowTooltip] = useState(false);
-
+  const [announcements,setAnnouncements] = useState([])
   const handleGroup = () => {
     navigate("/empgroupchat");
   };
@@ -27,7 +28,26 @@ const EmployeeSidebar = () => {
     localStorage.clear();
   };
 
+  const handleAnnouncement = () => {
+    navigate(`/fetchAllAnnouncement/${'empDashbord'}`);
+  };
+
   const isActive = (path) => location.pathname === path;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchAnnounce();
+        console.log("sidbar", data)
+        setAnnouncements(data); // Set announcements state with fetched data
+      } catch (error) {
+        console.error('Error fetching announcements:', error);
+      }
+    };
+
+    fetchData();   
+    
+})
 
   return (
     <>
@@ -37,6 +57,20 @@ const EmployeeSidebar = () => {
         </div>
 
         <div className="flex flex-row lg:flex-col gap-2 md:gap-3 lg:gap-5 relative">
+        <div
+            onClick={handleAnnouncement}
+            className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/fetchAllAnnouncement") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
+          >
+            <IoMdNotificationsOutline className="text-lg md:text-2xl lg:text-3xl" />
+            {announcements.length > 0 && (
+              <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                {announcements?.length}
+              </span>
+            )}
+            <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+             Announcement
+            </span>
+          </div>
           <div
             onClick={handleGroup}
             className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/empgroupchat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}

@@ -1,17 +1,20 @@
 import { BiLogOut } from "react-icons/bi";
 import { BsChatSquareDots } from "react-icons/bs";
 import { RiContactsLine } from "react-icons/ri";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import logo from "../../assests/logo.png";
 import { CgProfile } from "react-icons/cg";
-import { useState } from "react";
-
-const UserSidebar = ({ value }) => {
+import { useEffect, useState } from "react";
+import { IoMdNotificationsOutline } from "react-icons/io";
+import fetchAnnounce from '../utility/fetchAnnounce';
+const UserSidebar = ({ value,newNotificationCount }) => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const navigate = useNavigate();
   const location = useLocation();
   const [showTooltip, setShowTooltip] = useState(false);
-   console.log("value    ",value)
+  const [announcements,setAnnouncements] = useState([])
+
+
   const handleChat = () => {   //LOGISTIC
     switch (value) {
       case "HR":
@@ -97,14 +100,90 @@ const UserSidebar = ({ value }) => {
     localStorage.clear();
   };
 
+
+  
+
   const isActive = (path) => location.pathname === path;
+
+
+  const handleAnnouncement = () => {
+    switch (value) {
+      case "HR":
+        navigate(`/fetchAllAnnouncement/${'HrToHrChat'}`);
+        break;
+        case "CALLCENTER":
+          navigate(`/fetchAllAnnouncement/${'CallCenterToCallCenter'}`);
+          break;
+      case "ACCOUNT":
+        navigate(`/fetchAllAnnouncement/${'AccountToAccountChat'}`  );
+        break;
+      case "SOFTWARE":
+        navigate(`/fetchAllAnnouncement/${'SoftwareToSoftwareChat'}` );
+        break;
+      case "BOUNCER":
+        navigate(`/fetchAllAnnouncement/${'bouncerChat'}`);
+        break;
+      case "DIGITALMARKETING":
+        navigate(`/fetchAllAnnouncement/${'DigitalMarketingChatToDigitalMarketing'}`   );
+        break;
+      case "MONITORING":
+        navigate(`/fetchAllAnnouncement/${'monitoringTeamChat'}`   );
+        break;
+      case "VIRTUAL":
+        navigate(`/fetchAllAnnouncement/${'VirtualTeamToVirtualTeam'}`  );
+        break;
+      case "SECURITY":
+        navigate(`/fetchAllAnnouncement/${'/SecurityChatt'}`   );
+        break;
+      case "TE":
+        navigate(`/fetchAllAnnouncement/${'TEChat'}`   );
+        break;
+      case "LOGISTIC": 
+          navigate(`/fetchAllAnnouncement/${'LogisticChat'}`);
+          break;
+      default:
+        navigate("/");
+    }
+  };
+ 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchAnnounce();
+        console.log("sidbar", data)
+        setAnnouncements(data); // Set announcements state with fetched data
+      } catch (error) {
+        console.error('Error fetching announcements:', error);
+      }
+    };
+
+    fetchData();   
+    
+})
+ 
+
+ 
 
   return (
     <div className="flex flex-row lg:flex-col h-[80px] lg:h-screen w-full lg:w-[100px] left-0 bg-[#5443c3] border-b lg:border-r shadow-md justify-between items-center py-[10px] lg:py-[20px] text-gray-500 text-2xl md:text-3xl">
       <div className="w-16 md:w-20 lg:w-24 h-12 md:h-16 lg:h-20 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
         <img className="m-2 md:m-4 lg:m-6" src={logo} alt="Logo" />
       </div>
-      {/* <p className='text-white text-base lg:text-xl'>{userDetails?.name}</p> */}
+      <div
+            onClick={handleAnnouncement}
+            className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/fetchAllAnnouncement") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
+          >
+            <IoMdNotificationsOutline className="text-lg md:text-2xl lg:text-3xl" />
+            {announcements.length > 0 && (
+              <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                {announcements?.length}
+              </span>
+            )}
+            <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+             Announcement
+            </span>
+          </div>
 
       <div className="flex flex-row lg:flex-col gap-[10px] sm:gap-[10px] md:gap-[10px] lg:gap-[40px] relative">
         <div

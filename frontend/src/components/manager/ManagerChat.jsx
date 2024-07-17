@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
 import { FaVideo, FaImage, FaCamera } from "react-icons/fa";
 import GPSTracker from "./Gps.jsx"; // Adjust the import path as necessary
@@ -14,6 +14,8 @@ import { MdNotificationsActive } from "react-icons/md";
 import { IoMdSend } from "react-icons/io";
 import { FaArrowLeft } from "react-icons/fa";
 import Camera from "../Camera/Camera.jsx";
+import { IoMdNotificationsOutline } from "react-icons/io";
+import fetchAnnounce from '../utility/fetchAnnounce';
 
 function ManagerChat() {
   const [messages, setMessages] = useState([]);
@@ -39,7 +41,8 @@ function ManagerChat() {
   const [isChatSelected, setIsChatSelected] = useState(false);
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
   const [showCamera, setShowCamera] = useState(false);
-
+  const [announcements, setAnnouncements] = useState([])
+  const navigate = useNavigate();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   const handleClick = (id, name) => {
@@ -91,7 +94,7 @@ function ManagerChat() {
     if (currentLocation && JSON.stringify(currentLocation) !== JSON.stringify(prevLocation)) {
       console.log("Sending location:", currentLocation);
       axios
-        .post(`${BASE_URL}/api/location`, {
+        .post(`${BASE_URL}/api/location/managerlocation`, {
           managerId: loggedInUserId,
           longitude: currentLocation.longitude,
           latitude: currentLocation.latitude
@@ -227,6 +230,31 @@ function ManagerChat() {
     setShowCamera(false);
   };
 
+  const isActive = (path) => location.pathname === path;
+  const handleAnnouncement = () => {
+    navigate(`/fetchAllAnnouncement/${'managerChat'}`);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchAnnounce();
+        console.log("sidbar", data)
+        setAnnouncements(data); // Set announcements state with fetched data
+      } catch (error) {
+        console.error('Error fetching announcements:', error);
+      }
+    };
+
+    fetchData();
+
+  })
+
+
+  const handleLogout = () => {
+    navigate("/");
+    localStorage.clear();
+  };
 
 
   return (
@@ -234,7 +262,51 @@ function ManagerChat() {
       <GPSTracker managerId={loggedInUserId} />
       <div className="flex flex-col lg:flex-row h-screen relative">
         <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
-          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Billing Team</h1>
+          <div className="flex items-center">
+            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] flex-shrink-0">All Billing Team</h1>
+
+            <div className="relative ml-4">
+              <div className="flex">
+                <div>
+                  <div
+                    onClick={handleAnnouncement}
+                    className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/fetchAllAnnouncement") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
+                  >
+                    <IoMdNotificationsOutline className="text-lg md:text-2xl lg:text-3xl" />
+                  </div>
+
+                  {announcements.length > 0 && (
+                    <span className="relative -top-11 -right-5 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                      {announcements?.length}
+                    </span>
+                  )}
+
+                  <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 ml-1 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    Announcement
+                  </span>
+                </div>
+
+
+
+                <div
+                  onClick={handleLogout}
+                  className=" flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full h-auto "
+                >
+                 <div className="relative flex items-center justify-center">
+  <span className="absolute bottom-full mb-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+    Logout
+  </span>
+  <BiLogOut className="mx-10 text-lg md:text-2xl lg:text-3xl" />
+</div>
+                 
+                 
+                </div>
+              </div>
+
+
+
+            </div>
+          </div>
           <div className="relative mb-4">
             <input
               type="text"
@@ -363,12 +435,12 @@ function ManagerChat() {
                     </a>
                   )}
                   {message.content && message.content.camera && (
-                  <img
-                    src={message.content.camera}
-                    alt="Image"
-                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
-                  />
-                )}
+                    <img
+                      src={message.content.camera}
+                      alt="Image"
+                      className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                    />
+                  )}
                   {message.content && message.content.video && (
                     <video controls className="max-w-xs">
                       <source src={message.content.video} type="video/mp4" />
@@ -406,10 +478,10 @@ function ManagerChat() {
               ))}
               <div ref={messagesEndRef} />
               {showCamera && (
-              <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient}  />
-              </div>
-            )}
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
+                  <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} />
+                </div>
+              )}
             </div>
             <div className="flex items-center p-4 bg-[#f6f5fb] w-full">
               <input
@@ -425,12 +497,12 @@ function ManagerChat() {
                 className="hidden"
                 id="file-upload"
               />
-               <button
-              onClick={() => setShowCamera(true)}
-              className="mr-2 text-xl"
-            >
-              <FaCamera />
-            </button>
+              <button
+                onClick={() => setShowCamera(true)}
+                className="mr-2 text-xl"
+              >
+                <FaCamera />
+              </button>
               <button
                 onClick={handleSendMessage}
                 className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

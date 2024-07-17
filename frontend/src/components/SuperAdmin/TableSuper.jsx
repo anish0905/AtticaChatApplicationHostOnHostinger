@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
-// import GoogleMapComponent from './GoogleMap'; // Import the GoogleMapComponent
 import GoogleMapsuper from "./GoogleMapsuper";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import { BASE_URL } from '../../constants';
+
 const TableSuper = () => {
   const [manager, setManager] = useState([]);
   const [selectedManager, setSelectedManager] = useState(null);
   const [location, setLocation] = useState([]);
-  const [showMap, setShowMap] = useState(false); // State to control the visibility of the map
+  const [showMap, setShowMap] = useState(false); 
+  const [selectedDate, setSelectedDate] = useState(new Date()); // State for selected date
 
   useEffect(() => {
     const fetchAllManagers = async () => {
@@ -26,21 +29,27 @@ const TableSuper = () => {
     fetchAllManagers();
   }, []);
   
-  const openModal = async (id) => {
+  const openModal = async (id, date) => {
     try {
-      const response = await fetch(`${BASE_URL}/api/location/get/${id}`);
+      const formattedDate = date.toISOString().split('T')[0]; // Format the date to YYYY-MM-DD
+      const response = await fetch(`${BASE_URL}/api/location/get-managerlocation/${id}/${formattedDate}`);
       if (response.ok) {
         const data = await response.json();
-        setLocation(data.location);
-        setSelectedManager(id); // Set the selected manager ID
-        setShowMap(true); // Show the map when a location is clicked
+        if (data.locations.length > 0) {
+          setLocation(data.locations);
+          setSelectedManager(id);
+          setShowMap(true);
+        } else {
+          console.error('No locations found for the selected date');
+          setLocation([]);
+        }
       } else {
         console.error('Failed to fetch location');
-        setLocation(null);
+        setLocation([]);
       }
     } catch (error) {
       console.error('Error:', error);
-      setLocation(null);
+      setLocation([]);
     }
   };
 
@@ -62,6 +71,7 @@ const TableSuper = () => {
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">City</th>
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Pincode</th>
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Location</th>
+              <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Select Date</th>
             </tr>
           </thead>
           <tbody>
@@ -80,18 +90,25 @@ const TableSuper = () => {
                 <td
                   className="py-2 px-4 border-b text-decoration-line: underline"
                   style={{ color: 'blue', cursor: 'pointer' }}
-                  onClick={() => openModal(item._id)}
+                  onClick={() => openModal(item._id, selectedDate)}
                 >
                   Click here
+                </td>
+                <td className="py-2 px-4 border-b">
+                  <DatePicker 
+                    selected={selectedDate} 
+                    onChange={(date) => setSelectedDate(date)} 
+                    dateFormat="yyyy-MM-dd"
+                  />
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
-      {showMap && location.length >= 1 && (
+      {showMap && location.length > 0 && (
         <div className="w-full lg:w-1/2 p-4">
-          <GoogleMapsuper locations={location[0]?.locations} onClose={() => setShowMap(false)} className="w-full"/>
+          <GoogleMapsuper locations={location} onClose={() => setShowMap(false)} className="w-full"/>
         </div>
       )}
     </div>

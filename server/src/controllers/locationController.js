@@ -65,6 +65,7 @@ const ManagerGetLocationByDate = async (req, res) => {
 
     // Find the dateLocation entry for the specified date
     const dateLocation = location.dateLocations.find((dl) => dl.date === date);
+    const locations = dateLocation.locations
 
     if (!dateLocation) {
       return res
@@ -72,7 +73,7 @@ const ManagerGetLocationByDate = async (req, res) => {
         .json({ error: "No location data found for this date" });
     }
 
-    res.status(200).json({ dateLocation });
+    res.status(200).json({ locations});
   } catch (err) {
     res.status(500).json({
       error: "An error occurred while fetching the location data",

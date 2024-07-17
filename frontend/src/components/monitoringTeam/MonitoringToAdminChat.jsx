@@ -40,7 +40,7 @@ function MonitoringAdminChat() {
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
   const [showCamera, setShowCamera] = useState(false);
 
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  // const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
   // Function to handle click on admin or employee to initiate chat
   const handleClick = (id, name) => {
