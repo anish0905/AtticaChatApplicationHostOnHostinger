@@ -11,6 +11,7 @@ import ReplyModel from "../../components/ReplyModel";
 import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
+import ScrollingNavbar from "../admin/ScrollingNavbar";  
 
 function BouncerTeamChat() {
   const [messages, setMessages] = useState([]);
@@ -204,6 +205,7 @@ function BouncerTeamChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
+     <ScrollingNavbar/>
       <Sidebar  value="BOUNCER" />
       {showChat ? (
         <div className="w-full h-screen flex flex-col justify-between overflow-hidden">

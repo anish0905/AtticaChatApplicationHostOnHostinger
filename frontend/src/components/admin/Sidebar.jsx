@@ -27,7 +27,7 @@ const Sidebar = () => {
   const [showEmployeeOptions, setShowEmployeeOptions] = useState(false);
   const [activeRoute, setActiveRoute] = useState("/atticDashboard");
   const [showTooltip, setShowTooltip] = useState(false);
-  const userAdmin=JSON.parse(localStorage.getItem('userAdmin'))
+  const userAdmin = JSON.parse(localStorage.getItem('userAdmin'))
 
   // Default active route
 
@@ -55,8 +55,8 @@ const Sidebar = () => {
       <div
         onClick={() => handleNavigation("/announcement")}
         className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/announcement"
-            ? "bg-blue-500 text-white"
-            : "bg-[#fffefd]"
+          ? "bg-blue-500 text-white"
+          : "bg-[#fffefd]"
           }`}
       >
         <GrAnnounce className="text-lg md:text-2xl lg:text-3xl" />
@@ -68,11 +68,10 @@ const Sidebar = () => {
       <div className="flex flex-row lg:flex-col gap-2 md:gap-3 lg:gap-5 relative">
         <div
           onClick={() => handleNavigation("/admindashboard")}
-          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer ${
-            activeRoute === "/atticDashboard"
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === "/atticDashboard"
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
-          }`}
+            }`}
         >
           <MdDashboard className="text-lg md:text-2xl lg:text-3xl" />
           <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -82,11 +81,10 @@ const Sidebar = () => {
 
         <div
           onClick={() => handleNavigation("/Groups")}
-          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${
-            activeRoute === "/Groups"
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/Groups"
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
-          }`}
+            }`}
         >
           <GrChatOption className="text-lg md:text-2xl lg:text-3xl" />
           <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -97,11 +95,10 @@ const Sidebar = () => {
         <div
           onMouseEnter={() => setShowEmployeeOptions(true)}
           onMouseLeave={() => setShowEmployeeOptions(false)}
-          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer z-50  ${
-            employeeRoutes.includes(activeRoute)
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer z-50  ${employeeRoutes.includes(activeRoute)
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
-          }`}
+            }`}
         >
           <PersonAddIcon className="text-lg md:text-2xl lg:text-3xl" />
           <span
@@ -124,7 +121,7 @@ const Sidebar = () => {
             </div>
             <div
               onClick={() => handleNavigation("/managerRegister")}
-               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <GrUserManager className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Manager Registration</span>
@@ -156,7 +153,7 @@ const Sidebar = () => {
 
             <div
               onClick={() => handleNavigation("/AccountsReg")}
-               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
               <MdAccountTree className="bg-white rounded-full mr-2 my-2 text-2xl" />
               <span className="my-2">Accounts Team Registration</span>
@@ -193,6 +190,14 @@ const Sidebar = () => {
             </div>
 
             <div
+              onClick={() => handleNavigation("/TeReg")}
+              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
+            >
+              <GiHumanTarget className="bg-white rounded-full mr-2 my-2 text-2xl" />
+              <span className="my-2">TE Registration</span>
+            </div>
+
+            <div
               onClick={() => handleNavigation("/SecurityReg")}
               className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
             >
@@ -207,15 +212,15 @@ const Sidebar = () => {
               <span className="my-2">Logistic Registration</span>
             </div>
           </span>
+
         </div>
 
         <div
           onClick={() => handleNavigation("/livemesages")}
-          className={`group relative flex items-center lg:rounded-full rounded-lg z-50 p-2 md:p-4 lg:p-5 cursor-pointer ${
-            activeRoute === "/livemesages"
+          className={`group relative flex items-center lg:rounded-full rounded-lg z-50 p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === "/livemesages"
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
-          }`}
+            }`}
         >
           <TbMessageForward className="text-lg md:text-2xl lg:text-3xl" />
           <span className="absolute lg:bottom-auto lg:left-full mt-16 z-50 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -224,12 +229,11 @@ const Sidebar = () => {
         </div>
 
         <div
-             onClick={() => handleNavigation("/adminToemp")}
-          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${
-            activeRoute === "/adminToemp"
+          onClick={() => handleNavigation("/adminToemp")}
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/adminToemp"
               ? "bg-blue-500 text-white"
               : "bg-[#fffefd]"
-          }`}
+            }`}
         >
           <BsChatSquareDots className="text-lg md:text-2xl lg:text-3xl" />
           <span className="absolute lg:bottom-auto lg:left-full mt-16 z-50 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -240,26 +244,26 @@ const Sidebar = () => {
       </div>
 
       <div className="flex flex-row lg:flex-col">
-      <div
-             
+        <div
+
           className={`group relative flex items-center bg-green-300 hover:bg-green-500 rounded-full  p-2 md:p-4 lg:p-5 z-50 cursor-pointer lg:mt-2 m-1`}
-           
+
         >
           <CgProfile className="text-lg md:text-2xl lg:text-3xl" />
           <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-           {userAdmin}
+            {userAdmin}
           </span>
         </div>
-      
-      <div
-        onClick={handleLogout}
-        className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-2 md:p-4 lg:p-5 cursor-pointer lg:mt-2 m-1"
-      >
-        <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
-        <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          Logout
-        </span>
-      </div>
+
+        <div
+          onClick={handleLogout}
+          className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-2 md:p-4 lg:p-5 cursor-pointer lg:mt-2 m-1"
+        >
+          <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            Logout
+          </span>
+        </div>
       </div>
     </div>
   );

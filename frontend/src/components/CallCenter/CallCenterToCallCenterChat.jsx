@@ -12,7 +12,7 @@ import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
 import UserSidebar from "../AllUsers/UserSidebar";
-
+import ScrollingNavbar from "../admin/ScrollingNavbar";  
 
 function CallCenterToCallCenterChat() {
   const [messages, setMessages] = useState([]);
@@ -200,6 +200,7 @@ function CallCenterToCallCenterChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
+     <ScrollingNavbar/>
       <UserSidebar value="CALLCENTER" />
       {showChat ? (
         <div className="w-full h-screen flex flex-col justify-between overflow-hidden">

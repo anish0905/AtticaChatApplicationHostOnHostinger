@@ -78,17 +78,19 @@ const Modal = ({ show, onClose, accountTeam, onUpdate }) => {
   );
 };
 
-const AccountTeamDetails = () => {
+const AccountTeamDetails = ({value}) => {
   const [accountTeams, setAccountTeams] = useState([]);
   const [filteredAccountTeams, setFilteredAccountTeams] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedAccountTeam, setSelectedAccountTeam] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
+  console.log("value",value)
+
   useEffect(() => {
     const fetchAccountTeams = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/allUser/getAllAccountantTeam`);
+        const res = await axios.get(`${BASE_URL}/api/allUser/${value}`);
         setAccountTeams(res.data);
         setFilteredAccountTeams(res.data);
       } catch (error) {

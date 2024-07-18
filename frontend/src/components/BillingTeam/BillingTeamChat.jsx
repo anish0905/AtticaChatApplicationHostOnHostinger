@@ -18,6 +18,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import fetchAnnounce from '../utility/fetchAnnounce';
 import Camera from "../Camera/Camera";
+import ScrollingNavbar from "../admin/ScrollingNavbar";  
+
 
 function BillingTeamChat() {
   const [messages, setMessages] = useState([]);
@@ -236,7 +238,7 @@ function BillingTeamChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-
+    <ScrollingNavbar/>
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
           <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">

@@ -16,6 +16,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import Camera from "../Camera/Camera.jsx";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import fetchAnnounce from '../utility/fetchAnnounce';
+import ScrollingNavbar from "../admin/ScrollingNavbar";  
 
 function ManagerChat() {
   const [messages, setMessages] = useState([]);
@@ -259,6 +260,7 @@ function ManagerChat() {
 
   return (
     <div>
+      <ScrollingNavbar/>
       <GPSTracker managerId={loggedInUserId} />
       <div className="flex flex-col lg:flex-row h-screen relative">
         <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>

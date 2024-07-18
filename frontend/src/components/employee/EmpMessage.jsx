@@ -4,6 +4,7 @@ import { IoMdDocument, IoMdSend } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
 import notificationTone from "../../assests/notification_ding.mp3";
 import { BASE_URL } from "../../constants";
+import ScrollingNavbar from '../../components/admin/ScrollingNavbar'
 
 const EmpMessage = () => {
   const [employees, setEmployees] = useState([]);
@@ -158,6 +159,7 @@ const EmpMessage = () => {
   return (
     <div className="flex h-screen lg:w-[95vw] w-full absolute">
       {/* Chat Section */}
+      {/* <ScrollingNavbar messages={messages} />  */}
       <div className="flex-1 flex flex-col w-full bg-[#f6f5fb]">
         <div className="lg:text-[#ffffff] lg:bg-[#5443c3] bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] lg:text-2xl text-sm p-4 flex gap-2 items-center justify-between lg:mx-2 relative">
           <IoArrowBack
@@ -173,17 +175,7 @@ const EmpMessage = () => {
         </div>
 
 
-
-
-
-
-
-
-
-
-
-
-        <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto mb-16 lg:mb-0">
+<div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto mb-16 lg:mb-0">
           {messages.length > 0 ? (
             messages.map((msg) => (
               <div

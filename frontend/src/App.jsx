@@ -88,6 +88,7 @@ import TEDashboard from "./components/SuperAdmin/TEDashboard";
 import AnnouncementByAdmin from "./components/admin/AnnouncementByAdmin";
 import FetchAllAnnouncement from "./components/admin/FetchAllAnnouncement";
 import SuperAdminDashboard from "./components/SuperAdmin/SuperAdminDashboard";
+import TeReg from "./components/TE/TeReg"
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -192,6 +193,9 @@ const App = () => {
           <Route path="/AccountToAdminChat" element={<AccountToAdminChat />} />
 
           <Route path="/te" element={<TElogin />} />
+    
+          <Route path="/TeReg" element={<TeReg />} />
+          
           <Route path="/TEChat" element={<TEChat />} />
           <Route path="/techattoadmin" element={<TEChatToAdmin />} />
 

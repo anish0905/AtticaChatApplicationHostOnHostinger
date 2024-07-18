@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import Sidebar from "./../Sidebar";
-import { BASE_URL } from "../../../constants";
-import AccountsDetails from "../../accounts/AccountsDetails";
-import CSVFileUpload from "../../utility/CsvFileUpload";
+import Sidebar from "./../admin/Sidebar";
+import { BASE_URL } from "../../../src/constants";
+import AccountsDetails from "../accounts/AccountsDetails";
+import CSVFileUpload from "../../components/utility/CsvFileUpload";
 
-const AccountsReg = () => {
+const TeReg = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     password: "",
-    role: "Accountant",
+    role: "TE",
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,7 +41,7 @@ const AccountsReg = () => {
           name: "",
           email: "",
           password: "",
-          role: "Accountant",
+          role: "TE",
         });
       } else {
         const errorData = await response.json();
@@ -58,7 +58,7 @@ const AccountsReg = () => {
       <Sidebar />
       <div className="flex-1 p-6">
       <div className="flex items-center justify-between mb-4 flex-col lg:flex-row">
-          <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Account Details</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">TE Details</h1>
           <div>
             <button
               onClick={() => setIsModalOpen(true)}
@@ -75,12 +75,12 @@ const AccountsReg = () => {
             <CSVFileUpload endpoint="/api/allUser/register"/>
           </div>
         </div>
-        <AccountsDetails value={"/getAllAccountantTeam"} />
+        <AccountsDetails  value={"/getAllTE"} />
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-4xl mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto">
               <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">
-                Register for Accounts Team
+                Register for TE Team
               </h2>
               {error && <div className="text-red-500 mb-4">{error}</div>}
               <form onSubmit={handleSubmit} className="w-full">
@@ -135,4 +135,4 @@ const AccountsReg = () => {
   );
 };
 
-export default AccountsReg;
+export default TeReg;

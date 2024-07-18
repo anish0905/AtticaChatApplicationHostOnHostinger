@@ -10,6 +10,7 @@ import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
+import ScrollingNavbar from "../admin/ScrollingNavbar";  
 
 function ChatPage() {
   const [messages, setMessages] = useState([]);
@@ -201,7 +202,9 @@ function ChatPage() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
+      <ScrollingNavbar  /> 
       <EmployeeSidebar />
+      
       {showChat ? (
         <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10">

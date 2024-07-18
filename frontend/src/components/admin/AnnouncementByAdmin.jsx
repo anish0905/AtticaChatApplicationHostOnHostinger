@@ -75,24 +75,24 @@ console.log("message.....",messages)
     <div className="flex flex-col lg:flex-row h-screen relative">
       <Sidebar />
      
-      <div className="flex flex-col bg-[#eef2fa] text-black p-4 shadow w-full lg:w-full border border-[#5443c3] flex lg:flex">
-        <div className="flex justify-between mb-4 items-center">
-          <div className="flex items-center space-x-2">
+      <div className="flex-1 flex flex-col w-full lg:w-auto">
+        <div className="flex flex-col flex-1 lg:bg-[#f6f5fb] lg:border-l lg:border-gray-200 lg:overflow-y-auto">
+          <div className="flex items-center space-x-2  ">
             <Link to="/">
               <FaArrowLeft className="text-[#5443c3] hover:text-[#5443c3]" />
             </Link>
-            <h1 className="lg:text-2xl md:text-2xl text-xl font-bold text-[#5443c3]">Announcemet</h1>
+            <h1 className="text-lg font-bold p-4 lg:text-[#ffffff] lg:bg-[#5443c3] text-[#5443c3] border border-[#5443c3] bg-[#ffffff] w-full ">Announcemet</h1>
           </div>
-        </div>
-        <div className="h-5/6 overflow-y-auto">
+       
+        <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto">
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex  relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start '} mb-2`}
+              className={`flex relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start '} mb-2`}
              
             >
               <div
-                className={`relative lg:text-3xl md:text-xl text-sm font-bold  ${message.sender === loggedInUserId ? " self-end bg-[#e1dff3] text-[#5443c3] border border-[#5443c3] rounded-tr-3xl rounded-bl-3xl" : " self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                className={`relative lg:text-3xl md:text-xl text-sm font-bold  ${message.sender === loggedInUserId ? " self-end bg-[#e1dff3] border border-[#5443c3] text-[#5443c3] rounded-tr-3xl rounded-bl-3xl" : " self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                   } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
               >
                 {message.content && message.content.originalMessage && (
@@ -114,9 +114,9 @@ console.log("message.....",messages)
                     href={message.content.document}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-orange-600 hover:underline"
+                    className="lg:text-8xl md:text-6xl text-4xl my-3"
                   >
-                    <IoIosDocument className="text-9xl" />
+                    <IoIosDocument />
                   </a>
                 )}
                 {message.content && message.content.video && (
@@ -125,7 +125,7 @@ console.log("message.....",messages)
                     Your browser does not support the video tag.
                   </video>
                 )}
-                <span className="text-xs font-base  text-gray-500">
+                <span className="text-xs font-base  text-gray-500 mt-5">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
              
@@ -137,15 +137,16 @@ console.log("message.....",messages)
         <div className="flex space-x-2 mt-4">
           <input
             type="text"
-            className="w-3/4 h-10 rounded-lg border-2 border-[#5443c3] bg-white pl-4"
+            className="w-full h-10 rounded-lg border-2 border-[#5443c3] bg-white pl-4"
             placeholder="Type a message..."
             value={typedMessage}
             onChange={(e) => setTypedMessage(e.target.value)}
           />
           <IoMdSend
-            className="text-[#5443c3] text-2xl hover:text-[#5443c3] cursor-pointer"
+            className="text-[#5443c3] text-4xl hover:text-[#5443c3] cursor-pointer"
             onClick={handleSendMessage}
           />
+        </div>
         </div>
       </div>
     </div>
@@ -153,3 +154,5 @@ console.log("message.....",messages)
 }
 
 export default AnnouncementByAdmin;
+
+

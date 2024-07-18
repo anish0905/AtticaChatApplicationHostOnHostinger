@@ -10,6 +10,7 @@ import Sidebar from "../AllUsers/UserSidebar";
 import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
+import ScrollingNavbar from "../admin/ScrollingNavbar";  
 
 function DigitalToDigitalTamChat() {
   const [messages, setMessages] = useState([]);
@@ -200,6 +201,7 @@ function DigitalToDigitalTamChat() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
+     <ScrollingNavbar/>
       <Sidebar value="DIGITALMARKETING" />
       {showChat ? (
         <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
