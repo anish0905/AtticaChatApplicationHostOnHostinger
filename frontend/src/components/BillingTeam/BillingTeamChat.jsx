@@ -43,7 +43,9 @@ function BillingTeamChat() {
   const [showCamera, setShowCamera] = useState(false);
   const [announcements, setAnnouncements] = useState([])
   const navigate = useNavigate();
+
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+ 
 
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
@@ -89,7 +91,7 @@ function BillingTeamChat() {
 
     const messageData = {
       sender: loggedInUserId,
-      senderName: userDetails.name,
+      senderName: userDetails.user.name,
       recipient: recipient,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
@@ -215,19 +217,19 @@ function BillingTeamChat() {
     const fetchData = async () => {
       try {
         const data = await fetchAnnounce();
-        console.log("sidbar", data)
-        setAnnouncements(data); // Set announcements state with fetched data
+        setAnnouncements(data); 
+  
       } catch (error) {
         console.error('Error fetching announcements:', error);
       }
     };
 
-    fetchData();
+    fetchData(); // Fetch immediately on component mount
 
+    const intervalId = setInterval(fetchData, 10000); // Fetch every 5 seconds
 
-
-  })
-
+    return () => clearInterval(intervalId); // Clear interval on component unmount
+  }, []);
   const handleLogout = () => {
     navigate("/");
     localStorage.clear();
