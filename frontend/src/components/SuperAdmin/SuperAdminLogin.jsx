@@ -37,8 +37,8 @@ const SuperAdminLogin = () => {
 
   return (
     <div
-      className="flex items-center justify-center min-h-screen bg-[#f7f7ff]"
-      style={{ backgroundImage: `url(${back4})` }}
+      className="flex items-center justify-center min-h-screen bg-cover bg-center p-4 sm:p-6 lg:p-8 fixed bottom-0 lg:relative  lg:bottom-0 w-full"
+      style={{ background: `linear-gradient(to right, #b3ffab,#12fff7)` }}
     >
       <div className="flex flex-col lg:flex-row items-center justify-center lg:space-x-6 space-y-6 lg:space-y-0 w-full max-w-5xl p-4">
         <div className="hidden lg:block lg:w-1/2">

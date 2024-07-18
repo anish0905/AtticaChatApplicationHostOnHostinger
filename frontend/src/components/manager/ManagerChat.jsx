@@ -16,7 +16,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import Camera from "../Camera/Camera.jsx";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import fetchAnnounce from '../utility/fetchAnnounce';
-import ScrollingNavbar from "../admin/ScrollingNavbar";  
+import ScrollingNavbar from "../admin/ScrollingNavbar";
 
 function ManagerChat() {
   const [messages, setMessages] = useState([]);
@@ -240,16 +240,19 @@ function ManagerChat() {
     const fetchData = async () => {
       try {
         const data = await fetchAnnounce();
-        console.log("sidbar", data)
-        setAnnouncements(data); // Set announcements state with fetched data
+        setAnnouncements(data);
+
       } catch (error) {
         console.error('Error fetching announcements:', error);
       }
     };
 
-    fetchData();
+    fetchData(); // Fetch immediately on component mount
 
-  })
+    const intervalId = setInterval(fetchData, 10000); // Fetch every 5 seconds
+
+    return () => clearInterval(intervalId); // Clear interval on component unmount
+  }, []);
 
 
   const handleLogout = () => {
@@ -260,12 +263,12 @@ function ManagerChat() {
 
   return (
     <div>
-      <ScrollingNavbar/>
-      <GPSTracker managerId={loggedInUserId} />
-      <div className="flex flex-col lg:flex-row h-screen relative">
-        <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
+      <ScrollingNavbar />
+      <GPSTracker managerId={loggedInUserId} path={"managerlocation"} />
+      <div className="flex flex-col lg:flex-row h-screen relative justify-between">
+        <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 border border-[#5443c3] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
           <div className="flex items-center">
-            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] flex-shrink-0">All Billing Team</h1>
+            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] flex-shrink-0 ">All Billing Team</h1>
 
             <div className="relative ml-4">
               <div className="flex">
@@ -292,16 +295,18 @@ function ManagerChat() {
 
                 <div
                   onClick={handleLogout}
-                  className=" flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full h-auto "
+                  className=" flex items-center content-center w-full justify-evenly  "
                 >
-                 <div className="relative flex items-center justify-center">
-  <span className="absolute bottom-full mb-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-    Logout
-  </span>
-  <BiLogOut className="mx-10 text-lg md:text-2xl lg:text-3xl" />
-</div>
-                 
-                 
+                  <div className="relative flex items-center justify-items-end">
+                    <span className="absolute bottom-full whitespace-nowrap bg-black text-white text-xs md:text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      Logout
+                    </span>
+                    
+                    <BiLogOut className=" text-lg md:text-2xl lg:text-3xl mb-4 " />
+                   
+                  </div>
+
+
                 </div>
               </div>
 
@@ -381,19 +386,19 @@ function ManagerChat() {
         {isChatSelected && (
           <div className="w-full h-screen lg:w-min-[30%] flex flex-col justify-between bg-[#f6f5fb]">
             {isChatSelected && (
-              <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+              <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between h-20">
                 <button className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
                   onClick={handleBackToUserList}
                 >
                   <FaArrowLeft className="text-xl lg:text-2xl" />
                 </button>
                 <h1 className="text-xl lg:text-2xl font-bold">Chat with {recipientName}</h1>
-                <Link
+                {/* <Link
                   to="/"
                   className=" text-xl lg:text-2xl group relative flex items-center justify-end font-extrabold rounded-full p-3 md:p-5"
                 >
                   <BiLogOut />
-                </Link>
+                </Link> */}
               </div>
             )}
 

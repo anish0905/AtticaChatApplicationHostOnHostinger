@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../constants';
-const GPSTracker = ({ managerId }) => {
+const GPSTracker = ({ managerId ,path }) => {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [address, setAddress] = useState("");
@@ -51,7 +51,7 @@ const GPSTracker = ({ managerId }) => {
           const currentLocation = { lat, lng, address:data.results[0].formatted };
           console.log("lhhhhhhhhhh    ",lat,lng)
           axios
-          .post(`${BASE_URL}/api/location/managerlocation`, {
+          .post(`${BASE_URL}/api/location/${path}`, {
             userId:managerId,
             longitude : lng,
             latitude : lat,

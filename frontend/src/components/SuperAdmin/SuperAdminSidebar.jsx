@@ -28,7 +28,7 @@ const SuperAdminSidebar = () => {
 
 
   return (
-    <div className='flex flex-row lg:flex-col h-[80px] lg:h-screen w-full lg:w-[100px] left-0 bg-[#5443c3] border-b lg:border-r shadow-md justify-between items-center py-[10px] lg:py-[20px] text-gray-500'>
+    <div className="flex justify-evenly flex-row lg:flex-col h-[80px] lg:h-screen w-screen lg:w-[100px]  left-0 bg-[#5443c3] border-b lg:border-r shadow-md lg:justify-between items-center py-[10px] lg:py-[20px] text-gray-500">
       <div className="w-16 md:w-20 lg:w-24 h-12 md:h-16 lg:h-20 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
         <img className="m-2 md:m-4 lg:m-6" src={logo} alt="Logo" />
       </div>
@@ -39,35 +39,33 @@ const SuperAdminSidebar = () => {
 
       <div
           onClick={() => handleNavigation('/atticDashboard')}
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === '/atticDashboard' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === '/atticDashboard' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
         >
           <MdDashboard className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Dashboard
           </span>
         </div>
         
       <div
           onClick={() => handleNavigation('/superAdminDashboard')}
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === '/superAdminDashboard' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === '/superAdminDashboard' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
         >
           <RiDashboardLine 
           className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Super Admin Dashboard
           </span>
         </div>
         
-        
 
-        
 
         <div
           onClick={() => handleNavigation('/superAdminGroups')}
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === '/Groups' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === '/Groups' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
         >
           <GrChatOption className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Group Chat
           </span>
         </div>
@@ -76,20 +74,20 @@ const SuperAdminSidebar = () => {
 
         <div
           onClick={() => handleNavigation('/superAdminLiveMesages')}
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === '/livemesages' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === '/livemesages' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
         >
           <SiLivechat className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Live Chat
           </span>
         </div>
 
          <Link
           to="/BlockAccess"
-          className={`group relative flex items-center rounded-full p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === '/BlockAccess' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === '/BlockAccess' ? 'bg-blue-500 text-white' : 'bg-[#fffefd]'}`}
         >
           <TbLockFilled  className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-50 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Block
           </span>
         </Link> 
@@ -98,10 +96,10 @@ const SuperAdminSidebar = () => {
 
       <div
         onClick={handleLogout}
-        className="group relative flex items-center bg-[#fffefd] rounded-full p-2 md:p-4 lg:p-5 cursor-pointer"
+        className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-2 md:p-4 lg:p-5 cursor-pointer lg:mt-2 m-1"
       >
         <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
-        <span className="absolute bottom-full lg:bottom-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Logout
         </span>
       </div>

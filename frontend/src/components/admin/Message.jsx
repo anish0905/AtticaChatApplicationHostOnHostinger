@@ -193,7 +193,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
           {selectedGroupName && selectedGrade && (
             <div className="flex flex-col flex-1 bg-[#f6f5fb]">
               <div className="text-[#ffffff] bg-[#5443c3] lg:text-2xl md:text-xl text-xl p-4 flex gap-2 items-center justify-between">
-                <span onClick={() => navigate(-1)} className="cursor-pointer">
+                <span onClick={() => navigate(-1)} className="cursor-pointer text-[#ffffff]">
                   <IoArrowBack />
                 </span>
                 <div className="flex flex-row">

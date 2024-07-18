@@ -278,7 +278,7 @@ function TEChatToAdmin() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
-      <GPSTracker managerId={loggedInUserId} />
+      <GPSTracker managerId={loggedInUserId} path={"te-location"} />
       <Sidebar value="TE" />
       <div
         className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? "hidden lg:flex" : "flex"

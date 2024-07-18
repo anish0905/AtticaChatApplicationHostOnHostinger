@@ -52,6 +52,9 @@ const Sidebar = () => {
       <div className="w-16 md:w-20 lg:w-24 h-12 md:h-16 lg:h-20 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
         <img className="m-2 md:m-4 lg:m-6" src={logo} alt="Logo" />
       </div>
+
+      <div className="flex flex-row lg:flex-col gap-2 md:gap-3 lg:gap-5 relative">
+
       <div
         onClick={() => handleNavigation("/announcement")}
         className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/announcement"
@@ -63,9 +66,9 @@ const Sidebar = () => {
         <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           announce
         </span>
-      </div>
+      </div> 
 
-      <div className="flex flex-row lg:flex-col gap-2 md:gap-3 lg:gap-5 relative">
+
         <div
           onClick={() => handleNavigation("/admindashboard")}
           className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === "/atticDashboard"

@@ -101,7 +101,7 @@ const TETable = () => {
         </table>
       </div>
       {showMap && (
-        <div className="w-full lg:w-1/2 p-4">
+        <div className="w-full  p-4">
           {location.length > 0 ? (
             <GoogleMapsuper locations={location} onClose={() => setShowMap(false)} className="w-full" />
           ) : (
@@ -109,11 +109,7 @@ const TETable = () => {
           )}
         </div>
       )}
-      {locationNotFound && (
-        <div className="w-full lg:w-1/2 p-4">
-          <div className="text-red-600 font-semibold">No locations found for the selected date.</div>
-        </div>
-      )}
+      
     </div>
   );
 };

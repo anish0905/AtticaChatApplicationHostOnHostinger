@@ -14,14 +14,8 @@ function AnnouncementByAdmin() {
   const messagesEndRef = useRef(null);
   const loggedInUserId = localStorage.getItem("CurrentUserId");
 
-  useEffect(() => {
- 
-    if (!loggedInUserId) {
-        console.error("No logged in user ID found");
-        return;
-    }
-    setUserDetails({ name: userDetails.name });
-    // Fetch initial messages
+
+  const fetchdata = ()=>{
     axios.get(`${BASE_URL}/api/announce/getAnnounceById/${loggedInUserId}`)
         .then(response => {
             setMessages(response.data);
@@ -32,6 +26,11 @@ function AnnouncementByAdmin() {
         .catch(error => {
             console.error("Error fetching messages:", error);
         });
+  }
+
+  useEffect(() => {
+    fetchdata()
+    
      
 }, []);
 
@@ -43,7 +42,8 @@ function AnnouncementByAdmin() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = (e) => {
+    e.preventDefault();
     if (typedMessage.trim() === "") return;
 
     const messageData = {
@@ -56,13 +56,14 @@ function AnnouncementByAdmin() {
     axios.post(`${BASE_URL}/api/announce/postmessages/`, messageData)
       .then(response => {
         setMessages([...messages, response.data]);
-        setTypedMessage(""); // Clear input after sending message
+        setTypedMessage("");
+        fetchdata() // Clear input after sending message
       })
       
       .catch(error => {
         console.error("Error sending message:", error);
       });
-      window.location.reload()
+    
   };
 
   

@@ -56,8 +56,8 @@ const TableSuper = () => {
   return (
     <div className='flex flex-wrap w-full'>
       <div className="p-4 rounded-lg shadow-lg overflow-auto border border-purple-900 w-full ">
-        <div className="text-xl font-bold mb-4 text-[#5443c3]">Branch Manager Details</div>
-        <table className="min-w-full bg-white border">
+        <div className="lg:text-xl md:text-xl text-sm font-bold mb-4 text-[#5443c3]">Branch Manager Details</div>
+        <table className="min-w-full bg-white border lg:text-xl md:text-xl text-sm">
           <thead>
             <tr>
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Manager Id</th>
@@ -74,7 +74,7 @@ const TableSuper = () => {
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Select Date</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="min-w-full bg-white border lg:text-lg md:text-lg text-sm">
             {manager.map((item, index) => (
               <tr key={index}>
                 <td className="py-2 px-4 border-b text-[#5443c3]">{item._id}</td>

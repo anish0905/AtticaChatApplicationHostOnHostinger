@@ -39,7 +39,7 @@ function ScrollingNavbar() {
        
 
         <div className="flex-1 flex justify-center items-center">
-          <div className="scrolling-container overflow-hidden h-10 flex items-center lg:rounded-2xl lg:w-[80vw] w-[15vw]">
+          <div className="scrolling-container overflow-hidden h-10 flex items-center lg:rounded-2xl lg:w-[80vw] w-[80%]">
             <div className="scrolling-content flex items-center">
               {lastMessage && (
                 <span
