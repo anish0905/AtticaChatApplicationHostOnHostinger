@@ -239,7 +239,7 @@ function BillingTeamChat() {
 
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
-          <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+          <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between h-16">
             <button
               onClick={handleBackToEmployees}
               className=" text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "

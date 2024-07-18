@@ -261,9 +261,9 @@ function ManagerChat() {
     <div>
       <GPSTracker managerId={loggedInUserId} />
       <div className="flex flex-col lg:flex-row h-screen relative">
-        <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
+        <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 border border-[#5443c3] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
           <div className="flex items-center">
-            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] flex-shrink-0">All Billing Team</h1>
+            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] flex-shrink-0 ">All Billing Team</h1>
 
             <div className="relative ml-4">
               <div className="flex">
@@ -379,19 +379,19 @@ function ManagerChat() {
         {isChatSelected && (
           <div className="w-full h-screen lg:w-min-[30%] flex flex-col justify-between bg-[#f6f5fb]">
             {isChatSelected && (
-              <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+              <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between h-20">
                 <button className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
                   onClick={handleBackToUserList}
                 >
                   <FaArrowLeft className="text-xl lg:text-2xl" />
                 </button>
                 <h1 className="text-xl lg:text-2xl font-bold">Chat with {recipientName}</h1>
-                <Link
+                {/* <Link
                   to="/"
                   className=" text-xl lg:text-2xl group relative flex items-center justify-end font-extrabold rounded-full p-3 md:p-5"
                 >
                   <BiLogOut />
-                </Link>
+                </Link> */}
               </div>
             )}
 

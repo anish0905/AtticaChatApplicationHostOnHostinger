@@ -242,7 +242,7 @@ const ManagerDetails = () => {
                     </button>
                     <button
                       onClick={() => handleDelete(manager._id)}
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 sm:px-4 rounded mx-2"
                     >
                      <RiDeleteBin5Line />
                     </button>

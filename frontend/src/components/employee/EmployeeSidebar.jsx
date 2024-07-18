@@ -73,6 +73,7 @@ const EmployeeSidebar = () => {
              Announcement
             </span>
           </div>
+          
           <div
             onClick={handleGroup}
             className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/empgroupchat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}

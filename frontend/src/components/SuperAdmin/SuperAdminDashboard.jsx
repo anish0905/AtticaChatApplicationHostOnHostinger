@@ -4,6 +4,7 @@ import Sidebar from "../admin/Sidebar";
 import EmployeeDetails from "../admin/EmployeeDetails";
 import AdminDetails from "./AdminDetails";
 import { BASE_URL } from "../../constants";
+import SuperAdminSidebar from "./SuperAdminSidebar";
 
 const SuperAdminDashboard = () => {
   const [email, setEmail] = useState("");
@@ -55,7 +56,7 @@ const SuperAdminDashboard = () => {
 
   return (
     <div className="lg:flex block bg-[#f6f5fb]">
-      <Sidebar />
+      <SuperAdminSidebar />
       <div className="flex-1 p-6">
         <div className="flex items-center justify-between mb-4 flex-col lg:flex-col">
         <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Admin Details</h1>

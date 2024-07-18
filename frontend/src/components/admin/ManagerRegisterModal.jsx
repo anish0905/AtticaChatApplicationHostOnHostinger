@@ -88,7 +88,7 @@ const ManagerRegisterModal = () => {
                     { label: "Manager Address", name: "manager_address", type: "text" }
                   ].map((field, index) => (
                     <div className="mb-4" key={index}>
-                      <label className="block text-[#5443c3] text-sm font-bold lg:mb-2" htmlFor={field.name} >
+                      <label className="block text-[#5443c3] text-sm font-bold lg:mb-2" htmlFor={field.name} htmlFor={field.name}>
                         {field.label}
                       </label>
                       <input

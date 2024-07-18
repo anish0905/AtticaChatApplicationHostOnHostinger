@@ -7,6 +7,7 @@ import EmployeeSidebar from "../employee/EmployeeSidebar";
 import UserSidebar from "../AllUsers/UserSidebar";
 import { IoIosDocument } from "react-icons/io";
 
+
 function FetchAllAnnouncement() {
   const [messages, setMessages] = useState([]);
   const messagesEndRef = useRef(null);
@@ -73,10 +74,11 @@ function FetchAllAnnouncement() {
         {renderSidebar()}
 
       {/* <UserSidebar newNotificationCount={newNotificationCount} /> */}
+      {/* <EmployeeSidebar/> */}
       
       <div className="flex-col bg-[#eef2fa] text-black p-4 shadow w-full lg:w-full border border-[#5443c3] flex lg:flex">
         <div className="flex justify-between mb-4 items-center">
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-2 " >
             <Link to={`/${route}`}>
               <FaArrowLeft className="text-[#5443c3] hover:text-[#5443c3]" />
             </Link>
