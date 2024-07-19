@@ -58,29 +58,32 @@ const SuperAdminDashboard = () => {
     <div className="lg:flex block bg-[#f6f5fb]">
       <SuperAdminSidebar/>
       <div className="flex-1 p-6">
-        <div className="flex items-center justify-between mb-4 flex-col lg:flex-col">
+        <div className="flex justify-between mb-4 flex-col lg:flex-row">
         <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Admin Details</h1>
-       <div>
+       <div className='flex justify-center items-center content-center '>
          <button
             onClick={() => setIsModalOpen(true)}
-            className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-1 px-4 rounded-full h-10 mr-2 mt-4 lg:mt-0"
+             className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:px-4 py-1 px-2 lg:text-xl text-xs rounded-full w-full lg:w-[30vw] h-12 mr-2 mt-4 lg:mt-0"
           >
             Open Registration Form
           </button>
 
           <button
-            className="bg-red-500 p-2 w-16 rounded-sm my-2 text-white text-lg "
+            className="bg-red-500 text-white font-bold lg:px-4 py-1 px-2 lg:text-xl text-xs rounded-full w-full h-12 mr-2 mt-4 lg:mt-0"
+
+            
             onClick={handlePanic}
           >
             Panic
           </button>
           </div> 
+          </div>
           <AdminDetails />
-        </div>
+      
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
-            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 w-full max-w-lg mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto">
-              <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Register</h2>
+            <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 lg:w-full lg:h-auto w-[300px] h-auto max-w-lg mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto">
+              <h2 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">Register</h2>
               {error && <div className="text-red-500 mb-4">{error}</div>}
               <form onSubmit={handleSubmit} className="w-full">
                 <div className="mb-4">
@@ -90,7 +93,7 @@ const SuperAdminDashboard = () => {
                   <input
                     type="text"
                     id="email"
-                    className="block w-full mt-2 p-2 border border-gray-300 rounded"
+                   className="shadow appearance-none border rounded w-full lg:py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     placeholder="Email"
                     value={email}
                     onChange={handleNameChange}
@@ -103,7 +106,7 @@ const SuperAdminDashboard = () => {
                   <input
                     type="text"
                     id="password"
-                    className="block w-full mt-2 p-2 border border-gray-300 rounded"
+                   className="shadow appearance-none border rounded w-full lg:py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     placeholder="password"
                     value={password}
                     onChange={handleEmpIdChange}
@@ -111,14 +114,14 @@ const SuperAdminDashboard = () => {
                 </div>
                 <div className="flex items-center justify-between">
                   <button
-                    className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                    className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:py-2 lg:px-4 rounded focus:outline-none focus:shadow-outline text-sm py-2 px-2"
                     type="submit"
                   >
                     Register
                   </button>
                   <button
                     onClick={() => setIsModalOpen(false)}
-                    className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                   className="ml-4 bg-gray-500 hover:bg-gray-700 text-white font-bold lg:py-2 lg:px-4 rounded focus:outline-none focus:shadow-outline text-sm py-2 px-2"
                     type="button"
                   >
                     Cancel

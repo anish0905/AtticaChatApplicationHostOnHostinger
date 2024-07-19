@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { BASE_URL } from '../../constants';
 import axios from 'axios';
-import { AiOutlineDown } from 'react-icons/ai';
 import { IoIosDocument } from 'react-icons/io';
 
 const Chat = () => {
@@ -18,30 +17,17 @@ const Chat = () => {
 
     const fetchMessages = (sender, recipient) => {
         try {
-            if (selectedRole === "Admin") {
-                axios
-                    .get(`${BASE_URL}/api/empadminsender/getadminmessages/${recipient}/${sender}`)
-                    .then((response) => {
-                        ``
-                        setMessages(response.data);
-                    })
+            const url = selectedRole === "Admin" 
+                ? `${BASE_URL}/api/empadminsender/getadminmessages/${recipient}/${sender}`
+                : `${BASE_URL}/api/getmessages/${recipient}/${sender}`;
 
-            }
-            else {
-                axios
-                    .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
-                    .then((response) => {
-                        ``
-                        setMessages(response.data);
-                    })
-
-            }
+            axios.get(url).then((response) => {
+                setMessages(response.data);
+            });
         } catch (error) {
             console.error(error);
-
         }
     };
-    // fkjkjkj
 
     useEffect(() => {
         fetchMessages(sender, recipient);
@@ -60,25 +46,31 @@ const Chat = () => {
     };
 
     return (
-        <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#f6f5fb] h-screen overflow-hidden">
-            <h1 className=" flex justify-between font-medium content-center items-center  bg-[#5443C3] px-4 py-4 rounded text-white text-xl mb-5  ">
-                <p>Chat</p>
-                <p className='text-sm'> {user1Name} </p>
-                <p className='text-xs'>With</p>
-                <p className='text-sm'>{user2Name}</p>
-            </h1>
+        <div className="flex-grow overflow-y-auto p-1 flex flex-col bg-[#f6f5fb] h-screen overflow-hidden w-full">
+           <h1 className="flex flex-col font-medium bg-[#5443C3] px-4 py-4 rounded text-white text-lg md:text-xl lg:text-2xl mb-5">
+    <div className="flex justify-between items-center">
+        <p>Chat</p>
+    </div>
+    <div className="flex items-center space-x-2 mt-2">
+        <p className='text-sm text-yellow-300'>{user1Name}</p>
+        <p className='text-sm'>With</p>
+        <p className='text-sm text-green-300'>{user2Name}</p>
+    </div>
+</h1>
+
             {messages.map((message, index) => (
                 <div
                     key={message._id}
-                    className={`mb-4 p-4 rounded-lg max-w-[70%] relative ${message.sender === loggedInUserId
-                        ? 'bg-[#5443C3] text-white rounded-tr-3xl rounded-bl-3xl self-end'
-                        : 'bg-white text-[#5443C3] rounded-tl-3xl rounded-br-3xl self-start'
+                    className={`mb-4 p-4 rounded-lg max-w-[80%] md:max-w-[70%] lg:max-w-[60%] relative break-words whitespace-pre-wrap ${
+                        message.sender === loggedInUserId
+                            ? 'self-end bg-[#9184e9] border border-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl'
+                            : 'self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl'
                         }`}
                     onMouseEnter={() => handleHover(index)}
                     onMouseLeave={() => setHoveredMessage(null)}
                 >
                     {message.content && message.content.originalMessage && (
-                        <div className="mb-2  text-wrap">
+                        <div className="mb-2 text-wrap">
                             <span className="bg-green-900 px-2 py-1 text-xs text-white rounded">
                                 {message.content.originalMessage}
                             </span>
@@ -91,14 +83,14 @@ const Chat = () => {
                         <img
                             src={message.content.image}
                             alt="Image"
-                            className="min-w-xs"
+                            className="w-full h-auto md:h-64 lg:h-80 object-cover rounded-lg"
                         />
                     )}
                     {message.content && message.content.camera && (
                         <img
                             src={message.content.camera}
                             alt="Image"
-                            className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                            className="w-full h-auto md:h-64 lg:h-80 object-cover rounded-lg"
                         />
                     )}
                     {message.content && message.content.document && (
@@ -106,18 +98,18 @@ const Chat = () => {
                             href={message.content.document}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-blue-500 hover:underline"
+                            className="text-blue-500 hover:underline flex items-center space-x-2"
                         >
-                            <IoIosDocument className="text-9xl" />
+                            <IoIosDocument className="text-3xl md:text-5xl lg:text-6xl" />
                         </a>
                     )}
                     {message.content && message.content.video && (
-                        <video controls className="min-w-xs">
+                        <video controls className="w-full h-auto md:h-64 lg:h-80 rounded-lg">
                             <source src={message.content.video} type="video/mp4" />
                             Your browser does not support the video tag.
                         </video>
                     )}
-                    <span className="text-xs text-black">
+                    <span className="text-xs text-gray-400">
                         {new Date(message.createdAt).toLocaleString()}
                     </span>
                 </div>
@@ -128,5 +120,3 @@ const Chat = () => {
 };
 
 export default Chat;
-
-
