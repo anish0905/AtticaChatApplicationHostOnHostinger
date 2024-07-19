@@ -6,7 +6,7 @@ const {
   deleteMessage,
   unreadMessages,
   markMessagesRead,
-
+  deleteCameraImg,
   forwardMessage,
   replyToMessage,
   getMessagesByUser,
@@ -31,5 +31,8 @@ router.get("/getAllByUser/:userId1", getMessagesByUser);
 router.delete("/delmessages/:id", deleteMessage);
 router.get("/notifications/:userId", getuserAllMessages);
 router.get("/messages/user/:userId", getuserAllMessagesNotification);
+
+// Route to delete the camera image
+router.delete("/messages/camera/:id", deleteCameraImg);
 
 module.exports = router;
