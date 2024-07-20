@@ -281,6 +281,28 @@ const getuserAllMessagesNotification = async (req, res) => {
     res.status(500).json({ error: "Internal server error" }); // Send 500 status code in case of error
   }
 };
+const deleteCameraImg = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    // Find the message by id
+    const message = await Message.findById(id);
+
+    if (!message) {
+      return res.status(404).json({ message: "Message not found" });
+    }
+
+    // Delete the camera image
+    message.content.camera = null;
+
+    // Save the updated message
+    await message.save();
+
+    res.status(200).json({ message: "Camera image deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error });
+  }
+};
 
 module.exports = {
   createMessage,
@@ -293,4 +315,5 @@ module.exports = {
   getMessagesByUser,
   getuserAllMessages,
   getuserAllMessagesNotification,
+  deleteCameraImg,
 };

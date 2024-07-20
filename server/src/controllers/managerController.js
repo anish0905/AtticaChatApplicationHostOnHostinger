@@ -76,7 +76,7 @@ const loginManager = async (req, res) => {
       return res.status(400).json({ message: "Manager not found" });
     }
 
-    if(!manager.access){
+    if (!manager.access) {
       return res.status(401).json({ error: "Manager not authorized" });
     }
 
