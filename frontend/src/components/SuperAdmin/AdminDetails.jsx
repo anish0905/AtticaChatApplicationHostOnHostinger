@@ -170,7 +170,7 @@ const AdminDetails = () => {
                   {employee.email}
                 </td>
                 <td className="py-4 px-2 whitespace-nowrap sm:px-4 lex text-xs lg:text-sm ">
-                  <button
+                  {/* <button
                     onClick={() => handleEdit(employee)}
                      className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-2 sm:px-4 rounded mx-2"
                   >
