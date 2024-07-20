@@ -63,9 +63,9 @@ const TETable = () => {
 
   return (
     <div className="flex flex-wrap w-full">
-      <div className="p-4 rounded-lg shadow-lg overflow-auto border border-purple-900 w-full bg-white">
-        <div className="text-xl font-bold mb-4 text-[#5443c3]">Branch TE Details</div>
-        <table className="min-w-full bg-white border-collapse">
+      <div className="p-4 rounded-lg shadow-lg overflow-auto border border-purple-900 w-full ">
+        <div className="lg:text-xl md:text-xl text-sm font-bold mb-4 text-[#5443c3]">Branch TE Details</div>
+        <table className="min-w-full bg-white border lg:text-xl md:text-xl text-sm">
           <thead>
             <tr>
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">TE Id</th>
@@ -75,14 +75,15 @@ const TETable = () => {
               <th className="py-2 px-4 border-b bg-[#5443c3] text-white">Select Date</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="min-w-full bg-white border lg:text-lg md:text-lg text-sm">
             {TE.map((item, index) => (
               <tr key={index} className="hover:bg-gray-100">
                 <td className="py-2 px-4 border-b text-[#5443c3]">{item._id}</td>
                 <td className="py-2 px-4 border-b text-[#5443c3]">{item.name}</td>
                 <td className="py-2 px-4 border-b text-[#5443c3]">{item.email}</td>
                 <td
-                  className="py-2 px-4 border-b text-blue-600 underline cursor-pointer"
+                 className="py-2 px-4 border-b text-decoration-line: underline"
+                 style={{ color: 'blue', cursor: 'pointer' }}
                   onClick={() => openModal(item._id)}
                 >
                   Click here

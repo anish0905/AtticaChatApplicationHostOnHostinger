@@ -21,7 +21,7 @@ const Camera = ({ onCapture, onClose, recipient, loggedInUserId, admin }) => {
     <div className='font-semibold text-xl text-white w-50'>
       <div className='flex justify-center content-center items-center gap-10 my-5'>
       <button onClick={toggleOptions}>
-        {showOptions ? 'Chose Camera' : 'Chose Camera'}
+        {showOptions ? 'Choose Camera' : 'Choose Camera'}
       </button>
       </div>
       {showOptions && (

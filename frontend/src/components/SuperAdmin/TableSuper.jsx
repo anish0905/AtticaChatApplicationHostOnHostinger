@@ -99,6 +99,7 @@ const TableSuper = () => {
                     selected={selectedDate} 
                     onChange={(date) => setSelectedDate(date)} 
                     dateFormat="yyyy-MM-dd"
+                     className="border rounded px-2 py-1"
                   />
                 </td>
               </tr>
