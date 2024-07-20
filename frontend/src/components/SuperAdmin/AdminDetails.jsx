@@ -130,17 +130,7 @@ const AdminDetails = () => {
     }
   };
 
-  const changeOtp = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/api/user/updateOtp`);
-      console.log("updateotp   ", res.data);
-      // Update OTP state with fetched OTP data
-      window.location.reload();
-    } catch (error) {
-      console.error("Error fetching OTP", error);
-    }
-  };
-
+  
   return (
     <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
       
@@ -168,12 +158,12 @@ const AdminDetails = () => {
                   {employee.email}
                 </td>
                 <td className="py-4 px-2 sm:px-4 whitespace-nowrap flex">
-                  <button
+                  {/* <button
                     onClick={() => handleEdit(employee)}
                     className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-2 sm:px-4 rounded"
                   >
                     <FaEdit />
-                  </button>
+                  </button> */}
                   <button
                     onClick={() => handleDelete(employee._id)}
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 sm:px-4 rounded"
