@@ -204,9 +204,10 @@ function SoftwareToSoftware() {
 
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
-      <ScrollingNavbar/>
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10">
+      
       <UserSidebar value="SOFTWARE" />
+      {!showChat && <ScrollingNavbar  />}
       {showChat ? (
         <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white border-2 border-[#5443c3] my-2 mx-2 sticky top-0 z-10">

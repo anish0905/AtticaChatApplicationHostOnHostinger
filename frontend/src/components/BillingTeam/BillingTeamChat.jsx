@@ -239,8 +239,10 @@ function BillingTeamChat() {
 
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-    <ScrollingNavbar/>
+    <>
+    {!showChat && <ScrollingNavbar  />}
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10 ">
+  
       {showChat ? (
         <div className="w-full  flex flex-col justify-between overflow-hidden">
           <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between h-16">
@@ -471,6 +473,7 @@ function BillingTeamChat() {
         />
       )}
     </div>
+    </>
   );
 }
 
