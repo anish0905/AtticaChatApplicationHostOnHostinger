@@ -175,7 +175,7 @@ const AdminDetails = () => {
                      className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-2 sm:px-4 rounded mx-2"
                   >
                     <FaEdit />
-                  </button> */}
+                  </button>  */}
                   <button
                     onClick={() => handleDelete(employee._id)}
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 sm:px-4 rounded"
