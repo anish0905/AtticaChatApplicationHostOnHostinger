@@ -34,11 +34,12 @@ function ScrollingNavbar() {
   }, []);
 
   return (
-    <div className="fixed top-0 left-0 right-0   z-10">
+    <div className="fixed top-0 left-0 right-0  bg-[#5443c3]  z-10">
       
        
 
         <div className="flex-1 flex justify-center items-center">
+        <h1 className='text-white items-center text-lg lg:text-2xl font-bold'>Announcement</h1>
           <div className="scrolling-container overflow-hidden h-10 flex items-center lg:rounded-2xl lg:w-[80vw] w-[80%]">
             <div className="scrolling-content flex items-center">
               {lastMessage && (

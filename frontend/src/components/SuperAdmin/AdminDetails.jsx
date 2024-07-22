@@ -3,6 +3,7 @@ import axios from "axios";
 import { BASE_URL } from "../../constants";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import { AiOutlineSearch } from "react-icons/ai";
 
 const Modal = ({ show, onClose, employee, onUpdate }) => {
   const [formData, setFormData] = useState({ ...employee });
@@ -29,8 +30,8 @@ const Modal = ({ show, onClose, employee, onUpdate }) => {
 
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Edit Admin Details</h2>
+      <div className="bg-white p-6 rounded-lg shadow-lg w-[80%] max-w-md">
+        <h2 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">Edit Admin Details</h2>
 
         <form>
           <div className="mb-4">
@@ -93,6 +94,7 @@ const AdminDetails = () => {
   const [employees, setEmployees] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
   const [otp, setOtp] = useState({}); // State to store OTP for each user
 
   useEffect(() => {
@@ -130,33 +132,33 @@ const AdminDetails = () => {
     }
   };
 
-  const changeOtp = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/api/user/updateOtp`);
-      console.log("updateotp   ", res.data);
-      // Update OTP state with fetched OTP data
-      window.location.reload();
-    } catch (error) {
-      console.error("Error fetching OTP", error);
-    }
-  };
-
+  
   return (
-    <div className="flex flex-col h-screen w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
-      
-      <div className="flex-1 overflow-x-auto overflow-y-hidden">
-
-        {/* <button onClick={changeOtp}>Change OTP</button> */}
+    <div className="flex flex-col h-[950px] overflow-y-auto w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
+       <div className="relative mb-4 w-full">
+        <input
+          type="text"
+          placeholder="Search by name"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+         className="w-full lg:h-10 h-8 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
+        />
+         <AiOutlineSearch
+            size={15}
+            className="absolute top-3 left-3 text-gray-500 text-xl "
+          />
       </div>
 
-      <div className="h-full overflow-y-auto">
-        <table className="min-w-full divide-y divide-gray-200">
+
+      <div className="flex-1 overflow-x-auto overflow-y-hidden">
+      <div className="h-[850px] overflow-y-auto">
+        <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
           <thead className="bg-[#5443c3] sticky top-0">
             <tr>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
                 Email
               </th>
-              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
                 Actions
               </th>
             </tr>
@@ -164,16 +166,16 @@ const AdminDetails = () => {
           <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
             {employees.map((employee) => (
               <tr key={employee._id}>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap">
+                <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
                   {employee.email}
                 </td>
-                <td className="py-4 px-2 sm:px-4 whitespace-nowrap flex">
-                  <button
+                <td className="py-4 px-2 whitespace-nowrap sm:px-4 lex text-xs lg:text-sm ">
+                  {/* <button
                     onClick={() => handleEdit(employee)}
-                    className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-2 sm:px-4 rounded"
+                     className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-2 sm:px-4 rounded mx-2"
                   >
                     <FaEdit />
-                  </button>
+                  </button>  */}
                   <button
                     onClick={() => handleDelete(employee._id)}
                     className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 sm:px-4 rounded"
@@ -185,6 +187,7 @@ const AdminDetails = () => {
             ))}
           </tbody>
         </table>
+      </div>
       </div>
       {selectedEmployee && (
         <Modal
