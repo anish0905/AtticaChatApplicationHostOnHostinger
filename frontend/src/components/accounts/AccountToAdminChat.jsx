@@ -15,6 +15,7 @@ import Sidebar from "../AllUsers/UserSidebar"
 import ReplyModel from "../ReplyModel";//--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import Camera from "../Camera/Camera";
+import EditImageModal from '../AllUsers/EditImageModal'; 
 
 
 function AccountToAdminChat() {
@@ -422,6 +423,12 @@ function AccountToAdminChat() {
                             Reply
                           </button>
 
+                          <button
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleForward(message)}
+                          >
+                            Forward
+                          </button>
                           <button
                             className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                             onClick={() => handleForward(message)}

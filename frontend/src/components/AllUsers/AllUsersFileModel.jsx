@@ -1,7 +1,6 @@
-import * as React from 'react';
-import axios from 'axios';
-import { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import Button from '@mui/material/Button';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
@@ -13,17 +12,20 @@ import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 import { FaFolderPlus } from 'react-icons/fa';
 import { BASE_URL } from '../../constants';
+import EditImageModal from './EditImageModal'; // Assuming EditImageModal is implemented separately
 
-export default function AllUsersFileModel({ sender, recipient, admin, latitude, longitude,senderName }) {
-  // console.log("latitude, longitude",latitude,"   ",longitude)
-  const [open, setOpen] = React.useState(false);
-  const [loading, setLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-  const anchorRef = React.useRef(null);
-  const imageInputRef = React.useRef(null);
-  const documentInputRef = React.useRef(null);
-  const videoInputRef = React.useRef(null);
-  const LocationInputRef = React.useRef(null);
+export default function AllUsersFileModel({ sender, recipient, admin, latitude, longitude, senderName }) {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const anchorRef = useRef(null);
+  const imageInputRef = useRef(null);
+  const documentInputRef = useRef(null);
+  const videoInputRef = useRef(null);
+  const locationInputRef = useRef(null);
+  const editModelInputRef = useRef(null);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [sendEditImageClicked, setSendEditImageClicked] = useState(false);
 
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
@@ -37,20 +39,15 @@ export default function AllUsersFileModel({ sender, recipient, admin, latitude, 
   };
 
   const handleListKeyDown = (event) => {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    } else if (event.key === 'Escape') {
+    if (event.key === 'Tab' || event.key === 'Escape') {
       setOpen(false);
     }
   };
 
-  const prevOpen = useRef(open);
   useEffect(() => {
-    if (prevOpen.current === true && open === false) {
+    if (open) {
       anchorRef.current.focus();
     }
-    prevOpen.current = open;
   }, [open]);
 
   const handleFileInputClick = (inputRef) => {
@@ -68,33 +65,7 @@ export default function AllUsersFileModel({ sender, recipient, admin, latitude, 
       formData.append('recipient', recipient);
       formData.append('senderName', senderName);
 
-      setLoading(true);
-      setError(null);
-
-      try {
-        let response;
-        if (admin === 'admin') {
-          response = await axios.post(`${BASE_URL}/api/empadminsender/createMessage`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-        } else {
-          response = await axios.post(`${BASE_URL}/api/postmessages`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-        }
-        console.log('File uploaded successfully:', response.data);
-      } catch (error) {
-        console.error('Error uploading file:', error);
-        setError('Error uploading file. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-
-      event.target.value = null;
+      handleFileUpload(formData);
     }
   };
 
@@ -105,40 +76,46 @@ export default function AllUsersFileModel({ sender, recipient, admin, latitude, 
       formData.append(fieldName, file);
       formData.append('sender', sender);
       formData.append('recipient', recipient);
-      formData.append('latitude', latitude.toString()); // Ensure latitude is sent as string if needed
-      formData.append('longitude', longitude.toString()); // Ensure longitude is sent as string if needed
+      formData.append('latitude', latitude.toString());
+      formData.append('longitude', longitude.toString());
       formData.append('senderName', senderName);
-  
-      setLoading(true);
-      setError(null);
-  
-      try {
-        let response;
-        if (admin === 'admin') {
-          response = await axios.post(`${BASE_URL}/api/empadminsender/createMessage`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-        } else {
-          response = await axios.post(`${BASE_URL}/api/postmessages`, formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          });
-        }
-        console.log('File with location uploaded successfully:', response.data);
-      } catch (error) {
-        console.error('Error uploading file with location:', error);
-        setError('Error uploading file with location. Please try again.');
-      } finally {
-        setLoading(false);
-      }
-  
-      event.target.value = null;
+
+      handleFileUpload(formData);
     }
   };
-  
+
+  const handleFileUpload = async (formData) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const url = admin === 'admin' ? `${BASE_URL}/api/empadminsender/createMessage` : `${BASE_URL}/api/postmessages`;
+      const response = await axios.post(url, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      console.log('File uploaded successfully:', response.data);
+    } catch (error) {
+      console.error('Error uploading file:', error);
+      setError('Error uploading file. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleEditModel = (event, fieldName) => {
+    const file = event.target.files[0];
+    if (file) {
+      setSelectedImage(file);
+      setSendEditImageClicked(true);
+    }
+  };
+
+  const handleModalClose = () => {
+    setSelectedImage(null);
+    setSendEditImageClicked(false);
+  };
 
   return (
     <Stack direction="row" spacing={2}>
@@ -180,7 +157,8 @@ export default function AllUsersFileModel({ sender, recipient, admin, latitude, 
                     <MenuItem onClick={() => handleFileInputClick(imageInputRef)}>Image</MenuItem>
                     <MenuItem onClick={() => handleFileInputClick(documentInputRef)}>Document</MenuItem>
                     <MenuItem onClick={() => handleFileInputClick(videoInputRef)}>Video</MenuItem>
-                    <MenuItem onClick={() => handleFileInputClick(LocationInputRef)}>Image With Location</MenuItem>
+                    <MenuItem onClick={() => handleFileInputClick(locationInputRef)}>Image With Location</MenuItem>
+                    <MenuItem onClick={() => handleFileInputClick(editModelInputRef)}>Send Edit Image</MenuItem>
                   </MenuList>
                 </ClickAwayListener>
               </Paper>
@@ -210,16 +188,35 @@ export default function AllUsersFileModel({ sender, recipient, admin, latitude, 
           onChange={(e) => handleFileChange(e, 'video')}
         />
         <input
-          ref={LocationInputRef}
+          ref={locationInputRef}
           type="file"
           accept="image/*"
           style={{ display: 'none' }}
           onChange={(e) => imgageWithLocation(e, 'image')}
         />
+        <input
+          ref={editModelInputRef}
+          type="file"
+          accept="image/*"
+          style={{ display: 'none' }}
+          onChange={(e) => handleEditModel(e, 'editedImage')}
+        />
       </div>
 
       {loading && <CircularProgress className='absolute top-1/2 left-1/2' />}
       {error && <div style={{ color: 'red' }}>{error}</div>}
+
+      {selectedImage && sendEditImageClicked && (
+        <EditImageModal
+          imageFile={selectedImage}
+          onClose={handleModalClose}
+          admin={admin}
+          sender={sender} 
+          recipient={recipient}
+          senderName={senderName}
+          
+        />
+      )}
     </Stack>
   );
 }
@@ -230,4 +227,5 @@ AllUsersFileModel.propTypes = {
   admin: PropTypes.string.isRequired,
   latitude: PropTypes.number.isRequired,
   longitude: PropTypes.number.isRequired,
+  senderName: PropTypes.string.isRequired,
 };
