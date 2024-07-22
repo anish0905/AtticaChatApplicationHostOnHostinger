@@ -45,6 +45,7 @@ function ManagerChat() {
   const [announcements, setAnnouncements] = useState([])
   const navigate = useNavigate();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [showChat, setShowChat] = useState(false);
 
   const handleClick = (id, name) => {
     setRecipient(id);
@@ -52,6 +53,7 @@ function ManagerChat() {
     setIsChatSelected(true);
     setSelectedChatUserId(id);
     fetchMessages(loggedInUserId, id);
+    setShowChat(true);
   };
 
   const fetchMessages = (sender, recipient) => {
@@ -262,10 +264,11 @@ function ManagerChat() {
 
 
   return (
+    
     <div>
-      <ScrollingNavbar />
+     {!showChat && <ScrollingNavbar  />}
       <GPSTracker managerId={loggedInUserId} path={"managerlocation"} />
-      <div className="flex flex-col lg:flex-row h-screen relative justify-between">
+      <div className="flex flex-col lg:flex-row h-screen relative justify-between mt-10">
         <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 border border-[#5443c3] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
           <div className="flex items-center">
             <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] flex-shrink-0 ">All Billing Team</h1>
