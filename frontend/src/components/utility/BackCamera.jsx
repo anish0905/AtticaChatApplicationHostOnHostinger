@@ -80,7 +80,7 @@ const BackCamera = ({ onCapture, onClose, recipient, loggedInUserId, admin }) =>
   if (error) {
     return (
       <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-75">
-        <p className="text-white">{error}</p>
+        <p className="text-white lg:text-xl text-xs">{error}</p>
         <button onClick={handleClose} className="px-4 py-2 mt-4 bg-red-500 text-white rounded-lg">
           Close
         </button>
@@ -91,7 +91,7 @@ const BackCamera = ({ onCapture, onClose, recipient, loggedInUserId, admin }) =>
   return (
     <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-black bg-opacity-75">
       {loading ? (
-        <p className="text-white">Loading camera...</p>
+        <p className="text-white lg:text-xl text-xs">Loading camera...</p>
       ) : (
         <video
           ref={videoRef}
@@ -103,14 +103,14 @@ const BackCamera = ({ onCapture, onClose, recipient, loggedInUserId, admin }) =>
       <div className="mt-4 flex space-x-4">
         <button
           onClick={handleCapture}
-          className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+          className="px-4 py-2 bg-blue-500 text-white rounded-lg lg:text-xl text-xs"
           aria-label="Capture image"
         >
           Capture
         </button>
         <button
           onClick={handleClose}
-          className="px-4 py-2 bg-red-500 text-white rounded-lg"
+          className="px-4 py-2 bg-red-500 text-white rounded-lg lg:text-xl text-xs"
           aria-label="Close camera"
         >
           Close
