@@ -19,3 +19,4 @@ const fetchAnnounce = async () => {
 };
 
 export default fetchAnnounce;
+

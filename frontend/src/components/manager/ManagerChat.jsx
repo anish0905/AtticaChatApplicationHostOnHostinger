@@ -276,22 +276,22 @@ function ManagerChat() {
 
   const handleDelete = (message) => {
     axios
-     .delete(`${BASE_URL}/api/delmessages/${message._id}`)
-     .then((response) => {
-      
-        setMessages(messages.filter((m) => m._id!== message._id));
+      .delete(`${BASE_URL}/api/delmessages/${message._id}`)
+      .then((response) => {
+
+        setMessages(messages.filter((m) => m._id !== message._id));
         setShowDropdown("null")
       })
 
-     .catch((error) => {
+      .catch((error) => {
         console.error(error);
       });
   };
 
   return (
-    
+
     <div>
-     {!showChat && <ScrollingNavbar  />}
+      {!showChat && <ScrollingNavbar />}
       <GPSTracker managerId={loggedInUserId} path={"managerlocation"} />
       <div className="flex flex-col lg:flex-row h-screen relative justify-between mt-10">
         <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 border border-[#5443c3] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
@@ -329,9 +329,9 @@ function ManagerChat() {
                     <span className="absolute bottom-full whitespace-nowrap bg-black text-white text-xs md:text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       Logout
                     </span>
-                    
+
                     <BiLogOut className=" text-lg md:text-2xl lg:text-3xl mb-4 " />
-                   
+
                   </div>
 
 
@@ -452,36 +452,18 @@ function ManagerChat() {
                   {message.content && message.content.text && (
                     <p className="font-bold">{message.content.text}</p>
                   )}
-                  {message.content && message.content.image && (
-                    <img
-                      src={message.content.image}
-                      alt="Image"
-                      className="max-w-xs"
-                    />
+                   {message.content && message.content.image && (
+                    <p>Image</p>
                   )}
                   {message.content && message.content.document && (
-                    <a
-                      href={message.content.document}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-500 hover:underline"
-                    >
-                      <IoIosDocument className="text-9xl" />
-                    </a>
+                    <p>Ducoment</p>
                   )}
                   {message.content && message.content.camera && (
-                    <img
-                      src={message.content.camera}
-                      alt="Image"
-                      className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
-                    />
+                    <p>Image</p>
                   )}
                   {message.content && message.content.video && (
-                    <video controls className="max-w-xs">
-                      <source src={message.content.video} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  )}
+                    <p>video</p>
+                  )} 
                   <span className="text-xs text-black">
                     {new Date(message.createdAt).toLocaleString()}
                   </span>
@@ -493,7 +475,7 @@ function ManagerChat() {
                     />
                   )}
 
-{showDropdown === index && (
+                  {showDropdown === index && (
                     <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
                       <button
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -516,15 +498,15 @@ function ManagerChat() {
                         </button>
                       )}
                       {
-                      message.sender === loggedInUserId && (
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleDelete(message)}
-                        >
-                          delete
-                        </button>
-                      )
-                    }
+                        message.sender === loggedInUserId && (
+                          <button
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleDelete(message)}
+                          >
+                            delete
+                          </button>
+                        )
+                      }
                     </div>
                   )}
                 </div>
@@ -593,7 +575,7 @@ function ManagerChat() {
           imageUrl={imageForEditing}
           handleModalClose={handleModalClose}
           recipient={recipient}
-          
+
         />
       )}
     </div>

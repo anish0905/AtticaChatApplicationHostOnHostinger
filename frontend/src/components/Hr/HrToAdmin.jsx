@@ -56,7 +56,7 @@ function HrToAdmin() {
   // Function to fetch messages between two users
   const fetchMessages = (sender, recipient) => {
     axios
-      .get(`${BASE_URL}/api/empadminsender/getadminmessages/${recipient}/${sender}`)
+      .get(`${BASE_URL}/api/empadminsender/getmessages/${recipient}/${sender}`)
       .then((response) => {
         setMessages(response.data);
       })

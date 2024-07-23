@@ -13,6 +13,7 @@ const GroupNotification = () => {
   const [initialLoad, setInitialLoad] = useState(true); // Track if it's the initial load
   const messagesEndRef = useRef(null);
   const notificationSoundRef = useRef(null);
+  
 
   // Fetch user details from local storage and set the grade
   useEffect(() => {
