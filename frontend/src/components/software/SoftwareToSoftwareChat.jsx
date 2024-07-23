@@ -13,7 +13,7 @@ import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";
-
+import EditModel from "../utility/EditModel";
 
 function SoftwareToSoftware() {
   const [messages, setMessages] = useState([]);
@@ -36,7 +36,8 @@ function SoftwareToSoftware() {
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
-
+  const [showImageEditor, setShowImageEditor] = useState(false);
+  const [imageForEditing, setImageForEditing] = useState('');
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
 
@@ -85,7 +86,7 @@ function SoftwareToSoftware() {
     const messageData = {
       sender: loggedInUserId,
       recipient: recipient,
-      senderName :userDetails.name,
+      senderName: userDetails.name,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,
       document: attachment?.type.startsWith("application/")
@@ -201,13 +202,35 @@ function SoftwareToSoftware() {
     setShowCamera(false);
   };
 
+  const handleModalClose = () => {
+    setImageForEditing(''); // Close the modal and reset selected image
+    setShowImageEditor(false); // Close edit modal
+  };
+  const handleEditImage = (message) => {
+    setShowImageEditor(true);
+    setImageForEditing((message.content.image || message.content.camera));
+    // console.log("*******",imageForEditing)
+  };
 
+  const handleDelete = (message) => {
+    axios
+      .delete(`${BASE_URL}/api/delmessages/${message._id}`)
+      .then((response) => {
+
+        setMessages(messages.filter((m) => m._id !== message._id));
+        setShowDropdown("null")
+      })
+
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10">
-      
+
       <UserSidebar value="SOFTWARE" />
-      {!showChat && <ScrollingNavbar  />}
+      {!showChat && <ScrollingNavbar />}
       {showChat ? (
         <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white border-2 border-[#5443c3] my-2 mx-2 sticky top-0 z-10">
@@ -215,19 +238,19 @@ function SoftwareToSoftware() {
               onClick={handleBackToEmployees}
               className=" text-white text-4xl p-2 rounded-md"
             >
-              <FaArrowLeft  className="lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white lg:text-2xl text-xl" />
+              <FaArrowLeft className="lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white lg:text-2xl text-xl" />
             </button>
-         
-              <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
-            
+
+            <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
+
           </div>
           <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa]">
             {messages.map((message, index) => (
               <div
                 key={message._id}
                 className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
-                    ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-                    : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                  ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+                  : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                   }`}
 
                 onMouseEnter={() => handleHover(index)}
@@ -244,7 +267,7 @@ function SoftwareToSoftware() {
                 {message.content && message.content.text && (
                   <p className="font-bold lg:text-2xl text-sm">{message.content.text}</p>
                 )}
-                 {message.content && message.content. camera && (
+                {message.content && message.content.camera && (
                   <img
                     src={message.content.camera}
                     alt="Image"
@@ -299,6 +322,24 @@ function SoftwareToSoftware() {
                     >
                       Forward
                     </button>
+                    {(message.content.image || message.content.camera) && (
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleEditImage(message)}
+                      >
+                        Edit Image
+                      </button>
+                    )}
+                    {
+                      message.sender === loggedInUserId && (
+                        <button
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleDelete(message)}
+                        >
+                          delete
+                        </button>
+                      )
+                    }
                   </div>
                 )}
               </div>
@@ -306,7 +347,7 @@ function SoftwareToSoftware() {
             <div ref={messagesEndRef} />
             {showCamera && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient}  />
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} />
               </div>
             )}
           </div>
@@ -316,7 +357,7 @@ function SoftwareToSoftware() {
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type a message..."
-             className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
+              className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
             />
             <input
               type="file"
@@ -332,18 +373,18 @@ function SoftwareToSoftware() {
             </button>
             <button
               onClick={handleSendMessage}
-             className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
-                <IoMdSend />
+              <IoMdSend />
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto ">
-                <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Software Employees</h1>
+          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Software Employees</h1>
           <div className=" relative flex items-center mb-4">
-            
+
             <input
               type="text"
               value={userSearchQuery}
@@ -364,8 +405,8 @@ function SoftwareToSoftware() {
                   className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] font-bold ${unreadUsers.some(
                     (unreadUser) => unreadUser.userId === user._id
                   )
-                      ? "bg-blue-100"
-                      : "bg-gray-200"
+                    ? "bg-blue-100"
+                    : "bg-gray-200"
                     } ${recipient === user._id ? "bg-green-200" : ""}`}
                   onClick={() => handleClick(user._id, user.name)}
                 >
@@ -398,6 +439,14 @@ function SoftwareToSoftware() {
           isVisible={showReplyModal}
           senderName={userDetails.name}
           onClose={() => setShowReplyModal(false)}
+
+        />
+      )}
+      {showImageEditor && (
+        <EditModel
+          imageUrl={imageForEditing}
+          handleModalClose={handleModalClose}
+          recipient={recipient}
 
         />
       )}

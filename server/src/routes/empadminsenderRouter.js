@@ -8,7 +8,8 @@ const {
   markMessagesRead,
   markMessagesReadEmp,
   forwardMessage,
-  replyToMessage,getuserAllMessagesNotification
+  replyToMessage,getuserAllMessagesNotification,
+  deleteMessage
 } = require("../controllers/empAdminSenderController.js");
 
 const { upload } = require("../middleware/multer.middlewear.js");
@@ -34,6 +35,7 @@ router.get("/mark-messages-read-emp/:userId", markMessagesReadEmp);
 router.post("/forward",forwardMessage)
 router.post("/reply", replyToMessage)
 router.get("/messages/user/:userId",getuserAllMessagesNotification)
+router.delete("/delmessages/:messageId", deleteMessage);
 
 
 module.exports = router;

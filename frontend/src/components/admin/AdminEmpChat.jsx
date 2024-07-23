@@ -16,7 +16,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import GoogleMapsuper from "../SuperAdmin/GoogleMapsuper";
 import AdminFordWardModel from "./Pages/AdminFordWardModel";
 import Camera from "../Camera/Camera";
-
+import EditModel from "../utility/EditModel";
 const senderName = localStorage.getItem('email');
 
 function AdminEmpChat() {
@@ -42,6 +42,8 @@ function AdminEmpChat() {
   const [showMap, setShowMap] = useState(false);
   const [location, setLocation] = useState([]);
   const [showCamera, setShowCamera] = useState(false);
+  const [showImageEditor, setShowImageEditor] = useState(false);
+  const [imageForEditing, setImageForEditing] = useState('');
 
 
   // Debugging logs
@@ -194,6 +196,29 @@ function AdminEmpChat() {
   const handleCloseCamera = () => {
     setShowCamera(false);
   };
+  const handleModalClose = () => {
+    setImageForEditing(''); // Close the modal and reset selected image
+    setShowImageEditor(false); // Close edit modal
+  };
+  const handleEditImage = (message) => {
+    setShowImageEditor(true);
+    setImageForEditing(((message.content.image || message.content.camera)));
+    // console.log("*******",imageForEditing)
+  };
+
+  const handleDelete = (message) => {
+    axios
+     .delete(`${BASE_URL}/api/empadminsender/delmessages/${message._id}`)
+     .then((response) => {
+      
+        setMessages(messages.filter((m) => m._id!== message._id));
+        setShowDropdown("null")
+      })
+
+     .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen relative">
@@ -297,22 +322,40 @@ function AdminEmpChat() {
                           className="absolute top-2 right-2 cursor-pointer font-bold"
                           onClick={() => handleDropdownClick(index)}
                         />
-                        {showDropdown === index && (
-                          <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
-                            <button
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                              onClick={() => handleReply(message)}
-                            >
-                              Reply
-                            </button>
-                            <button
-                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                              onClick={() => handleForward(message)}
-                            >
-                              Forward
-                            </button>
-                          </div>
-                        )}
+                                          {showDropdown === index && (
+                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleReply(message)}
+                      >
+                        Reply
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleForward(message)}
+                      >
+                        Forward
+                      </button>
+                      {((message.content.image || message.content.camera)) && (
+                        <button
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleEditImage(message)}
+                        >
+                          Edit Image
+                        </button>
+                      )}
+                      {
+                      message.sender === loggedInUserId && (
+                        <button
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleDelete(message)}
+                        >
+                          delete
+                        </button>
+                      )
+                    }
+                    </div>
+                  )}
                       </>
                     )}
                   </div>
@@ -385,6 +428,14 @@ function AdminEmpChat() {
         <div className="w-full lg:w-1/2 p-4">
           <GoogleMapsuper locations={location} onClose={() => setShowMap(false)} className="w-full" />
         </div>
+      )}
+       {showImageEditor && (
+        <EditModel
+          imageUrl={imageForEditing}
+          handleModalClose={handleModalClose}
+          recipient={recipient}
+          admin='admin'
+        />
       )}
     </div>
   );

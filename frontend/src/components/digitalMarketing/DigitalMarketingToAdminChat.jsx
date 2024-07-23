@@ -12,7 +12,7 @@ import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
-
+import EditModel from "../utility/EditModel";
 function DigitalMarketingToAdminChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -38,6 +38,9 @@ function DigitalMarketingToAdminChat() {
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
   const [showCamera, setShowCamera] = useState(false);
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [showImageEditor, setShowImageEditor] = useState(false);
+  const [imageForEditing, setImageForEditing] = useState('');
+
 
 
 
@@ -252,6 +255,31 @@ function DigitalMarketingToAdminChat() {
   const handleCloseCamera = () => {
     setShowCamera(false);
   };
+  const handleModalClose = () => {
+    setImageForEditing(''); // Close the modal and reset selected image
+    setShowImageEditor(false); // Close edit modal
+  };
+  const handleEditImage = (message) => {
+    setShowImageEditor(true);
+    setImageForEditing(((message.content.image || message.content.camera)));
+    // console.log("*******",imageForEditing)
+  };
+
+  const handleDelete = (message) => {
+    axios
+     .delete(`${BASE_URL}/api/empadminsender/delmessages/${message._id}`)
+     .then((response) => {
+      
+        setMessages(messages.filter((m) => m._id!== message._id));
+        setShowDropdown("null")
+      })
+
+     .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  
 
   return (
     <div className="flex flex-col lg:flex-row h-screen relative">
@@ -394,23 +422,40 @@ function DigitalMarketingToAdminChat() {
                         className="absolute top-2 right-2 cursor-pointer"
                         onClick={() => handleDropdownClick(index)}
                       />
-                      {showDropdown === index && (
-                        <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
-                          <button
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => handleReply(message)}
-                          >
-                            Reply
-                          </button>
-
-                          <button
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => handleForward(message)}
-                          >
-                            Forward
-                          </button>
-                        </div>
+                                 {showDropdown === index && (
+                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleReply(message)}
+                      >
+                        Reply
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleForward(message)}
+                      >
+                        Forward
+                      </button>
+                      {((message.content.image || message.content.camera)) && (
+                        <button
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleEditImage(message)}
+                        >
+                          Edit Image
+                        </button>
                       )}
+                      {
+                      message.sender === loggedInUserId && (
+                        <button
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleDelete(message)}
+                        >
+                          delete
+                        </button>
+                      )
+                    }
+                    </div>
+                  )}
                     </>
                   }
                 </div>
@@ -474,6 +519,14 @@ function DigitalMarketingToAdminChat() {
           onClose={() => setShowReplyModal(false)}
           value={"Admin"}
 
+        />
+      )}
+      {showImageEditor && (
+        <EditModel
+          imageUrl={imageForEditing}
+          handleModalClose={handleModalClose}
+          recipient={recipient}
+          admin='admin'
         />
       )}
     </div>

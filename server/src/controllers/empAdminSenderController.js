@@ -326,6 +326,28 @@ const getuserAllMessagesNotification = async (req, res) => {
   }
 };
 
+
+const deleteMessage = async (req, res) => {
+  const { messageId } = req.params;
+
+  // Validate the messageId
+  if (!mongoose.Types.ObjectId.isValid(messageId)) {
+    return res.status(400).json({ error: "Invalid message ID" });
+  }
+  try {
+    const message = await MessageRes.findByIdAndDelete(messageId);
+    if (!message) {
+      return res.status(404).json({ error: "Message not found" });
+    }
+    res.status(204).json({ message: "Message deleted successfully" });
+    // Delete any associated files (if any)
+    // await deleteFiles(message.files);
+  } catch (error) {
+    console.error("Error deleting message:", error);
+    res.status(500).json({ error: "Internal server error" }); // Send 500 status code in case of error
+  }
+}
+
 module.exports = {
   createMessage,
   getMessagesEmp,
@@ -337,4 +359,5 @@ module.exports = {
   forwardMessage,
   replyToMessage,
   getuserAllMessagesNotification,
+  deleteMessage
 };

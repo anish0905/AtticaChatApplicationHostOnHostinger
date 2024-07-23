@@ -13,7 +13,7 @@ import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
 import UserSidebar from "../AllUsers/UserSidebar";
 import ScrollingNavbar from "../admin/ScrollingNavbar";  
-
+import EditModel from "../utility/EditModel";
 function CallCenterToCallCenterChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -35,7 +35,8 @@ function CallCenterToCallCenterChat() {
   const [replyMessage, setReplyMessage] = useState(null); //--------------->
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
   const [showCamera, setShowCamera] = useState(false);
-
+  const [showImageEditor, setShowImageEditor] = useState(false);
+  const [imageForEditing, setImageForEditing] = useState('');
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -198,6 +199,30 @@ function CallCenterToCallCenterChat() {
     setShowCamera(false);
   };
 
+  const handleModalClose = () => {
+    setImageForEditing(''); // Close the modal and reset selected image
+    setShowImageEditor(false); // Close edit modal
+  };
+  const handleEditImage = (message) => {
+    setShowImageEditor(true);
+    setImageForEditing(((message.content.image || message.content.camera)));
+    // console.log("*******",imageForEditing)
+  };
+
+  const handleDelete = (message) => {
+    axios
+     .delete(`${BASE_URL}/api/delmessages/${message._id}`)
+     .then((response) => {
+      
+        setMessages(messages.filter((m) => m._id!== message._id));
+        setShowDropdown("null")
+      })
+
+     .catch((error) => {
+        console.error(error);
+      });
+  };
+  
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10">
 
@@ -280,22 +305,40 @@ function CallCenterToCallCenterChat() {
                   />
                 )}
 
-                {showDropdown === index && (
-                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
-                    <button
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleReply(message)}
-                    >
-                      Reply
-                    </button>
-                    <button
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                      onClick={() => handleForward(message)}
-                    >
-                      Forward
-                    </button>
-                  </div>
-                )}
+{showDropdown === index && (
+                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleReply(message)}
+                      >
+                        Reply
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleForward(message)}
+                      >
+                        Forward
+                      </button>
+                      {((message.content.image || message.content.camera))&& (
+                        <button
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleEditImage(message)}
+                        >
+                          Edit Image
+                        </button>
+                      )}
+                      {
+                      message.sender === loggedInUserId && (
+                        <button
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleDelete(message)}
+                        >
+                          delete
+                        </button>
+                      )
+                    }
+                    </div>
+                  )}
               </div>
             ))}
             <div ref={messagesEndRef} />
@@ -395,6 +438,14 @@ function CallCenterToCallCenterChat() {
           isVisible={showReplyModal}
           onClose={() => setShowReplyModal(false)}
 
+        />
+      )}
+      {showImageEditor && (
+        <EditModel
+          imageUrl={imageForEditing}
+          handleModalClose={handleModalClose}
+          recipient={recipient}
+          
         />
       )}
     </div>

@@ -12,8 +12,8 @@ import ReplyModel from "../ReplyModel";
 import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
-import ScrollingNavbar from "../admin/ScrollingNavbar";  
-
+import ScrollingNavbar from "../admin/ScrollingNavbar";
+import EditModel from "../utility/EditModel";
 function LogisticChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -36,6 +36,9 @@ function LogisticChat() {
   const [replyMessage, setReplyMessage] = useState(null);
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
+  const [showImageEditor, setShowImageEditor] = useState(false);
+  const [imageForEditing, setImageForEditing] = useState('');
+
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -202,12 +205,35 @@ function LogisticChat() {
   const handleCloseCamera = () => {
     setShowCamera(false);
   };
+  const handleModalClose = () => {
+    setImageForEditing(''); // Close the modal and reset selected image
+    setShowImageEditor(false); // Close edit modal
+  };
+  const handleEditImage = (message) => {
+    setShowImageEditor(true);
+    setImageForEditing((message.content.image || message.content.camera));
+    // console.log("*******",imageForEditing)
+  };
+
+  const handleDelete = (message) => {
+    axios
+      .delete(`${BASE_URL}/api/delmessages/${message._id}`)
+      .then((response) => {
+
+        setMessages(messages.filter((m) => m._id !== message._id));
+        setShowDropdown("null")
+      })
+
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10">
-   
+
       <UserSidebar value="LOGISTIC" />
-      {!showChat && <ScrollingNavbar  />}
+      {!showChat && <ScrollingNavbar />}
       {showChat ? (
         <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white border-2 border-[#5443c3] my-2 mx-2 sticky top-0 z-10">
@@ -225,8 +251,8 @@ function LogisticChat() {
               <div
                 key={message._id}
                 className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
-                    ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-                    : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                  ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+                  : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                   }`}
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
@@ -298,6 +324,24 @@ function LogisticChat() {
                     >
                       Forward
                     </button>
+                    {(message.content.image ||message.content.camera) && (
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleEditImage(message)}
+                      >
+                        Edit Image
+                      </button>
+                    )}
+                    {
+                      message.sender === loggedInUserId && (
+                        <button
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleDelete(message)}
+                        >
+                          delete
+                        </button>
+                      )
+                    }
                   </div>
                 )}
               </div>
@@ -335,7 +379,7 @@ function LogisticChat() {
             >
               <IoMdSend />
             </button>
-            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={ userDetails.name}/>
+            <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
         </div>
       ) : (
@@ -364,8 +408,8 @@ function LogisticChat() {
                   className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] font-bold ${unreadUsers.some(
                     (unreadUser) => unreadUser.userId === user._id
                   )
-                      ? "bg-blue-100"
-                      : "bg-gray-200"
+                    ? "bg-blue-100"
+                    : "bg-gray-200"
                     } ${recipient === user._id ? "bg-green-200" : ""}`}
                   onClick={() => handleClick(user._id, user.name)}
                 >
@@ -386,7 +430,7 @@ function LogisticChat() {
           forwardMessage={forwardMessage}
           onForward={handleForwardMessage}
           onCancel={handleCancelForward}
-          senderName={ userDetails.name}
+          senderName={userDetails.name}
         />
       )}
       {replyMessage && (
@@ -395,8 +439,16 @@ function LogisticChat() {
           sender={loggedInUserId}
           recipient={recipient}
           isVisible={showReplyModal}
-          senderName={ userDetails.name}
+          senderName={userDetails.name}
           onClose={() => setShowReplyModal(false)}
+        />
+      )}
+      {showImageEditor && (
+        <EditModel
+          imageUrl={imageForEditing}
+          handleModalClose={handleModalClose}
+          recipient={recipient}
+
         />
       )}
     </div>

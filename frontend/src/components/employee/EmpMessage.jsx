@@ -5,7 +5,7 @@ import { IoArrowBack } from "react-icons/io5";
 import notificationTone from "../../assests/notification_ding.mp3";
 import { BASE_URL } from "../../constants";
 import ScrollingNavbar from '../../components/admin/ScrollingNavbar'
-
+import EditModel from "../utility/EditModel";
 const EmpMessage = () => {
   const [employees, setEmployees] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -16,6 +16,8 @@ const EmpMessage = () => {
   const [initialLoad, setInitialLoad] = useState(true); // Track if it's the initial load
   const messagesEndRef = useRef(null);
   const notificationSoundRef = useRef(null);
+  const [showImageEditor, setShowImageEditor] = useState(false);
+  const [imageForEditing, setImageForEditing] = useState('');
 
   // Fetch user details from local storage and set the grade
   useEffect(() => {

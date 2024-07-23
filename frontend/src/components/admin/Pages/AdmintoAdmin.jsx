@@ -14,6 +14,7 @@ import AllUsersFileModel from "../../AllUsers/AllUsersFileModel";
 import ForwardMsgAllUsersToAdmin from "../../AllUsers/ForwardMsgAllUsersToAdmin";
 import ReplyModel from "../../ReplyModel";
 import { IoMdSend } from "react-icons/io";
+import EditModel from "../../utility/EditModel";
 
 function AdmintoAdmin() {
   const [messages, setMessages] = useState([]);
@@ -40,6 +41,8 @@ function AdmintoAdmin() {
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
   const [replyMessage, setReplyMessage] = useState(null); //--------------->
   const [showReplyModal, setShowReplyModal] = useState(false);  //--------------->
+  const [showImageEditor, setShowImageEditor] = useState(false);
+  const [imageForEditing, setImageForEditing] = useState('');
 
 
   // Function to handle click on admin or employee to initiate chat
@@ -247,7 +250,15 @@ function AdmintoAdmin() {
     setMessages([]);
   };
 
-
+  const handleModalClose = () => {
+    setImageForEditing(''); // Close the modal and reset selected image
+    setShowImageEditor(false); // Close edit modal
+  };
+  const handleEditImage = (message) => {
+    setShowImageEditor(true);
+    setImageForEditing(message.content.image);
+    // console.log("*******",imageForEditing)
+  };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
@@ -394,22 +405,30 @@ function AdmintoAdmin() {
                         className="absolute top-2 right-2 cursor-pointer"
                         onClick={() => handleDropdownClick(index)}
                       />
-                      {showDropdown === index && (
-                        <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
-                          <button
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => handleReply(message)}
-                          >
-                            Reply
-                          </button>
-                          <button
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => handleForward(message)}
-                          >
-                            Forward
-                          </button>
-                        </div>
+                                       {showDropdown === index && (
+                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleReply(message)}
+                      >
+                        Reply
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleForward(message)}
+                      >
+                        Forward
+                      </button>
+                      {message.content.image && (
+                        <button
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleEditImage(message)}
+                        >
+                          Edit Image
+                        </button>
                       )}
+                    </div>
+                  )}
                     </>
                   }
                 </div>
@@ -462,6 +481,14 @@ function AdmintoAdmin() {
           onClose={() => setShowReplyModal(false)}
           value={"Admin"}
 
+        />
+      )}
+       {showImageEditor && (
+        <EditModel
+          imageUrl={imageForEditing}
+          handleModalClose={handleModalClose}
+          recipient={recipient}
+          admin='admin'
         />
       )}
     </div>

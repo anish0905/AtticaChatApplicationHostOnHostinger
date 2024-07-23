@@ -12,7 +12,7 @@ import ReplyModel from "../ReplyModel"; //--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import Camera from "../Camera/Camera";
 import GPSTracker from "../manager/Gps";
-
+import EditModel from "../utility/EditModel";
 function TEChatToAdmin() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -38,6 +38,9 @@ function TEChatToAdmin() {
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
   const [showCamera, setShowCamera] = useState(false); 
+  const [showImageEditor, setShowImageEditor] = useState(false);
+  const [imageForEditing, setImageForEditing] = useState('');
+
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
@@ -275,6 +278,29 @@ function TEChatToAdmin() {
   const handleCloseCamera = () => {
     setShowCamera(false);
   };
+  const handleModalClose = () => {
+    setImageForEditing(''); // Close the modal and reset selected image
+    setShowImageEditor(false); // Close edit modal
+  };
+  const handleEditImage = (message) => {
+    setShowImageEditor(true);
+    setImageForEditing((message.content.image || message.content.camera));
+    // console.log("*******",imageForEditing)
+  };
+
+  const handleDelete = (message) => {
+    axios
+     .delete(`${BASE_URL}/api/empadminsender/delmessages/${message._id}`)
+     .then((response) => {
+      
+        setMessages(messages.filter((m) => m._id!== message._id));
+        setShowDropdown("null")
+      })
+
+     .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen">
@@ -448,23 +474,40 @@ function TEChatToAdmin() {
                         className="absolute top-2 right-2 cursor-pointer"
                         onClick={() => handleDropdownClick(index)}
                       />
-                      {showDropdown === index && (
-                        <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
-                          <button
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => handleReply(message)}
-                          >
-                            Reply
-                          </button>
-
-                          <button
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                            onClick={() => handleForward(message)}
-                          >
-                            Forward
-                          </button>
-                        </div>
+                                 {showDropdown === index && (
+                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleReply(message)}
+                      >
+                        Reply
+                      </button>
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        onClick={() => handleForward(message)}
+                      >
+                        Forward
+                      </button>
+                      {(message.content.image || message.content.camera) && (
+                        <button
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleEditImage(message)}
+                        >
+                          Edit Image
+                        </button>
                       )}
+                       {
+                      message.sender === loggedInUserId && (
+                        <button
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                          onClick={() => handleDelete(message)}
+                        >
+                          delete
+                        </button>
+                      )
+                    }
+                    </div>
+                  )}
                     </>
                   )}
                 </div>
@@ -532,6 +575,14 @@ function TEChatToAdmin() {
           isVisible={showReplyModal}
           onClose={() => setShowReplyModal(false)}
           value={"Admin"}
+        />
+      )}
+      {showImageEditor && (
+        <EditModel
+          imageUrl={imageForEditing}
+          handleModalClose={handleModalClose}
+          recipient={recipient}
+          admin='admin'
         />
       )}
     </div>
