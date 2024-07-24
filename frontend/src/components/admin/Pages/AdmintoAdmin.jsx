@@ -90,9 +90,7 @@ function AdmintoAdmin() {
   }, [loggedInUserId, recipient]);
 
   // Automatically scroll to bottom when new messages are received
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+   
 
   // Function to send a new message
   const handleSendMessage = () => {

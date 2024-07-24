@@ -21,6 +21,7 @@ import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";  
 
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 function BillingTeamChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -415,6 +416,7 @@ function BillingTeamChat() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} />
           </div>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       ) : (
         <div className="w-full lg:w-1/4 h-screen bg-white p-4 overflow-y-auto border-[#5443c3] shadow-lg">

@@ -13,6 +13,7 @@ import ReplyModel from "../ReplyModel";//--------------->
 import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import Camera from "../Camera/Camera";
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 
 function HrToAdmin() {
   const [messages, setMessages] = useState([]);
@@ -88,9 +89,7 @@ function HrToAdmin() {
 
 
   // Automatically scroll to bottom when new messages are received
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+   
 
   // Function to send a new message
   const handleSendMessage = () => {
@@ -508,6 +507,7 @@ function HrToAdmin() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name} />
           </div>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       )}
 

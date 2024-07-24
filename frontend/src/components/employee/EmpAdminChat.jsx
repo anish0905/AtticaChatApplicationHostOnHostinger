@@ -13,6 +13,7 @@ import { IoMdSend } from "react-icons/io";
 import EmployeeSidebar from "./EmployeeSidebar";
 import Camera from "../Camera/Camera";
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 function EmpAdminChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -85,9 +86,7 @@ function EmpAdminChat() {
 
 
   // Automatically scroll to bottom when new messages are received
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+   
 
   // Function to send a new message
   const handleSendMessage = () => {
@@ -508,6 +507,7 @@ function EmpAdminChat() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails?.name} />
           </div>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       )}
 

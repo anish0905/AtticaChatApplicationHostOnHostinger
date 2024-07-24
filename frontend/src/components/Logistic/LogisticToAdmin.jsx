@@ -13,6 +13,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 function LogisticToAdmin() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -88,9 +89,7 @@ function LogisticToAdmin() {
 
 
   // Automatically scroll to bottom when new messages are received
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+   
 
   // Function to send a new message
   const handleSendMessage = () => {
@@ -496,6 +495,7 @@ function LogisticToAdmin() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name} />
           </div>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       )}
       {showForwardModal && (

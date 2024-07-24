@@ -17,6 +17,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import Camera from "../Camera/Camera";
 import ScrollingNavbar from '../../components/admin/ScrollingNavbar'
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 // import UserSidebar from "../AllUsers/UserSidebar";
 
 
@@ -382,6 +383,7 @@ function AccountToAccountChat() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto">

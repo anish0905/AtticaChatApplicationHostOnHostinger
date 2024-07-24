@@ -4,6 +4,8 @@ import { BASE_URL } from "../../../constants";
 import AccountsDetails from "../../accounts/AccountsDetails";
 import MonitoringDetails from "../../monitoringTeam/MonitoringDetails";
 import CSVFileUpload from "../../utility/CsvFileUpload";
+import Swal from "sweetalert2";
+import axios from "axios";
 
 const MonitoringReg = () => {
   const [formData, setFormData] = useState({
@@ -42,7 +44,7 @@ const MonitoringReg = () => {
           name: "",
           email: "",
           password: "",
-          role: "Accountant",
+          role: "MonitoringTeam",
         });
       } else {
         const errorData = await response.json();
@@ -54,6 +56,34 @@ const MonitoringReg = () => {
     }
   };
 
+  const handleDelete = async () => {
+    try {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'Do you want to delete users with the Software role?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'No, cancel!',
+      });
+  
+      if (result.isConfirmed) {
+        const response = await axios.delete(`${BASE_URL}/api/allUser/users`, {
+          data: { role: "MonitoringTeam" } // Send role in the request body
+        });
+  
+        if (response.status === 200) {
+          Swal.fire('Deleted!', 'Users have been deleted.', 'success');
+          window.location.reload();
+        } else {
+          Swal.fire('Failed!', response.data.message || 'Deletion failed', 'error');
+        }
+      }
+    } catch (error) {
+      Swal.fire('Error!', 'An error occurred: ' + error.message, 'error');
+    }
+  };
+
   return (
     <div className="lg:flex block bg-[#f6f5fb]">
       <Sidebar />
@@ -61,6 +91,11 @@ const MonitoringReg = () => {
       <div className="flex justify-between mb-4 flex-col lg:flex-row">
           <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Monitoring  Team Details</h1>
           <div className='flex justify-center items-center content-center '>
+          <button
+              className="bg-[#fc3b3b] hover:bg-red-700 px-4 font-semibold py-2 rounded-full text-white "
+            onClick={handleDelete}>
+              Delete All  
+            </button>
             <button
               onClick={() => setIsModalOpen(true)}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:px-4 py-1 px-2 lg:text-xl text-xs lg:rounded-full w-full h-12 mr-2 mt-4 lg:mt-0"

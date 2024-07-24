@@ -15,6 +15,7 @@ import { FaArrowLeft } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 
 function SecurityToAdmin() {
   const [messages, setMessages] = useState([]);
@@ -90,9 +91,7 @@ function SecurityToAdmin() {
   }, [recipient]);
 
   // Automatically scroll to bottom when new messages are received
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+   
 
   // Function to send a new message
   const handleSendMessage = () => {
@@ -506,6 +505,7 @@ function SecurityToAdmin() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name} />
           </div>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       )}
 

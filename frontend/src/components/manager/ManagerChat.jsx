@@ -18,6 +18,7 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import fetchAnnounce from '../utility/fetchAnnounce';
 import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton.jsx";
 function ManagerChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -91,9 +92,7 @@ function ManagerChat() {
     }
   }, [loggedInUserId, recipient]);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+   
 
   useEffect(() => {
     if (currentLocation && JSON.stringify(currentLocation) !== JSON.stringify(prevLocation)) {
@@ -546,6 +545,7 @@ function ManagerChat() {
               </button>
               <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.manager_name} />
             </div>
+            <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
           </div>
         )}
       </div>
