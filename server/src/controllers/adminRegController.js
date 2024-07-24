@@ -140,6 +140,25 @@ const unblockAllAdmin = async (req, res) => {
   res.status(200).json({ message: "All Admins Access Unblocked successfully" });
 };
 
+const deleteAlladmin = async (req, res) => {
+  try {
+    console.log("Deleting all users...");
+    // Delete all users
+    const result = await Admin.deleteMany();
+    console.log(result);
+
+    if (result.deletedCount > 0) {
+      return res.status(200).json({
+        message: `${result.deletedCount} user(s) deleted successfully`,
+      });
+    } else {
+      return res.status(404).json({ message: "No users found to delete" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
 module.exports = {
   AdminRegistion,
   AdminLogin,
@@ -151,4 +170,5 @@ module.exports = {
   accessUnblocks,
   blockAllAdmin,
   unblockAllAdmin,
+  deleteAlladmin,
 };
