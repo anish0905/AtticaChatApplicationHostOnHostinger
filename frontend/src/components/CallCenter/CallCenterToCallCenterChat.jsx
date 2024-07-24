@@ -14,6 +14,7 @@ import Camera from "../Camera/Camera";
 import UserSidebar from "../AllUsers/UserSidebar";
 import ScrollingNavbar from "../admin/ScrollingNavbar";  
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 function CallCenterToCallCenterChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -378,6 +379,7 @@ function CallCenterToCallCenterChat() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto">

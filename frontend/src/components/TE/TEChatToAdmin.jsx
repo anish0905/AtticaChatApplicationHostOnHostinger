@@ -13,6 +13,7 @@ import AllUsersFileModel from "../AllUsers/AllUsersFileModel";
 import Camera from "../Camera/Camera";
 import GPSTracker from "../manager/Gps";
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 function TEChatToAdmin() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -111,9 +112,7 @@ function TEChatToAdmin() {
   }, [recipient]);
 
   // Automatically scroll to bottom when new messages are received
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+   
 
   // Function to send a new message
   const handleSendMessage = () => {
@@ -556,6 +555,7 @@ function TEChatToAdmin() {
               longitude={longitude}
             />
           </div>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       )}
 

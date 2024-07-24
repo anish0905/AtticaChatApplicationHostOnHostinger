@@ -17,6 +17,7 @@ import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
 import Camera from "../Camera/Camera";
 import UserSidebar from "../AllUsers/UserSidebar";
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 
 function CallCenterToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -92,9 +93,7 @@ function CallCenterToAdminChat() {
   }, [recipient]);
 
   // Automatically scroll to bottom when new messages are received
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+   
 
   // Function to send a new message
   const handleSendMessage = () => {
@@ -538,6 +537,7 @@ function CallCenterToAdminChat() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name} />
           </div>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
 
 

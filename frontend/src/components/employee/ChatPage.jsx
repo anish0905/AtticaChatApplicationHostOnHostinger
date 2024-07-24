@@ -12,6 +12,7 @@ import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -148,11 +149,11 @@ function ChatPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
-  }, [messages]);
+  // useEffect(() => {
+  //   if (messagesEndRef.current) {
+  //     messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+  //   }
+  // }, [messages]);
 
   const handleHover = (index) => {
     setHoveredMessage(index);
@@ -199,28 +200,28 @@ function ChatPage() {
     setImageForEditing(((message.content.image || message.content.camera)));
     // console.log("*******",imageForEditing)
   };
-  
+
   const handleDelete = (message) => {
     axios
-     .delete(`${BASE_URL}/api/delmessages/${message._id}`)
-     .then((response) => {
-      
-        setMessages(messages.filter((m) => m._id!== message._id));
+      .delete(`${BASE_URL}/api/delmessages/${message._id}`)
+      .then((response) => {
+
+        setMessages(messages.filter((m) => m._id !== message._id));
         setShowDropdown("null")
       })
 
-     .catch((error) => {
+      .catch((error) => {
         console.error(error);
       });
   };
 
 
-  
+
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-  {!showChat && <ScrollingNavbar />}
+      {!showChat && <ScrollingNavbar />}
       <EmployeeSidebar />
-    
+
       {showChat ? (
         <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10">
@@ -237,11 +238,10 @@ function ChatPage() {
             {messages.map((message, index) => (
               <div
                 key={message._id}
-                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap lg:text-3xl md:text-xl text-sm font-bold ${
-                  message.sender === loggedInUserId
-                    ? "bg-[#e1dff3] text-[#5443c3] border border-[#5443c3] rounded-tr-3xl rounded-bl-3xl self-end"
-                    : "bg-white text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl self-start"
-                }`}
+                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap lg:text-3xl md:text-xl text-sm font-bold ${message.sender === loggedInUserId
+                  ? "bg-[#e1dff3] text-[#5443c3] border border-[#5443c3] rounded-tr-3xl rounded-bl-3xl self-end"
+                  : "bg-white text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl self-start"
+                  }`}
                 onMouseEnter={() => handleHover(index)}
                 onMouseLeave={() => setHoveredMessage(null)}
               >
@@ -301,29 +301,29 @@ function ChatPage() {
                   />
                 )}
 
-{showDropdown === index && (
-                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                {showDropdown === index && (
+                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleReply(message)}
+                    >
+                      Reply
+                    </button>
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleForward(message)}
+                    >
+                      Forward
+                    </button>
+                    {((message.content.image || message.content.camera)) && (
                       <button
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleReply(message)}
+                        onClick={() => handleEditImage(message)}
                       >
-                        Reply
+                        Edit Image
                       </button>
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleForward(message)}
-                      >
-                        Forward
-                      </button>
-                      {((message.content.image || message.content.camera)) && (
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleEditImage(message)}
-                        >
-                          Edit Image
-                        </button>
-                      )}
-                      {
+                    )}
+                    {
                       message.sender === loggedInUserId && (
                         <button
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -333,8 +333,8 @@ function ChatPage() {
                         </button>
                       )
                     }
-                    </div>
-                  )}
+                  </div>
+                )}
               </div>
             ))}
             <div ref={messagesEndRef} />
@@ -348,7 +348,11 @@ function ChatPage() {
                 />
               </div>
             )}
+            <ScrollToBottomButton messagesEndRef={messagesEndRef} />
+
+
           </div>
+
 
           <div className="flex items-center p-4 bg-[#eef2fa] border-t border-gray-200 fixed bottom-0 w-full lg:static ">
             <input
@@ -361,19 +365,20 @@ function ChatPage() {
             <button onClick={() => setShowCamera(true)} className="mr-2 text-xl">
               <FaCamera />
             </button>
-
             <button
               onClick={handleSendMessage}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
               <IoMdSend />
             </button>
+
             <AllUsersFileModel
               sender={loggedInUserId}
               recipient={recipient}
               senderName={userDetails.name}
             />
           </div>
+
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky mt-10 ">
@@ -400,11 +405,10 @@ function ChatPage() {
               .map((user) => (
                 <li
                   key={user._id}
-                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${
-                    unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
-                      ? "bg-blue-200"
-                      : "bg-gray-200"
-                  } ${recipient === user._id ? "bg-green-200" : ""}`}
+                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
+                    ? "bg-blue-200"
+                    : "bg-gray-200"
+                    } ${recipient === user._id ? "bg-green-200" : ""}`}
                   onClick={() => handleClick(user._id, user.name)}
                 >
                   <span>{user.name}</span>
@@ -441,7 +445,7 @@ function ChatPage() {
           imageUrl={imageForEditing}
           handleModalClose={handleModalClose}
           recipient={recipient}
-          //admin='admin'
+        //admin='admin'
         />
       )}
     </div>

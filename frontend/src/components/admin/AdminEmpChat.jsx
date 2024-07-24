@@ -17,6 +17,7 @@ import GoogleMapsuper from "../SuperAdmin/GoogleMapsuper";
 import AdminFordWardModel from "./Pages/AdminFordWardModel";
 import Camera from "../Camera/Camera";
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 const senderName = localStorage.getItem('email');
 
 function AdminEmpChat() {
@@ -88,9 +89,6 @@ function AdminEmpChat() {
     return () => clearInterval(intervalId);
   }, [recipient]);
 
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   const handleSendMessage = () => {
     if (!newMessage.trim() && !attachment) return;
@@ -399,6 +397,7 @@ function AdminEmpChat() {
                     className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center justify-center"
                   />
                 </div>
+            <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
               </div>
 
             </div>

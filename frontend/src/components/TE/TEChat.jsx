@@ -14,6 +14,7 @@ import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";  
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 function TEChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -383,6 +384,7 @@ function TEChat() {
 
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto ">
