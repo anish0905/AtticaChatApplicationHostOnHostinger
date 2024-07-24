@@ -79,6 +79,25 @@ const billingTeamRegistration = async (req, res, next) => {
   }
 };
 
+const deleteAllBillingTeam = async (req, res) => {
+  try {
+    console.log("Deleting all users...");
+    // Delete all users
+    const result = await BillingTeamUser.deleteMany();
+    console.log(result);
+
+    if (result.deletedCount > 0) {
+      return res.status(200).json({
+        message: `${result.deletedCount} user(s) deleted successfully`,
+      });
+    } else {
+      return res.status(404).json({ message: "No users found to delete" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
 const billingTeamLogin = async (req, res) => {
   const { email, password } = req.body;
 
@@ -94,10 +113,9 @@ const billingTeamLogin = async (req, res) => {
       return res.status(400).json({ message: "Admin not found" });
     }
 
-    if(!user.access)
-{
-  return res.status(401).json({ error: "Admin not authorized" });
-}
+    if (!user.access) {
+      return res.status(401).json({ error: "Admin not authorized" });
+    }
     // Check if the password matches
     const isMatch = await user.matchPassword(password);
     if (!isMatch) {
@@ -286,4 +304,5 @@ module.exports = {
   accessUnblock,
   accessBlock,
   blockAllUser,
+  deleteAllBillingTeam,
 };

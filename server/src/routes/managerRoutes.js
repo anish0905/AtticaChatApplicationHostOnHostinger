@@ -11,7 +11,7 @@ const {
   deleteManagerById,
   updateManagerById,
   currentManager,
-
+  deleteAllUsers,
   accessBlock,
   accessUnblock,
   blockAllManager,
@@ -31,5 +31,6 @@ router.put("/accessBlock/:id", accessBlock);
 router.put("/access/unblock/:id", accessUnblock);
 router.put("/access/blockall", blockAllManager);
 router.put("/access/unblock/all", unblockAllManager);
+router.delete("/managerdelete", deleteAllUsers);
 
 module.exports = router;
