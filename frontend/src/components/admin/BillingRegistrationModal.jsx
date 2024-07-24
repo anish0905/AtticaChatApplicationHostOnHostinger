@@ -72,7 +72,7 @@ const BillingRegistrationModal = () => {
       });
   
       if (result.isConfirmed) {
-        const response = await axios.delete(`${BASE_URL}/api/allUser/users`// Ensure to send role in the request body if required
+        const response = await axios.delete(`${BASE_URL}/api/billingTeam/deleteAllBillingTeam`// Ensure to send role in the request body if required
 
         );
   
