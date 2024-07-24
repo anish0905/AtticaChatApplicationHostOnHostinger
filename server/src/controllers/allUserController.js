@@ -721,3 +721,255 @@ exports.unblockAllUser = async (req, res) => {
     .status(200)
     .json({ message: "All Managers Access Unblocked Successfully" });
 };
+
+// delete Bouncers/Driver
+
+exports.deleteBouncersDriver = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    // Find the user by ID
+    const user = await User.findById(userId);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Check the role of the user
+    if (user.role === "Bouncers/Driver") {
+      // Delete the user
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+exports.deleteAccountant = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "user not found" });
+    }
+
+    if (user.role === "Accountant") {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+exports.deletesoftware = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.role === "Software") {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+exports.deleteHr = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.role === "HR") {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+exports.CallCenter = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.role === "CallCenter") {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+exports.deleteVirtualTeam = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.role === "VirtualTeam") {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+exports.deleteMonitoringTeam = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.role === "MonitoringTeam") {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+exports.deleteSecurityCCTV = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.role === "Security/CCTV") {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+exports.deleteDigitalMarketing = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.role === "Digital Marketing") {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+exports.deleteTE = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.role === "TE") {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+exports.deleteLogistic = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.role === "Logistic") {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+//according to roles
+
+exports.deleteUsersByRole = async (req, res) => {
+  try {
+    const { role } = req.body;
+
+    // Delete all users with the specified role
+    const result = await User.deleteMany({ role: role });
+
+    if (result.deletedCount > 0) {
+      return res.status(200).json({
+        message: `${result.deletedCount} user(s) with role ${role} deleted successfully`,
+      });
+    } else {
+      return res
+        .status(404)
+        .json({ message: `No users found with role ${role}` });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
