@@ -8,11 +8,11 @@ const {
   deleteEmployee,
   getTotalMemberAccordingToGroup,
   getEmployeeById,
-
   accessBlock,
   accessUnblock,
   BolockAllEmployee,
   Unblocked,
+  deleteAllEmp,
 } = require("../controllers/employeeRegController");
 
 // Register
@@ -37,5 +37,7 @@ router.put("/accessBlock/:id", accessBlock);
 router.put("/access/unblock/:id", accessUnblock);
 router.put("/access/blockall", BolockAllEmployee);
 router.put("/unblock", Unblocked);
+
+router.delete("/employee/delete", deleteAllEmp);
 
 module.exports = router;

@@ -87,7 +87,7 @@ const loginUser = asyncHandler(async (req, res) => {
       .status(401)
       .json({ error: "Employee ID or password is not valid" });
   }
-  
+
   // if (!employeeAvailable.access) {
   //   return res.status(401).json({ error: "Employee not authorized" });
   // }
@@ -194,7 +194,6 @@ const getTotalMemberAccordingToGroup = asyncHandler(async (req, res) => {
 
 const getEmployeeById = async (req, res) => {
   const { id } = req.params;
-  
 
   // Validate ID format
   if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -252,6 +251,25 @@ const Unblocked = async (req, res) => {
   }
 };
 
+const deleteAllEmp = async (req, res) => {
+  try {
+    console.log("Deleting all users...");
+    // Delete all users
+    const result = await EmployeReg.deleteMany();
+    console.log(result);
+
+    if (result.deletedCount > 0) {
+      return res.status(200).json({
+        message: `${result.deletedCount} user(s) deleted successfully`,
+      });
+    } else {
+      return res.status(404).json({ message: "No users found to delete" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
 module.exports = {
   registerEmployee,
   loginUser,
@@ -265,4 +283,5 @@ module.exports = {
   accessUnblock,
   BolockAllEmployee,
   Unblocked,
+  deleteAllEmp,
 };
