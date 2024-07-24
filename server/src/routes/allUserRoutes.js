@@ -51,4 +51,30 @@ router.put("/access/unblock/:id", authController.accessUnblock);
 router.put("/access/blockall", authController.blockAllUser);
 router.put("/access/unblock/all", authController.unblockAllUser);
 
+// delete /bouncers/driver/
+
+router.delete("/bouncers/driver/:id", authController.deleteBouncersDriver);
+
+// delete Accountant
+
+router.delete("/accountant/:id", authController.deleteAccountant);
+// delete Accountant
+
+router.delete("/software/:id", authController.deletesoftware);
+
+router.delete("/HR/:id", authController.deleteHr);
+
+router.delete("/callCenter/:id", authController.CallCenter);
+
+router.delete("/virtualTeam/:id", authController.deleteVirtualTeam);
+
+router.delete("/monitoringTeam/:id", authController.deleteMonitoringTeam);
+
+router.delete("/security/CCTV/:id", authController.deleteSecurityCCTV);
+
+router.delete("/te/:id", authController.deleteTE);
+router.delete("/logistic/:id", authController.deleteLogistic);
+
+router.delete("/users", authController.deleteUsersByRole);
+
 module.exports = router;
