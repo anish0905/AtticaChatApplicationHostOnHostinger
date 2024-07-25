@@ -19,8 +19,8 @@ const result = upload.fields([
 router.post("/postmessages", result, createMessage);
 router.get("/getAnnounceById/:id", getAnnouncementById);
 router.get("/getAllAnnounce/", getAllAnnouncements);
-router.delete("/deleteAnnounce", delAllAnouncementsbySender);
-router.delete("/deleteAnnouncebyId", deletebyId);
-router.put("/updateAnnouncement", updateAnnouncement);
+router.delete("/deleteAnnounce/:id", delAllAnouncementsbySender);
+router.delete("/deleteAnnouncebyId/:id", deletebyId);
+router.put("/updateAnnouncement/:id", updateAnnouncement);
 
 module.exports = router;
