@@ -161,30 +161,39 @@ const deletebyId = async (req, res) => {
   }
 };
 
+
+
 const updateAnnouncement = async (req, res) => {
   try {
     const { id } = req.params;
-    const updatedAnnouncement = req.body;
+    const { text } = req.body;
 
-    const updatedAnnouncementDocument = await Announce.findByIdAndUpdate(
-      id,
-      updatedAnnouncement,
-      { new: true }
-    );
+    // Check if the announcement exists
+    const announcement = await Announce.findById(id);
 
-    if (!updatedAnnouncementDocument) {
+    if (!announcement) {
       return res.status(404).json({ message: "Announcement not found" });
     }
 
+    // Update the announcement
+    announcement.content.text = text; // Assuming 'text' is the field you want to update
+    const updatedAnnouncement = await announcement.save();
+
     res.status(200).json({
       message: "Announcement updated successfully",
-      updatedAnnouncementDocument,
+      updatedAnnouncement,
     });
   } catch (error) {
     console.error("Error updating the Announcement:", error);
     res.status(400).json({ message: error.message });
   }
 };
+
+module.exports = {
+  updateAnnouncement,
+};
+
+
 
 module.exports = {
   getAnnouncementById,

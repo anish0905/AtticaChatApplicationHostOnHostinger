@@ -110,6 +110,7 @@ function AnnouncementByAdmin() {
         setMessages(updatedMessages);
         setEditMode(false);
         setIsUpdating(false);
+        fetchData()
       })
       .catch((error) => {
         console.error("Error editing message:", error);
