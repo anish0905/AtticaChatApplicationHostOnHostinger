@@ -189,9 +189,7 @@ const updateAnnouncement = async (req, res) => {
   }
 };
 
-module.exports = {
-  updateAnnouncement,
-};
+
 
 
 

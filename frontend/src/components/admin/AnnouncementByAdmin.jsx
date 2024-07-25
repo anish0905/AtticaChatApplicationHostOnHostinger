@@ -5,6 +5,8 @@ import { FaArrowLeft } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Sidebar from "./Sidebar";
 import { BASE_URL } from "../../constants";
+import Swal from 'sweetalert2';
+
 
 function AnnouncementByAdmin() {
   const [messages, setMessages] = useState([]);
@@ -118,6 +120,35 @@ function AnnouncementByAdmin() {
       });
   };
 
+ 
+  
+    const handleDeleteAllAnnouncements = () => {
+      Swal.fire({
+        title: "Are you sure?",
+        text: "This action will delete all announcements. This cannot be undone!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete all!",
+        cancelButtonText: "Cancel",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          axios
+            .delete(`${BASE_URL}/api/announce/deleteAnnounce/${loggedInUserId}`)
+            .then((response) => {
+              setMessages([]);
+              Swal.fire("Deleted!", "All announcements have been deleted.", "success");
+            })
+            .catch((error) => {
+              console.error("Error deleting all announcements:", error);
+              Swal.fire("Error", "Failed to delete announcements.", "error");
+            });
+        }
+      });
+    };
+
+
   return (
     <div className="flex flex-col lg:flex-row h-screen relative">
       <Sidebar />
@@ -128,9 +159,12 @@ function AnnouncementByAdmin() {
             <Link to="/">
               <FaArrowLeft className="text-[#5443c3] hover:text-[#5443c3]" />
             </Link>
-            <h1 className="text-lg font-bold p-4 lg:text-[#ffffff] lg:bg-[#5443c3] text-[#5443c3] border border-[#5443c3] bg-[#ffffff] w-full ">
+            <div className="text-lg font-bold p-4 flex justify-between items-center lg:text-[#ffffff] lg:bg-[#5443c3] text-[#5443c3] border border-[#5443c3] bg-[#ffffff] w-full ">
+            <h1 >
               Announcement
             </h1>
+            <button className="bg-[#ff3434] hover:bg-[#f06856] px-2 py-2 rounded-md shadow-md" onClick={handleDeleteAllAnnouncements}>Delete All</button>
+            </div>
           </div>
 
           <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto">
