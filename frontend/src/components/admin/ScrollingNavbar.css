@@ -1,25 +1,23 @@
+/* Add these styles in your CSS file */
+.scrolling-container {
+  position: relative;
+}
 
-  
-  .scrolling-container {
-    position: relative;
+.scrolling-content {
+  display: flex;
+  white-space: nowrap;
+  position: absolute;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
   }
-  
-  .scrolling-content {
-    display: flex;
-    white-space: nowrap;
+  100% {
+    transform: translateX(-100%);
   }
-  
-  @keyframes scroll {
-    0% {
-      transform: translateX(100%);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
-  }
-  
-  .animate-scroll {
-    animation: scroll 20s linear infinite;
-  }
-  
-  
+}
+
+.animate-scroll {
+  animation: scroll 40s linear infinite;
+}
