@@ -78,7 +78,7 @@ return (
           {messages.map((message, index) => (
             <div
               key={index}
-              className={`flex relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId ? 'justify-end' : 'justify-start '} mb-2`}
+              className={`flex relative break-words whitespace-pre-wrap ${message.sender}  justify-end  mb-2`}
             >
               <div
                 className={`relative lg:text-3xl md:text-xl text-sm font-bold ${
