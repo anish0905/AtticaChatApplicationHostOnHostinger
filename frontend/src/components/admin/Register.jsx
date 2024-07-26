@@ -107,21 +107,20 @@ export const Register = () => {
         <div className="flex justify-between mb-4 flex-col lg:flex-row"> 
           <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Employee Details</h1>
           <div className='flex justify-center items-center content-center '>
-          <button
-              className="bg-[#fc3b3b] hover:bg-red-700 px-4 font-semibold py-2 rounded-full text-white "
-            onClick={handleDelete}>
-              Delete All  
-            </button>
+  
             <button
               onClick={() => setIsModalOpen(true)}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:px-4 py-1 px-2 lg:text-xl text-xs lg:rounded-full w-full h-12 mr-2 mt-4 lg:mt-0">
             
-              Open Registration Form
+            Registration Form
             </button>
             <CsvFileUpload endpoint="/api/employeeRegistration/register"/>
+          
           </div>
         </div>
         <EmployeeDetails />
+
+        
         {isModalOpen && (
           <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 z-50">
             <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 lg:w-full lg:h-auto w-[300px] h-[600px] max-w-lg mx-2 sm:mx-4 md:mx-6 lg:mx-auto xl:mx-auto">

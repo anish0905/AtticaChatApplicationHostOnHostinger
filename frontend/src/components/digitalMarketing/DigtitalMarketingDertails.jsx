@@ -141,9 +141,8 @@ const DigitalMarketingDetails = () => {
   return (
     <div className="flex flex-col h-[950px] overflow-y-auto w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
       <ToastContainer />
-      <div className="flex justify-between items-center mb-4">
-        {/* <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Digital Marketing Team Details</h1> */}
-        <div className="relative mb-4 w-full">
+      <div className="relative mb-4 w-full flex items-center space-x-4">
+        <div className="relative flex-grow">
           <input
             type="text"
             placeholder="Search by name..."
@@ -153,6 +152,11 @@ const DigitalMarketingDetails = () => {
           />
           <AiOutlineSearch size={20} className="absolute top-3 left-3 text-gray-500 text-xl " />
         </div>
+        <button
+              className="bg-[#fc3b3b] hover:bg-red-700 text-white font-bold lg:text-xl text-xs rounded-xl h-12 px-3 "
+            onClick={handleDelete}>
+              Delete All  
+            </button>
       </div>
 
       <div className="flex-1 overflow-x-auto overflow-y-hidden">

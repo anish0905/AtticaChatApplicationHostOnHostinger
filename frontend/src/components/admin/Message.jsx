@@ -8,6 +8,7 @@ import { IoArrowBack } from "react-icons/io5";
 import { BASE_URL } from "../../constants";
 import { useNavigate } from "react-router-dom";
 import notificationTone from "../../assests/notification_ding.mp3";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 
 const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade }) => {
   const [message, setMessage] = useState("");
@@ -17,9 +18,9 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
   const [showPopSms, setShowPopSms] = useState(false);
   const [popSmsContent, setPopSmsContent] = useState({});
   const [lastMessageCount, setLastMessageCount] = useState(0);
-  const messagesEndRef = useRef(null);
   const notificationSoundRef = useRef(null);
   const adminId = localStorage.getItem("AdminId");
+  const messagesEndRef = useRef(null);
 
   const navigate = useNavigate();
   const { selectedGroupName: paramsGroupName, selectedGrade: paramsGrade } = useParams();
@@ -269,6 +270,7 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
           >
             <IoMdSend />
           </button>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
           {/* <button
            className="text-white bg-blue-500  rounded px-4 py-2 flex items-center justify-center mx-2"
             onClick={() => setShowPopSms(true)}
