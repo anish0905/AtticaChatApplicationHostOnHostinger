@@ -139,7 +139,7 @@ exports.loginDigitalMarketing = async (req, res) => {
   }
 };
 
-exports.loginDigitalCashier = async (req, res) => {
+exports.loginCashier = async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -171,6 +171,7 @@ exports.loginDigitalCashier = async (req, res) => {
       token,
       message: "Cashier logged in successfully",
       _id: user._id,
+      user: user
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
