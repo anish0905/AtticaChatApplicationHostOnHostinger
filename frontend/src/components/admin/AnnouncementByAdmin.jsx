@@ -156,14 +156,14 @@ function AnnouncementByAdmin() {
       <div className="flex-1 flex flex-col w-full lg:w-auto">
         <div className="flex flex-col flex-1 lg:bg-[#f6f5fb] lg:border-l lg:border-gray-200 lg:overflow-y-auto">
           <div className="flex items-center space-x-2">
+          <div className="lg:text-2xl font-bold p-4 flex justify-between items-center lg:text-[#ffffff] lg:bg-[#5443c3] text-[#5443c3] border border-[#5443c3] bg-[#ffffff] w-full ">
             <Link to="/">
-              <FaArrowLeft className="text-[#5443c3] hover:text-[#5443c3]" />
+              <FaArrowLeft className="lg:text-white text-[#5443c3] hover:text-[#5443c3]" />
             </Link>
-            <div className="text-lg font-bold p-4 flex justify-between items-center lg:text-[#ffffff] lg:bg-[#5443c3] text-[#5443c3] border border-[#5443c3] bg-[#ffffff] w-full ">
             <h1 >
               Announcement
             </h1>
-            <button className="bg-[#ff3434] hover:bg-[#f06856] px-2 py-2 rounded-md shadow-md" onClick={handleDeleteAllAnnouncements}>Delete All</button>
+            <button className="bg-[#ff3434] hover:bg-[#f06856] px-2 py-2 rounded-md shadow-md lg:text-xl" onClick={handleDeleteAllAnnouncements}>Delete All</button>
             </div>
           </div>
 

@@ -34,7 +34,8 @@ const userSchema = new mongoose.Schema(
         "Security/CCTV",
         "Digital Marketing",
         "TE",
-        "Logistic"
+        "Logistic",
+        "Cashier"
       ],
       required: true,
     },
