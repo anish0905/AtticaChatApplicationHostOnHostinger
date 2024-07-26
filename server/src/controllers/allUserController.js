@@ -171,6 +171,7 @@ exports.loginCashier = async (req, res) => {
       token,
       message: "Cashier logged in successfully",
       _id: user._id,
+      user: user
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
