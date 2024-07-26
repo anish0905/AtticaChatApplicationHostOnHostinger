@@ -139,7 +139,7 @@ exports.loginDigitalMarketing = async (req, res) => {
   }
 };
 
-exports.loginDigitalCashier = async (req, res) => {
+exports.loginCashier = async (req, res) => {
   try {
     const { email, password } = req.body;
 
