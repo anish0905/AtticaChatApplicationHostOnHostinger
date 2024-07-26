@@ -1,10 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './ScrollingNavbar.css';
 import fetchAnnounce from '../utility/fetchAnnounce';
+import { IoArrowBack } from "react-icons/io5";
 
 function ScrollingNavbar() {
   const { route } = useParams();
+  const navigate = useNavigate();
   const recentMessageRef = useRef(null);
   const [announcements, setAnnouncements] = useState([]);
   const [contentWidth, setContentWidth] = useState(0);
@@ -41,9 +43,12 @@ function ScrollingNavbar() {
 
   return (
     <div className="fixed top-0 left-0 right-0 bg-[#5443c3] z-10">
-      <div className="flex-1 flex justify-center items-center">
-        <h1 className="text-white items-center text-lg lg:text-2xl font-bold">Announcement</h1>
-        <div ref={containerRef} className="scrolling-container overflow-hidden h-10 flex items-center lg:rounded-2xl lg:w-[80vw] w-[80%]">
+      <div className="flex-1 flex justify-center items-center p-4 gap-2">
+        <span onClick={() => navigate(-1)} className="cursor-pointer text-[#ffffff]">
+          {/* <IoArrowBack /> */}
+        </span>
+        <h1 className="text-white items-center text-xs lg:text-2xl font-bold mx-2">Announcement</h1>
+        <div ref={containerRef} className="scrolling-container overflow-hidden h-10 flex items-center lg:rounded-2xl lg:w-[80vw] w-[80%] text-xs">
           <div
             className="scrolling-content flex items-center"
             style={{

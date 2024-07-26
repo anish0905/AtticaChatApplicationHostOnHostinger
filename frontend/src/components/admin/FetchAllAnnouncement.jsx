@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { Link, useParams } from 'react-router-dom';
@@ -73,8 +74,8 @@ return (
     <div className="flex flex-col lg:flex-row h-screen relative">
       <ScrollingNavbar messages={messages} /> 
       {renderSidebar()}
-      <div className="flex-col bg-[#eef2fa] text-black p-4 shadow w-full lg:w-full border border-[#5443c3] flex lg:flex mt-20"> {/* Adjust for navbar height */}
-        <div className="h-5/6 overflow-y-auto">
+      <div className="flex-col bg-[#eef2fa] text-black p-4 shadow w-full lg:w-full flex lg:flex mt-20"> {/* Adjust for navbar height */}
+        <div className="h-screen overflow-y-auto">
           {messages.map((message, index) => (
             <div
               key={index}
