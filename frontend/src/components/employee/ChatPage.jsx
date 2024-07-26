@@ -47,39 +47,103 @@ function ChatPage() {
     setShowChat(true);
   };
 
+  // const fetchMessages = (sender, recipient) => {
+  //   axios
+  //     .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
+  //     .then((response) => {
+  //       setMessages(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+
   const fetchMessages = (sender, recipient) => {
     axios
       .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
       .then((response) => {
         setMessages(response.data);
+  
+        setUsers((prevUsers) =>
+          prevUsers
+            .map((user) =>
+              user._id === recipient
+                ? { ...user, lastMessageTime: new Date() }
+                : user
+            )
+            .sort((a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime))
+        );
       })
       .catch((error) => {
         console.error(error);
       });
   };
+  
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`${BASE_URL}/api/employee/`)
+  //     .then((response) => {
+  //       const filteredUsers = response.data.filter(
+  //         (user) => user._id !== loggedInUserId
+  //       );
+  //       setUsers(filteredUsers);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, [loggedInUserId]);
+
 
   useEffect(() => {
     axios
       .get(`${BASE_URL}/api/employee/`)
       .then((response) => {
-        const filteredUsers = response.data.filter(
-          (user) => user._id !== loggedInUserId
-        );
+        const filteredUsers = response.data
+          .filter((user) => user._id !== loggedInUserId)
+          .map((user) => ({ ...user, lastMessageTime: new Date(0) })); // Initialize lastMessageTime
         setUsers(filteredUsers);
       })
       .catch((error) => {
         console.error(error);
       });
   }, [loggedInUserId]);
+  
 
   useEffect(() => {
     const intervalId = setInterval(() => fetchMessages(sender, recipient), 2000);
     return () => clearInterval(intervalId);
   }, [sender, recipient]);
 
+  // const handleSendMessage = async () => {
+  //   if (!newMessage.trim() && !attachment) return;
+
+  //   const messageData = {
+  //     sender: loggedInUserId,
+  //     senderName: userDetails.name,
+  //     recipient: recipient,
+  //     text: newMessage,
+  //     image: attachment?.type.startsWith("image/") ? attachment.url : null,
+  //     document: attachment?.type.startsWith("application/")
+  //       ? attachment.url
+  //       : null,
+  //     video: attachment?.type.startsWith("video/") ? attachment.url : null,
+  //   };
+
+  //   try {
+  //     const response = await axios.post(`${BASE_URL}/api/postmessages`, messageData);
+  //     setMessages([...messages, response.data.data]);
+  //     setNewMessage("");
+  //     setAttachment(null);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
   const handleSendMessage = async () => {
     if (!newMessage.trim() && !attachment) return;
-
+  
     const messageData = {
       sender: loggedInUserId,
       senderName: userDetails.name,
@@ -91,16 +155,28 @@ function ChatPage() {
         : null,
       video: attachment?.type.startsWith("video/") ? attachment.url : null,
     };
-
+  
     try {
       const response = await axios.post(`${BASE_URL}/api/postmessages`, messageData);
       setMessages([...messages, response.data.data]);
       setNewMessage("");
       setAttachment(null);
+  
+      // Update users with the latest message time
+      setUsers((prevUsers) =>
+        prevUsers
+          .map((user) =>
+            user._id === recipient
+              ? { ...user, lastMessageTime: new Date() }
+              : user
+          )
+          .sort((a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime))
+      );
     } catch (error) {
       console.log(error);
     }
   };
+  
 
   const handleFileUpload = (file) => {
     const reader = new FileReader();
@@ -112,6 +188,28 @@ function ChatPage() {
     };
     reader.readAsDataURL(file);
   };
+
+  // useEffect(() => {
+  //   if (users.length > 0) {
+  //     const fetchUnreadMessages = async () => {
+  //       try {
+  //         const unreadUsersData = await Promise.all(
+  //           users.map(async (user) => {
+  //             const response = await axios.get(
+  //               `${BASE_URL}/api/mark-messages-read/${user._id}`
+  //             );
+  //             return { userId: user._id, data: response.data };
+  //           })
+  //         );
+  //         setUnreadUsers(unreadUsersData.filter((u) => u.data.length > 0));
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //     };
+  //     fetchUnreadMessages();
+  //   }
+  // }, [users]);
+
 
   useEffect(() => {
     if (users.length > 0) {
@@ -133,6 +231,7 @@ function ChatPage() {
       fetchUnreadMessages();
     }
   }, [users]);
+  
 
   const handleBackToEmployees = () => {
     setShowChat(false);

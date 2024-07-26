@@ -42,48 +42,128 @@ function SoftwareToSoftware() {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
 
+  // const handleClick = (id, name) => {
+  //   setSender(loggedInUserId);
+  //   setRecipient(id);
+  //   setRecipientName(name);
+  //   fetchMessages(loggedInUserId, id);
+  //   setShowChat(true);
+  // };
+
   const handleClick = (id, name) => {
     setSender(loggedInUserId);
     setRecipient(id);
     setRecipientName(name);
     fetchMessages(loggedInUserId, id);
+    markMessagesAsRead(id);
     setShowChat(true);
   };
+  
+
+  // const fetchMessages = (sender, recipient) => {
+  //   axios
+  //     .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
+  //     .then((response) => {
+  //       setMessages(response.data);
+  //       console.log(response);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
 
   const fetchMessages = (sender, recipient) => {
     axios
       .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
       .then((response) => {
         setMessages(response.data);
+        // Update user list based on latest message time
+        setUsers((prevUsers) =>
+          prevUsers
+            .map((user) =>
+              user._id === recipient
+                ? { ...user, lastMessageTime: new Date() }
+                : user
+            )
+            .sort(
+              (a, b) =>
+                new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
+            )
+        );
         console.log(response);
       })
       .catch((error) => {
         console.error(error);
       });
   };
+  
+
+
+
+  // useEffect(() => {
+  //   axios
+  //     .get(`${BASE_URL}/api/allUser/getAllSoftwareTeam`)
+  //     .then((response) => {
+  //       const filteredUsers = response.data.filter(
+  //         (user) => user._id !== loggedInUserId
+  //       );
+  //       setUsers(filteredUsers);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // }, []);
 
   useEffect(() => {
     axios
       .get(`${BASE_URL}/api/allUser/getAllSoftwareTeam`)
       .then((response) => {
-        const filteredUsers = response.data.filter(
-          (user) => user._id !== loggedInUserId
-        );
+        const filteredUsers = response.data
+          .filter((user) => user._id !== loggedInUserId)
+          .map((user) => ({ ...user, lastMessageTime: new Date(0) })); // Initialize lastMessageTime to a past date
         setUsers(filteredUsers);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
+  
 
   useEffect(() => {
     const intervalId = setInterval(() => fetchMessages(sender, recipient), 2000);
     return () => clearInterval(intervalId);
   }, [sender, recipient]);
 
+  // const handleSendMessage = () => {
+  //   if (!newMessage.trim() && !attachment) return;
+
+  //   const messageData = {
+  //     sender: loggedInUserId,
+  //     recipient: recipient,
+  //     senderName: userDetails.name,
+  //     text: newMessage,
+  //     image: attachment?.type.startsWith("image/") ? attachment.url : null,
+  //     document: attachment?.type.startsWith("application/")
+  //       ? attachment.url
+  //       : null,
+  //     video: attachment?.type.startsWith("video/") ? attachment.url : null,
+  //   };
+
+  //   axios
+  //     .post(`${BASE_URL}/api/postmessages`, messageData)
+  //     .then((response) => {
+  //       setMessages([...messages, response.data.data]);
+  //       setNewMessage("");
+  //       setAttachment(null);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
   const handleSendMessage = () => {
     if (!newMessage.trim() && !attachment) return;
-
+  
     const messageData = {
       sender: loggedInUserId,
       recipient: recipient,
@@ -95,18 +175,33 @@ function SoftwareToSoftware() {
         : null,
       video: attachment?.type.startsWith("video/") ? attachment.url : null,
     };
-
+  
     axios
       .post(`${BASE_URL}/api/postmessages`, messageData)
       .then((response) => {
         setMessages([...messages, response.data.data]);
         setNewMessage("");
         setAttachment(null);
+  
+        // Update user list based on latest message time
+        setUsers((prevUsers) =>
+          prevUsers
+            .map((user) =>
+              user._id === recipient
+                ? { ...user, lastMessageTime: new Date() }
+                : user
+            )
+            .sort(
+              (a, b) =>
+                new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
+            )
+        );
       })
       .catch((error) => {
         console.error(error);
       });
   };
+  
 
   const handleFileUpload = (file) => {
     const reader = new FileReader();
@@ -118,6 +213,30 @@ function SoftwareToSoftware() {
     };
     reader.readAsDataURL(file);
   };
+
+  // useEffect(() => {
+  //   if (users.length > 0) {
+  //     const fetchUnreadMessages = async () => {
+  //       try {
+  //         const unreadUsersData = await Promise.all(
+  //           users.map(async (user) => {
+  //             const response = await axios.get(
+  //               `${BASE_URL}/api/mark-messages-read/${user._id}`
+  //             );
+  //             return { userId: user._id, data: response.data };
+  //           })
+  //         );
+  //         setUnreadUsers(unreadUsersData.filter((u) => u.data.length > 0));
+  //       } catch (error) {
+  //         console.error(error);
+  //       }
+  //     };
+  //     fetchUnreadMessages();
+  //     // const intervalId = setInterval(fetchUnreadMessages, 2 * 1000);
+  //     // return () => clearInterval(intervalId);
+  //   }
+  // }, [users]);
+
 
   useEffect(() => {
     if (users.length > 0) {
@@ -137,10 +256,10 @@ function SoftwareToSoftware() {
         }
       };
       fetchUnreadMessages();
-      // const intervalId = setInterval(fetchUnreadMessages, 2 * 1000);
-      // return () => clearInterval(intervalId);
     }
   }, [users]);
+
+  
 
   const handleBackToEmployees = () => {
     setShowChat(false);
@@ -212,6 +331,14 @@ function SoftwareToSoftware() {
     setImageForEditing((message.content.image || message.content.camera));
     // console.log("*******",imageForEditing)
   };
+
+  const markMessagesAsRead = (recipientId) => {
+    setUnreadUsers((prevUnreadUsers) =>
+      prevUnreadUsers.filter((unreadUser) => unreadUser.userId !== recipientId)
+    );
+  };
+  
+
 
   const handleDelete = (message) => {
     axios
@@ -457,3 +584,5 @@ function SoftwareToSoftware() {
 }
 
 export default SoftwareToSoftware;
+
+
