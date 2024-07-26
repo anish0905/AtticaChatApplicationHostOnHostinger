@@ -138,6 +138,44 @@ exports.loginDigitalMarketing = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.loginDigitalCashier = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    // Find user by email and role
+    const user = await User.findOne({ email, role: "Cashier" });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+    if (!user.access) {
+      return res
+        .status(401)
+        .json({ error: "Cashier not authorized" });
+    }
+
+    // Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid email or password" });
+    }
+
+    // Create JWT token
+    const token = jwt.sign(
+      { userId: user._id, role: user.role },
+      "your_jwt_secret", // Replace with a secure key
+      { expiresIn: "1h" }
+    );
+
+    res.status(200).json({
+      token,
+      message: "Cashier logged in successfully",
+      _id: user._id,
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
 exports.loginAccountant = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -507,6 +545,16 @@ exports.getAllDigitalTeams = async function (req, res) {
   }
 };
 
+exports.getAllCashier = async function (req, res) {
+  try {
+    const users = await User.find({ role: "Cashier" }).select(
+      "-password"
+    );
+    res.json(users);
+  } catch (err) {
+    res.status(500).send(err);
+  }
+};
 exports.getAllAccountant = async function (req, res) {
   try {
     const users = await User.find({ role: "Accountant" }).select("-password");
@@ -899,6 +947,26 @@ exports.deleteDigitalMarketing = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     if (user.role === "Digital Marketing") {
+      await User.findByIdAndDelete(userId);
+      return res.status(200).json({ message: "User deleted successfully" });
+    } else {
+      return res
+        .status(403)
+        .json({ message: "Forbidden: User does not have the required role" });
+    }
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+exports.deleteCashier = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    if (user.role === "Cashier") {
       await User.findByIdAndDelete(userId);
       return res.status(200).json({ message: "User deleted successfully" });
     } else {

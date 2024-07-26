@@ -17,6 +17,8 @@ router.post("/Security/login", authController.loginSecurity);
 router.post("/bouncers/login", authController.loginBouncers);
 router.post("/TE/login", authController.loginTE);
 router.post("/Logistic/login", authController.loginLogistic);
+router.post("/Cashier/login", authController.loginDigitalCashier);
+
 
 // Route to get user count by role
 router.get("/counts/by-role", authController.getUsersCountByRole);
@@ -41,6 +43,8 @@ router.get("/getAllBouncersTeam", authController.getAllBouncers);
 
 router.get("/getAllTE", authController.getAllTE);
 router.get("/getAllLogistic", authController.getAllLogistic);
+
+router.get("/getAllDigitalCashier", authController.getAllCashier);
 
 router.get("/getbyId/:id", authController.getById);
 router.delete("/delete/:id", authController.deleteById);
@@ -71,6 +75,10 @@ router.delete("/virtualTeam/:id", authController.deleteVirtualTeam);
 router.delete("/monitoringTeam/:id", authController.deleteMonitoringTeam);
 
 router.delete("/security/CCTV/:id", authController.deleteSecurityCCTV);
+
+router.delete("/bouncers/driver/:id", authController.deleteCashier);
+
+
 
 router.delete("/te/:id", authController.deleteTE);
 router.delete("/logistic/:id", authController.deleteLogistic);
