@@ -6,6 +6,8 @@ import notificationTone from "../../assests/notification_ding.mp3";
 import { BASE_URL } from "../../constants";
 import ScrollingNavbar from '../../components/admin/ScrollingNavbar'
 import EditModel from "../utility/EditModel";
+import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+
 const EmpMessage = () => {
   const [employees, setEmployees] = useState([]);
   const [messages, setMessages] = useState([]);
@@ -18,6 +20,7 @@ const EmpMessage = () => {
   const notificationSoundRef = useRef(null);
   const [showImageEditor, setShowImageEditor] = useState(false);
   const [imageForEditing, setImageForEditing] = useState('');
+  
 
   // Fetch user details from local storage and set the grade
   useEffect(() => {
@@ -163,9 +166,9 @@ const EmpMessage = () => {
       {/* Chat Section */}
       {/* <ScrollingNavbar messages={messages} />  */}
       <div className="flex-1 flex flex-col w-full bg-[#f6f5fb]">
-        <div className="lg:text-[#ffffff] lg:bg-[#5443c3] bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] lg:text-2xl text-sm p-4 flex gap-2 items-center justify-between lg:mx-2 relative">
+        <div className="lg:text-[#ffffff] lg:bg-[#5443c3] bg-[#ffffff] text-[#5443c3] border border-[#5443c3] lg:text-2xl text-sm p-4 flex gap-2 items-center justify-between lg:mx-2 relative">
           <IoArrowBack
-            className="mr-2 cursor-pointer"
+            className="mr-2 cursor-pointer lg:text-[#ffffff] text-[#5443c3]"
             onClick={() => setMessages([])}
           />
           {employees.length > 0 && (
@@ -177,7 +180,7 @@ const EmpMessage = () => {
         </div>
 
 
-<div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto mb-16 lg:mb-0">
+<div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto lg:mb-0">
           {messages.length > 0 ? (
             messages.map((msg) => (
               <div
@@ -218,7 +221,7 @@ const EmpMessage = () => {
         </div>
 
         <div className=" bg-[#f6f5fb] shadow-md">
-          <div className="flex items-center p-2 lg:p-4 bg-[#eef2fa] border-t border-gray-200 fixed bottom-0 w-full lg:static">
+          <div className="flex items-center p-2 lg:p-4 bg-[#eef2fa] border-t border-gray-200 bottom-0 w-full lg:static">
             <input
               type="text"
               className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
@@ -233,6 +236,7 @@ const EmpMessage = () => {
             >
               <IoMdSend />
             </button>
+            <ScrollToBottomButton/>
           </div>
         </div>
       </div>
