@@ -35,6 +35,7 @@ const BillingTeamManagerLogin = () => {
   const fetchUserDetails = async (userId) => {
     try {
       const resp = await axios.get(`${BASE_URL}/api/billingTeam/getUserById/${userId}`);
+      console.log("FetchUserDetails", resp.data)
   
       localStorage.setItem("userDetails",JSON.stringify(resp.data))
     } catch (error) {

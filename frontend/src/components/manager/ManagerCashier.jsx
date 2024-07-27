@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch ,AiOutlineDown} from "react-icons/ai";
@@ -17,7 +15,7 @@ import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 import ManagerSidebar from "./ManagerSidebar";
-function ManagerChat() {
+function ManagerCashier() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [users, setUsers] = useState([]);
@@ -64,7 +62,7 @@ function ManagerChat() {
 
   useEffect(() => {
     axios
-      .get(`${BASE_URL}/api/billingTeam/getAllUsers`)
+      .get(`${BASE_URL}/api/allUser/getAllDigitalCashier`)
       .then((response) => {
         const filteredUsers = response.data.filter(
           (user) => user._id !== loggedInUserId
@@ -160,7 +158,6 @@ function ManagerChat() {
   }, []);
 
 
-
   const handleHover = (index) => {
     setHoveredMessage(index);
   };
@@ -228,7 +225,7 @@ function ManagerChat() {
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10">
       
-<ManagerSidebar/>
+      <ManagerSidebar/>
       {!showChat && <ScrollingNavbar  />}
       {showChat ? (
         <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
@@ -459,4 +456,5 @@ function ManagerChat() {
   );
 }
 
-export default ManagerChat;
+export default ManagerCashier;
+
