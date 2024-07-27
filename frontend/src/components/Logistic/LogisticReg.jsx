@@ -12,7 +12,9 @@ const LogisticReg = () => {
     name: "",
     email: "",
     password: "",
-    role: "Logistic"
+    role: "Logistic",
+    group:"",
+    grade:"",
   });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -110,6 +112,9 @@ const LogisticReg = () => {
                   { label: "Name", name: "name", type: "text" },
                   { label: "Email", name: "email", type: "email" },
                   { label: "Password", name: "password", type: "password" },
+                  {label:"Group",name:"group",type:"text"},
+                  {label:"Grade",name:"grade",type:"text"},
+
                 ].map((field, index) => (
                   <div className="mb-4" key={index}>
                     <label className="block text-[#5443c3] text-sm font-bold lg:mb-2" htmlFor={field.name}>

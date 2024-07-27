@@ -37,7 +37,9 @@ const Modal = ({ show, onClose, callCenter, onUpdate }) => {
           {[
             { label: "Call Center Name", name: "name", type: "text" },
             { label: "Call Center Email", name: "email", type: "email" },
-            { label: "Call Center Password", name: "password", type: "password" }
+            { label: "Call Center Password", name: "password", type: "password" },
+            {label:"Group",name:"group",type:"text"},
+            {label:"Grade",name:"grade",type:"text"}
           ].map((field, index) => (
             <div className="mb-4" key={index}>
               <label
@@ -187,6 +189,12 @@ const CallCenterDetail = () => {
                   Email
                 </th>
                 <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                  Group
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                  Grade
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
                   Actions
                 </th>
               </tr>
@@ -202,6 +210,12 @@ const CallCenterDetail = () => {
                   </td>
                   <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
                     {center?.email}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                    {center?.group}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                    {center?.grade}
                   </td>
                   <td className="py-4 px-2 whitespace-nowrap sm:px-4 lex text-xs lg:text-sm ">
                     <button

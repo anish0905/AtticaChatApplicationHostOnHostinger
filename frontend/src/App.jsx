@@ -89,6 +89,7 @@ import AnnouncementByAdmin from "./components/admin/AnnouncementByAdmin";
 import FetchAllAnnouncement from "./components/admin/FetchAllAnnouncement";
 import SuperAdminDashboard from "./components/SuperAdmin/SuperAdminDashboard";
 import TeReg from "./components/TE/TeReg"
+import GroupChat from "./components/AllUsers/GroupChat";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -208,6 +209,10 @@ const App = () => {
           <Route
             path="/SoftwareToAdminChat"
             element={<SoftwareToAdminChat />}
+          />
+          <Route
+            path="/groupChat"
+            element={<GroupChat />}
           />
           <Route path="/SecurityChat" element={<SecurityToSecurityChat />} />
           <Route path="/SecurityToAdminChat" element={<SecurityToAdmin />} />

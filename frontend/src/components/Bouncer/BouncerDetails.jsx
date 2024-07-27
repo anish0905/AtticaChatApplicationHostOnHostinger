@@ -37,7 +37,9 @@ const Modal = ({ show, onClose, bouncer, onUpdate }) => {
           {[
             { label: "Bouncer Name", name: "name", type: "text" },
             { label: "Bouncer Email", name: "email", type: "email" },
-            { label: "Bouncer Password", name: "password", type: "password" }
+            { label: "Bouncer Password", name: "password", type: "password" },
+            {label:"Group",name:"group",type:"text"},
+            {label:"Grade",name:"grade",type:"text"}
           ].map((field, index) => (
             <div className="mb-4" key={index}>
               <label
@@ -134,7 +136,7 @@ const BouncerDetails = () => {
   };
 
   const filteredBouncers = bouncers.filter((bouncer) =>
-    bouncer.name.toLowerCase().includes(searchQuery.toLowerCase())
+    bouncer?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -175,6 +177,12 @@ const BouncerDetails = () => {
                   Email
                 </th>
                 <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                  Group
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                  Grade
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
                   Actions
                 </th>
               </tr>
@@ -190,6 +198,12 @@ const BouncerDetails = () => {
                   </td>
                   <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
                     {bouncer?.email}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                    {bouncer?.group}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                    {bouncer?.grade}
                   </td>
                   <td className="py-4 px-2 whitespace-nowrap sm:px-4 lex text-xs lg:text-sm ">
                     <button

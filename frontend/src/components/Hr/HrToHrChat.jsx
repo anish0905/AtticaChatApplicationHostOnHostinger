@@ -49,11 +49,37 @@ function HrToHrChat() {
     setShowChat(true);
   };
 
+  // const fetchMessages = (sender, recipient) => {
+  //   axios
+  //     .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
+  //     .then((response) => {
+  //       setMessages(response.data);
+  //       console.log(response);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+
   const fetchMessages = (sender, recipient) => {
     axios
       .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
       .then((response) => {
         setMessages(response.data);
+        // Update user list based on latest message time
+        setUsers((prevUsers) =>
+          prevUsers
+            .map((user) =>
+              user._id === recipient
+                ? { ...user, lastMessageTime: new Date() }
+                : user
+            )
+            .sort(
+              (a, b) =>
+                new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
+            )
+        );
         console.log(response);
       })
       .catch((error) => {
@@ -65,9 +91,9 @@ function HrToHrChat() {
     axios
       .get(`${BASE_URL}/api/allUser/getAllHRTeam`)
       .then((response) => {
-        const filteredUsers = response.data.filter(
-          (user) => user._id !== loggedInUserId
-        );
+        const filteredUsers = response.data
+          .filter((user) => user._id !== loggedInUserId)
+          .map((user) => ({ ...user, lastMessageTime: new Date(0) })); // Initialize lastMessageTime to a past date
         setUsers(filteredUsers);
       })
       .catch((error) => {
@@ -80,9 +106,37 @@ function HrToHrChat() {
     return () => clearInterval(intervalId);
   }, [sender, recipient]);
 
+  // const handleSendMessage = () => {
+  //   if (!newMessage.trim() && !attachment) return;
+
+  //   const messageData = {
+  //     sender: loggedInUserId,
+  //     recipient: recipient,
+  //     senderName: userDetails.name,
+  //     text: newMessage,
+  //     image: attachment?.type.startsWith("image/") ? attachment.url : null,
+  //     document: attachment?.type.startsWith("application/")
+  //       ? attachment.url
+  //       : null,
+  //     video: attachment?.type.startsWith("video/") ? attachment.url : null,
+  //   };
+
+  //   axios
+  //     .post(`${BASE_URL}/api/postmessages`, messageData)
+  //     .then((response) => {
+  //       setMessages([...messages, response.data.data]);
+  //       setNewMessage("");
+  //       setAttachment(null);
+  //     })
+  //     .catch((error) => {
+  //       console.error(error);
+  //     });
+  // };
+
+
   const handleSendMessage = () => {
     if (!newMessage.trim() && !attachment) return;
-
+  
     const messageData = {
       sender: loggedInUserId,
       recipient: recipient,
@@ -94,19 +148,34 @@ function HrToHrChat() {
         : null,
       video: attachment?.type.startsWith("video/") ? attachment.url : null,
     };
-
+  
     axios
       .post(`${BASE_URL}/api/postmessages`, messageData)
       .then((response) => {
         setMessages([...messages, response.data.data]);
         setNewMessage("");
         setAttachment(null);
+  
+        // Update user list based on latest message time
+        setUsers((prevUsers) =>
+          prevUsers
+            .map((user) =>
+              user._id === recipient
+                ? { ...user, lastMessageTime: new Date() }
+                : user
+            )
+            .sort(
+              (a, b) =>
+                new Date(b.lastMessageTime) - new Date(a.lastMessageTime)
+            )
+        );
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
+  
   const handleFileUpload = (file) => {
     const reader = new FileReader();
     reader.onload = () => {

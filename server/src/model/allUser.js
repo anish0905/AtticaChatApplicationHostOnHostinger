@@ -20,6 +20,13 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    group:{
+      type:String
+    },
+    grade:{
+      type:String
+
+    },
 
     role: {
       type: String,
