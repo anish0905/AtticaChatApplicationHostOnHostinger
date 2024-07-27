@@ -91,6 +91,7 @@ import SuperAdminDashboard from "./components/SuperAdmin/SuperAdminDashboard";
 import TeReg from "./components/TE/TeReg"
 import CashierLogin from "./components/Cashier/CashierLogin";
 import CashierManagerChat from "./components/Cashier/CashierManagerChat";
+import ManagerCashier from "./components/manager/ManagerCashier";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -130,6 +131,7 @@ const App = () => {
           <Route path="/empDashbord" element={<Empdashbord />} />
           <Route path="/managerLogin" element={<ManagerLogin />} />
           <Route path="/managerChat" element={<ManagerChat />} />
+          <Route path="/ManagerCashier" element={<ManagerCashier />} />
           <Route
             path="/billingTeamRegister"
             element={<BillingRegistrationModal />}

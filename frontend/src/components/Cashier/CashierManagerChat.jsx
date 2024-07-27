@@ -50,7 +50,6 @@ function CashierManagerChat() {
   const [imageForEditing, setImageForEditing] = useState('');
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-  console.log(userDetails, "Userdetails")
  
 
   const handleClick = (id, name) => {
@@ -97,7 +96,7 @@ function CashierManagerChat() {
 
     const messageData = {
       sender: loggedInUserId,
-      senderName: userDetails.user.name,
+      senderName: userDetails.name,
       recipient: recipient,
       text: newMessage,
       image: attachment?.type.startsWith("image/") ? attachment.url : null,

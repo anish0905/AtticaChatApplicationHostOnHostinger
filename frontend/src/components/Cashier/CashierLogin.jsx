@@ -18,12 +18,11 @@ const CashierLogin = () => {
                 email,
                 password,
             });
-            console.log("reponse", response.data)
-
-            localStorage.setItem("CurrentUserId", response.data._id);
-            localStorage.setItem("token", response.data.token);
-            localStorage.setItem("email", email);
-            fetchUserDetails(response.data._id);
+            console.log("Cashier post", response.data);
+      localStorage.setItem("CurrentUserId", response.data.user._id);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("email", email);
+      fetchUserDetails(response.data._id);
             navigate("/CashierManagerChat");
 
         } catch (error) {
@@ -32,13 +31,14 @@ const CashierLogin = () => {
     };
 
     const fetchUserDetails = async (userId) => {
+        console.log("userId...",userId)
         try {
-            const resp = await axios.get(`${BASE_URL}/api/allUser/getAllDigitalCashier/${userId}`);
+            const resp = await axios.get(`${BASE_URL}/api/allUser/getbyId/${userId}`);
+            console.log("FetchUserDetails", resp.data)
 
             localStorage.setItem("userDetails", JSON.stringify(resp.data))
         } catch (error) {
             console.error("Fetch User Details Error:", error);
-            // Handle error gracefully, set userDetails to null or {}
         }
     };
 
