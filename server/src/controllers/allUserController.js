@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // Registration logic
 exports.registerUser = async (req, res) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role,group,grade } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -23,6 +23,8 @@ exports.registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       role,
+      grade,
+      group
     });
 
     // Save the user to the database
@@ -668,7 +670,7 @@ exports.getById = async function (req, res) {
 };
 
 exports.updateById = async function (req, res) {
-  const { email, password, name } = req.body;
+  const { email, password, name,grade,group } = req.body;
   const { id } = req.params;
 
   if (!id) {
@@ -676,7 +678,7 @@ exports.updateById = async function (req, res) {
   }
 
   try {
-    const updateData = { email, name };
+    const updateData = { email, name,grade,group };
 
     if (password) {
       const salt = await bcrypt.genSalt(10);

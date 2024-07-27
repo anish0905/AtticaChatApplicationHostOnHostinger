@@ -318,12 +318,12 @@ function ChatPage() {
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      {!showChat && <ScrollingNavbar />}
+      {!showChat && <span className="mt-20"><ScrollingNavbar /></span>}
       <EmployeeSidebar />
 
       {showChat ? (
         <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
-          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10">
+          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
             <button
               onClick={handleBackToEmployees}
               className="lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
@@ -480,7 +480,7 @@ function ChatPage() {
 
         </div>
       ) : (
-        <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky mt-10 ">
+        <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100">
           <div className="sticky top-0 bg-white  z-10">
             <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">
               All Employees

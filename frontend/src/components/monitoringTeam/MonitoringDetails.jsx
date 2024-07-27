@@ -37,7 +37,9 @@ const Modal = ({ show, onClose, monitoringTeam, onUpdate }) => {
           {[
             { label: "Monitoring Team Name", name: "name", type: "text" },
             { label: "Monitoring Team Email", name: "email", type: "email" },
-            { label: "Monitoring Team Password", name: "password", type: "password" }
+            { label: "Monitoring Team Password", name: "password", type: "password" },
+            {label:"Group",name:"group",type:"text"},
+            {label:"Grade",name:"grade",type:"text"}
           ].map((field, index) => (
             <div className="mb-4" key={index}>
               <label
@@ -102,7 +104,7 @@ const MonitoringDetails = () => {
   useEffect(() => {
     setFilteredTeams(
       monitoringTeams.filter((team) =>
-        team.name.toLowerCase().includes(searchQuery.toLowerCase())
+        team?.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
   }, [searchQuery, monitoringTeams]);
@@ -182,6 +184,12 @@ const MonitoringDetails = () => {
                   Email
                 </th>
                 <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                  Group
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                  Grade
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
                   Actions
                 </th>
               </tr>
@@ -197,6 +205,12 @@ const MonitoringDetails = () => {
                   </td>
                   <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
                     {team?.email}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                    {team?.group}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                    {team?.grade}
                   </td>
                   <td className="py-4 px-2 whitespace-nowrap sm:px-4 lex text-xs lg:text-sm ">
                     <button
