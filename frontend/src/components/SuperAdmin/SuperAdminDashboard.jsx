@@ -116,12 +116,6 @@ const SuperAdminDashboard = () => {
           <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Admin Details</h1>
           <div className='flex justify-center items-center content-center '>
             <button
-              className="bg-[#fc3b3b] hover:bg-red-700 px-4 font-semibold py-2 rounded-full text-white "
-              onClick={handleDelete}
-            >
-              Delete All
-            </button>
-            <button
               onClick={() => setIsModalOpen(true)}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:px-4 py-1 px-2 lg:text-xl text-xs rounded-full w-full lg:w-[30vw] h-12 mr-2 mt-4 lg:mt-0"
             >

@@ -19,9 +19,10 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import fetchAnnounce from '../utility/fetchAnnounce';
 import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";  
-
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import BillingSidebar from "./BillingSidebar";
+
 function BillingTeamChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -51,14 +52,72 @@ function BillingTeamChat() {
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
  
+  const [newCountMessage, setNewCountMessage] = useState(() => JSON.parse(localStorage.getItem("newCountMessage") || "[]"));
+  const [lastUserMessageCounts, setLastUserMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
+  const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
+
+ 
+ 
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setLastUserMessageCounts(JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
+      setNewCountMessage(JSON.parse(localStorage.getItem("newCountMessage") || "[]"));
+      setCurrentCountMessage(JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
+    }, 1000); // Update every second
+
+    return () => clearInterval(intervalId); // Clean up on component unmount
+  }, []);
 
   const handleClick = (id, name) => {
+    // Get the current count message and last user message counts from local storage
+    const currentCountMessage = JSON.parse(localStorage.getItem("currentCountMessage") || "[]");
+    const lastUserMessageCounts = JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]");
+
+    // Update lastUserMessageCounts with currentCountMessage for the clicked user
+    const updatedLastUserMessageCounts = lastUserMessageCounts.map((user) => {
+      if (user.userId === id) {
+        return { userId: user.userId, count: currentCountMessage.find((u) => u.userId === id)?.count || 0 };
+      }
+      return user;
+    });
+
+    // If the user is not in lastUserMessageCounts, add them
+    if (!updatedLastUserMessageCounts.some((user) => user.userId === id)) {
+      const currentCount = currentCountMessage.find((u) => u.userId === id)?.count || 0;
+      updatedLastUserMessageCounts.push({ userId: id, count: currentCount });
+    }
+
+    // Store the updated lastUserMessageCounts in local storage
+    localStorage.setItem("lastUserMessageCounts", JSON.stringify(updatedLastUserMessageCounts));
+
+    // Set the state and fetch messages
     setSender(loggedInUserId);
     setRecipient(id);
     setRecipientName(name);
     fetchMessages(loggedInUserId, id);
     setShowChat(true);
   };
+
+  // Function to get the count for a user
+  const getCountForUser = (userId) => {
+    const newCountMessage = JSON.parse(localStorage.getItem("newCountMessage") || "[]");
+    const user = newCountMessage.find((item) => item.userId === userId);
+    return user ? user.count : 0;
+  };
+
+  // Function to get the unread count for a user
+  const getUnreadCountForUser = (userId) => {
+    const currentCountMessage = JSON.parse(localStorage.getItem("currentCountMessage") || "[]");
+    const lastUserMessageCounts = JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]");
+
+    const currentCount = currentCountMessage.find((user) => user.userId === userId)?.count || 0;
+    const lastCount = lastUserMessageCounts.find((user) => user.userId === userId)?.count || 0;
+
+    return currentCount - lastCount;
+  };
+
+
 
   const fetchMessages = (sender, recipient) => {
     axios
@@ -265,18 +324,19 @@ function BillingTeamChat() {
   };
 
   return (
-    <>
-    {!showChat && <ScrollingNavbar  />}
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
+    {!showChat && <span className="mt-20"><ScrollingNavbar  /></span>}
+   <BillingSidebar/>
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10 ">
   
       {showChat ? (
-        <div className="w-full  flex flex-col justify-between overflow-hidden">
-          <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between h-16">
+        <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
+          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
             <button
               onClick={handleBackToEmployees}
-              className=" text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+              className="lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
             >
-              <FaArrowLeft className="lg:text-2xl text-xl" />
+              <FaArrowLeft />
             </button>
 
 
@@ -286,11 +346,11 @@ function BillingTeamChat() {
 
           </div>
 
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa] mb-20">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa]  pr-20">
             {messages.map((message, index) => (
               <div
                 key={message._id}
-                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
+                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap lg:text-3xl md:text-xl text-sm font-bold ${message.sender === loggedInUserId
                   ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
                   : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                   }`}
@@ -419,9 +479,9 @@ function BillingTeamChat() {
           <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       ) : (
-        <div className="w-full lg:w-1/4 h-screen bg-white p-4 overflow-y-auto border-[#5443c3] shadow-lg">
-          <div className="flex items-center">
-            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] flex-shrink-0">All Manager Team</h1>
+        <div className="w-full bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">
+   
+            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">All Manager Team</h1>
 
             <div className="relative ml-4">
               <div
@@ -457,8 +517,8 @@ function BillingTeamChat() {
 
 
             </div>
-          </div>
-          <div className=" relative flex items-center mb-4 ">
+       
+          <div className=" relative flex items-center mb-5 ">
             <input
               type="text"
               value={userSearchQuery}
@@ -468,12 +528,10 @@ function BillingTeamChat() {
             />
             <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
           </div>
-          <ul>
-
+          {/* <ul>
             {users
               .filter((user) =>
-                user.
-                  manager_name.toLowerCase().includes(userSearchQuery.toLowerCase())
+                user.manager_name.toLowerCase().includes(userSearchQuery.toLowerCase())
               )
               .map((user) => (
                 <li
@@ -496,9 +554,37 @@ function BillingTeamChat() {
                   </span>
                 </li>
               ))}
+          </ul> */}
+
+          <ul>
+            {users
+              .filter((user) =>
+                user.manager_name.toLowerCase().includes(userSearchQuery.toLowerCase())
+              )
+              .map((user) => (
+                <li
+                  key={user._id}
+                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
+                      ? "bg-blue-200"
+                      : "bg-gray-200"
+                    } ${recipient === user._id ? "bg-green-200" : ""}`}
+                  onClick={() => handleClick(user._id, user.manager_name)}
+                >
+                  <span>{user.manager_name}</span>
+                  <span>
+                    {getUnreadCountForUser(user._id) > 0 && (
+                      <span className="text-red-500 font-bold">
+                        {getUnreadCountForUser(user._id)}
+                      </span>
+                    )}
+                  </span>
+                </li>
+              ))}
           </ul>
         </div>
       )}
+
+
       {showForwardModal && (
         <ForwardMessageModalBillingTeam
           users={users}
@@ -526,7 +612,7 @@ function BillingTeamChat() {
         />
       )}
     </div>
-    </>
+    </div>
   );
 }
 
