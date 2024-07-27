@@ -17,6 +17,7 @@ import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 import ManagerSidebar from "./ManagerSidebar";
+
 function ManagerChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -226,25 +227,25 @@ function ManagerChat() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10">
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
       
-<ManagerSidebar/>
-      {!showChat && <ScrollingNavbar  />}
+
+      {!showChat && <span className="mt-20"><ScrollingNavbar /></span>}
+      <ManagerSidebar/>
+
       {showChat ? (
-        <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
-          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white border-2 border-[#5443c3] my-2 mx-2 sticky top-0 z-10">
+        <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
+          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
            
             <button
               onClick={handleBackToEmployees}
-              className=" text-white text-4xl p-2 rounded-md"
+             className="lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
             >
-            <FaArrowLeft  className="lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white lg:text-2xl text-xl"/>
+            <FaArrowLeft />
             </button>
-            <div>
               <h1  className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
-            </div>
           </div>
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] mb-20 lg:mb-0">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa] pr-20">
             {messages.map((message,index) => (
               <div
                 key={message._id}
@@ -382,9 +383,9 @@ function ManagerChat() {
           <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       ) : (
-        <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto">
-          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">Billing Team</h1>
-          <div className=" relative flex items-center mb-4">
+        <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">
+          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">Billing Team</h1>
+          <div className=" relative flex items-center mb-5">
             
             <input
               type="text"

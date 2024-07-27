@@ -19,9 +19,10 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import fetchAnnounce from '../utility/fetchAnnounce';
 import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";  
-
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import BillingSidebar from "./BillingSidebar";
+
 function BillingTeamChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -265,18 +266,19 @@ function BillingTeamChat() {
   };
 
   return (
-    <>
-    {!showChat && <ScrollingNavbar  />}
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
+    {!showChat && <span className="mt-20"><ScrollingNavbar  /></span>}
+   <BillingSidebar/>
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10 ">
   
       {showChat ? (
-        <div className="w-full  flex flex-col justify-between overflow-hidden">
-          <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between h-16">
+        <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
+          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
             <button
               onClick={handleBackToEmployees}
-              className=" text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+              className="lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
             >
-              <FaArrowLeft className="lg:text-2xl text-xl" />
+              <FaArrowLeft />
             </button>
 
 
@@ -286,11 +288,11 @@ function BillingTeamChat() {
 
           </div>
 
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa] mb-20">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa]  pr-20">
             {messages.map((message, index) => (
               <div
                 key={message._id}
-                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
+                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap lg:text-3xl md:text-xl text-sm font-bold ${message.sender === loggedInUserId
                   ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
                   : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                   }`}
@@ -419,9 +421,9 @@ function BillingTeamChat() {
           <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       ) : (
-        <div className="w-full lg:w-1/4 h-screen bg-white p-4 overflow-y-auto border-[#5443c3] shadow-lg">
-          <div className="flex items-center">
-            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] flex-shrink-0">All Manager Team</h1>
+        <div className="w-full bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">
+   
+            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">All Manager Team</h1>
 
             <div className="relative ml-4">
               <div
@@ -457,8 +459,8 @@ function BillingTeamChat() {
 
 
             </div>
-          </div>
-          <div className=" relative flex items-center mb-4 ">
+       
+          <div className=" relative flex items-center mb-5 ">
             <input
               type="text"
               value={userSearchQuery}
@@ -499,6 +501,8 @@ function BillingTeamChat() {
           </ul>
         </div>
       )}
+
+
       {showForwardModal && (
         <ForwardMessageModalBillingTeam
           users={users}
@@ -526,7 +530,7 @@ function BillingTeamChat() {
         />
       )}
     </div>
-    </>
+    </div>
   );
 }
 
