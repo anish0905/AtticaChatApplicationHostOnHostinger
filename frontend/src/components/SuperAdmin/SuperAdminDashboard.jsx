@@ -11,13 +11,33 @@ import Swal from "sweetalert2";
 
 const SuperAdminDashboard = () => {
   const [email, setEmail] = useState("");
+  const [name, setname] = useState("");
   const [password, setPassword] = useState("");
+  const [department, setDepartment] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
-
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const user = { email, password };
+  const user = { email, password, department,name };
+
+  const departments = [
+    "Admin",
+    "Employee",
+    "Manager",
+    "Billing_Team",
+    "Accountant",
+    "Software",
+    "HR",
+    "CallCenter",
+    "VirtualTeam",
+    "MonitoringTeam",
+    "Bouncers/Driver",
+    "Security/CCTV",
+    "Digital Marketing",
+    "TE",
+    "Logistic",
+    "Cashier"
+  ];
 
   const handlePanic = async () => {
     try {
@@ -28,8 +48,10 @@ const SuperAdminDashboard = () => {
     }
   };
 
-  const handleNameChange = (e) => setEmail(e.target.value);
-  const handleEmpIdChange = (e) => setPassword(e.target.value);
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
+  const handleDepartmentChange = (e) => setDepartment(e.target.value);
+  const handleName = (e) => setname(e.target.value);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -69,10 +91,9 @@ const SuperAdminDashboard = () => {
         confirmButtonText: 'Yes, delete it!',
         cancelButtonText: 'No, cancel!',
       });
-  
+
       if (result.isConfirmed) {
-        const response = await axios.delete(`${BASE_URL}/api/admin/deleteAlladmin`, 
-        );
+        const response = await axios.delete(`${BASE_URL}/api/admin/deleteAlladmin`);
   
         if (response) {
           Swal.fire('Deleted!', 'Users have been deleted.', 'success');
@@ -94,10 +115,11 @@ const SuperAdminDashboard = () => {
         <div className="flex justify-between mb-4 flex-col lg:flex-row">
           <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Admin Details</h1>
           <div className='flex justify-center items-center content-center '>
-          <button
+            <button
               className="bg-[#fc3b3b] hover:bg-red-700 px-4 font-semibold py-2 rounded-full text-white "
-            onClick={handleDelete}>
-              Delete All  
+              onClick={handleDelete}
+            >
+              Delete All
             </button>
             <button
               onClick={() => setIsModalOpen(true)}
@@ -120,19 +142,33 @@ const SuperAdminDashboard = () => {
               <h2 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">Register</h2>
               {error && <div className="text-red-500 mb-4">{error}</div>}
               <form onSubmit={handleSubmit} className="w-full">
+              <div className="mb-4">
+                  <label htmlFor="email" className="block text-[#5443c3] text-sm font-bold mb-2">
+                    Name
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    className="shadow appearance-none border rounded w-full lg:py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    placeholder="name"
+                    value={name}
+                    onChange={handleName}
+                  />
+                </div>
                 <div className="mb-4">
                   <label htmlFor="email" className="block text-[#5443c3] text-sm font-bold mb-2">
                     Email
                   </label>
                   <input
-                    type="text"
+                    type="email"
                     id="email"
                     className="shadow appearance-none border rounded w-full lg:py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     placeholder="Email"
                     value={email}
-                    onChange={handleNameChange}
+                    onChange={handleEmailChange}
                   />
                 </div>
+                
                 <div className="mb-4">
                   <label htmlFor="password" className="block text-[#5443c3] text-sm font-bold mb-2">
                     Password
@@ -143,8 +179,26 @@ const SuperAdminDashboard = () => {
                     className="shadow appearance-none border rounded w-full lg:py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     placeholder="Password"
                     value={password}
-                    onChange={handleEmpIdChange}
+                    onChange={handlePasswordChange}
                   />
+                </div>
+                <div className="mb-4">
+                  <label htmlFor="department" className="block text-[#5443c3] text-sm font-bold mb-2">
+                    Department
+                  </label>
+                  <select
+                    id="department"
+                    className="shadow appearance-none border rounded w-full lg:py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                    value={department}
+                    onChange={handleDepartmentChange}
+                  >
+                    <option value="" disabled>Select your department</option>
+                    {departments.map((dept) => (
+                      <option key={dept} value={dept}>
+                        {dept}
+                      </option>
+                    ))}
+                  </select>
                 </div>
                 <div className="flex items-center justify-between">
                   <button

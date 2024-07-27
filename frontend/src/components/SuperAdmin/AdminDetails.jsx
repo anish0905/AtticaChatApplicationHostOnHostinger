@@ -155,9 +155,17 @@ const AdminDetails = () => {
         <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
           <thead className="bg-[#5443c3] sticky top-0">
             <tr>
+            <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                Name
+              </th>
               <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
                 Email
               </th>
+            
+              <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                Department
+              </th>
+              
               <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
                 Actions
               </th>
@@ -167,8 +175,15 @@ const AdminDetails = () => {
             {employees.map((employee) => (
               <tr key={employee._id}>
                 <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                  {employee.name}
+                </td>
+                <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
                   {employee.email}
                 </td>
+                <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                  {employee.department}
+                </td>
+                
                 <td className="py-4 px-2 whitespace-nowrap sm:px-4 lex text-xs lg:text-sm ">
                   {/* <button
                     onClick={() => handleEdit(employee)}
