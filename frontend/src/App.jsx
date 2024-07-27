@@ -90,6 +90,9 @@ import FetchAllAnnouncement from "./components/admin/FetchAllAnnouncement";
 import SuperAdminDashboard from "./components/SuperAdmin/SuperAdminDashboard";
 import TeReg from "./components/TE/TeReg"
 import GroupChat from "./components/AllUsers/GroupChat";
+import CashierLogin from "./components/Cashier/CashierLogin";
+import CashierManagerChat from "./components/Cashier/CashierManagerChat";
+import ManagerCashier from "./components/manager/ManagerCashier";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -129,6 +132,7 @@ const App = () => {
           <Route path="/empDashbord" element={<Empdashbord />} />
           <Route path="/managerLogin" element={<ManagerLogin />} />
           <Route path="/managerChat" element={<ManagerChat />} />
+          <Route path="/ManagerCashier" element={<ManagerCashier />} />
           <Route
             path="/billingTeamRegister"
             element={<BillingRegistrationModal />}
@@ -227,6 +231,9 @@ const App = () => {
           <Route path="/LogisticReg" element={<LogisticReg />} />
           <Route path="/LogisticChat" element={<LogisticChat />} />
           <Route path="/LogisticToAdminChat" element={<LogisticToAdmin />} />
+
+          <Route path="/CashierLogin" element={<CashierLogin />} />
+          <Route path="/CashierManagerChat" element={<CashierManagerChat />} />
 
           {isSuperAdminLoggedIn ? (
             <>
