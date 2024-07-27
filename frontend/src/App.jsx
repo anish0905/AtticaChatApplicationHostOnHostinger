@@ -211,7 +211,7 @@ const App = () => {
             element={<SoftwareToAdminChat />}
           />
           <Route
-            path="/groupChat"
+            path="/groupChat/:apiEndpoint"
             element={<GroupChat />}
           />
           <Route path="/SecurityChat" element={<SecurityToSecurityChat />} />
