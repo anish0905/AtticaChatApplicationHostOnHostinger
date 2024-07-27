@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 
 const AdminRegistion = async (req, res) => {
   const { name, email, password, department } = req.body;
+  console.log(name, email, password, department);
 
   try {
     // Validate request body
@@ -33,11 +34,11 @@ const AdminRegistion = async (req, res) => {
 
 // Controller function for admin login
 const AdminLogin = async (req, res) => {
-  const { email, password, department } = req.body;
+  const { email, password } = req.body;
 
   try {
     // Validate request body
-    if (!email || !password || !department) {
+    if (!email || !password) {
       return res.status(400).json({ message: "Please fill all the fields" });
     }
 
@@ -48,7 +49,7 @@ const AdminLogin = async (req, res) => {
     }
 
     // Ensure the admin has access and belongs to the correct department
-    if (!admin.access || admin.department !== department) {
+    if (!admin.access ) {
       return res.status(401).json({ error: "Admin not authorized" });
     }
 
