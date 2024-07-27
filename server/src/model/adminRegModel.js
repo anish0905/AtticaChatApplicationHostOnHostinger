@@ -12,6 +12,30 @@ const adminSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    department: {
+      type: String,
+      enum: [
+        "Admin",
+        "Employee",       
+        "Manager",
+        "Billing_Team",
+        "Accountant",
+        "Software",
+        "HR",
+        "CallCenter",
+        "VirtualTeam",
+        "MonitoringTeam",
+        "Bouncers/Driver",
+        "Security/CCTV",
+        "Digital Marketing",
+        "TE",
+        "Logistic",
+        "Cashier"
+      ],
+      required: true
+
+
+    },
     access: { type: Boolean, default: true },
   },
   { timestamps: true }

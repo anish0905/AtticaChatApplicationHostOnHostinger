@@ -34,6 +34,27 @@ app.use(express.json()); // Parse JSON bodies of incoming requests
 const chatSchema = new mongoose.Schema({
   group: String, // Group name
   grade: String,
+  department: {
+    type: String,
+    enum: [
+      "Admin",
+      "Employee",       
+      "Manager",
+      "Billing_Team",
+      "Accountant",
+      "Software",
+      "HR",
+      "CallCenter",
+      "VirtualTeam",
+      "MonitoringTeam",
+      "Bouncers/Driver",
+      "Security/CCTV",
+      "Digital Marketing",
+      "TE",
+      "Logistic",
+      "Cashier"
+    ],
+  },
   messages: [
     {
       employeeId: String,
@@ -42,7 +63,7 @@ const chatSchema = new mongoose.Schema({
       Document: String,
       video: String,
     },
-  ], // Array containing employeeId, message, Image, and Document
+  ],
 });
 
 // Create Mongoose Model based on the schema
@@ -62,21 +83,20 @@ const storage = multer.diskStorage({
 // Set up multer upload configuration
 const upload = multer({ storage: storage });
 
-// API endpoint to send a new message with image and document uploads
-// API endpoint to send a new message with optional image and document uploads
+
 app.post(
   "/api/messages",
   upload.fields([{ name: "image" }, { name: "document" }, { name: "video" }]),
   async (req, res) => {
     try {
-      const { employeeId, message, group, grade } = req.body;
+      const { employeeId, message, group, grade , department} = req.body;
 
       // Find the chat room by group name and grade
-      let chatRoom = await ChatModel.findOne({ group, grade });
+      let chatRoom = await ChatModel.findOne({ group, grade, department });              
 
       if (!chatRoom) {
         return res.status(400).json({
-          error: `Chat room with group "${group}" and grade "${grade}" does not exist`,
+          error: `Chat room with group "${group}" and grade "${grade}"  and department  "${department}" does not exist   `,
         });
       }
 

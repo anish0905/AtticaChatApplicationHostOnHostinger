@@ -17,7 +17,7 @@ router.post("/Security/login", authController.loginSecurity);
 router.post("/bouncers/login", authController.loginBouncers);
 router.post("/TE/login", authController.loginTE);
 router.post("/Logistic/login", authController.loginLogistic);
-router.post("/Cashier/login", authController.loginDigitalCashier);
+router.post("/Cashier/login", authController.loginCashier);
 
 
 // Route to get user count by role
