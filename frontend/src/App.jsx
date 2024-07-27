@@ -93,6 +93,7 @@ import GroupChat from "./components/AllUsers/GroupChat";
 import CashierLogin from "./components/Cashier/CashierLogin";
 import CashierManagerChat from "./components/Cashier/CashierManagerChat";
 import ManagerCashier from "./components/manager/ManagerCashier";
+import CashierRegistration from "./components/Cashier/CashierRegistration";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -234,6 +235,7 @@ const App = () => {
 
           <Route path="/CashierLogin" element={<CashierLogin />} />
           <Route path="/CashierManagerChat" element={<CashierManagerChat />} />
+          <Route path="/CashierReg" element={<CashierRegistration/>} />
 
           {isSuperAdminLoggedIn ? (
             <>
