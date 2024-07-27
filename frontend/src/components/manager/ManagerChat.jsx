@@ -19,6 +19,7 @@ import fetchAnnounce from '../utility/fetchAnnounce';
 import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton.jsx";
+
 function ManagerChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -292,7 +293,7 @@ function ManagerChat() {
     <div>
       {!showChat && <ScrollingNavbar />}
       <GPSTracker managerId={loggedInUserId} path={"managerlocation"} />
-      <div className="flex flex-col lg:flex-row h-screen relative justify-between mt-10">
+      <div className="flex flex-col lg:flex-row h-screen relative justify-between mt-20">
         <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 border border-[#5443c3] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
           <div className="flex items-center">
             <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] flex-shrink-0 ">All Billing Team</h1>
@@ -302,13 +303,13 @@ function ManagerChat() {
                 <div>
                   <div
                     onClick={handleAnnouncement}
-                    className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/fetchAllAnnouncement") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
+                    className={`group relative flex lg:ml-48 ml-32 rounded-full p-3 md:p-5 ${isActive("/fetchAllAnnouncement") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
                   >
-                    <IoMdNotificationsOutline className="text-lg md:text-2xl lg:text-3xl" />
+                    <IoMdNotificationsOutline className="text-lg md:text-2xl lg:text-3xl " />
                   </div>
 
                   {announcements.length > 0 && (
-                    <span className="relative -top-11 -right-5 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+                    <span className="relative -top-11 -right-5 transform translate-x-1/2 -translate-y-1/2 lg:ml-48 ml-32 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
                       {announcements?.length}
                     </span>
                   )}
@@ -324,7 +325,7 @@ function ManagerChat() {
                   onClick={handleLogout}
                   className=" flex items-center content-center w-full justify-evenly  "
                 >
-                  <div className="relative flex items-center justify-items-end">
+                  <div className="relative flex items-center justify-items-end ">
                     <span className="absolute bottom-full whitespace-nowrap bg-black text-white text-xs md:text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       Logout
                     </span>
@@ -414,7 +415,7 @@ function ManagerChat() {
           <div className="w-full h-screen lg:w-min-[30%] flex flex-col justify-between bg-[#f6f5fb]">
             {isChatSelected && (
               <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between h-20">
-                <button className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+                <button className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl mt-2 "
                   onClick={handleBackToUserList}
                 >
                   <FaArrowLeft className="text-xl lg:text-2xl" />

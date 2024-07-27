@@ -30,7 +30,7 @@ function ScrollingNavbar() {
 
     fetchData(); // Fetch immediately on component mount
 
-    const intervalId = setInterval(fetchData, 1000); // Fetch every 5 seconds
+    const intervalId = setInterval(fetchData, 5000); // Fetch every 5 seconds
 
     return () => clearInterval(intervalId); // Clear interval on component unmount
   }, []);
@@ -42,7 +42,7 @@ function ScrollingNavbar() {
   }, [containerRef, announcements]);
 
   return (
-    <div className="fixed top-0 left-0 right-0 bg-[#5443c3] z-10">
+    <div className=" top-0 left-0 right-0 bg-[#5443c3] z-10 lg:w-auto lg:ml-[4.8%] w-full fixed " >
       <div className="flex-1 flex justify-center items-center p-4 gap-2">
         <span onClick={() => navigate(-1)} className="cursor-pointer text-[#ffffff]">
           {/* <IoArrowBack /> */}

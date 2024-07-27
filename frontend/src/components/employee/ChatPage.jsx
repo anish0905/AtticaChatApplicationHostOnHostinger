@@ -13,6 +13,7 @@ import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+
 function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -234,7 +235,7 @@ function ChatPage() {
 
             <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
           </div>
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa]">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa] pr-20">
             {messages.map((message, index) => (
               <div
                 key={message._id}

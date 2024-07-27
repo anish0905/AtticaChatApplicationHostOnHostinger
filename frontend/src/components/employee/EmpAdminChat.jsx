@@ -14,6 +14,8 @@ import EmployeeSidebar from "./EmployeeSidebar";
 import Camera from "../Camera/Camera";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import ScrollingNavbar from "../admin/ScrollingNavbar";
+
 function EmpAdminChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -282,16 +284,17 @@ function EmpAdminChat() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen relative">
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden relative mt-20 lg:mt-0">
+      <ScrollingNavbar />
       <EmployeeSidebar />
-      <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 border border-[#5443c3] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
-        <h1 className="lg:text-2xl md:text-2xl text-xl font-bold mb-4 text-[#5443c3] text-left ">All Admins</h1>
-        <div className="relative mb-4 my-2">
+      <div className={`sticky top-0 bg-white  z-10 w-full lg:w-1/4 p-4 overflow-y-auto  lg:mt-20 border border-purple-100 flex flex-col  text-black shadow ] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
+        <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">All Admins</h1>
+        <div className="relative flex items-center mb-5">
           <input
             type="text"
             value={adminSearchQuery}
             onChange={(e) => setAdminSearchQuery(e.target.value)}
-            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg "
+            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
             placeholder="Search by email..."
           />
           <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
@@ -349,7 +352,7 @@ function EmpAdminChat() {
 
           {isChatSelected && (
 
-            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between border border-[#5443c3]">
+            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between border border-[#5443c3] lg:mt-20">
 
               <button className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg mt-2"
                 onClick={handleBackToUserList}
@@ -370,7 +373,7 @@ function EmpAdminChat() {
           )}
 
 
-          <div className="flex flex-col flex-1 px-4 pt-4 relative overflow-y-auto" style={{ maxHeight: "80vh" }}>
+          <div className="flex flex-col flex-1  pt-4 relative overflow-y-auto pr-20" style={{ maxHeight: "80vh" }}>
             {messages.map((message, index) => (
               <div
                 key={index}
