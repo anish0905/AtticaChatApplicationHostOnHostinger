@@ -51,14 +51,72 @@ function BillingTeamChat() {
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
  
+  const [newCountMessage, setNewCountMessage] = useState(() => JSON.parse(localStorage.getItem("newCountMessage") || "[]"));
+  const [lastUserMessageCounts, setLastUserMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
+  const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
+
+ 
+ 
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setLastUserMessageCounts(JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
+      setNewCountMessage(JSON.parse(localStorage.getItem("newCountMessage") || "[]"));
+      setCurrentCountMessage(JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
+    }, 1000); // Update every second
+
+    return () => clearInterval(intervalId); // Clean up on component unmount
+  }, []);
 
   const handleClick = (id, name) => {
+    // Get the current count message and last user message counts from local storage
+    const currentCountMessage = JSON.parse(localStorage.getItem("currentCountMessage") || "[]");
+    const lastUserMessageCounts = JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]");
+
+    // Update lastUserMessageCounts with currentCountMessage for the clicked user
+    const updatedLastUserMessageCounts = lastUserMessageCounts.map((user) => {
+      if (user.userId === id) {
+        return { userId: user.userId, count: currentCountMessage.find((u) => u.userId === id)?.count || 0 };
+      }
+      return user;
+    });
+
+    // If the user is not in lastUserMessageCounts, add them
+    if (!updatedLastUserMessageCounts.some((user) => user.userId === id)) {
+      const currentCount = currentCountMessage.find((u) => u.userId === id)?.count || 0;
+      updatedLastUserMessageCounts.push({ userId: id, count: currentCount });
+    }
+
+    // Store the updated lastUserMessageCounts in local storage
+    localStorage.setItem("lastUserMessageCounts", JSON.stringify(updatedLastUserMessageCounts));
+
+    // Set the state and fetch messages
     setSender(loggedInUserId);
     setRecipient(id);
     setRecipientName(name);
     fetchMessages(loggedInUserId, id);
     setShowChat(true);
   };
+
+  // Function to get the count for a user
+  const getCountForUser = (userId) => {
+    const newCountMessage = JSON.parse(localStorage.getItem("newCountMessage") || "[]");
+    const user = newCountMessage.find((item) => item.userId === userId);
+    return user ? user.count : 0;
+  };
+
+  // Function to get the unread count for a user
+  const getUnreadCountForUser = (userId) => {
+    const currentCountMessage = JSON.parse(localStorage.getItem("currentCountMessage") || "[]");
+    const lastUserMessageCounts = JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]");
+
+    const currentCount = currentCountMessage.find((user) => user.userId === userId)?.count || 0;
+    const lastCount = lastUserMessageCounts.find((user) => user.userId === userId)?.count || 0;
+
+    return currentCount - lastCount;
+  };
+
+
 
   const fetchMessages = (sender, recipient) => {
     axios
@@ -468,12 +526,10 @@ function BillingTeamChat() {
             />
             <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
           </div>
-          <ul>
-
+          {/* <ul>
             {users
               .filter((user) =>
-                user.
-                  manager_name.toLowerCase().includes(userSearchQuery.toLowerCase())
+                user.manager_name.toLowerCase().includes(userSearchQuery.toLowerCase())
               )
               .map((user) => (
                 <li
@@ -493,6 +549,32 @@ function BillingTeamChat() {
                     {unreadUsers.some(
                       (unreadUser) => unreadUser.userId === user._id
                     ) && <span className="text-red-500 font-bold">New</span>}
+                  </span>
+                </li>
+              ))}
+          </ul> */}
+
+          <ul>
+            {users
+              .filter((user) =>
+                user.manager_name.toLowerCase().includes(userSearchQuery.toLowerCase())
+              )
+              .map((user) => (
+                <li
+                  key={user._id}
+                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
+                      ? "bg-blue-200"
+                      : "bg-gray-200"
+                    } ${recipient === user._id ? "bg-green-200" : ""}`}
+                  onClick={() => handleClick(user._id, user.manager_name)}
+                >
+                  <span>{user.manager_name}</span>
+                  <span>
+                    {getUnreadCountForUser(user._id) > 0 && (
+                      <span className="text-red-500 font-bold">
+                        {getUnreadCountForUser(user._id)}
+                      </span>
+                    )}
                   </span>
                 </li>
               ))}

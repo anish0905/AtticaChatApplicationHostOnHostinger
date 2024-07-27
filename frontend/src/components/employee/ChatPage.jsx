@@ -13,7 +13,6 @@ import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
-
 function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -37,10 +36,48 @@ function ChatPage() {
   const [showCamera, setShowCamera] = useState(false);
   const [showImageEditor, setShowImageEditor] = useState(false);
   const [imageForEditing, setImageForEditing] = useState('');
+  const [userDetails, setUserDetails] = useState(() => JSON.parse(localStorage.getItem("userDetails")));
 
-  const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  const [newCountMessage, setNewCountMessage] = useState(() => JSON.parse(localStorage.getItem("newCountMessage") || "[]"));
+  const [lastUserMessageCounts, setLastUserMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
+  const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
+
+ 
+ 
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setLastUserMessageCounts(JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
+      setNewCountMessage(JSON.parse(localStorage.getItem("newCountMessage") || "[]"));
+      setCurrentCountMessage(JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
+    }, 1000); // Update every second
+
+    return () => clearInterval(intervalId); // Clean up on component unmount
+  }, []);
 
   const handleClick = (id, name) => {
+    // Get the current count message and last user message counts from local storage
+    const currentCountMessage = JSON.parse(localStorage.getItem("currentCountMessage") || "[]");
+    const lastUserMessageCounts = JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]");
+
+    // Update lastUserMessageCounts with currentCountMessage for the clicked user
+    const updatedLastUserMessageCounts = lastUserMessageCounts.map((user) => {
+      if (user.userId === id) {
+        return { userId: user.userId, count: currentCountMessage.find((u) => u.userId === id)?.count || 0 };
+      }
+      return user;
+    });
+
+    // If the user is not in lastUserMessageCounts, add them
+    if (!updatedLastUserMessageCounts.some((user) => user.userId === id)) {
+      const currentCount = currentCountMessage.find((u) => u.userId === id)?.count || 0;
+      updatedLastUserMessageCounts.push({ userId: id, count: currentCount });
+    }
+
+    // Store the updated lastUserMessageCounts in local storage
+    localStorage.setItem("lastUserMessageCounts", JSON.stringify(updatedLastUserMessageCounts));
+
+    // Set the state and fetch messages
     setSender(loggedInUserId);
     setRecipient(id);
     setRecipientName(name);
@@ -48,103 +85,58 @@ function ChatPage() {
     setShowChat(true);
   };
 
-  // const fetchMessages = (sender, recipient) => {
-  //   axios
-  //     .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
-  //     .then((response) => {
-  //       setMessages(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // };
+  // Function to get the count for a user
+  const getCountForUser = (userId) => {
+    const newCountMessage = JSON.parse(localStorage.getItem("newCountMessage") || "[]");
+    const user = newCountMessage.find((item) => item.userId === userId);
+    return user ? user.count : 0;
+  };
 
+  // Function to get the unread count for a user
+  const getUnreadCountForUser = (userId) => {
+    const currentCountMessage = JSON.parse(localStorage.getItem("currentCountMessage") || "[]");
+    const lastUserMessageCounts = JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]");
+
+    const currentCount = currentCountMessage.find((user) => user.userId === userId)?.count || 0;
+    const lastCount = lastUserMessageCounts.find((user) => user.userId === userId)?.count || 0;
+
+    return currentCount - lastCount;
+  };
 
   const fetchMessages = (sender, recipient) => {
     axios
       .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
       .then((response) => {
         setMessages(response.data);
-  
-        setUsers((prevUsers) =>
-          prevUsers
-            .map((user) =>
-              user._id === recipient
-                ? { ...user, lastMessageTime: new Date() }
-                : user
-            )
-            .sort((a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime))
-        );
       })
       .catch((error) => {
         console.error(error);
       });
   };
-  
-
-  // useEffect(() => {
-  //   axios
-  //     .get(`${BASE_URL}/api/employee/`)
-  //     .then((response) => {
-  //       const filteredUsers = response.data.filter(
-  //         (user) => user._id !== loggedInUserId
-  //       );
-  //       setUsers(filteredUsers);
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //     });
-  // }, [loggedInUserId]);
-
 
   useEffect(() => {
     axios
       .get(`${BASE_URL}/api/employee/`)
       .then((response) => {
-        const filteredUsers = response.data
-          .filter((user) => user._id !== loggedInUserId)
-          .map((user) => ({ ...user, lastMessageTime: new Date(0) })); // Initialize lastMessageTime
+        const filteredUsers = response.data.filter(
+          (user) => user._id !== loggedInUserId
+        );
+        console.log("filteredUsers...", filteredUsers)
         setUsers(filteredUsers);
       })
       .catch((error) => {
         console.error(error);
       });
   }, [loggedInUserId]);
-  
 
   useEffect(() => {
     const intervalId = setInterval(() => fetchMessages(sender, recipient), 2000);
     return () => clearInterval(intervalId);
   }, [sender, recipient]);
 
-  // const handleSendMessage = async () => {
-  //   if (!newMessage.trim() && !attachment) return;
-
-  //   const messageData = {
-  //     sender: loggedInUserId,
-  //     senderName: userDetails.name,
-  //     recipient: recipient,
-  //     text: newMessage,
-  //     image: attachment?.type.startsWith("image/") ? attachment.url : null,
-  //     document: attachment?.type.startsWith("application/")
-  //       ? attachment.url
-  //       : null,
-  //     video: attachment?.type.startsWith("video/") ? attachment.url : null,
-  //   };
-
-  //   try {
-  //     const response = await axios.post(`${BASE_URL}/api/postmessages`, messageData);
-  //     setMessages([...messages, response.data.data]);
-  //     setNewMessage("");
-  //     setAttachment(null);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-
   const handleSendMessage = async () => {
     if (!newMessage.trim() && !attachment) return;
-  
+
     const messageData = {
       sender: loggedInUserId,
       senderName: userDetails.name,
@@ -156,28 +148,16 @@ function ChatPage() {
         : null,
       video: attachment?.type.startsWith("video/") ? attachment.url : null,
     };
-  
+
     try {
       const response = await axios.post(`${BASE_URL}/api/postmessages`, messageData);
       setMessages([...messages, response.data.data]);
       setNewMessage("");
       setAttachment(null);
-  
-      // Update users with the latest message time
-      setUsers((prevUsers) =>
-        prevUsers
-          .map((user) =>
-            user._id === recipient
-              ? { ...user, lastMessageTime: new Date() }
-              : user
-          )
-          .sort((a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime))
-      );
     } catch (error) {
       console.log(error);
     }
   };
-  
 
   const handleFileUpload = (file) => {
     const reader = new FileReader();
@@ -189,28 +169,6 @@ function ChatPage() {
     };
     reader.readAsDataURL(file);
   };
-
-  // useEffect(() => {
-  //   if (users.length > 0) {
-  //     const fetchUnreadMessages = async () => {
-  //       try {
-  //         const unreadUsersData = await Promise.all(
-  //           users.map(async (user) => {
-  //             const response = await axios.get(
-  //               `${BASE_URL}/api/mark-messages-read/${user._id}`
-  //             );
-  //             return { userId: user._id, data: response.data };
-  //           })
-  //         );
-  //         setUnreadUsers(unreadUsersData.filter((u) => u.data.length > 0));
-  //       } catch (error) {
-  //         console.error(error);
-  //       }
-  //     };
-  //     fetchUnreadMessages();
-  //   }
-  // }, [users]);
-
 
   useEffect(() => {
     if (users.length > 0) {
@@ -232,6 +190,25 @@ function ChatPage() {
       fetchUnreadMessages();
     }
   }, [users]);
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("/api/users");
+        const fetchedUsers = response.data.filter(
+          (user) => user._id !== loggedInUserId
+        );
+        const sortedUsers = fetchedUsers.sort(
+          (a, b) => getUnreadCountForUser(b._id) - getUnreadCountForUser(a._id)
+        );
+        setUsers(sortedUsers);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+  
+    fetchUsers();
+  }, [loggedInUserId, messages, getUnreadCountForUser]);
   
 
   const handleBackToEmployees = () => {
@@ -249,11 +226,8 @@ function ChatPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // useEffect(() => {
-  //   if (messagesEndRef.current) {
-  //     messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // }, [messages]);
+  
+
 
   const handleHover = (index) => {
     setHoveredMessage(index);
@@ -315,16 +289,16 @@ function ChatPage() {
       });
   };
 
-
+  
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
-      {!showChat && <span className="mt-20"><ScrollingNavbar /></span>}
+      {!showChat && <ScrollingNavbar />}
       <EmployeeSidebar />
 
       {showChat ? (
         <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
-          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
+          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10">
             <button
               onClick={handleBackToEmployees}
               className="lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
@@ -334,7 +308,7 @@ function ChatPage() {
 
             <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
           </div>
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa] pr-20">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa]">
             {messages.map((message, index) => (
               <div
                 key={message._id}
@@ -440,7 +414,7 @@ function ChatPage() {
             <div ref={messagesEndRef} />
             {showCamera && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-                <Camera
+                <Camera    
                   onCapture={handleCapture}
                   onClose={handleCloseCamera}
                   loggedInUserId={loggedInUserId}
@@ -481,8 +455,8 @@ function ChatPage() {
 
         </div>
       ) : (
-        <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100">
-          <div className="sticky top-0 bg-white  z-10">
+        <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky mt-10 ">
+          <div className="sticky top-0 bg-white z-10">
             <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">
               All Employees
             </h1>
@@ -497,7 +471,7 @@ function ChatPage() {
               <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
             </div>
           </div>
-          <ul className="overflow-y-auto h-[87%] "> {/* Set a fixed height for the user list */}
+          <ul>
             {users
               .filter((user) =>
                 user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
@@ -506,21 +480,26 @@ function ChatPage() {
                 <li
                   key={user._id}
                   className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
-                    ? "bg-blue-200"
-                    : "bg-gray-200"
+                      ? "bg-blue-200"
+                      : "bg-gray-200"
                     } ${recipient === user._id ? "bg-green-200" : ""}`}
                   onClick={() => handleClick(user._id, user.name)}
                 >
                   <span>{user.name}</span>
                   <span>
-                    {unreadUsers.some(
-                      (unreadUser) => unreadUser.userId === user._id
-                    ) && <span className="text-red-500 font-bold">New</span>}
+                    {getUnreadCountForUser(user._id) > 0 && (
+                      <span className="text-red-500 font-bold">
+                        {getUnreadCountForUser(user._id)}
+                      </span>
+                    )}
                   </span>
                 </li>
               ))}
           </ul>
+
+
         </div>
+
       )}
 
       {showForwardModal && (
