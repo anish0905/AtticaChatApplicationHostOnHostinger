@@ -162,11 +162,11 @@ const EmpMessage = () => {
   };
 
   return (
-    <div className="flex h-screen lg:w-[95vw] w-full absolute">
+    <div className="flex h-[92%] lg:w-[95%] w-full fixed">
       {/* Chat Section */}
       {/* <ScrollingNavbar messages={messages} />  */}
       <div className="flex-1 flex flex-col w-full bg-[#f6f5fb]">
-        <div className="lg:text-[#ffffff] lg:bg-[#5443c3] bg-[#ffffff] text-[#5443c3] border border-[#5443c3] lg:text-2xl text-sm p-4 flex gap-2 items-center justify-between lg:mx-2 relative">
+        <div className="lg:text-[#ffffff] lg:bg-[#5443c3] bg-[#ffffff] text-[#5443c3] border border-[#5443c3] lg:text-2xl text-sm p-4 flex gap-2 items-center justify-between  relative">
           <IoArrowBack
             className="mr-2 cursor-pointer lg:text-[#ffffff] text-[#5443c3]"
             onClick={() => setMessages([])}
@@ -180,7 +180,7 @@ const EmpMessage = () => {
         </div>
 
 
-<div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto lg:mb-0">
+<div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto lg:mb-0 pr-20">
           {messages.length > 0 ? (
             messages.map((msg) => (
               <div

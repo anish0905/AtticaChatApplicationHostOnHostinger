@@ -1,5 +1,5 @@
 /* Add these styles in your CSS file */
-.scrolling-container {
+/* .scrolling-container {
   position: relative;
 }
 
@@ -20,4 +20,22 @@
 
 .animate-scroll {
   animation: scroll 40s linear infinite;
+} */
+
+@keyframes scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.scrolling-container {
+  overflow: hidden;
+}
+
+.scrolling-content {
+  display: flex;
+  white-space: nowrap;
 }

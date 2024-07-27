@@ -2,7 +2,6 @@ import React from 'react';
 import { GoArrowDown } from "react-icons/go";
 
 const ScrollToBottomButton = ({messagesEndRef}) => {
-  console.log("messageEndRef",messagesEndRef)
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
