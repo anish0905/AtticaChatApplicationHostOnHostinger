@@ -103,6 +103,47 @@ const UserSidebar = ({ value, newNotificationCount }) => {
     }
   };
 
+
+  const handlegroup = () => {
+    switch (value) {
+      case "HR":
+        navigate("/HrToAdminChat");
+        break;
+        case "CALLCENTER":
+          navigate("/CallCenterToAdminChat");
+          break;
+      case "ACCOUNT":
+        navigate("/AccountToAdminChat");
+        break;
+      case "SOFTWARE":
+        navigate("/groupChat");
+        break;
+      case "BOUNCER":
+        navigate("/BouncerToAdminChat");
+        break;
+      case "DIGITALMARKETING":
+        navigate("/DigitalMarketingToAdminChat");
+        break;
+      case "MONITORING":
+        navigate("/MonitoringTeamToAdminChat");
+        break;
+      case "VIRTUAL":
+        navigate("/VirtualTeamToAdminChat");
+        break;
+      case "SECURITY":
+        navigate("/SecurityToAdminChat");
+        break;
+      case "TE":
+        navigate("/techattoadmin");
+        break;
+        case "LOGISTIC":
+          navigate("/LogisticToAdminChat");
+          break;
+      default:
+        navigate("/");
+    }
+  };
+
   const handleLogout = () => {
     navigate("/");
     localStorage.clear();
@@ -233,6 +274,29 @@ const UserSidebar = ({ value, newNotificationCount }) => {
             ? "bg-blue-500 text-white"
             : "bg-[#fffefd]"
             }`}
+        >
+          <RiContactsLine />
+          <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            Admin
+          </span>
+        </div>
+
+        <div
+          onClick={handlegroup}
+          className={`group relative flex items-center rounded-full p-3 md:p-5 ${
+            isActive("/HrToAdminChat") ||
+            isActive("/CallCenterToAdminChat") ||
+            isActive("/AccountToAdminChat") ||
+            isActive("/groupChat") ||
+            isActive("/BouncerToAdminChat") ||
+            isActive("/DigitalMarketingToAdminChat") ||
+            isActive("/MonitoringTeamToAdminChat") ||
+            isActive("/VirtualTeamToAdminChat") ||
+            isActive("/SecurityToAdminChat") ||
+            isActive("/techattoadmin")
+              ? "bg-blue-500 text-white"
+              : "bg-[#fffefd]"
+          }`}
         >
           <RiContactsLine />
           <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">

@@ -38,7 +38,10 @@ const Modal = ({ show, onClose, HrTeam, onUpdate }) => {
           {[
             { label: "Hr Name", name: "name", type: "text" },
             { label: "Hr Email", name: "email", type: "email" },
-            { label: "Hr Password", name: "password", type: "password" }
+            { label: "Hr Password", name: "password", type: "password" },
+            {label:"Group",name:"group",type:"text"},
+             {label:"Grade",name:"grade",type:"text"}
+
           ].map((field, index) => (
             <div className="mb-4" key={index}>
               <label
@@ -91,7 +94,7 @@ const HrDetails = () => {
         const res = await axios.get(`${BASE_URL}/api/allUser/getAllHRTeam`);
         setHrTeams(res.data);
       } catch (error) {
-        console.error("Error fetching Virtual Teams", error);
+        console.error("Error fetching Hr Teams", error);
       }
     };
 
@@ -108,7 +111,7 @@ const HrDetails = () => {
       if (window.confirm("Are you sure? The data will be deleted permanently.")) {
         await axios.delete(`${BASE_URL}/api/allUser/delete/${HrTeamId}`);
         setHrTeams(HrTeams.filter((team) => team._id !== HrTeamId));
-        toast.success('Virtual Team deleted successfully');
+        toast.success('Hr Team deleted successfully');
       }
     } catch (error) {
       console.error("Error deleting Virtual Team", error);
@@ -136,7 +139,7 @@ const HrDetails = () => {
   };
 
   const filteredHrTeams = HrTeams.filter((team) =>
-    team.name.toLowerCase().includes(searchQuery.toLowerCase())
+    team?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -177,6 +180,12 @@ const HrDetails = () => {
                   Email
                 </th>
                 <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                Group
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                Grade
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
                   Actions
                 </th>
               </tr>
@@ -192,6 +201,12 @@ const HrDetails = () => {
                   </td>
                   <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
                     {team?.email}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                    {team?.group}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                    {team?.grade}
                   </td>
                   <td className="py-4 px-2 whitespace-nowrap sm:px-4 lex text-xs lg:text-sm ">
                     <button
@@ -226,3 +241,8 @@ const HrDetails = () => {
 };
 
 export default HrDetails;
+
+
+
+
+

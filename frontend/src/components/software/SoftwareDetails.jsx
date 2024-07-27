@@ -38,7 +38,9 @@ const Modal = ({ show, onClose, SoftwareTeam, onUpdate }) => {
           {[
             { label: "Software Name", name: "name", type: "text" },
             { label: "Software Email", name: "email", type: "email" },
-            { label: "Software Password", name: "password", type: "password" }
+            { label: "Software Password", name: "password", type: "password" },
+            {label:"Group",name:"group",type:"text"},
+            {label:"Grade",name:"grade",type:"text"},
           ].map((field, index) => (
             <div className="mb-4" key={index}>
               <label
@@ -140,7 +142,7 @@ const SoftwareDetails = () => {
   };
 
   const filteredSoftwareTeams = softwareTeams.filter(team =>
-    team.name.toLowerCase().includes(searchQuery.toLowerCase())
+    team?.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
@@ -181,6 +183,12 @@ const SoftwareDetails = () => {
                   Email
                 </th>
                 <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+               Group
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+               Grade
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
                   Actions
                 </th>
               </tr>
@@ -196,6 +204,12 @@ const SoftwareDetails = () => {
                   </td>
                   <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
                     {team?.email}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                    {team?.group}
+                  </td>
+                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                    {team?.grade}
                   </td>
                   <td className="py-4 px-2 whitespace-nowrap sm:px-4 lex text-xs lg:text-sm ">
                     <button

@@ -89,6 +89,7 @@ import AnnouncementByAdmin from "./components/admin/AnnouncementByAdmin";
 import FetchAllAnnouncement from "./components/admin/FetchAllAnnouncement";
 import SuperAdminDashboard from "./components/SuperAdmin/SuperAdminDashboard";
 import TeReg from "./components/TE/TeReg"
+import GroupChat from "./components/AllUsers/GroupChat";
 import CashierLogin from "./components/Cashier/CashierLogin";
 import CashierManagerChat from "./components/Cashier/CashierManagerChat";
 import ManagerCashier from "./components/manager/ManagerCashier";
@@ -212,6 +213,10 @@ const App = () => {
           <Route
             path="/SoftwareToAdminChat"
             element={<SoftwareToAdminChat />}
+          />
+          <Route
+            path="/groupChat"
+            element={<GroupChat />}
           />
           <Route path="/SecurityChat" element={<SecurityToSecurityChat />} />
           <Route path="/SecurityToAdminChat" element={<SecurityToAdmin />} />
