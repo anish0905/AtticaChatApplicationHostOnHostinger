@@ -36,9 +36,9 @@ const Modal = ({ show, onClose, HrTeam, onUpdate }) => {
         <h2 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">Edit Cashier Details</h2>
         <form>
           {[
-            { label: "Hr Name", name: "name", type: "text" },
-            { label: "Hr Email", name: "email", type: "email" },
-            { label: "Hr Password", name: "password", type: "password" }
+            { label: "Cashier Name", name: "name", type: "text" },
+            { label: "Cashier Email", name: "email", type: "email" },
+            { label: "Cashier Password", name: "password", type: "password" }
           ].map((field, index) => (
             <div className="mb-4" key={index}>
               <label
@@ -128,6 +128,7 @@ const CashierDetails = () => {
         )
       );
       toast.success('Virtual Team details updated successfully');
+      window.location.reload();
     } catch (error) {
       console.error("Error updating Virtual Team", error);
       toast.error('Failed to update Virtual Team');
