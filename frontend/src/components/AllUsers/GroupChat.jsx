@@ -7,6 +7,7 @@ import { BASE_URL } from "../../constants";
 import ScrollingNavbar from '../admin/ScrollingNavbar'
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import { useParams } from "react-router-dom";
 
 const GroupChat = () => {
     const [employees, setEmployees] = useState([]);
@@ -14,6 +15,7 @@ const GroupChat = () => {
     const [currentUserName, setCurrentUserName] = useState(""); // Assuming the current user is "AMMU BABU"
     const [newMessage, setNewMessage] = useState("");
     const [userGrade, setUserGrade] = useState("");
+    const [userGroup, setUserGroup] = useState("");
     const [lastMessageCount, setLastMessageCount] = useState(0); // Track the last count of messages
     const [initialLoad, setInitialLoad] = useState(true); // Track if it's the initial load
     const messagesEndRef = useRef(null);
@@ -21,13 +23,17 @@ const GroupChat = () => {
     const [showImageEditor, setShowImageEditor] = useState(false);
     const [imageForEditing, setImageForEditing] = useState('');
 
+    const {apiEndpoint} = useParams()
 
     // Fetch user details from local storage and set the grade
     useEffect(() => {
         const userDetails = localStorage.getItem("userDetails");
         if (userDetails) {
             const userDetailsObj = JSON.parse(userDetails);
+            setUserGroup(userDetailsObj.group);
+           
             setUserGrade(userDetailsObj.grade);
+
             setCurrentUserName(userDetailsObj.name);
         }
     }, []);
@@ -36,7 +42,7 @@ const GroupChat = () => {
     useEffect(() => {
         const fetchEmployees = async () => {
             try {
-                const response = await axios.get(`${BASE_URL}/api/allUser/getAllSoftwareTeam`);
+                const response = await axios.get(`${BASE_URL}/api/allUser/${apiEndpoint}`);
                 setEmployees(response.data);
             } catch (error) {
                 console.error("Error fetching employees:", error);
@@ -173,7 +179,7 @@ const GroupChat = () => {
                     />
                     {employees.length > 0 && (
                         <>
-                            <h2 className="lg:text-2xl text-sm font-bold">Group: {employees[0].group}</h2>
+                            <h2 className="lg:text-2xl text-sm font-bold">Group: {userGroup}</h2>
                             <h2 className="lg:text-2xl text-sm font-bold">Grade: {userGrade}</h2>
                         </>
                     )}
