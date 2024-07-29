@@ -174,11 +174,11 @@ const GroupChat = () => {
     };
 
     return (
-        <div className="flex h-screen lg:w-[95vw] w-full absolute flex-col lg:flex-row">
+        <div className="flex h-screen w-full absolute flex-col lg:flex-row">
             {/* Chat Section */}
-            {/* <ScrollingNavbar messages={messages} />  */}
+            <span><ScrollingNavbar messages={messages} /> </span>
             <UserSidebar />
-            <div className="flex-1 flex flex-col w-full bg-[#f6f5fb]">
+            <div className="flex-1 flex flex-col w-full bg-[#f6f5fb] lg:mt-20">
                 <div className="lg:text-[#ffffff] lg:bg-[#5443c3] bg-[#ffffff] text-[#5443c3] border border-[#5443c3] lg:text-2xl text-sm p-4 flex gap-2 items-center justify-between lg:mx-2 relative">
                     <IoArrowBack
                         className="mr-2 cursor-pointer lg:text-[#ffffff] text-[#5443c3]"
@@ -193,7 +193,7 @@ const GroupChat = () => {
                 </div>
 
 
-                <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto lg:mb-0">
+                <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto lg:mb-0 pr-20">
                     {messages.length > 0 ? (
                         messages.map((msg) => (
                             <div
