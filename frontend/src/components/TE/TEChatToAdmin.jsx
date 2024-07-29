@@ -14,6 +14,9 @@ import Camera from "../Camera/Camera";
 import GPSTracker from "../manager/Gps";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import ScrollingNavbar from "../admin/ScrollingNavbar"; 
+import { IoMdSend } from "react-icons/io";
+
 function TEChatToAdmin() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -302,15 +305,17 @@ function TEChatToAdmin() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden relative mt-20 lg:mt-0">
+      
+      <ScrollingNavbar />
       <GPSTracker managerId={loggedInUserId} path={"te-location"} />
       <Sidebar value="TE" />
       <div
-        className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 ${isChatSelected ? "hidden lg:flex" : "flex"
+        className={`sticky top-0 bg-white  z-10 w-full lg:w-1/4 p-4 overflow-y-auto  lg:mt-20 border border-purple-100 flex flex-col  text-black shadow ${isChatSelected ? "hidden lg:flex" : "flex"
           }`}
       >
-        <h1 className="text-2xl font-bold mb-4 text-[#5443c3]">All Admins</h1>
-        <div className="relative mb-4">
+        <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">All Admins</h1>
+        <div className="relative flex items-center mb-5">
           <input
             type="text"
             value={adminSearchQuery}
@@ -324,7 +329,7 @@ function TEChatToAdmin() {
           {filteredAdmins.map((admin) => (
             <div key={admin._id}>
               <div
-                className="w-full h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
+                className="w-full lg:text-xl md:text-2xl text-sm h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4  block items-center p-4 cursor-pointer"
                 onClick={() => handleClick(admin._id, admin.email)}
               >
                 <h1>{admin.email}</h1>
@@ -334,7 +339,7 @@ function TEChatToAdmin() {
                     unreadUser.data.map((message) => (
                       <div
                         key={message._id}
-                        className="text-orange-600 flex justify-between items-center content-center gap-5 mt-2"
+                        className="text-orange-600 relative break-words whitespace-pre-wrap my-2 "
                         onClick={() => handleShowMessage(admin._id)}
                       >
                         {!showMessages[admin._id] ? (
@@ -371,17 +376,17 @@ function TEChatToAdmin() {
       </div>
 
       {isChatSelected && (
-        <div className="w-full lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb] sticky top-0 z-10">
+        <div className="w-full h-screen lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
           {isChatSelected && (
-            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between border border-[#5443c3] lg:mt-20">
               <button
-                className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+               className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg mt-2"
                 onClick={handleBackToUserList}
               >
                 <FaArrowLeft />
               </button>
 
-              <h1 className="text-2xl font-bold">Chat with {recipientName}</h1>
+              <h1 className="lg:text-2xl text-base font-bold ml-auto">Chat with {recipientName}</h1>
               <Link
                 to={"/"}
                 className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
@@ -391,11 +396,11 @@ function TEChatToAdmin() {
             </div>
           )}
 
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
+          <div className="flex flex-col flex-1  pt-4 relative overflow-y-auto pr-20" style={{ maxHeight: "80vh" }}>
             {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex relative ${message.sender === loggedInUserId
+                className={`flex  relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
                   ? "justify-end"
                   : "justify-start"
                   } mb-2  `}
@@ -403,10 +408,10 @@ function TEChatToAdmin() {
                 onMouseLeave={() => handleLeave()}
               >
                 <div
-                  className={`w-1/3 p-2 rounded-md relative ${message.sender === loggedInUserId
-                    ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl"
-                    : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
-                    }`}
+                  className={`relative lg:text-3xl md:text-xl text-sm font-bold ${message.sender === loggedInUserId
+                    ? " bg-[#e1dff3] border border-[#5443c3] text-[#5443c3] self-end rounded-tr-3xl rounded-bl-3xl "
+                    : "bg-white text-[#5443c3] border border-[#5443c3]  self-start rounded-tl-3xl rounded-br-3xl relative"
+                    }py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                 >
                   {/* //---------------> */}
                   {message.content && message.content.originalMessage && (
@@ -425,7 +430,7 @@ function TEChatToAdmin() {
                       <img
                         src={message.content.image}
                         alt="Image"
-                        className="max-w-xs rounded"
+                       className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
                       />
                     </>
                   )}
@@ -450,7 +455,7 @@ function TEChatToAdmin() {
                       href={message.content.document}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-orange-600 hover:underline"
+                      className="text-orange-600 hover:underline lg:text-8xl md:text-6xl text-4xl"
                     >
                       <IoIosDocument className="text-9xl" />
                     </a>
@@ -544,7 +549,7 @@ function TEChatToAdmin() {
               onClick={handleSendMessage}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             >
-              Send
+         <IoMdSend />
             </button>
             <AllUsersFileModel
               sender={loggedInUserId}

@@ -18,6 +18,7 @@ import Camera from "../Camera/Camera";
 import UserSidebar from "../AllUsers/UserSidebar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import ScrollingNavbar from "../admin/ScrollingNavbar";
 
 function CallCenterToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -288,11 +289,13 @@ function CallCenterToAdminChat() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen relative">
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden relative mt-20 lg:mt-0">
+       <ScrollingNavbar />
      <UserSidebar value="CALLCENTER" />
-      <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 border border-[#5443c3] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
-        <h1 className="lg:text-2xl md:text-2xl text-xl font-bold mb-4 text-[#5443c3] text-left">All Admins</h1>
-        <div className="relative mb-4 my-2">
+
+      <div className={`sticky top-0 bg-white  z-10 w-full lg:w-1/4 p-4 overflow-y-auto  lg:mt-20 border border-purple-100 flex flex-col  text-black shadow ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
+        <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">All Admins</h1>
+        <div className="relative flex items-center mb-5">
           <input
             type="text"
             value={adminSearchQuery}
