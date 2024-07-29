@@ -73,7 +73,7 @@ function FetchAllAnnouncement() {
 return (
     <div className="flex flex-col lg:flex-row h-screen relative">
        <span className='mt-20'><ScrollingNavbar messages={messages} /></span>
-      <EmployeeSidebar/>
+      {/* <EmployeeSidebar/> */}
       {renderSidebar()}
       <div className="flex-col bg-[#eef2fa] text-black p-4 shadow w-full lg:w-full flex lg:flex lg:mt-20"> {/* Adjust for navbar height */}
         <div className="h-screen overflow-y-auto">

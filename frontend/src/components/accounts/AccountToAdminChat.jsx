@@ -18,6 +18,7 @@ import Camera from "../Camera/Camera";
 import EditImageModal from '../AllUsers/EditImageModal'; 
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import ScrollingNavbar from "../admin/ScrollingNavbar";
 
 function AccountToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -343,19 +344,21 @@ function AccountToAdminChat() {
   .sort((a, b) => b.unreadCount - a.unreadCount);
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen relative">
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden relative mt-20 lg:mt-0">
+        <ScrollingNavbar />
       <Sidebar value="ACCOUNT" />
-      <div className={`flex flex-col bg-white text-black p-4 shadow w-full lg:w-1/4 border border-[#5443c3] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
-        <h1 className="lg:text-2xl md:text-2xl text-xl font-bold mb-4 text-[#5443c3] text-left">All Admins</h1>
-        <div className="relative mb-4 my-2 ">
+
+      <div className={`sticky top-0 bg-white  z-10 w-full lg:w-1/4 p-4 overflow-y-auto  lg:mt-20 border border-purple-100 flex flex-col  text-black shadow  ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
+        <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">All Admins</h1>
+        <div className="relative flex items-center mb-5">
           <input
             type="text"
             value={adminSearchQuery}
             onChange={(e) => setAdminSearchQuery(e.target.value)}
-            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border-2 border-[#5443c3] shadow-lg "
+            className="w-full h-10 p-2 text-base text-gray-700 rounded-xl pl-10 bg-white border border-[#5443c3] shadow-lg"
             placeholder="Search by email..."
           />
-          <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl " />
+          <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
         </div>
 
 
@@ -385,10 +388,10 @@ function AccountToAdminChat() {
         <div className="w-full h-screen lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
 
           {isChatSelected && (
-            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between">
+            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between border border-[#5443c3] lg:mt-20">
 
               <button
-                className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg mt-2"
+               className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg mt-2"
                 onClick={handleBackToUserList}
               >
                 <FaArrowLeft />
@@ -397,7 +400,7 @@ function AccountToAdminChat() {
               <h1 className="lg:text-2xl text-base font-bold ml-auto">Chat with {recipientName}</h1>
               <Link
                 to={"/"}
-                className="group relative flex items-center justify-end font-extrabold rounded-full p-3 md:p-5"
+                className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
               >
                 {/* <BiLogOut /> */}
               </Link>
@@ -406,7 +409,7 @@ function AccountToAdminChat() {
           )}
 
 
-          <div className="flex flex-col flex-1 px-4 pt-4 relative overflow-y-auto">
+          <div className="flex flex-col flex-1  pt-4 relative overflow-y-auto pr-20" style={{ maxHeight: "80vh" }}>
             {messages.map((message, index) => (
               <div
                 key={index}
@@ -415,7 +418,7 @@ function AccountToAdminChat() {
                 onMouseLeave={() => handleLeave()}
               >
                 <div
-                  className={`relative lg:text-2xl md:text-xl text-sm ${message.sender === loggedInUserId ? "bg-[#5443c3] text-white self-end rounded-tr-3xl rounded-bl-3xl" : "bg-white text-[#5443c3] self-start rounded-tl-3xl rounded-br-3xl relative"
+                  className={`relative lg:text-3xl md:text-xl text-sm font-bold ${message.sender === loggedInUserId ?  " bg-[#e1dff3] border border-[#5443c3] text-[#5443c3] self-end rounded-tr-3xl rounded-bl-3xl " : "bg-white text-[#5443c3] border border-[#5443c3]  self-start rounded-tl-3xl rounded-br-3xl relative"
                     } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                 >
                   {/* //---------------> */}
@@ -447,7 +450,7 @@ function AccountToAdminChat() {
                       href={message.content.document}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-orange-600 hover:underline"
+                      className="text-orange-600 hover:underline lg:text-8xl md:text-6xl text-4xl"
                     >
                       <IoIosDocument className="text-9xl" />
                     </a>
@@ -458,7 +461,7 @@ function AccountToAdminChat() {
                       Your browser does not support the video tag.
                     </video>
                   )}
-                  <span className="text-xs text-black">
+                  <span className="text-xs font-medium text-gray-500">
                     {new Date(message.createdAt).toLocaleString()}
                   </span>
                   {

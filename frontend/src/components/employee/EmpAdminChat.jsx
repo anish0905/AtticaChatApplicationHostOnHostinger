@@ -344,7 +344,7 @@ function EmpAdminChat() {
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden relative mt-20 lg:mt-0">
       <ScrollingNavbar />
       <EmployeeSidebar />
-      <div className={`sticky top-0 bg-white  z-10 w-full lg:w-1/4 p-4 overflow-y-auto  lg:mt-20 border border-purple-100 flex flex-col  text-black shadow ] ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
+      <div className={`sticky top-0 bg-white  z-10 w-full lg:w-1/4 p-4 overflow-y-auto  lg:mt-20 border border-purple-100 flex flex-col  text-black shadow  ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
         <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">All Admins</h1>
         <div className="relative flex items-center mb-5">
           <input
@@ -376,9 +376,6 @@ function EmpAdminChat() {
       </div>
 
       {isChatSelected && (
-
-
-
         <div className="w-full h-screen lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb] ">
 
 

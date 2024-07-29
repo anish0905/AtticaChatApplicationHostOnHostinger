@@ -276,6 +276,8 @@ function BillingTeamChat() {
   const handleAnnouncement = () => {
     navigate(`/fetchAllAnnouncement/${'managerChat'}`);
   };
+  
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -337,10 +339,10 @@ function BillingTeamChat() {
    
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
+      
     {!showChat && <span className="mt-20"><ScrollingNavbar  /></span>}
    <BillingSidebar/>
-    <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10 ">
-  
+   
       {showChat ? (
         <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
           <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
@@ -353,18 +355,15 @@ function BillingTeamChat() {
 
 
             <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
-
-
-
           </div>
 
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa]  pr-20">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] h-screen pr-20">
             {messages.map((message, index) => (
               <div
                 key={message._id}
                 className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap lg:text-3xl md:text-xl text-sm font-bold ${message.sender === loggedInUserId
-                  ? "self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-                  : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                  ? "self-end bg-[#e1dff3] text-[#5443c3] border border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+                  :  "self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                   }`}
 
                 onMouseEnter={() => handleHover(index)}
@@ -392,13 +391,13 @@ function BillingTeamChat() {
                     href={message.content.document}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-orange-500 hover:underline"
+                   className="text-orange-500 hover:underline lg:text-8xl md:text-6xl text-4xl"
                   >
                     <IoIosDocument className="text-9xl" />
                   </a>
                 )}
                 {message.content && message.content.video && (
-                  <video controls className="max-w-xs">
+                  <video controls className="max-w-xs lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32 text-4xl">
                     <source src={message.content.video} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
@@ -410,7 +409,7 @@ function BillingTeamChat() {
                     className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
                   />
                 )}
-                <span className="text-xs text-black">
+                <span className="text-xs font-base  text-gray-500">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
 
@@ -464,13 +463,13 @@ function BillingTeamChat() {
               </div>
             )}
           </div>
-          <div className="flex items-center p-4 bg-[#eef2fa] border-t border-gray-200  fixed bottom-0 w-full lg:static">
+          <div className="flex items-center p-4 bg-[#eef2fa] border-t border-gray-200 fixed bottom-0 w-full lg:static">
             <input
               type="text"
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type a message..."
-              className="flex-grow p-2 border-2 rounded-lg mr-2 border-[#5443c3]"
+              className="flex-grow p-2 border rounded-lg mr-2 border-[#5443c3]"
             />
             <button
               onClick={() => setShowCamera(true)}
@@ -491,17 +490,16 @@ function BillingTeamChat() {
           <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       ) : (
-        <div className="w-full bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">
-   
+        <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">
             <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">All Manager Team</h1>
-
-            <div className="relative ml-4">
-              <div
+            <div>
+              
+              {/* <div
                 onClick={handleAnnouncement}
                 className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/fetchAllAnnouncement") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
               >
                 <IoMdNotificationsOutline className="text-lg md:text-2xl lg:text-3xl" />
-              </div>
+              </div> */}
 
               {announcements.length > 0 && (
                 <span className="relative -top-11 -right-5 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
@@ -520,12 +518,12 @@ function BillingTeamChat() {
               onClick={handleLogout}
               className=" flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full h-auto "
             >
-              <div className="relative flex items-center justify-center">
+              {/* <div className="relative flex items-center justify-center">
                 <span className="absolute bottom-full mb-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Logout
                 </span>
                 <BiLogOut className="mx-10 my-2 text-lg md:text-2xl lg:text-3xl" />
-              </div>
+              </div> */}
 
 
             </div>
@@ -593,7 +591,7 @@ function BillingTeamChat() {
          
         />
       )}
-    </div>
+
     </div>
   );
 }
