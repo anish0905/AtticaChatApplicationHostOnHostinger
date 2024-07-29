@@ -17,6 +17,7 @@ import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 import ManagerSidebar from "./ManagerSidebar";
+import GPSTracker from "./Gps";
 
 function ManagerChat() {
   const [messages, setMessages] = useState([]);
@@ -286,7 +287,7 @@ function ManagerChat() {
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
       
-
+      <GPSTracker managerId={loggedInUserId} path={"managerlocation"} />
       {!showChat && <span className="mt-20"><ScrollingNavbar /></span>}
       <ManagerSidebar/>
 
