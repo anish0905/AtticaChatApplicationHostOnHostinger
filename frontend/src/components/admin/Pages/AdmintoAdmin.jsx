@@ -45,16 +45,59 @@ function AdmintoAdmin() {
   const [imageForEditing, setImageForEditing] = useState('');
 
 
-  // Function to handle click on admin or employee to initiate chat
-  const handleClick = (id, name) => {
-    setRecipient(id);
-    setRecipientName(name);
-    setIsChatSelected(true);
-    setSelectedChatUserId(id);
-    fetchMessages(loggedInUserId, id);
+  const [newAdminCountMessage, setNewAdminCountMessage] = useState(() => JSON.parse(localStorage.getItem("newAdminCountMessage") || "[]"));
+  const [lastAdminMessageCounts, setLastAdminMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]"));
+  const [currentAdminCountMessage, setCurrentAdminCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]"));
+   
+  
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setLastAdminMessageCounts(JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]"));
+      setNewAdminCountMessage(JSON.parse(localStorage.getItem("newAdminCountMessage") || "[]"));
+      setCurrentAdminCountMessage(JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]"));
+    }, 1000); // Update every second
+  
+    return () => clearInterval(intervalId); // Clean up on component unmount
+  }, []);
 
-  };
+  
 
+ const handleAdminClick = (id, name) => {
+  console.log("id, name ",id, name)
+  const currentAdminCountMessage = JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]");
+  const lastAdminMessageCounts = JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]");
+
+  const updatedLastAdminMessageCounts = lastAdminMessageCounts.map((admin) => {
+    if (admin.userId === id) {
+      return { userId: admin.userId, count: currentAdminCountMessage.find((u) => u.userId === id)?.count || 0 };
+    }
+    return admin;
+  });
+
+  if (!updatedLastAdminMessageCounts.some((admin) => admin.userId === id)) {
+    const currentCount = currentAdminCountMessage.find((u) => u.userId === id)?.count || 0;
+    updatedLastAdminMessageCounts.push({ userId: id, count: currentCount });
+  }
+
+  localStorage.setItem("lastAdminMessageCounts", JSON.stringify(updatedLastAdminMessageCounts));
+  setLastAdminMessageCounts(updatedLastAdminMessageCounts);
+  setRecipient(id);
+  setRecipientName(name);
+  setIsChatSelected(true);
+  setSelectedChatUserId(id);
+  fetchMessages(loggedInUserId, id);
+};
+
+const getUnreadCountForAdmin = (adminId) => {
+  console.log("id   ",adminId)
+  const currentAdminCountMessage = JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]");
+  const lastAdminMessageCounts = JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]");
+
+  const currentCount = currentAdminCountMessage.find((admin) => admin.userId === adminId)?.count || 0;
+  const lastCount = lastAdminMessageCounts.find((admin) => admin.userId === adminId)?.count || 0;
+  console.log("currentCount - lastCount  ",currentCount - lastCount)
+  return currentCount - lastCount;
+};
   // Function to fetch messages between two users
   const fetchMessages = (sender, recipient) => {
     axios
@@ -276,48 +319,21 @@ function AdmintoAdmin() {
 
 
         <div className="h-5/6 overflow-y-auto">
-          {filteredAdmins.map((admin) => (
-            <div key={admin._id}>
-              <div
-                className="w-full  h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 text-2xl block items-center p-4 cursor-pointer"
-                onClick={() => handleClick(admin._id, admin.email)}
-              >
-                <h1>{admin.email}</h1>
-                {unreadUsersAdmin
-                  .filter((unreadUser) => unreadUser.userId === admin._id)
-                  .flatMap((unreadUser) =>
-                    unreadUser.data.map((message) => (
-                      <div
-                        key={message._id}
-                        className="text-orange-600 flex justify-between items-center content-center gap-5 mt-2"
-                        onClick={() => handleShowMessage(admin._id)}
-                      >
-                        {!showMessages[admin._id] ? (
-                          <>
-                
-                {/* //---------------> */}
-                            {message.content && message.content.text && (
-                              <p className="pe-2 text-base">{message.content.text}</p>
-                            )}
-                            {message.content && message.content.image && <FaImage />}
-                            {message.content && message.content.video && <FaVideo />}
-                            {message.content && message.content.document && (
-                              <IoIosDocument className="text-xl" />
-                            )}
-                            <p className="text-xs text-black">
-                              {new Date(message.createdAt).toLocaleDateString()}{" "}
-                              {new Date(message.createdAt).toLocaleTimeString()}
-                            </p>
-                          </>
-                        ) : (
-                          <p></p>
-                        )}
-                      </div>
-                    ))
-                  )}
-              </div>
-            </div>
-          ))}
+        {filteredAdmins.map((admin) => (
+  <div key={admin._id}>
+    <div
+      className="w-full lg:text-xl md:text-2xl text-sm h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 block items-center p-4 cursor-pointer"
+      onClick={() => handleAdminClick(admin._id, admin.email)}
+    >
+      <h1>{admin.email} </h1>
+      {getUnreadCountForAdmin(admin._id) > 0 && (
+        <span className="text-red-500 font-bold">
+            {getUnreadCountForAdmin(admin._id)}
+        </span>
+      )}
+    </div>
+  </div>
+))}
         </div>
       </div>
 

@@ -45,13 +45,62 @@ function EmpAdminChat() {
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
-  const handleClick = (id, name) => {
+  const [newAdminCountMessage, setNewAdminCountMessage] = useState(() => JSON.parse(localStorage.getItem("newAdminCountMessage") || "[]"));
+  const [lastAdminMessageCounts, setLastAdminMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]"));
+  const [currentAdminCountMessage, setCurrentAdminCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]"));
+
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setLastAdminMessageCounts(JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]"));
+      setNewAdminCountMessage(JSON.parse(localStorage.getItem("newAdminCountMessage") || "[]"));
+      setCurrentAdminCountMessage(JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]"));
+    }, 1000); // Update every second
+
+    return () => clearInterval(intervalId); // Clean up on component unmount
+  }, []);
+
+
+
+  const handleAdminClick = (id, name) => {
+    console.log("hi................")
+    console.log("id, name ", id, name)
+    const currentAdminCountMessage = JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]");
+    const lastAdminMessageCounts = JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]");
+
+    const updatedLastAdminMessageCounts = lastAdminMessageCounts.map((admin) => {
+      if (admin.userId === id) {
+        return { userId: admin.userId, count: currentAdminCountMessage.find((u) => u.userId === id)?.count || 0 };
+      }
+      return admin;
+    });
+
+    if (!updatedLastAdminMessageCounts.some((admin) => admin.userId === id)) {
+      const currentCount = currentAdminCountMessage.find((u) => u.userId === id)?.count || 0;
+      updatedLastAdminMessageCounts.push({ userId: id, count: currentCount });
+    }
+
+    localStorage.setItem("lastAdminMessageCounts", JSON.stringify(updatedLastAdminMessageCounts));
+    setLastAdminMessageCounts(updatedLastAdminMessageCounts);
     setRecipient(id);
     setRecipientName(name);
     setIsChatSelected(true);
     setSelectedChatUserId(id);
     fetchMessages(loggedInUserId, id);
   };
+
+  const getUnreadCountForAdmin = (adminId) => {
+
+    const currentAdminCountMessage = JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]");
+    const lastAdminMessageCounts = JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]");
+
+    const currentCount = currentAdminCountMessage.find((admin) => admin.userId === adminId)?.count || 0;
+    const lastCount = lastAdminMessageCounts.find((admin) => admin.userId === adminId)?.count || 0;
+    console.log("currentCount - lastCount  ", currentCount - lastCount)
+    return currentCount - lastCount;
+  };
+
+
 
   // Function to fetch messages between two users
   const fetchMessages = (sender, recipient) => {
@@ -88,7 +137,7 @@ function EmpAdminChat() {
 
 
   // Automatically scroll to bottom when new messages are received
-   
+
 
   // Function to send a new message
   const handleSendMessage = () => {
@@ -200,10 +249,10 @@ function EmpAdminChat() {
     }));
   };
 
-  
+
 
   // Fetch pop-up SMS notifications at regular intervals
- 
+
   const handleHover = (index) => {
     setHoveredMessage(index);
   };
@@ -265,23 +314,31 @@ function EmpAdminChat() {
   };
   const handleEditImage = (message) => {
     setShowImageEditor(true);
-    setImageForEditing((message.content.image ||message.content.camera));
+    setImageForEditing((message.content.image || message.content.camera));
     // console.log("*******",imageForEditing)
   };
 
   const handleDelete = (message) => {
     axios
-     .delete(`${BASE_URL}/api/empadminsender/delmessages/${message._id}`)
-     .then((response) => {
-      
-        setMessages(messages.filter((m) => m._id!== message._id));
+      .delete(`${BASE_URL}/api/empadminsender/delmessages/${message._id}`)
+      .then((response) => {
+
+        setMessages(messages.filter((m) => m._id !== message._id));
         setShowDropdown("null")
       })
 
-     .catch((error) => {
+      .catch((error) => {
         console.error(error);
       });
   };
+  
+  const sortedAdmins = filteredAdmins
+    .map((admin) => ({
+      ...admin,
+      unreadCount: getUnreadCountForAdmin(admin._id),
+    }))
+    .sort((a, b) => b.unreadCount - a.unreadCount);
+
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden relative mt-20 lg:mt-0">
@@ -300,43 +357,18 @@ function EmpAdminChat() {
           <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
         </div>
         <div className="h-5/6 overflow-y-auto">
-          {filteredAdmins.map((admin) => (
+          {sortedAdmins.map((admin) => (
             <div key={admin._id}>
               <div
-                className="w-full lg:text-xl md:text-2xl text-sm h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4  block items-center p-4 cursor-pointer"
-                onClick={() => handleClick(admin._id, admin.email)}
+                className="w-full lg:text-xl md:text-2xl text-sm h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 flex justify-between items-center p-4 cursor-pointer"
+                onClick={() => handleAdminClick(admin._id, admin.email)}
               >
                 <h1>{admin.email}</h1>
-                {unreadUsersAdmin
-                  .filter((unreadUser) => unreadUser.userId === admin._id)
-                  .flatMap((unreadUser) =>
-                    unreadUser.data.map((message) => (
-                      <div
-                        key={message._id}
-                        className="text-orange-600 relative break-words whitespace-pre-wrap my-2 "
-                        onClick={() => handleShowMessage(admin._id)}
-                      >
-                        {!showMessages[admin._id] ? (
-                          <>
-                            {message.content && message.content.text && (
-                              <p className="pe-2 text-base">{message.content.text}</p>
-                            )}
-                            {message.content && message.content.image && <FaImage />}
-                            {message.content && message.content.video && <FaVideo />}
-                            {message.content && message.content.document && (
-                              <IoIosDocument className="text-xl" />
-                            )}
-                            <p className="text-xs text-black">
-                              {new Date(message.createdAt).toLocaleDateString()}{" "}
-                              {new Date(message.createdAt).toLocaleTimeString()}
-                            </p>
-                          </>
-                        ) : (
-                          <p></p>
-                        )}
-                      </div>
-                    ))
-                  )}
+                {admin.unreadCount > 0 && (
+                  <p className="text-red-500 font-bold">
+                    {admin.unreadCount}
+                  </p>
+                )}
               </div>
             </div>
           ))}
@@ -393,13 +425,13 @@ function EmpAdminChat() {
                       </span>
                     </div>
                   )}
-                 {message.content && message.content.camera && (
-                  <img
-                    src={message.content.camera}
-                    alt="Image"
-                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
-                  />
-                )}
+                  {message.content && message.content.camera && (
+                    <img
+                      src={message.content.camera}
+                      alt="Image"
+                      className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                    />
+                  )}
                   {message.content && message.content.text && (
                     <p className="text-sm">{message.content.text}</p>
                   )}
@@ -434,40 +466,40 @@ function EmpAdminChat() {
                         className="absolute top-2 right-2 cursor-pointer"
                         onClick={() => handleDropdownClick(index)}
                       />
-                              {showDropdown === index && (
-                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleReply(message)}
-                      >
-                        Reply
-                      </button>
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleForward(message)}
-                      >
-                        Forward
-                      </button>
-                      {(message.content.image ||message.content.camera) && (
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleEditImage(message)}
-                        >
-                          Edit Image
-                        </button>
+                      {showDropdown === index && (
+                        <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                          <button
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleReply(message)}
+                          >
+                            Reply
+                          </button>
+                          <button
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleForward(message)}
+                          >
+                            Forward
+                          </button>
+                          {(message.content.image || message.content.camera) && (
+                            <button
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              onClick={() => handleEditImage(message)}
+                            >
+                              Edit Image
+                            </button>
+                          )}
+                          {
+                            message.sender === loggedInUserId && (
+                              <button
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                onClick={() => handleDelete(message)}
+                              >
+                                delete
+                              </button>
+                            )
+                          }
+                        </div>
                       )}
-                      {
-                      message.sender === loggedInUserId && (
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleDelete(message)}
-                        >
-                          delete
-                        </button>
-                      )
-                    }
-                    </div>
-                  )}
                     </>
                   }
                 </div>
@@ -500,7 +532,7 @@ function EmpAdminChat() {
             >
               <FaCamera />
             </button>
-            
+
 
             <button
               onClick={handleSendMessage}
@@ -510,13 +542,13 @@ function EmpAdminChat() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails?.name} />
           </div>
-          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef} />
         </div>
       )}
 
 
 
-     
+
 
       {showForwardModal && (
 

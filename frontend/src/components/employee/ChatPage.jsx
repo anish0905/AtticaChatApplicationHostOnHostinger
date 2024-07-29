@@ -42,8 +42,8 @@ function ChatPage() {
   const [lastUserMessageCounts, setLastUserMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
   const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
 
- 
- 
+
+
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -102,6 +102,20 @@ function ChatPage() {
 
     return currentCount - lastCount;
   };
+
+  // Function to sort users based on unread message count
+  const sortedUsers = users
+    .filter((user) =>
+      user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
+    )
+    .map((user) => ({
+      ...user,
+      unreadCount: getUnreadCountForUser(user._id),
+    }))
+    .sort((a, b) => b.unreadCount - a.unreadCount);
+
+
+    
 
   const fetchMessages = (sender, recipient) => {
     axios
@@ -206,10 +220,10 @@ function ChatPage() {
         console.error("Error fetching users:", error);
       }
     };
-  
+
     fetchUsers();
   }, [loggedInUserId, messages, getUnreadCountForUser]);
-  
+
 
   const handleBackToEmployees = () => {
     setShowChat(false);
@@ -226,7 +240,7 @@ function ChatPage() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  
+
 
 
   const handleHover = (index) => {
@@ -289,7 +303,7 @@ function ChatPage() {
       });
   };
 
-  
+
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
@@ -414,7 +428,7 @@ function ChatPage() {
             <div ref={messagesEndRef} />
             {showCamera && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-                <Camera    
+                <Camera
                   onCapture={handleCapture}
                   onClose={handleCloseCamera}
                   loggedInUserId={loggedInUserId}
@@ -472,29 +486,25 @@ function ChatPage() {
             </div>
           </div>
           <ul>
-            {users
-              .filter((user) =>
-                user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
-              )
-              .map((user) => (
-                <li
-                  key={user._id}
-                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
-                      ? "bg-blue-200"
-                      : "bg-gray-200"
-                    } ${recipient === user._id ? "bg-green-200" : ""}`}
-                  onClick={() => handleClick(user._id, user.name)}
-                >
-                  <span>{user.name}</span>
-                  <span>
-                    {getUnreadCountForUser(user._id) > 0 && (
-                      <span className="text-red-500 font-bold">
-                        {getUnreadCountForUser(user._id)}
-                      </span>
-                    )}
-                  </span>
-                </li>
-              ))}
+            {sortedUsers.map((user) => (
+              <li
+                key={user._id}
+                className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
+                  ? "bg-blue-200"
+                  : "bg-gray-200"
+                  } ${recipient === user._id ? "bg-green-200" : ""}`}
+                onClick={() => handleClick(user._id, user.name)}
+              >
+                <span>{user.name}</span>
+                <span>
+                  {user.unreadCount > 0 && (
+                    <span className="text-red-500 font-bold">
+                      {user.unreadCount}
+                    </span>
+                  )}
+                </span>
+              </li>
+            ))}
           </ul>
 
 
