@@ -276,6 +276,8 @@ function BillingTeamChat() {
   const handleAnnouncement = () => {
     navigate(`/fetchAllAnnouncement/${'managerChat'}`);
   };
+  
+
 
   useEffect(() => {
     const fetchData = async () => {

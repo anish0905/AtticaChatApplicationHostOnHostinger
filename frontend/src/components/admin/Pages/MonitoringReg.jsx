@@ -164,3 +164,11 @@ const MonitoringReg = () => {
 };
 
 export default MonitoringReg;
+
+
+
+
+
+
+
+

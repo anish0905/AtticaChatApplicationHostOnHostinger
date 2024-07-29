@@ -8,6 +8,7 @@ import ScrollingNavbar from '../admin/ScrollingNavbar'
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 import { useNavigate, useParams } from "react-router-dom";
+import UserSidebar from './UserSidebar'
 
 const GroupChat = () => {
     const [employees, setEmployees] = useState([]);
@@ -173,9 +174,10 @@ const GroupChat = () => {
     };
 
     return (
-        <div className="flex h-screen lg:w-[95vw] w-full absolute">
+        <div className="flex h-screen lg:w-[95vw] w-full absolute flex-col lg:flex-row">
             {/* Chat Section */}
             {/* <ScrollingNavbar messages={messages} />  */}
+            <UserSidebar />
             <div className="flex-1 flex flex-col w-full bg-[#f6f5fb]">
                 <div className="lg:text-[#ffffff] lg:bg-[#5443c3] bg-[#ffffff] text-[#5443c3] border border-[#5443c3] lg:text-2xl text-sm p-4 flex gap-2 items-center justify-between lg:mx-2 relative">
                     <IoArrowBack
