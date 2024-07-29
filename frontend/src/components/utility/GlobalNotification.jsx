@@ -8,7 +8,10 @@ const GlobalNotification = () => {
   const [messageCount, setMessageCount] = useState(0);
   const [adminMessages, setAdminMessages] = useState([]);
   const [adminMessageCount, setAdminMessageCount] = useState(0);
-  
+  const [lastUserMessageCounts, setLastUserMessageCounts] = useState([]);
+  const [adminUserMessageCounts, setAdminUserMessageCounts] = useState([]);
+  const [currentCountMessage, setCurrentCountMessage] = useState([]);
+
   const prevMessageCount = useRef(parseInt(localStorage.getItem('prevMessageCount')) || 0);
   const prevAdminMessageCount = useRef(parseInt(localStorage.getItem('prevAdminMessageCount')) || 0);
 
@@ -20,10 +23,16 @@ const GlobalNotification = () => {
         setMessages(fetchedMessages);
         setMessageCount(fetchedMessages.length);
 
-        // Initialize localStorage value if it's not set
-        if (!localStorage.getItem('prevMessageCount')) {
-          localStorage.setItem('prevMessageCount', fetchedMessages.length.toString());
-          prevMessageCount.current = fetchedMessages.length;
+        // Update current message counts
+        const updatedCounts = updateMessageCounts(fetchedMessages);
+        setCurrentCountMessage(updatedCounts);
+        localStorage.setItem('currentCountMessage', JSON.stringify(updatedCounts));
+
+        // Initialize last user message counts if not set
+        if (!localStorage.getItem('lastUserMessageCounts')) {
+          const initialCounts = updatedCounts;
+          setLastUserMessageCounts(initialCounts);
+          localStorage.setItem('lastUserMessageCounts', JSON.stringify(initialCounts));
         }
       } catch (error) {
         console.error('Error fetching messages:', error);
@@ -36,8 +45,10 @@ const GlobalNotification = () => {
         const fetchedAdminMessages = response.data;
         setAdminMessages(fetchedAdminMessages);
         setAdminMessageCount(fetchedAdminMessages.length);
+        const adminUserMessageCountsArray = updateMessageCounts(fetchedAdminMessages);
+        setAdminUserMessageCounts(adminUserMessageCountsArray);
+        localStorage.setItem('adminUserMessageCounts', JSON.stringify(adminUserMessageCountsArray));
 
-        // Initialize localStorage value if it's not set
         if (!localStorage.getItem('prevAdminMessageCount')) {
           localStorage.setItem('prevAdminMessageCount', fetchedAdminMessages.length.toString());
           prevAdminMessageCount.current = fetchedAdminMessages.length;
@@ -75,6 +86,9 @@ const GlobalNotification = () => {
       newMessages.forEach(message => showNotification(message));
       prevMessageCount.current = messageCount;
       localStorage.setItem('prevMessageCount', messageCount.toString());
+
+      // Calculate and store new message counts
+      updateAndStoreNewMessageCounts();
     }
   }, [messageCount, messages]);
 
@@ -90,7 +104,7 @@ const GlobalNotification = () => {
   const showNotification = (message) => {
     if (Notification.permission === "granted") {
       const notification = new Notification("New Message", {
-        body: `${message.senderName}: ${message.content.text}`,
+        body: `${message.senderName}: ${message.content?.text || ''}`,
       });
       notification.onclick = () => {
         window.focus();
@@ -105,16 +119,55 @@ const GlobalNotification = () => {
     notificationSound.play();
   };
 
+  const updateMessageCounts = (messages) => {
+    const counts = {};
+    messages.forEach(message => {
+      counts[message.sender] = (counts[message.sender] || 0) + 1;
+    });
+    return Object.entries(counts).map(([userId, count]) => ({ userId, count }));
+  };
+
+  const updateAndStoreNewMessageCounts = () => {
+    const lastCounts = JSON.parse(localStorage.getItem('lastUserMessageCounts')) || [];
+    const currentCounts = JSON.parse(localStorage.getItem('currentCountMessage')) || [];
+
+    const lastCountsMap = new Map(lastCounts.map(({ userId, count }) => [userId, count]));
+    const currentCountsMap = new Map(currentCounts.map(({ userId, count }) => [userId, count]));
+
+    const newCounts = [];
+
+    currentCountsMap.forEach((count, userId) => {
+      const lastCount = lastCountsMap.get(userId) || 0;
+      const newCount = count - lastCount;
+      newCounts.push({ userId, count: newCount });
+    });
+
+    // Ensure all users in lastCounts are included even if they have 0 new messages
+    lastCountsMap.forEach((lastCount, userId) => {
+      if (!currentCountsMap.has(userId)) {
+        newCounts.push({ userId, count: 0 });
+      }
+    });
+
+    localStorage.setItem('newCountMessage', JSON.stringify(newCounts));
+  };
+
   return (
     <div>
-      {/* {messages.map((message, index) => (
-        <div key={index}>
-          <strong>Sender:</strong> {message.senderName}, <strong>Text:</strong> {message.content.text}
+      {/* Example of displaying the message counts
+      {lastUserMessageCounts.map(({ userId, count }) => (
+        <div key={userId}>
+          User {userId} had {count} messages
         </div>
       ))}
-      {adminMessages.map((message, index) => (
-        <div key={index}>
-          <strong>Sender:</strong> {message.senderName}, <strong>Text:</strong> {message.content.text}
+      {currentCountMessage.map(({ userId, count }) => (
+        <div key={userId}>
+          User {userId} has {count} new messages
+        </div>
+      ))}
+      {adminUserMessageCounts.map(({ userId, count }) => (
+        <div key={userId}>
+          Admin User {userId} has {count} messages
         </div>
       ))} */}
     </div>

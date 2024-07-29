@@ -50,17 +50,74 @@ function SoftwareToSoftware() {
   //   setShowChat(true);
   // };
 
+ 
+  const [newCountMessage, setNewCountMessage] = useState(() => JSON.parse(localStorage.getItem("newCountMessage") || "[]"));
+  const [lastUserMessageCounts, setLastUserMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
+  const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
+
+ 
+ 
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setLastUserMessageCounts(JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
+      setNewCountMessage(JSON.parse(localStorage.getItem("newCountMessage") || "[]"));
+      setCurrentCountMessage(JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
+    }, 1000); // Update every second
+
+    return () => clearInterval(intervalId); // Clean up on component unmount
+  }, []);
+
   const handleClick = (id, name) => {
+    // Get the current count message and last user message counts from local storage
+    const currentCountMessage = JSON.parse(localStorage.getItem("currentCountMessage") || "[]");
+    const lastUserMessageCounts = JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]");
+
+    // Update lastUserMessageCounts with currentCountMessage for the clicked user
+    const updatedLastUserMessageCounts = lastUserMessageCounts.map((user) => {
+      if (user.userId === id) {
+        return { userId: user.userId, count: currentCountMessage.find((u) => u.userId === id)?.count || 0 };
+      }
+      return user;
+    });
+
+    // If the user is not in lastUserMessageCounts, add them
+    if (!updatedLastUserMessageCounts.some((user) => user.userId === id)) {
+      const currentCount = currentCountMessage.find((u) => u.userId === id)?.count || 0;
+      updatedLastUserMessageCounts.push({ userId: id, count: currentCount });
+    }
+
+    // Store the updated lastUserMessageCounts in local storage
+    localStorage.setItem("lastUserMessageCounts", JSON.stringify(updatedLastUserMessageCounts));
+
+    // Set the state and fetch messages
     setSender(loggedInUserId);
     setRecipient(id);
     setRecipientName(name);
     fetchMessages(loggedInUserId, id);
-    markMessagesAsRead(id);
     setShowChat(true);
   };
-  
 
- 
+  // Function to get the count for a user
+  const getCountForUser = (userId) => {
+    const newCountMessage = JSON.parse(localStorage.getItem("newCountMessage") || "[]");
+    const user = newCountMessage.find((item) => item.userId === userId);
+    return user ? user.count : 0;
+  };
+
+  // Function to get the unread count for a user
+  const getUnreadCountForUser = (userId) => {
+    const currentCountMessage = JSON.parse(localStorage.getItem("currentCountMessage") || "[]");
+    const lastUserMessageCounts = JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]");
+
+    const currentCount = currentCountMessage.find((user) => user.userId === userId)?.count || 0;
+    const lastCount = lastUserMessageCounts.find((user) => user.userId === userId)?.count || 0;
+
+    return currentCount - lastCount;
+  };
+
+
+
 
 
   // const fetchMessages = (sender, recipient) => {
@@ -76,24 +133,24 @@ function SoftwareToSoftware() {
   // };
   const fetchMessages = (sender, recipient) => {
     axios
-        .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
-        .then((response) => {
-            setMessages(response.data);
-            setUsers((prevUsers) =>
-                prevUsers
-                    .map((user) =>
-                        user._id === recipient
-                            ? { ...user } // Do not update the lastMessageTime here
-                            : user
-                    )
-                    .sort((a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime))
-            );
-            console.log(response);
-        })
-        .catch((error) => {
-            console.error(error);
-        });
-};
+      .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
+      .then((response) => {
+        setMessages(response.data);
+        setUsers((prevUsers) =>
+          prevUsers
+            .map((user) =>
+              user._id === recipient
+                ? { ...user } // Do not update the lastMessageTime here
+                : user
+            )
+            .sort((a, b) => new Date(b.lastMessageTime) - new Date(a.lastMessageTime))
+        );
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
 
 
@@ -125,7 +182,7 @@ function SoftwareToSoftware() {
         console.error(error);
       });
   }, []);
-  
+
 
   useEffect(() => {
     const intervalId = setInterval(() => fetchMessages(sender, recipient), 2000);
@@ -161,7 +218,7 @@ function SoftwareToSoftware() {
 
   const handleSendMessage = () => {
     if (!newMessage.trim() && !attachment) return;
-  
+
     const messageData = {
       sender: loggedInUserId,
       recipient: recipient,
@@ -171,14 +228,14 @@ function SoftwareToSoftware() {
       document: attachment?.type.startsWith("application/") ? attachment.url : null,
       video: attachment?.type.startsWith("video/") ? attachment.url : null,
     };
-  
+
     axios
       .post(`${BASE_URL}/api/postmessages`, messageData)
       .then((response) => {
         setMessages([...messages, response.data.data]);
         setNewMessage("");
         setAttachment(null);
-  
+
         // Update user list based on latest message time and status
         setUsers((prevUsers) =>
           prevUsers
@@ -232,27 +289,27 @@ function SoftwareToSoftware() {
 
   useEffect(() => {
     if (users.length > 0) {
-        const fetchUnreadMessages = async () => {
-            try {
-                const unreadUsersData = await Promise.all(
-                    users.map(async (user) => {
-                        const response = await axios.get(
-                            `${BASE_URL}/api/mark-messages-read/${user._id}`
-                        );
-                        return { userId: user._id, data: response.data };
-                    })
-                );
-                setUnreadUsers(unreadUsersData.filter((u) => u.data.length > 0));
-            } catch (error) {
-                console.error(error);
-            }
-        };
-        fetchUnreadMessages();
+      const fetchUnreadMessages = async () => {
+        try {
+          const unreadUsersData = await Promise.all(
+            users.map(async (user) => {
+              const response = await axios.get(
+                `${BASE_URL}/api/mark-messages-read/${user._id}`
+              );
+              return { userId: user._id, data: response.data };
+            })
+          );
+          setUnreadUsers(unreadUsersData.filter((u) => u.data.length > 0));
+        } catch (error) {
+          console.error(error);
+        }
+      };
+      fetchUnreadMessages();
     }
-}, [users]);
+  }, [users]);
 
 
-  
+
 
   const handleBackToEmployees = () => {
     setShowChat(false);
@@ -330,7 +387,7 @@ function SoftwareToSoftware() {
       prevUnreadUsers.filter((unreadUser) => unreadUser.userId !== recipientId)
     );
   };
-  
+
 
 
   const handleDelete = (message) => {
@@ -500,7 +557,7 @@ function SoftwareToSoftware() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
-          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef} />
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto ">
@@ -517,42 +574,33 @@ function SoftwareToSoftware() {
             <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
           </div>
           <ul>
-          {users
-  .filter((user) =>
-    user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
-  )
-  .map((user) => {
-    const isUnread = unreadUsers.some(
-      (unreadUser) => unreadUser.userId === user._id
-    );
-    const latestMessage = messages
-      .filter(
-        (message) =>
-          (message.sender === user._id && message.recipient === loggedInUserId) ||
-          (message.sender === loggedInUserId && message.recipient === user._id)
-      )
-      .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))[0];
-    const latestMessageText = latestMessage
-      ? latestMessage.text || (latestMessage.image && "Image") || (latestMessage.document && "Document")
-      : "";
+            {users
+              .filter((user) =>
+                user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
+              )
+              .map((user) => (
+                <li
+                  key={user._id}
+                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
+                      ? "bg-blue-200"
+                      : "bg-gray-200"
+                    } ${recipient === user._id ? "bg-green-200" : ""}`}
+                  onClick={() => handleClick(user._id, user.name)}
+                >
+                  <span>{user.name}</span>
+                  <span>
+                    {getUnreadCountForUser(user._id) > 0 && (
+                      <span className="text-red-500 font-bold">
+                        {getUnreadCountForUser(user._id)}
+                      </span>
+                    )}
+                  </span>
+                </li>
+              ))}
+          </ul>
 
-    return (
-      <li
-        key={user._id}
-        className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] font-bold ${isUnread && latestMessage && latestMessage.sender === user._id ? "bg-blue-100" : "bg-gray-200"} ${recipient === user._id ? "bg-green-200" : ""}`}
-        onClick={() => handleClick(user._id, user.name)}
-      >
-        <span>{user.name}</span>
-        <span>
-          {isUnread && latestMessage && latestMessage.sender === user._id && (
-            <span className="text-red-500 font-bold">New</span>
-          )}
-        </span>
-      </li>
-    );
-  })}     
-   </ul>
-        </div>           
+
+        </div>
       )}
 
       {showForwardModal && (

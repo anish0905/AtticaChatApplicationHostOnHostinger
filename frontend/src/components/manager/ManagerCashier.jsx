@@ -40,13 +40,71 @@ function ManagerCashier() {
   const [imageForEditing, setImageForEditing] = useState('');
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
+  const [newCountMessage, setNewCountMessage] = useState(() => JSON.parse(localStorage.getItem("newCountMessage") || "[]"));
+  const [lastUserMessageCounts, setLastUserMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
+  const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
+
+ 
+ 
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setLastUserMessageCounts(JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
+      setNewCountMessage(JSON.parse(localStorage.getItem("newCountMessage") || "[]"));
+      setCurrentCountMessage(JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
+    }, 1000); // Update every second
+
+    return () => clearInterval(intervalId); // Clean up on component unmount
+  }, []);
+
   const handleClick = (id, name) => {
+    // Get the current count message and last user message counts from local storage
+    const currentCountMessage = JSON.parse(localStorage.getItem("currentCountMessage") || "[]");
+    const lastUserMessageCounts = JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]");
+
+    // Update lastUserMessageCounts with currentCountMessage for the clicked user
+    const updatedLastUserMessageCounts = lastUserMessageCounts.map((user) => {
+      if (user.userId === id) {
+        return { userId: user.userId, count: currentCountMessage.find((u) => u.userId === id)?.count || 0 };
+      }
+      return user;
+    });
+
+    // If the user is not in lastUserMessageCounts, add them
+    if (!updatedLastUserMessageCounts.some((user) => user.userId === id)) {
+      const currentCount = currentCountMessage.find((u) => u.userId === id)?.count || 0;
+      updatedLastUserMessageCounts.push({ userId: id, count: currentCount });
+    }
+
+    // Store the updated lastUserMessageCounts in local storage
+    localStorage.setItem("lastUserMessageCounts", JSON.stringify(updatedLastUserMessageCounts));
+
+    // Set the state and fetch messages
     setSender(loggedInUserId);
     setRecipient(id);
     setRecipientName(name);
     fetchMessages(loggedInUserId, id);
     setShowChat(true);
   };
+
+  // Function to get the count for a user
+  const getCountForUser = (userId) => {
+    const newCountMessage = JSON.parse(localStorage.getItem("newCountMessage") || "[]");
+    const user = newCountMessage.find((item) => item.userId === userId);
+    return user ? user.count : 0;
+  };
+
+  // Function to get the unread count for a user
+  const getUnreadCountForUser = (userId) => {
+    const currentCountMessage = JSON.parse(localStorage.getItem("currentCountMessage") || "[]");
+    const lastUserMessageCounts = JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]");
+
+    const currentCount = currentCountMessage.find((user) => user.userId === userId)?.count || 0;
+    const lastCount = lastUserMessageCounts.find((user) => user.userId === userId)?.count || 0;
+
+    return currentCount - lastCount;
+  };
+
 
   const fetchMessages = (sender, recipient) => {
     axios
@@ -223,25 +281,26 @@ function ManagerCashier() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10">
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
       
+  
+      {!showChat && <span className="mt-20"><ScrollingNavbar  /></span>}
       <ManagerSidebar/>
-      {!showChat && <ScrollingNavbar  />}
       {showChat ? (
-        <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
-          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white border-2 border-[#5443c3] my-2 mx-2 sticky top-0 z-10">
+        <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
+          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
            
             <button
               onClick={handleBackToEmployees}
-              className=" text-white text-4xl p-2 rounded-md"
+              className="lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
             >
-            <FaArrowLeft  className="lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white lg:text-2xl text-xl"/>
+            <FaArrowLeft />
             </button>
             <div>
               <h1  className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
             </div>
           </div>
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] mb-20 lg:mb-0">
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] h-screen pr-20">
             {messages.map((message,index) => (
               <div
                 key={message._id}
@@ -379,9 +438,9 @@ function ManagerCashier() {
           <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       ) : (
-        <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto">
-          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">Billing Team</h1>
-          <div className=" relative flex items-center mb-4">
+        <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">
+          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">Billing Team</h1>
+          <div className=" relative flex items-center mb-5">
             
             <input
               type="text"
@@ -400,20 +459,19 @@ function ManagerCashier() {
               .map((user) => (
                 <li
                   key={user._id}
-                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between lg:text-xl text-sm text-[#5443c3] font-bold ${
-                    unreadUsers.some(
-                      (unreadUser) => unreadUser.userId === user._id
-                    )
+                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
                       ? "bg-blue-200"
                       : "bg-gray-200"
-                  } ${recipient === user._id ? "bg-green-200" : ""}`}
+                    } ${recipient === user._id ? "bg-green-200" : ""}`}
                   onClick={() => handleClick(user._id, user.name)}
                 >
                   <span>{user.name}</span>
                   <span>
-                    {unreadUsers.some(
-                      (unreadUser) => unreadUser.userId === user._id
-                    ) && <span className="text-red-500 font-bold">New</span>}
+                    {getUnreadCountForUser(user._id) > 0 && (
+                      <span className="text-red-500 font-bold">
+                        {getUnreadCountForUser(user._id)}
+                      </span>
+                    )}
                   </span>
                 </li>
               ))}

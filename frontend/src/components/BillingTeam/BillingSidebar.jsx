@@ -8,20 +8,21 @@ import { useEffect, useState } from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import fetchAnnounce from '../utility/fetchAnnounce';
 
-const ManagerSidebar = ({ value }) => {
+const BillingSidebar = ({ value }) => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
+  // const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const navigate = useNavigate();
   const location = useLocation();
   const [showTooltip, setShowTooltip] = useState(false);
   const [announcements, setAnnouncements] = useState([]);
 
   const handleChat = () => { 
-    navigate("/managerChat");  
+    navigate("/BillingTeamChat");  
   };
 
-  const handleChasierChat = () => {      
-    navigate("/ManagerCashier");       
-  };
+//   const handleChasierChat = () => {      
+//     navigate("/ManagerCashier");       
+//   };
 
   const handleLogout = () => {
     navigate("/");
@@ -42,10 +43,11 @@ const ManagerSidebar = ({ value }) => {
       "VIRTUAL": "VirtualTeamToVirtualTeam",
       "SECURITY": "SecurityChatt",
       "TE": "TEChat",
-      "LOGISTIC": "LogisticChat"
+      "LOGISTIC": "LogisticChat",
+    
     };
 
-    navigate(`/fetchAllAnnouncement/${'managerChat'}`);
+    navigate(`/fetchAllAnnouncement/${'BillingTeamChat'}`);
   };
 
   useEffect(() => {
@@ -80,7 +82,7 @@ const ManagerSidebar = ({ value }) => {
             {announcements.length}
           </span>
         )}
-        <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
+        <span className="z-50 absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap  bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Announcement
         </span>
       </div>
@@ -88,21 +90,11 @@ const ManagerSidebar = ({ value }) => {
       <div className="flex flex-row lg:flex-col gap-[10px] sm:gap-[10px] md:gap-[10px] lg:gap-[40px] relative">
         <div
           onClick={handleChat}
-          className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/managerChat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
+          className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/BillingTeamChat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
         >
           <BsChatSquareDots />
-          <span className=" absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
-            BillingTeam
-          </span>
-        </div>
-
-        <div
-          onClick={handleChasierChat}
-          className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/ManagerCashier") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
-        >
-          <RiContactsLine />
-          <span className="z-50 absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Cashier
+          <span className=" z-50 absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            ManagerTeam
           </span>
         </div>
       </div>
@@ -117,16 +109,16 @@ const ManagerSidebar = ({ value }) => {
             >
               <CgProfile />
               {showTooltip && (
-                <div className="z-50 absolute top-full left-0 mt-5 p-4 bg-black text-white text-sm md:text-md rounded shadow-md z-10 items-start">
-                  <p>Email: {userDetails.manager_email}</p>
-                  <p>Name: {userDetails.manager_name}</p>
-                  <p>Role: {"Manager"}</p>
+                <div className="z-50 absolute top-full left-0 mt-5 p-4 bg-black text-white text-sm md:text-md rounded shadow-md  items-start">
+                  <p>Email: {userDetails.email}</p>
+                  <p>Name: {userDetails.name}</p>
+                  {/* <p>Role: {"Manager"}</p> */}
                 </div>
               )}
             </div>
           </div>
           <p className="text-white text-base lg:text-xl items-center hidden lg:flex">
-            {userDetails?.manager_name}
+            {userDetails?.name}
           </p>
         </div>
 
@@ -144,6 +136,7 @@ const ManagerSidebar = ({ value }) => {
   );
 };
 
-export default ManagerSidebar;
+export default BillingSidebar;
+
 
 
