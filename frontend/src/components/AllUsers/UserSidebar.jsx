@@ -1,234 +1,118 @@
 import { BiLogOut } from "react-icons/bi";
 import { BsChatSquareDots } from "react-icons/bs";
 import { RiContactsLine } from "react-icons/ri";
-import { useNavigate, useLocation, useParams } from "react-router-dom";
-import logo from "../../assests/logo.png";
+import { useNavigate, useLocation } from "react-router-dom";
+import logo from "../../assests/logo.png"
 import { CgProfile } from "react-icons/cg";
 import { useEffect, useState } from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import fetchAnnounce from '../utility/fetchAnnounce';
+import { GrChatOption } from "react-icons/gr";
+
 const UserSidebar = ({ value, newNotificationCount }) => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
   const navigate = useNavigate();
   const location = useLocation();
   const [showTooltip, setShowTooltip] = useState(false);
-  const [announcements, setAnnouncements] = useState([])
+  const [announcements, setAnnouncements] = useState([]);
 
-
-  const handleChat = () => {   //LOGISTIC
-    switch (value) {
-      case "HR":
-        navigate("/HrToHrChat");
-        break;
-      case "CALLCENTER":
-        navigate("/CallCenterToCallCenter");
-        break;
-      case "ACCOUNT":
-        navigate("/AccountToAccountChat");
-        break;
-      case "SOFTWARE":
-        navigate("/SoftwareToSoftwareChat");
-        break;
-      case "BOUNCER":
-        navigate("/bouncerChat");
-        break;
-      case "DIGITALMARKETING":
-        navigate("/DigitalMarketingChatToDigitalMarketing");
-        break;
-      case "MONITORING":
-        navigate("/monitoringTeamChat");
-        break;
-      case "VIRTUAL":
-        navigate("/VirtualTeamToVirtualTeam");
-        break;
-      case "SECURITY":
-        navigate("/SecurityChat");
-        break;
-      case "TE":
-        navigate("/TEChat");
-        break;
-      case "LOGISTIC":
-        navigate("/LogisticChat");
-        break;
-      case "BILLING":
-        navigate("/managerChat");
-        break;
-      default:
-        navigate("/");
-    }
+  const paths = {
+    chat: {
+      HR: "/HrToHrChat",
+      CALLCENTER: "/CallCenterToCallCenter",
+      ACCOUNT: "/AccountToAccountChat",
+      SOFTWARE: "/SoftwareToSoftwareChat",
+      BOUNCER: "/bouncerChat",
+      DIGITALMARKETING: "/DigitalMarketingChatToDigitalMarketing",
+      MONITORING: "/monitoringTeamChat",
+      VIRTUAL: "/VirtualTeamToVirtualTeam",
+      SECURITY: "/SecurityChat",
+      TE: "/TEChat",
+      LOGISTIC: "/LogisticChat",
+    },
+    adminChat: {
+      HR: "/HrToAdminChat",
+      CALLCENTER: "/CallCenterToAdminChat",
+      ACCOUNT: "/AccountToAdminChat",
+      SOFTWARE: "/SoftwareToAdminChat",
+      BOUNCER: "/BouncerToAdminChat",
+      DIGITALMARKETING: "/DigitalMarketingToAdminChat",
+      MONITORING: "/MonitoringTeamToAdminChat",
+      VIRTUAL: "/VirtualTeamToAdminChat",
+      SECURITY: "/SecurityToAdminChat",
+      TE: "/techattoadmin",
+      LOGISTIC: "/LogisticToAdminChat",
+    },
+    groupChat: {
+      HR: "/groupChat/getAllHRTeam",
+      CALLCENTER: "/groupChat/getAllCallCenterTeam",
+      ACCOUNT: "/groupChat/getAllAccountantTeam",
+      SOFTWARE: "/groupChat/getAllSoftwareTeam",
+      BOUNCER: "/groupChat/getAllSoftwareTeam",
+      DIGITALMARKETING: "/groupChat/getAllDigitalMarketingTeam",
+      MONITORING: "/groupChat/AllMonitoringTeam",
+      VIRTUAL: "/groupChat/getAllVirtualTeam",
+      SECURITY: "/groupChat/getAllSoftwareTeam",
+      TE: "/groupChat/getAllSoftwareTeam",
+      LOGISTIC: "/groupChat/getAllSoftwareTeam",
+    },
+    announcements: {
+      HR: "/fetchAllAnnouncement/HrToHrChat",
+      CALLCENTER: "/fetchAllAnnouncement/CallCenterToCallCenter",
+      ACCOUNT: "/fetchAllAnnouncement/AccountToAccountChat",
+      SOFTWARE: "/fetchAllAnnouncement/SoftwareToSoftwareChat",
+      BOUNCER: "/fetchAllAnnouncement/getAllBouncersTeam",
+      DIGITALMARKETING: "/fetchAllAnnouncement/DigitalMarketingChatToDigitalMarketing",
+      MONITORING: "/fetchAllAnnouncement/monitoringTeamChat",
+      VIRTUAL: "/fetchAllAnnouncement/VirtualTeamToVirtualTeam",
+      SECURITY: "/fetchAllAnnouncement/getAllSecurityTeam",
+      TE: "/fetchAllAnnouncement/getAllTE",
+      LOGISTIC: "/fetchAllAnnouncement/getAllLogistic",
+      Cashier: "/fetchAllAnnouncement/getAllDigitalCashier",
+    },
   };
 
-  const handleAdminChat = () => {
-    switch (value) {
-      case "HR":
-        navigate("/HrToAdminChat");
-        break;
-      case "CALLCENTER":
-        navigate("/CallCenterToAdminChat");
-        break;
-      case "ACCOUNT":
-        navigate("/AccountToAdminChat");
-        break;
-      case "SOFTWARE":
-        navigate("/SoftwareToAdminChat");
-        break;
-      case "BOUNCER":
-        navigate("/BouncerToAdminChat");
-        break;
-      case "DIGITALMARKETING":
-        navigate("/DigitalMarketingToAdminChat");
-        break;
-      case "MONITORING":
-        navigate("/MonitoringTeamToAdminChat");
-        break;
-      case "VIRTUAL":
-        navigate("/VirtualTeamToAdminChat");
-        break;
-      case "SECURITY":
-        navigate("/SecurityToAdminChat");
-        break;
-      case "TE":
-        navigate("/techattoadmin");
-        break;
-      case "LOGISTIC":
-        navigate("/LogisticToAdminChat");
-        break;
-
-      case "MANAGER":
-        navigate("/ManagerCashier");
-        break;
-
-      default:
-        navigate("/");
-    }
-  };
-
-
-  const handlegroup = () => {
-    switch (value) {
-      case "HR":
-        navigate("/HrToAdminChat");
-        break;
-        case "CALLCENTER":
-          navigate("/CallCenterToAdminChat");
-          break;
-      case "ACCOUNT":
-        navigate("/AccountToAdminChat");
-        break;
-      case "SOFTWARE":
-        navigate("/groupChat");
-        break;
-      case "BOUNCER":
-        navigate("/BouncerToAdminChat");
-        break;
-      case "DIGITALMARKETING":
-        navigate("/DigitalMarketingToAdminChat");
-        break;
-      case "MONITORING":
-        navigate("/MonitoringTeamToAdminChat");
-        break;
-      case "VIRTUAL":
-        navigate("/VirtualTeamToAdminChat");
-        break;
-      case "SECURITY":
-        navigate("/SecurityToAdminChat");
-        break;
-      case "TE":
-        navigate("/techattoadmin");
-        break;
-        case "LOGISTIC":
-          navigate("/LogisticToAdminChat");
-          break;
-      default:
-        navigate("/");
-    }
+  const handleNavigation = (type) => {
+    navigate(paths[type][value] || "/");
   };
 
   const handleLogout = () => {
-    navigate("/");
     localStorage.clear();
+    navigate("/");
   };
-
-
-
 
   const isActive = (path) => location.pathname === path;
-
-
-  const handleAnnouncement = () => {
-    switch (value) {
-      case "HR":
-        navigate(`/fetchAllAnnouncement/${'HrToHrChat'}`);
-        break;
-      case "CALLCENTER":
-        navigate(`/fetchAllAnnouncement/${'CallCenterToCallCenter'}`);
-        break;
-      case "ACCOUNT":
-        navigate(`/fetchAllAnnouncement/${'AccountToAccountChat'}`);
-        break;
-      case "SOFTWARE":
-        navigate(`/fetchAllAnnouncement/${'SoftwareToSoftwareChat'}`);
-        break;
-      case "BOUNCER":
-        navigate(`/fetchAllAnnouncement/${'bouncerChat'}`);
-        break;
-      case "DIGITALMARKETING":
-        navigate(`/fetchAllAnnouncement/${'DigitalMarketingChatToDigitalMarketing'}`);
-        break;
-      case "MONITORING":
-        navigate(`/fetchAllAnnouncement/${'monitoringTeamChat'}`);
-        break;
-      case "VIRTUAL":
-        navigate(`/fetchAllAnnouncement/${'VirtualTeamToVirtualTeam'}`);
-        break;
-      case "SECURITY":
-        navigate(`/fetchAllAnnouncement/${'/SecurityChatt'}`);
-        break;
-      case "TE":
-        navigate(`/fetchAllAnnouncement/${'TEChat'}`);
-        break;
-      case "LOGISTIC":
-        navigate(`/fetchAllAnnouncement/${'LogisticChat'}`);
-        break;
-      default:
-        navigate("/");
-    }
-  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await fetchAnnounce();
         setAnnouncements(data);
-
       } catch (error) {
         console.error('Error fetching announcements:', error);
       }
     };
 
-    fetchData(); // Fetch immediately on component mount
+    fetchData();
+    const intervalId = setInterval(fetchData, 10000);
 
-    const intervalId = setInterval(fetchData, 10000); // Fetch every 5 seconds
-
-    return () => clearInterval(intervalId); // Clear interval on component unmount
+    return () => clearInterval(intervalId);
   }, []);
-
-
-
 
   return (
     <div className="flex flex-row lg:flex-col h-[80px] lg:h-screen w-full lg:w-[100px] left-0 bg-[#5443c3] border-b lg:border-r shadow-md justify-around items-center py-[10px] lg:py-[20px] text-gray-500 text-2xl md:text-3xl">
       <div className="w-16 md:w-20 lg:w-24 h-12 md:h-16 lg:h-20 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
         <img className="m-2 md:m-4 lg:m-6" src={logo} alt="Logo" />
       </div>
+      
       <div
-        onClick={handleAnnouncement}
+        onClick={() => handleNavigation('announcements')}
         className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/fetchAllAnnouncement") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
       >
         <IoMdNotificationsOutline className="text-lg md:text-2xl lg:text-3xl" />
         {announcements.length > 0 && (
           <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
-            {announcements?.length}
+            {announcements.length}
           </span>
         )}
         <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -238,20 +122,10 @@ const UserSidebar = ({ value, newNotificationCount }) => {
 
       <div className="flex flex-row lg:flex-col gap-[10px] sm:gap-[10px] md:gap-[10px] lg:gap-[40px] relative">
         <div
-          onClick={handleChat}
-          className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/HrToHrChat") ||
-            isActive("/CallCenterToCallCenter") ||
-            isActive("/AccountToAccountChat") ||
-            isActive("/SoftwareToSoftwareChat") ||
-            isActive("/bouncerChat") ||
-            isActive("/DigitalMarketingChatToDigitalMarketing") ||
-            isActive("/monitoringTeamChat") ||
-            isActive("/VirtualTeamToVirtualTeam") ||
-            isActive("/SecurityChat") ||
-            isActive("/TEChat")
-            ? "bg-blue-500 text-white"
-            : "bg-[#fffefd]"
-            }`}
+          onClick={() => handleNavigation('chat')}
+          className={`group relative flex items-center rounded-full p-3 md:p-5 ${
+            Object.values(paths.chat).includes(location.pathname) ? "bg-blue-500 text-white" : "bg-[#fffefd]"
+          }`}
         >
           <BsChatSquareDots />
           <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -259,22 +133,10 @@ const UserSidebar = ({ value, newNotificationCount }) => {
           </span>
         </div>
 
-       
         <div
-          onClick={handlegroup}
+          onClick={() => handleNavigation('adminChat')}
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${
-            isActive("/HrToAdminChat") ||
-            isActive("/CallCenterToAdminChat") ||
-            isActive("/AccountToAdminChat") ||
-            isActive("/groupChat") ||
-            isActive("/BouncerToAdminChat") ||
-            isActive("/DigitalMarketingToAdminChat") ||
-            isActive("/MonitoringTeamToAdminChat") ||
-            isActive("/VirtualTeamToAdminChat") ||
-            isActive("/SecurityToAdminChat") ||
-            isActive("/techattoadmin")
-              ? "bg-blue-500 text-white"
-              : "bg-[#fffefd]"
+            Object.values(paths.adminChat).includes(location.pathname) ? "bg-blue-500 text-white" : "bg-[#fffefd]"
           }`}
         >
           <RiContactsLine />
@@ -282,22 +144,31 @@ const UserSidebar = ({ value, newNotificationCount }) => {
             Admin
           </span>
         </div>
+
+        <div
+          onClick={() => handleNavigation('groupChat')}
+          className={`group relative flex items-center rounded-full p-3 md:p-5 ${
+            Object.values(paths.groupChat).includes(location.pathname) ? "bg-blue-500 text-white" : "bg-[#fffefd]"
+          }`}
+        >
+          <GrChatOption />
+          <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            Group
+          </span>
+        </div>
       </div>
 
       <div className="flex flex-row lg:flex-col gap-[10px] sm:gap-[10px] md:gap-[10px] lg:gap-[40px] relative">
         <div className="flex items-center flex-col">
-          <div className="group relative flex items-center bg-green-300 hover:bg-green-500 rounded-full p-3 md:p-5 ">
+          <div className="group relative flex items-center bg-green-300 hover:bg-green-500 rounded-full p-3 md:p-5">
             <div
               className="group relative"
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
             >
               <CgProfile />
-              {/* <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-white text-black text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                Profile
-              </span> */}
               {showTooltip && (
-                <div className="absolute top-full left-0 mt-5 p-4 bg-black text-white text-sm md:text-md rounded shadow-md z-10 items-start">
+                <div className="absolute top-full left-0 mt-5 p-4 bg-black text-white text-sm md:text-md rounded shadow-md z-10">
                   <p>Email: {userDetails.email}</p>
                   <p>Name: {userDetails.name}</p>
                   <p>Role: {userDetails.role}</p>
@@ -305,17 +176,17 @@ const UserSidebar = ({ value, newNotificationCount }) => {
               )}
             </div>
           </div>
-          <p className="text-white text-base lg:text-xl items-center hidden lg:flex">
+          <p className="text-white text-base lg:text-xl hidden lg:flex">
             {userDetails?.name}
           </p>
         </div>
 
         <div
           onClick={handleLogout}
-          className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-3 md:p-5 "
+          className="group relative flex items-center bg-red-500 hover:bg-red-700 text-white rounded-full p-3 md:p-5"
         >
-          <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 m-1 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <BiLogOut />
+          <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Logout
           </span>
         </div>
