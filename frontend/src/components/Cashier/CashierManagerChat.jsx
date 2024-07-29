@@ -22,6 +22,7 @@ import ScrollingNavbar from "../admin/ScrollingNavbar";
 
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import CashierSidebar from "./CashierSidebar";
 function CashierManagerChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -318,18 +319,20 @@ function CashierManagerChat() {
   };
 
   return (
-    <>
-    {!showChat && <ScrollingNavbar  />}
-    <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10 ">
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
+
+    {!showChat && <span className="mt-20"><ScrollingNavbar  /></span>}
+    <CashierSidebar value="Cashier"/>
+    
   
       {showChat ? (
-        <div className="w-full  flex flex-col justify-between overflow-hidden">
-          <div className=" text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between h-16">
+        <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
+          <div  className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
             <button
               onClick={handleBackToEmployees}
-              className=" text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+              className="lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
             >
-              <FaArrowLeft className="lg:text-2xl text-xl" />
+              <FaArrowLeft />
             </button>
 
 
@@ -472,23 +475,23 @@ function CashierManagerChat() {
           <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       ) : (
-        <div className="w-full lg:w-1/4 h-screen bg-white p-4 overflow-y-auto border-[#5443c3] shadow-lg">
+        <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">
           <div className="flex items-center">
-            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] flex-shrink-0">All Manager Team</h1>
+            <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">All Manager Team</h1>
 
-            <div className="relative ml-4">
-              <div
+            <div >
+              {/* <div
                 onClick={handleAnnouncement}
                 className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/fetchAllAnnouncement") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
               >
                 <IoMdNotificationsOutline className="text-lg md:text-2xl lg:text-3xl" />
-              </div>
+              </div> */}
 
-              {announcements.length > 0 && (
+              {/* {announcements.length > 0 && (
                 <span className="relative -top-11 -right-5 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
                   {announcements?.length}
                 </span>
-              )}
+              )} */}
 
               <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 ml-1 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 Announcement
@@ -501,17 +504,17 @@ function CashierManagerChat() {
               onClick={handleLogout}
               className=" flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full h-auto "
             >
-              <div className="relative flex items-center justify-center">
+              {/* <div className="relative flex items-center justify-center">
                 <span className="absolute bottom-full mb-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                   Logout
                 </span>
                 <BiLogOut className="mx-10 my-2 text-lg md:text-2xl lg:text-3xl" />
-              </div>
+              </div> */}
 
 
             </div>
           </div>
-          <div className=" relative flex items-center mb-4 ">
+          <div className=" relative flex items-center mb-5 ">
             <input
               type="text"
               value={userSearchQuery}
@@ -574,8 +577,8 @@ function CashierManagerChat() {
          
         />
       )}
+
     </div>
-    </>
   );
 }
 

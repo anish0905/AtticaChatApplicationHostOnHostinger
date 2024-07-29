@@ -296,10 +296,10 @@ function ManagerCashier() {
             >
             <FaArrowLeft />
             </button>
-            <div>
+      
               <h1  className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
-            </div>
           </div>
+          
           <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] h-screen pr-20">
             {messages.map((message,index) => (
               <div
@@ -439,7 +439,7 @@ function ManagerCashier() {
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">
-          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">Billing Team</h1>
+          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">Cashier Team</h1>
           <div className=" relative flex items-center mb-5">
             
             <input
