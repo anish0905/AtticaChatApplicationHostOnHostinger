@@ -233,32 +233,10 @@ const Sidebar = () => {
           </span>
         </div>
 
-        <div
-          onClick={() => handleNavigation("/EmpMessage")}
-          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/EmpMessage"
-            ? "bg-blue-500 text-white"
-            : "bg-[#fffefd]"
-            }`}
-        >
-          <TbMessageForward className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Message Forward
-          </span>
-        </div>
+        
       </div>
 
-      <div className="relative flex flex-row lg:flex-col gap-3 lg:gap-5 lg:pb-5 items-center">
-        <div
-          onClick={handleLogout}
-          className="group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 bg-[#fffefd] cursor-pointer z-50"
-        >
-          <BiLogOut className="text-lg md:text-2xl lg:text-3xl text-red-600" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            logout
-          </span>
-        </div>
-
-        <div
+      <div
          
           className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/profile"
             ? "bg-blue-500 text-white"
@@ -273,6 +251,19 @@ const Sidebar = () => {
 
           </span>
         </div>
+
+      <div className="relative flex flex-row lg:flex-col gap-3 lg:gap-5 lg:pb-5 items-center">
+        <div
+          onClick={handleLogout}
+          className="group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 bg-[#fffefd] cursor-pointer z-50"
+        >
+          <BiLogOut className="text-lg md:text-2xl lg:text-3xl text-red-600" />
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            logout
+          </span>
+        </div>
+
+        
 
       </div>
     </div>
