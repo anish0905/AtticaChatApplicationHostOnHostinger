@@ -244,3 +244,7 @@ const SoftwareDetails = () => {
 };
 
 export default SoftwareDetails;
+
+
+
+

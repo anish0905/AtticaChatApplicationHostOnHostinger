@@ -351,33 +351,42 @@ function AccountToAccountChat() {
         console.error(error);
       });
   };
-
+  const sortedUsers = users
+  .filter((user) =>
+    user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
+  )
+  .map((user) => ({
+    ...user,
+    unreadCount: getUnreadCountForUser(user._id),
+  }))
+  .sort((a, b) => b.unreadCount - a.unreadCount);
+  
   return (
-    <div className="flex flex-col lg:flex-row h-screen overflow-hidden mt-10">
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden">
 
+{!showChat && <span className="mt-20"><ScrollingNavbar /></span>}
       <UserSidebar value="ACCOUNT" className="mt-11 lg:mt-0" />
-      {!showChat && 
       
-      
-      <ScrollingNavbar />}
       {showChat ? (
-        <div className="w-full h-screen flex flex-col justify-between overflow-hidden">
-          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white border-2 border-[#5443c3] my-2 mx-2 sticky top-0 z-10">
+        <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
+          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
             <button
               onClick={handleBackToEmployees}
-              className=" text-white text-4xl p-2 rounded-md"
+             className="lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
             >
               <FaArrowLeft className="lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white lg:text-2xl text-xl" />
             </button>
+
             <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
           </div>
-          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] mb-20 lg:mb-0 h-screen">
+
+          <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] h-screen pr-20">
             {messages.map((message, index) => (
               <div
                 key={message._id}
-                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
-                  ? " self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-                  : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap lg:text-3xl md:text-xl text-sm font-bold ${message.sender === loggedInUserId
+                  ? "self-end bg-[#e1dff3] text-[#5443c3] border border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+                  : "self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                   }`}
 
                 onMouseEnter={() => handleHover(index)}
@@ -391,7 +400,7 @@ function AccountToAccountChat() {
                   </div>
                 )}
                 {message.content && message.content.text && (
-                  <p className="font-bold lg:text-base text-xs ">{message.content.text}</p>
+                  <p className="font-bold lg:text-base text-sm ">{message.content.text}</p>
                 )}
                 {message.content && message.content.image && (
                   <img
@@ -405,7 +414,7 @@ function AccountToAccountChat() {
                     href={message.content.document}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-orange-500 hover:underline"
+                   className="text-orange-500 hover:underline lg:text-8xl md:text-6xl text-4xl"
                   >
                     <IoIosDocument className="text-9xl" />
                   </a>
@@ -418,12 +427,12 @@ function AccountToAccountChat() {
                   />
                 )}
                 {message.content && message.content.video && (
-                  <video controls className="max-w-xs">
+                  <video controls className="max-w-xs lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32 text-4xl">
                     <source src={message.content.video} type="video/mp4" />
                     Your browser does not support the video tag.
                   </video>
                 )}
-                <span className="text-xs text-black">
+                <span className="text-xs font-base  text-gray-500">
                   {new Date(message.createdAt).toLocaleString()}
                 </span>
 
@@ -508,8 +517,8 @@ function AccountToAccountChat() {
           <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
         </div>
       ) : (
-        <div className="w-full lg:w-1/4 bg-gray-100 p-4 overflow-y-auto">
-          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">All Accounts Employees</h1>
+        <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">
+          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">All Accounts Employees</h1>
           <div className="relative flex items-center mb-4">
 
             <input
@@ -522,29 +531,25 @@ function AccountToAccountChat() {
             <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
           </div>
           <ul>
-            {users
-              .filter((user) =>
-                user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
-              )
-              .map((user) => (
-                <li
-                  key={user._id}
-                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
-                      ? "bg-blue-200"
-                      : "bg-gray-200"
-                    } ${recipient === user._id ? "bg-green-200" : ""}`}
-                  onClick={() => handleClick(user._id, user.name)}
-                >
-                  <span>{user.name}</span>
-                  <span>
-                    {getUnreadCountForUser(user._id) > 0 && (
-                      <span className="text-red-500 font-bold">
-                        {getUnreadCountForUser(user._id)}
-                      </span>
-                    )}
-                  </span>
-                </li>
-              ))}
+          {sortedUsers.map((user) => (
+      <li
+        key={user._id}
+        className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
+          ? "bg-blue-200"
+          : "bg-gray-200"
+        } ${recipient === user._id ? "bg-green-200" : ""}`}
+        onClick={() => handleClick(user._id, user.name)}
+      >
+        <span>{user.name}</span>
+        <span>
+          {user.unreadCount > 0 && (
+            <span className="text-red-500 font-bold">
+              {user.unreadCount}
+            </span>
+          )}
+        </span>
+      </li>
+    ))}
           </ul>
         </div>
       )}

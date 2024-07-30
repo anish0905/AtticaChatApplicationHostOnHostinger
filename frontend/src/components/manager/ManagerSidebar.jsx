@@ -45,7 +45,7 @@ const ManagerSidebar = ({ value }) => {
       "LOGISTIC": "LogisticChat"
     };
 
-    navigate(`/fetchAllAnnouncement/${routes[value] || ''}`);
+    navigate(`/fetchAllAnnouncement/${'managerChat'}`);
   };
 
   useEffect(() => {
@@ -80,7 +80,7 @@ const ManagerSidebar = ({ value }) => {
             {announcements.length}
           </span>
         )}
-        <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ">
           Announcement
         </span>
       </div>
@@ -91,7 +91,7 @@ const ManagerSidebar = ({ value }) => {
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/managerChat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
         >
           <BsChatSquareDots />
-          <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className=" absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-50">
             BillingTeam
           </span>
         </div>
@@ -101,7 +101,7 @@ const ManagerSidebar = ({ value }) => {
           className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/ManagerCashier") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
         >
           <RiContactsLine />
-          <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="z-50 absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Cashier
           </span>
         </div>
@@ -117,7 +117,7 @@ const ManagerSidebar = ({ value }) => {
             >
               <CgProfile />
               {showTooltip && (
-                <div className="absolute top-full left-0 mt-5 p-4 bg-black text-white text-sm md:text-md rounded shadow-md z-10 items-start">
+                <div className="z-50 absolute top-full left-0 mt-5 p-4 bg-black text-white text-sm md:text-md rounded shadow-md z-10 items-start">
                   <p>Email: {userDetails.manager_email}</p>
                   <p>Name: {userDetails.manager_name}</p>
                   <p>Role: {"Manager"}</p>
@@ -126,7 +126,7 @@ const ManagerSidebar = ({ value }) => {
             </div>
           </div>
           <p className="text-white text-base lg:text-xl items-center hidden lg:flex">
-            {userDetails?.name}
+            {userDetails?.manager_name}
           </p>
         </div>
 
@@ -135,7 +135,7 @@ const ManagerSidebar = ({ value }) => {
           className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-3 md:p-5"
         >
           <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 m-1 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className=" z-50 absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 m-1 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Logout
           </span>
         </div>
@@ -145,3 +145,5 @@ const ManagerSidebar = ({ value }) => {
 };
 
 export default ManagerSidebar;
+
+

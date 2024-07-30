@@ -9,8 +9,9 @@ const GlobalNotification = () => {
   const [adminMessages, setAdminMessages] = useState([]);
   const [adminMessageCount, setAdminMessageCount] = useState(0);
   const [lastUserMessageCounts, setLastUserMessageCounts] = useState([]);
-  const [adminUserMessageCounts, setAdminUserMessageCounts] = useState([]);
   const [currentCountMessage, setCurrentCountMessage] = useState([]);
+  const [lastAdminMessageCounts, setLastAdminMessageCounts] = useState([]);
+  const [currentAdminCountMessage, setCurrentAdminCountMessage] = useState([]);
 
   const prevMessageCount = useRef(parseInt(localStorage.getItem('prevMessageCount')) || 0);
   const prevAdminMessageCount = useRef(parseInt(localStorage.getItem('prevAdminMessageCount')) || 0);
@@ -45,13 +46,17 @@ const GlobalNotification = () => {
         const fetchedAdminMessages = response.data;
         setAdminMessages(fetchedAdminMessages);
         setAdminMessageCount(fetchedAdminMessages.length);
-        const adminUserMessageCountsArray = updateMessageCounts(fetchedAdminMessages);
-        setAdminUserMessageCounts(adminUserMessageCountsArray);
-        localStorage.setItem('adminUserMessageCounts', JSON.stringify(adminUserMessageCountsArray));
 
-        if (!localStorage.getItem('prevAdminMessageCount')) {
-          localStorage.setItem('prevAdminMessageCount', fetchedAdminMessages.length.toString());
-          prevAdminMessageCount.current = fetchedAdminMessages.length;
+        // Update current admin message counts
+        const adminUpdatedCounts = updateMessageCounts(fetchedAdminMessages);
+        setCurrentAdminCountMessage(adminUpdatedCounts);
+        localStorage.setItem('currentAdminCountMessage', JSON.stringify(adminUpdatedCounts));
+
+        // Initialize last admin message counts if not set
+        if (!localStorage.getItem('lastAdminMessageCounts')) {
+          const initialAdminCounts = adminUpdatedCounts;
+          setLastAdminMessageCounts(initialAdminCounts);
+          localStorage.setItem('lastAdminMessageCounts', JSON.stringify(initialAdminCounts));
         }
       } catch (error) {
         console.error('Error fetching admin messages:', error);
@@ -98,6 +103,9 @@ const GlobalNotification = () => {
       newAdminMessages.forEach(message => showNotification(message));
       prevAdminMessageCount.current = adminMessageCount;
       localStorage.setItem('prevAdminMessageCount', adminMessageCount.toString());
+
+      // Calculate and store new admin message counts
+      updateAndStoreNewAdminMessageCounts();
     }
   }, [adminMessageCount, adminMessages]);
 
@@ -152,6 +160,31 @@ const GlobalNotification = () => {
     localStorage.setItem('newCountMessage', JSON.stringify(newCounts));
   };
 
+  const updateAndStoreNewAdminMessageCounts = () => {
+    const lastAdminCounts = JSON.parse(localStorage.getItem('lastAdminMessageCounts')) || [];
+    const currentAdminCounts = JSON.parse(localStorage.getItem('currentAdminCountMessage')) || [];
+
+    const lastAdminCountsMap = new Map(lastAdminCounts.map(({ userId, count }) => [userId, count]));
+    const currentAdminCountsMap = new Map(currentAdminCounts.map(({ userId, count }) => [userId, count]));
+
+    const newAdminCounts = [];
+
+    currentAdminCountsMap.forEach((count, userId) => {
+      const lastCount = lastAdminCountsMap.get(userId) || 0;
+      const newCount = count - lastCount;
+      newAdminCounts.push({ userId, count: newCount });
+    });
+
+    // Ensure all users in lastAdminCounts are included even if they have 0 new messages
+    lastAdminCountsMap.forEach((lastCount, userId) => {
+      if (!currentAdminCountsMap.has(userId)) {
+        newAdminCounts.push({ userId, count: 0 });
+      }
+    });
+
+    localStorage.setItem('newAdminCountMessage', JSON.stringify(newAdminCounts));
+  };
+
   return (
     <div>
       {/* Example of displaying the message counts
@@ -164,10 +197,15 @@ const GlobalNotification = () => {
         <div key={userId}>
           User {userId} has {count} new messages
         </div>
-      ))}
-      {adminUserMessageCounts.map(({ userId, count }) => (
+      ))} */}
+      {/* {lastAdminMessageCounts.map(({ userId, count }) => (
         <div key={userId}>
-          Admin User {userId} has {count} messages
+          Admin User {userId} had {count} messages
+        </div>
+      ))}
+      {currentAdminCountMessage.map(({ userId, count }) => (
+        <div key={userId}>
+          Admin User {userId} has {count} new messages
         </div>
       ))} */}
     </div>

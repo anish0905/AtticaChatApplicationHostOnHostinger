@@ -280,6 +280,16 @@ function ManagerCashier() {
       });
   };
 
+  const sortedUsers = users
+    .filter((user) =>
+      user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
+    )
+    .map((user) => ({
+      ...user,
+      unreadCount: getUnreadCountForUser(user._id),
+    }))
+    .sort((a, b) => b.unreadCount - a.unreadCount);
+
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
       
@@ -296,10 +306,10 @@ function ManagerCashier() {
             >
             <FaArrowLeft />
             </button>
-            <div>
+      
               <h1  className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
-            </div>
           </div>
+          
           <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] h-screen pr-20">
             {messages.map((message,index) => (
               <div
@@ -439,7 +449,7 @@ function ManagerCashier() {
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">
-          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">Billing Team</h1>
+          <h1 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3] lg:m-4">Cashier Team</h1>
           <div className=" relative flex items-center mb-5">
             
             <input
@@ -452,29 +462,25 @@ function ManagerCashier() {
             <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
           </div>
           <ul>
-            {users
-              .filter((user) =>
-                user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
-              )
-              .map((user) => (
-                <li
-                  key={user._id}
-                  className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
-                      ? "bg-blue-200"
-                      : "bg-gray-200"
-                    } ${recipient === user._id ? "bg-green-200" : ""}`}
-                  onClick={() => handleClick(user._id, user.name)}
-                >
-                  <span>{user.name}</span>
-                  <span>
-                    {getUnreadCountForUser(user._id) > 0 && (
-                      <span className="text-red-500 font-bold">
-                        {getUnreadCountForUser(user._id)}
-                      </span>
-                    )}
-                  </span>
-                </li>
-              ))}
+            {sortedUsers.map((user) => (
+              <li
+                key={user._id}
+                className={`p-4 mb-2 rounded-lg cursor-pointer flex justify-between text-[#5443c3] text-sm font-medium ${unreadUsers.some((unreadUser) => unreadUser.userId === user._id)
+                  ? "bg-blue-200"
+                  : "bg-gray-200"
+                  } ${recipient === user._id ? "bg-green-200" : ""}`}
+                onClick={() => handleClick(user._id, user.name)}
+              >
+                <span>{user.name}</span>
+                <span>
+                  {user.unreadCount > 0 && (
+                    <span className="text-red-500 font-bold">
+                      {user.unreadCount}
+                    </span>
+                  )}
+                </span>
+              </li>
+            ))}
           </ul>
         </div>
       )}
