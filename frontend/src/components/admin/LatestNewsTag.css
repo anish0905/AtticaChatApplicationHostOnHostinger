@@ -1,0 +1,59 @@
+.tag-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .tag {
+    background-color: #ff0000; /* Red background color */
+    color: white; /* White text color */
+    padding: 5px 10px; /* Adjust padding as needed */
+    font-size: 26px; /* Adjust font size as needed */
+    font-weight: bold; /* Make the text bold */
+    position: relative;
+    display: inline-block;
+    clip-path: polygon(0% 0%, 100% 0%, 85% 50%, 100% 100%, 0% 100%);
+    width: 250px;
+    margin-left: -60px;
+    transition: all 0.3s ease; /* Smooth transition for responsive adjustments */
+  }
+  
+  @media (max-width: 1200px) {
+    .tag {
+      font-size: 22px;
+      width: 220px;
+      margin-left: -50px;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .tag {
+      font-size: 20px;
+      width: 200px;
+      margin-left: -45px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .tag {
+      font-size: 18px;
+      width: 180px;
+      margin-left: -40px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .tag {
+      font-size: 16px;
+      width: 160px;
+      margin-left: -35px;
+    }
+  }
+  
+  @media (max-width: 400px) {
+    .tag {
+      font-size: 14px;
+      width: 140px;
+      margin-left: -30px;
+    }
+  }
+  

@@ -162,7 +162,7 @@ const EmpMessage = () => {
   };
 
   return (
-    <div className="flex h-[92%] lg:w-[95%] w-full fixed">
+    <div className="flex lg:h-[92%] h-[80%] w-[95%] fixed">
       {/* Chat Section */}
       {/* <ScrollingNavbar messages={messages} />  */}
       <div className="flex-1 flex flex-col w-full bg-[#f6f5fb]">
@@ -180,7 +180,7 @@ const EmpMessage = () => {
         </div>
 
 
-<div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto lg:mb-0 pr-20">
+<div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto lg:mb-0 lg:pr-10 pr-4">
           {messages.length > 0 ? (
             messages.map((msg) => (
               <div
