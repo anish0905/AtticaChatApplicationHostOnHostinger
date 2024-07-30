@@ -328,7 +328,7 @@ function BillingTeamChat() {
    // Function to sort users based on unread message count
    const sortedUsers = users
    .filter((user) =>
-     user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
+     user.name?.toLowerCase().includes(userSearchQuery.toLowerCase())
    )
    .map((user) => ({
      ...user,
@@ -501,11 +501,11 @@ function BillingTeamChat() {
                 <IoMdNotificationsOutline className="text-lg md:text-2xl lg:text-3xl" />
               </div> */}
 
-              {announcements.length > 0 && (
+              {/* {announcements.length > 0 && (
                 <span className="relative -top-11 -right-5 transform translate-x-1/2 -translate-y-1/2 bg-red-500 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
                   {announcements?.length}
                 </span>
-              )}
+              )} */}
 
               <span className="absolute bottom-0 left-1/2 transform -translate-x-1/2 ml-1 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 Announcement

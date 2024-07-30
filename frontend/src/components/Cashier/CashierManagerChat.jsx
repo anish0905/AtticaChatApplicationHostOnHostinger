@@ -321,7 +321,7 @@ function CashierManagerChat() {
  // Function to sort users based on unread message count
  const sortedUsers = users
  .filter((user) =>
-   user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
+   user.name?.toLowerCase().includes(userSearchQuery.toLowerCase())
  )
  .map((user) => ({
    ...user,
