@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BsChatSquareDots } from "react-icons/bs";
 import { BiLogOut } from "react-icons/bi";
 import logo from "../../assests/logo.png";
@@ -21,15 +21,32 @@ import { FaMoneyBillTrendUp } from "react-icons/fa6";
 import { GrUserManager } from "react-icons/gr";
 import { CgProfile } from "react-icons/cg";
 import { GiLogicGateAnd } from "react-icons/gi";
+import { BASE_URL } from '../../constants';
+import axios from "axios";
+
 
 const Sidebar = () => {
   const navigate = useNavigate();
   const [showEmployeeOptions, setShowEmployeeOptions] = useState(false);
   const [activeRoute, setActiveRoute] = useState("/atticDashboard");
-  const [showTooltip, setShowTooltip] = useState(false);
-  const userAdmin = JSON.parse(localStorage.getItem('userAdmin'))
+  const userAdmin = JSON.parse(localStorage.getItem('userAdmin'));
+  const [userDetails, setUserDetails] = useState(null);
 
-  // Default active route
+  const userId = localStorage.getItem('CurrentUserId');
+
+  const fetchUserDetails = async () => {
+    try {
+      const resp = await axios.get(`${BASE_URL}/api/admin/admin/${userId}`);
+      setUserDetails(resp.data);
+      console.log(resp.data.department);
+    } catch (error) {
+      console.error("Fetch User Details Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserDetails();
+  }, []);
 
   const handleNavigation = (route) => {
     setActiveRoute(route);
@@ -41,39 +58,120 @@ const Sidebar = () => {
     localStorage.clear();
   };
 
-  const employeeRoutes = [
-    "/register",
-    "/billingTeamRegister",
-    "/managerRegister",
-  ];
+
+  const getRegistrationOptions = () => {
+    if (!userDetails) return null;
+
+    switch (userDetails.department) {
+      case 'Employee':
+        return [
+          { route: "/register", icon: IoPersonSharp, label: "Employee Registration" },
+
+        ];
+      case 'Digital Marketing':
+        return [
+          { route: "/DigitalMarketingReg", icon: FaLaptop, label: "Digital Marketing Team Registration" }
+        ];
+      case 'VirtualTeam':
+        return [
+          { route: "/VirtualTeamReg", icon: GrVirtualMachine, label: "Virtual Team Registration" }
+        ];
+      case 'CallCenter':
+        return [
+          { route: "/CallCenterReg", icon: MdAddCall, label: "Call Center Team Registration" }
+        ];
+      case 'Accountant':
+        return [
+          { route: "/AccountsReg", icon: MdAccountTree, label: "Accounts Team Registration" }
+        ];
+      case 'MonitoringTeam':
+        return [
+          { route: "/MonitoringReg", icon: FaHourglassHalf, label: "Monitoring Team Registration" }
+        ];
+      case 'Bouncers/Driver':
+        return [
+          { route: "/BouncerReg", icon: TbBounceLeft, label: "Bouncer Registration" }
+        ];
+      case 'Software':
+        return [
+          { route: "/SoftwareReg", icon: GrCloudSoftware, label: "Software Registration" }
+        ];
+      case 'HR':
+        return [
+          { route: "/HrReg", icon: GiHumanTarget, label: "Hr Registration" }
+        ];
+      case 'TE':
+        return [
+          { route: "/TeReg", icon: GiHumanTarget, label: "TE Registration" }
+        ];
+      case 'Security':
+        return [
+          { route: "/SecurityReg", icon: MdSecurity, label: "Security Registration" }
+        ];
+      case 'Logistic':
+        return [
+          { route: "/LogisticReg", icon: GiLogicGateAnd, label: "Logistic Registration" }
+        ];
+      case 'Cashier':
+        return [
+          { route: "/CashierReg", icon: GiLogicGateAnd, label: "Cashier Registration" }
+        ];
+      case 'Manager':
+        return [
+          { route: "/managerRegister", icon: GrUserManager, label: "Manager Registration" },
+        ];
+      case 'Billing_Team':
+        return [
+          { route: "/billingTeamRegister", icon: FaMoneyBillTrendUp, label: "Billing Team Registration" },
+        ]
+      case 'Admin':
+        return [
+          { route: "/register", icon: IoPersonSharp, label: "Employee Registration" },
+          { route: "/billingTeamRegister", icon: FaMoneyBillTrendUp, label: "Billing Team Registration" },
+          { route: "/managerRegister", icon: GrUserManager, label: "Manager Registration" },
+          { route: "/DigitalMarketingReg", icon: FaLaptop, label: "Digital Marketing Team Registration" },
+          { route: "/VirtualTeamReg", icon: GrVirtualMachine, label: "Virtual Team Registration" },
+          { route: "/CallCenterReg", icon: MdAddCall, label: "Call Center Team Registration" },
+          { route: "/AccountsReg", icon: MdAccountTree, label: "Accounts Team Registration" },
+          { route: "/MonitoringReg", icon: FaHourglassHalf, label: "Monitoring Team Registration" },
+          { route: "/BouncerReg", icon: TbBounceLeft, label: "Bouncer Registration" },
+          { route: "/SoftwareReg", icon: GrCloudSoftware, label: "Software Registration" },
+          { route: "/HrReg", icon: GiHumanTarget, label: "Hr Registration" },
+          { route: "/TeReg", icon: GiHumanTarget, label: "TE Registration" },
+          { route: "/SecurityReg", icon: MdSecurity, label: "Security Registration" },
+          { route: "/LogisticReg", icon: GiLogicGateAnd, label: "Logistic Registration" },
+          { route: "/CashierReg", icon: GiLogicGateAnd, label: "Cashier Registration" }
+        ];
+      default:
+        return [];
+    }
+  };
 
   return (
-    <div className="flex justify-evenly flex-row lg:flex-col h-[80px] lg:h-screen w-screen lg:w-[100px]  left-0 bg-[#5443c3] border-b lg:border-r shadow-md lg:justify-between items-center py-[10px] lg:py-[20px] text-gray-500">
+    <div className="flex justify-evenly flex-row lg:flex-col h-[80px] lg:h-screen w-screen lg:w-[100px] left-0 bg-[#5443c3] border-b lg:border-r shadow-md lg:justify-between items-center py-[10px] lg:py-[20px] text-gray-500">
       <div className="w-16 md:w-20 lg:w-24 h-12 md:h-16 lg:h-20 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
         <img className="m-2 md:m-4 lg:m-6" src={logo} alt="Logo" />
       </div>
 
       <div className="flex flex-row lg:flex-col gap-2 md:gap-3 lg:gap-5 relative">
-
-      <div
-        onClick={() => handleNavigation("/announcement")}
-        className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/announcement"
-          ? "bg-blue-500 text-white"
-          : "bg-[#fffefd]"
-          }`}
-      >
-        <GrAnnounce className="text-lg md:text-2xl lg:text-3xl" />
-        <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          announce
-        </span>
-      </div> 
-
+        <div
+          onClick={() => handleNavigation("/announcement")}
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/announcement"
+            ? "bg-blue-500 text-white"
+            : "bg-[#fffefd]"
+            }`}
+        >
+          <GrAnnounce className="text-lg md:text-2xl lg:text-3xl" />
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            announce
+          </span>
+        </div>
 
         <div
           onClick={() => handleNavigation("/admindashboard")}
           className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === "/atticDashboard"
-              ? "bg-blue-500 text-white"
-              : "bg-[#fffefd]"
+            ? "bg-blue-500 text-white"
+            : "bg-[#fffefd]"
             }`}
         >
           <MdDashboard className="text-lg md:text-2xl lg:text-3xl" />
@@ -85,8 +183,8 @@ const Sidebar = () => {
         <div
           onClick={() => handleNavigation("/Groups")}
           className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/Groups"
-              ? "bg-blue-500 text-white"
-              : "bg-[#fffefd]"
+            ? "bg-blue-500 text-white"
+            : "bg-[#fffefd]"
             }`}
         >
           <GrChatOption className="text-lg md:text-2xl lg:text-3xl" />
@@ -98,188 +196,78 @@ const Sidebar = () => {
         <div
           onMouseEnter={() => setShowEmployeeOptions(true)}
           onMouseLeave={() => setShowEmployeeOptions(false)}
-          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer z-50  ${employeeRoutes.includes(activeRoute)
-              ? "bg-blue-500 text-white"
-              : "bg-[#fffefd]"
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 cursor-pointer z-50 ${getRegistrationOptions()?.some(option => option.route === activeRoute)
+            ? "bg-blue-500 text-white"
+            : "bg-[#fffefd]"
             }`}
         >
           <PersonAddIcon className="text-lg md:text-2xl lg:text-3xl" />
           <span
-            className="absolute lg:bottom-auto lg:w-96 lg:left-full lg:-top-60 top-12 -right-20 lg:ml-0 lg:mt-2 whitespace-nowrap bg-[#f6f5fb] text-[#5443c3] border border-[#5443c3] text-xs lg:text-lg md:text-sm rounded py-6 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 "
+            className={`absolute lg:bottom-auto lg:w-96 lg:left-full top-12 -right-20 lg:ml-0 lg:mt-2 whitespace-nowrap bg-[#f6f5fb] text-[#5443c3] border border-[#5443c3] text-xs lg:text-lg md:text-sm rounded py-6 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${userDetails?.department === 'Admin' ? 'lg:-top-60' : 'lg:top-0'}`}
             style={{ display: showEmployeeOptions ? "block" : "none" }}
           >
-            <div
-              onClick={() => handleNavigation("/register")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <IoPersonSharp className="bg-white rounded-full  mr-2 my-2 text-2xl" />
-              <span className="my-2">Employee Registration</span>
-            </div>
-            <div
-              onClick={() => handleNavigation("/billingTeamRegister")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <FaMoneyBillTrendUp className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Billing Team Registration</span>
-            </div>
-            <div
-              onClick={() => handleNavigation("/managerRegister")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <GrUserManager className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Manager Registration</span>
-            </div>
-
-            <div
-              onClick={() => handleNavigation("/DigitalMarketingReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-xl hover:text-sm"
-            >
-              <FaLaptop className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Digital Marketing Team Registration</span>
-            </div>
-
-            <div
-              onClick={() => handleNavigation("/VirtualTeamReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <GrVirtualMachine className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Virtual Team Registration</span>
-            </div>
-
-            <div
-              onClick={() => handleNavigation("/CallCenterReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <MdAddCall className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Call Center Team Registration</span>
-            </div>
-
-            <div
-              onClick={() => handleNavigation("/AccountsReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <MdAccountTree className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Accounts Team Registration</span>
-            </div>
-            <div
-              onClick={() => handleNavigation("/MonitoringReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <FaHourglassHalf className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Monitoring Team Registration</span>
-            </div>
-            <div
-              onClick={() => handleNavigation("/BouncerReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <TbBounceLeft className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Bouncer Registration</span>
-            </div>
-
-            <div
-              onClick={() => handleNavigation("/SoftwareReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <GrCloudSoftware className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Software Registration</span>
-            </div>
-
-            <div
-              onClick={() => handleNavigation("/HrReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <GiHumanTarget className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Hr Registration</span>
-            </div>
-
-            <div
-              onClick={() => handleNavigation("/TeReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <GiHumanTarget className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">TE Registration</span>
-            </div>
-
-            <div
-              onClick={() => handleNavigation("/SecurityReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <MdSecurity className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Security Registration</span>
-            </div>
-            <div
-              onClick={() => handleNavigation("/LogisticReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <GiLogicGateAnd className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Logistic Registration</span>
-            </div>
-            <div
-              onClick={() => handleNavigation("/CashierReg")}
-              className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
-            >
-              <GiLogicGateAnd className="bg-white rounded-full mr-2 my-2 text-2xl" />
-              <span className="my-2">Cashier Registration</span>
-            </div>
-          </span>
-
-        </div>
-
-        <div
-          onClick={() => handleNavigation("/livemesages")}
-          className={`group relative flex items-center lg:rounded-full rounded-lg z-50 p-2 md:p-4 lg:p-5 cursor-pointer ${activeRoute === "/livemesages"
-              ? "bg-blue-500 text-white"
-              : "bg-[#fffefd]"
-            }`}
-        >
-          <TbMessageForward className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 z-50 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Live Chat
+            {getRegistrationOptions()?.map((option, index) => (
+              <div
+                key={index}
+                onClick={() => handleNavigation(option.route)}
+                className="flex items-center gap-2 cursor-pointer hover:text-red-500 lg:hover:text-2xl hover:text-sm"
+              >
+                <option.icon className="bg-white rounded-full mr-2 my-2 text-2xl" />
+                <span className="my-2">{option.label}</span>
+              </div>
+            ))}
           </span>
         </div>
+
 
         <div
           onClick={() => handleNavigation("/adminToemp")}
-          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/adminToemp"
-              ? "bg-blue-500 text-white"
-              : "bg-[#fffefd]"
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/ChatPage"
+            ? "bg-blue-500 text-white"
+            : "bg-[#fffefd]"
             }`}
         >
           <BsChatSquareDots className="text-lg md:text-2xl lg:text-3xl" />
-          <span className="absolute lg:bottom-auto lg:left-full mt-16 z-50 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Employee Chat
+          <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+            Chat Page
           </span>
         </div>
 
+        
       </div>
 
-      <div className="flex flex-row lg:flex-col">
-        <div
-
-          className={`group relative flex items-center bg-green-300 hover:bg-green-500 rounded-full  p-2 md:p-4 lg:p-5 z-50 cursor-pointer lg:mt-2 m-1`}
-
+      <div
+         
+          className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/profile"
+            ? "bg-blue-500 text-white"
+            : "bg-[#fffefd]"
+            }`}
         >
           <CgProfile className="text-lg md:text-2xl lg:text-3xl" />
           <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            {userAdmin}
+            <div>Name: {userDetails?.name}</div>
+            <div>Email: {userDetails?.email}</div>
+            <div>Department: {userDetails?.department}</div>
+
           </span>
         </div>
 
+      <div className="relative flex flex-row lg:flex-col gap-3 lg:gap-5 lg:pb-5 items-center">
         <div
           onClick={handleLogout}
-          className="group relative flex items-center bg-yellow-200 hover:bg-yellow-500 rounded-full p-2 md:p-4 lg:p-5 cursor-pointer lg:mt-2 m-1"
+          className="group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 bg-[#fffefd] cursor-pointer z-50"
         >
-          <BiLogOut className="text-lg md:text-2xl lg:text-3xl" />
+          <BiLogOut className="text-lg md:text-2xl lg:text-3xl text-red-600" />
           <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-            Logout
+            logout
           </span>
         </div>
+
+        
+
       </div>
     </div>
   );
 };
 
 export default Sidebar;
-
-
-
