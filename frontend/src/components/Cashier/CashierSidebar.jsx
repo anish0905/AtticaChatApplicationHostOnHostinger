@@ -68,7 +68,7 @@ const CashierSidebar = ({ value, newNotificationCount }) => {
       SECURITY: "/fetchAllAnnouncement/getAllSecurityTeam",
       TE: "/fetchAllAnnouncement/getAllTE",
       LOGISTIC: "/fetchAllAnnouncement/getAllLogistic",
-      Cashier: "/fetchAllAnnouncement/getAllDigitalCashier",
+      Cashier: "/fetchAllAnnouncement/CashierManagerChat",
     },
   };
 

@@ -8,6 +8,9 @@ import EmployeeSidebar from '../employee/EmployeeSidebar';
 import UserSidebar from '../AllUsers/UserSidebar';
 // import ScrollingNavbar from './ScrollingNavbar';
 import ScrollingNavbar from './ScrollingNavbar';
+import ManagerSidebar from '../manager/ManagerSidebar';
+import BillingSidebar from '../BillingTeam/BillingSidebar';
+import CashierSidebar from '../Cashier/CashierSidebar'
 
 function FetchAllAnnouncement() {
   const [messages, setMessages] = useState([]);
@@ -45,11 +48,11 @@ function FetchAllAnnouncement() {
   };
 
   const renderSidebar = () => {
-    if (route === 'empDashboard') {
+    if (route === 'empDashbord') {
       return <EmployeeSidebar newNotificationCount={newNotificationCount} />;
     } else if (
       route === 'AccountToAccountChat' ||
-      route === 'BillingTeamChat' ||
+      // route === 'BillingTeamChat' ||
       route === 'monitoringTeamChat' ||
       route === 'DigitalMarketingChatToDigitalMarketing' ||
       route === 'bouncerChat' ||
@@ -59,10 +62,29 @@ function FetchAllAnnouncement() {
       route === 'SecurityChat' ||
       route === 'VirtualTeamToVirtualTeam' ||
       route === 'LogisticChat' ||
-      route === 'TEChat'
+      route === 'TEChat' || 
+      route === 'getAllTE' || 
+      route === 'getAllLogistic' || 
+      route === 'getAllDigitalCashier' || 
+      route === 'getAllSecurityTeam' || 
+      route === 'getAllBouncersTeam' 
+ 
     ) {
       return <UserSidebar newNotificationCount={newNotificationCount} />;
-    } else {
+    } 
+    
+    else if (route=='managerChat'){
+      return <ManagerSidebar newNotificationCount={newNotificationCount} />
+    }
+
+    else if (route==='BillingTeamChat'){
+      return <BillingSidebar newNotificationCount={newNotificationCount} />  
+    }
+
+    else if (route==='CashierManagerChat'){
+      return <CashierSidebar newNotificationCount={newNotificationCount} />
+    }
+    else {
       return null; // Or some default sidebar
     }
   };
