@@ -1,34 +1,55 @@
 import React, { useEffect, useState } from "react";
 
-const Modal = ({ show, onClose, manager, onUpdate }) => {
-  const [formData, setFormData] = useState({ ...manager });
+import 'react-toastify/dist/ReactToastify.css';
 
-  useEffect(() => {
-    setFormData({ ...manager });
-  }, [manager]);
 
-  if (!show) return null;
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleUpdate = () => {
-    onUpdate(formData);
-    onClose();
-    window.location.reload(); // Refresh page after update (if needed)
-  };
-
-  return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl">
-        <h2 className=" text-2xl font-bold mb-4 text-[#5443c3] py-6 text-center">Edit Manager Details</h2>
-        <form>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+export const Modal = ({ show, onClose, manager, onUpdate }) => {
+    const [formData, setFormData] = useState({ ...manager });
+  
+    useEffect(() => {
+      setFormData({ ...manager });
+    }, [manager]);
+  
+    if (!show) return null;
+  
+    const handleChange = (e) => {
+      const { name, value } = e.target;
+      setFormData({
+        ...formData,
+        [name]: value,
+      });
+    };
+  
+    const handleGroupChange = (index, e) => {
+      const { name, value } = e.target;
+      const newGroups = formData.group.map((group, idx) => 
+        idx === index ? { ...group, [name]: value } : group
+      );
+      setFormData({
+        ...formData,
+        group: newGroups,
+      });
+    };
+  
+    const handleAddGroup = () => {
+      setFormData({
+        ...formData,
+        group: [...formData.group, { name: "", grade: "" }],
+      });
+    };
+  
+    const handleUpdate = () => {
+      onUpdate(formData);
+      onClose();
+      
+    };
+  
+    return (
+      <div className="fixed inset-0 z-50 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
+        <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md max-h-full overflow-y-auto">
+          <h2 className="text-2xl font-bold mb-4 text-[#5443c3]">Edit Manager Details</h2>
+          <form>
             {[
               { label: "Manager ID", name: "manager_Id", type: "text" },
               { label: "Manager Name", name: "manager_name", type: "text" },
@@ -59,31 +80,53 @@ const Modal = ({ show, onClose, manager, onUpdate }) => {
                 />
               </div>
             ))}
-          </div>
-          <div className="flex justify-end">
+            {formData?.group?.map((group, index) => (
+              <div key={index} className="mb-4">
+                <label className="block text-[#5443c3] text-sm font-bold mb-2">
+                  Group {index + 1}
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-2"
+                  name="name"
+                  placeholder="Group Name"
+                  value={group.name}
+                  onChange={(e) => handleGroupChange(index, e)}
+                />
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                  name="grade"
+                  placeholder="Group Grade"
+                  value={group.grade}
+                  onChange={(e) => handleGroupChange(index, e)}
+                />
+              </div>
+            ))}
             <button
               type="button"
-              onClick={handleUpdate}
-              className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={handleAddGroup}
+              className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4"
             >
-              Update
+              Add Group
             </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Close
-            </button>
-          </div>
-        </form>
+            <div className="flex justify-end">
+              <button
+                type="button"
+                onClick={handleUpdate}
+                className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Update
+              </button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Close
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-  );
-};
-
-export default Modal;
-
-
-
-
+    );
+  };
+  

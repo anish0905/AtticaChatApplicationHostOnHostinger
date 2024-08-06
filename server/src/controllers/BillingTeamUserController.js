@@ -14,18 +14,10 @@ const billingTeamRegistration = async (req, res, next) => {
     branch_state,
     branch_city,
     branch_pincode,
+    group
   } = req.body;
 
-  // Logging input for debugging purposes
-  console.log(
-    name,
-    email,
-    password,
-    branch_name,
-    branch_state,
-    branch_city,
-    branch_pincode
-  );
+
 
   // Check for missing fields
   if (
@@ -60,6 +52,7 @@ const billingTeamRegistration = async (req, res, next) => {
       branch_state,
       branch_city,
       branch_pincode,
+      group
     });
 
     // Save the new user to the database
@@ -189,6 +182,7 @@ const updateUserById = async (req, res) => {
     branch_state,
     branch_city,
     branch_pincode,
+    group,
   } = req.body;
 
   try {
@@ -204,6 +198,7 @@ const updateUserById = async (req, res) => {
         branch_state,
         branch_city,
         branch_pincode,
+        group,
       },
       { new: true }
     );
@@ -293,6 +288,22 @@ const blockAllUser = async (req, res) => {
   res.status(200).json({ message: "All Managers Access Blocked Successfully" });
 };
 
+const getUserGroup = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const user = await BillingTeamUser.findById(id);
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    res.status(200).json(user.group );
+  } catch (error) {
+    res.status(500).json({
+      message: "An error occurred while fetching user group",
+      error: error.message,
+    });
+  }
+};
+
 module.exports = {
   billingTeamRegistration,
   billingTeamLogin,
@@ -305,4 +316,5 @@ module.exports = {
   accessBlock,
   blockAllUser,
   deleteAllBillingTeam,
+  getUserGroup
 };

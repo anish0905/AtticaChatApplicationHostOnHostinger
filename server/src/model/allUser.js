@@ -20,9 +20,16 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    group:{
-      type:String
-    },
+    group: [
+      {
+        name: { 
+          type: String,
+        },
+        grade: {
+          type: String,
+        },
+      }
+    ],
     grade:{
       type:String
 

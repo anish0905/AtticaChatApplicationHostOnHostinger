@@ -38,7 +38,7 @@ const Sidebar = () => {
     try {
       const resp = await axios.get(`${BASE_URL}/api/admin/admin/${userId}`);
       setUserDetails(resp.data);
-      console.log(resp.data.department);
+      localStorage.setItem('department', resp.data.department);
     } catch (error) {
       console.error("Fetch User Details Error:", error);
     }
@@ -70,7 +70,7 @@ const Sidebar = () => {
         ];
       case 'Digital Marketing':
         return [
-          { route: "/DigitalMarketingReg", icon: FaLaptop, label: "Digital Marketing Team Registration" }
+          { route: "/AccountsReg/Digital Marketing", icon: FaLaptop, label: "Digital Marketing Team Registration" }
         ];
       case 'VirtualTeam':
         return [
@@ -82,39 +82,39 @@ const Sidebar = () => {
         ];
       case 'Accountant':
         return [
-          { route: "/AccountsReg", icon: MdAccountTree, label: "Accounts Team Registration" }
+          {  route: `/AccountsReg/Accountant`, icon: MdAccountTree, label: "Accounts Team Registration" }
         ];
       case 'MonitoringTeam':
         return [
-          { route: "/MonitoringReg", icon: FaHourglassHalf, label: "Monitoring Team Registration" }
+          { route: "/AccountsReg/MonitoringTeam", icon: FaHourglassHalf, label: "Monitoring Team Registration" }
         ];
       case 'Bouncers/Driver':
         return [
-          { route: "/BouncerReg", icon: TbBounceLeft, label: "Bouncer Registration" }
+          { route: "/AccountsReg/Bouncers", icon: TbBounceLeft, label: "Bouncer Registration" }
         ];
       case 'Software':
         return [
-          { route: "/SoftwareReg", icon: GrCloudSoftware, label: "Software Registration" }
+          { route: "/AccountsReg/Software", icon: GrCloudSoftware, label: "Software Registration" }
         ];
       case 'HR':
         return [
-          { route: "/HrReg", icon: GiHumanTarget, label: "Hr Registration" }
+          { route: "/AccountsReg/HR", icon: GiHumanTarget, label: "Hr Registration" }
         ];
       case 'TE':
         return [
-          { route: "/TeReg", icon: GiHumanTarget, label: "TE Registration" }
+          { route: "/AccountsReg/TE", icon: GiHumanTarget, label: "TE Registration" }
         ];
       case 'Security':
         return [
-          { route: "/SecurityReg", icon: MdSecurity, label: "Security Registration" }
+          { route: "/AccountsReg/Security", icon: MdSecurity, label: "Security Registration" }
         ];
       case 'Logistic':
         return [
-          { route: "/LogisticReg", icon: GiLogicGateAnd, label: "Logistic Registration" }
+          { route: "/AccountsReg/Logistic", icon: GiLogicGateAnd, label: "Logistic Registration" }
         ];
       case 'Cashier':
         return [
-          { route: "/CashierReg", icon: GiLogicGateAnd, label: "Cashier Registration" }
+          { route: "/AccountsReg/Cashier", icon: GiLogicGateAnd, label: "Cashier Registration" }
         ];
       case 'Manager':
         return [
@@ -129,18 +129,18 @@ const Sidebar = () => {
           { route: "/register", icon: IoPersonSharp, label: "Employee Registration" },
           { route: "/billingTeamRegister", icon: FaMoneyBillTrendUp, label: "Billing Team Registration" },
           { route: "/managerRegister", icon: GrUserManager, label: "Manager Registration" },
-          { route: "/DigitalMarketingReg", icon: FaLaptop, label: "Digital Marketing Team Registration" },
-          { route: "/VirtualTeamReg", icon: GrVirtualMachine, label: "Virtual Team Registration" },
-          { route: "/CallCenterReg", icon: MdAddCall, label: "Call Center Team Registration" },
-          { route: "/AccountsReg", icon: MdAccountTree, label: "Accounts Team Registration" },
-          { route: "/MonitoringReg", icon: FaHourglassHalf, label: "Monitoring Team Registration" },
-          { route: "/BouncerReg", icon: TbBounceLeft, label: "Bouncer Registration" },
-          { route: "/SoftwareReg", icon: GrCloudSoftware, label: "Software Registration" },
-          { route: "/HrReg", icon: GiHumanTarget, label: "Hr Registration" },
-          { route: "/TeReg", icon: GiHumanTarget, label: "TE Registration" },
-          { route: "/SecurityReg", icon: MdSecurity, label: "Security Registration" },
-          { route: "/LogisticReg", icon: GiLogicGateAnd, label: "Logistic Registration" },
-          { route: "/CashierReg", icon: GiLogicGateAnd, label: "Cashier Registration" }
+          { route: "/AccountsReg/Digital Marketing", icon: FaLaptop, label: "Digital Marketing Team Registration" },
+          { route: "/AccountsReg/VirtualTeam", icon: GrVirtualMachine, label: "Virtual Team Registration" },
+          { route: "/AccountsReg/CallCenter", icon: MdAddCall, label: "Call Center Team Registration" },
+          { route:"/AccountsReg/Accountant", icon: MdAccountTree, label: "Accounts Team Registration" },
+          { route: "/AccountsReg/MonitoringTeam", icon: FaHourglassHalf, label: "Monitoring Team Registration" },
+          { route: "/AccountsReg/Bouncers", icon: TbBounceLeft, label: "Bouncer Registration" },
+          { route: "/AccountsReg/Software", icon: GrCloudSoftware, label: "Software Registration" },
+          { route: "/AccountsReg/HR", icon: GiHumanTarget, label: "Hr Registration" },
+          { route: "/AccountsReg/TE", icon: GiHumanTarget, label: "TE Registration" },
+          { route: "/AccountsReg/Security", icon: MdSecurity, label: "Security Registration" },
+          { route: "/AccountsReg/Logistic", icon: GiLogicGateAnd, label: "Logistic Registration" },
+          { route: "/AccountsReg/Cashier", icon: GiLogicGateAnd, label: "Cashier Registration" }
         ];
       default:
         return [];

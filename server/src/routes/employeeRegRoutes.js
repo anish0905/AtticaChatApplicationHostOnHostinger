@@ -13,6 +13,7 @@ const {
   BolockAllEmployee,
   Unblocked,
   deleteAllEmp,
+  getEmployeeGroups
 } = require("../controllers/employeeRegController");
 
 // Register
@@ -39,5 +40,9 @@ router.put("/access/blockall", BolockAllEmployee);
 router.put("/unblock", Unblocked);
 
 router.delete("/employee/delete", deleteAllEmp);
+
+router.get("/groups/:userId", getEmployeeGroups);
+
+
 
 module.exports = router;

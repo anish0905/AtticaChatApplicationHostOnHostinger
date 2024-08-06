@@ -11,16 +11,16 @@ import Stack from '@mui/material/Stack';
 import CircularProgress from '@mui/material/CircularProgress';
 import { FaFolderPlus } from "react-icons/fa";
 import { BASE_URL } from '../../../constants';
-export default function UploadImageModal({ selectedGroupName, selectedGrade }) {
+export default function UploadImageModal({ selectedGroupName, selectedGrade,department }) {
   const [open, setOpen] = React.useState(false);
   const [loading, setLoading] = React.useState(false); // Add loading state
   const anchorRef = React.useRef(null);
   const imageInputRef = React.useRef(null);
   const documentInputRef = React.useRef(null);
   const videoInputRef = React.useRef(null);
-  console.log(selectedGroupName, selectedGrade);
+  // console.log(selectedGroupName, selectedGrade);
 
-  const adminId = localStorage.getItem("AdminId");
+  const adminId = localStorage.getItem("AdminId") || localStorage.getItem("CurrentUserId");
   const handleToggle = () => {
     setOpen((prevOpen) => !prevOpen);
   };
@@ -64,6 +64,7 @@ export default function UploadImageModal({ selectedGroupName, selectedGrade }) {
       formData.append(fieldName, file); // Use fieldName as the field name
       formData.append('group', selectedGroupName);
       formData.append('grade', selectedGrade);
+      formData.append('department', department); // Add department to the FormData object
       formData.append('employeeId', adminId); // Add adminId to the FormData object
       
 

@@ -14,7 +14,7 @@ const EmpGroupChat = () => {
           <ScrollingNavbar />
         </div>
         <div className="flex-1 mt-16 lg:mt-20">
-          <EmpMessage />
+          <EmpMessage department="Employee" />
         </div>
       </div>
     </div>

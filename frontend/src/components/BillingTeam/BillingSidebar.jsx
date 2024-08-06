@@ -7,6 +7,7 @@ import { CgProfile } from "react-icons/cg";
 import { useEffect, useState } from "react";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import fetchAnnounce from '../utility/fetchAnnounce';
+import { GrChatOption } from "react-icons/gr";
 
 const BillingSidebar = ({ value }) => {
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
@@ -67,6 +68,11 @@ const BillingSidebar = ({ value }) => {
     return () => clearInterval(intervalId); // Clear interval on component unmount
   }, []);
 
+
+  const handleGroup =() =>{
+    navigate("/billingGroup");
+  }
+
   return (
     <div className="flex flex-row lg:flex-col h-[80px] lg:h-screen w-full lg:w-[100px] left-0 bg-[#5443c3] border-b lg:border-r shadow-md justify-around items-center py-[10px] lg:py-[20px] text-gray-500 text-2xl md:text-3xl">
       <div className="w-16 md:w-20 lg:w-24 h-12 md:h-16 lg:h-20 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
@@ -99,6 +105,16 @@ const BillingSidebar = ({ value }) => {
         </div>
       </div>
 
+      <div
+            onClick={handleGroup}
+            className={`group relative flex items-center rounded-full p-3 md:p-5 ${isActive("/empgroupchat") ? "bg-blue-500 text-white" : "bg-[#fffefd]"}`}
+          >
+            <GrChatOption className="text-lg md:text-2xl lg:text-3xl" />
+            <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              Group Chat
+            </span>
+          </div>
+
       <div className="flex flex-row lg:flex-col gap-[10px] sm:gap-[10px] md:gap-[10px] lg:gap-[40px] relative">
         <div className="flex items-center flex-col">
           <div className="group relative flex items-center bg-green-300 hover:bg-green-500 rounded-full p-3 md:p-5">
@@ -112,7 +128,7 @@ const BillingSidebar = ({ value }) => {
                 <div className="z-50 absolute top-full left-0 mt-5 p-4 bg-black text-white text-sm md:text-md rounded shadow-md  items-start">
                   <p>Email: {userDetails.email}</p>
                   <p>Name: {userDetails.name}</p>
-                  {/* <p>Role: {"Manager"}</p> */}
+                  <p>Role: {"Billing Team"}</p>
                 </div>
               )}
             </div>

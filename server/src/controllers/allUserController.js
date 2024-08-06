@@ -6,7 +6,7 @@ const jwt = require("jsonwebtoken");
 // Registration logic
 exports.registerUser = async (req, res) => {
   try {
-    const { name, email, password, role,group,grade } = req.body;
+    const { name, email, password, role,groups } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -23,8 +23,7 @@ exports.registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       role,
-      grade,
-      group
+      group:groups
     });
 
     // Save the user to the database
@@ -671,7 +670,7 @@ exports.getById = async function (req, res) {
 };
 
 exports.updateById = async function (req, res) {
-  const { email, password, name,grade,group } = req.body;
+  const { email, password, name,group } = req.body;
   const { id } = req.params;
 
   if (!id) {
@@ -679,7 +678,7 @@ exports.updateById = async function (req, res) {
   }
 
   try {
-    const updateData = { email, name,grade,group };
+    const updateData = { email, name,group };
 
     if (password) {
       const salt = await bcrypt.genSalt(10);
@@ -1044,3 +1043,18 @@ exports.deleteUsersByRole = async (req, res) => {
     return res.status(500).json({ message: "Internal server error", error });
   }
 };
+
+exports.getUserGroup = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id).select('group');
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    return res.status(200).json(user.group);
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+

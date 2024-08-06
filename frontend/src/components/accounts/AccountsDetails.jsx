@@ -7,92 +7,39 @@ import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import { AiOutlineSearch } from "react-icons/ai";
 
-const Modal = ({ show, onClose, accountTeam, onUpdate }) => {
-  const [formData, setFormData] = useState({ ...accountTeam });
+import UpdateModel from "../AllUsers/UpdateModel";
 
-  useEffect(() => {
-    setFormData({ ...accountTeam });
-  }, [accountTeam]);
-
-  if (!show) return null;
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  const handleUpdate = () => {
-    onUpdate(formData);
-    onClose();
-  };
-
-  return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-[80%] max-w-md">
-        <h2 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">Edit Account Team Details</h2>
-        <form>
-          {[
-            { label: "Account Team Name", name: "name", type: "text" },
-            { label: "Account Team Email", name: "email", type: "email" },
-            { label: "Account Team Password", name: "password", type: "password" },
-            {label:"Group",name:"group",type:"text"},
-            {label:"Grade",name:"grade",type:"text"},
-          ].map((field, index) => (
-            <div className="mb-4" key={index}>
-              <label
-                className="block text-[#5443c3] text-sm font-bold mb-2"
-                htmlFor={field.name}
-              >
-                {field.label}
-              </label>
-              <input
-                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-                id={field.name}
-                name={field.name}
-                type={field.type}
-                value={formData[field.name]}
-                onChange={handleChange}
-              />
-            </div>
-          ))}
-          <div className="flex justify-end">
-            <button
-              type="button"
-              onClick={handleUpdate}
-             className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Update
-            </button>
-            <button
-              type="button"
-              onClick={onClose}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 sm:px-4 rounded"
-            >
-              Close
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-};
-
-const AccountTeamDetails = ({value}) => {
+const AccountTeamDetails = ({ value }) => {
   const [accountTeams, setAccountTeams] = useState([]);
   const [filteredAccountTeams, setFilteredAccountTeams] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedAccountTeam, setSelectedAccountTeam] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
-  console.log("value",value)
+  console.log("value", value)
+
+  const roleEndpointMap = {
+    Accountant: "allUser/getAllAccountantTeam",
+    Software: "allUser/getAllSoftwareTeam",
+    HR: "allUser/getAllHRTeam",
+    "CallCenter": "allUser/getAllCallCenterTeam",
+    "VirtualTeam": "allUser/getAllVirtualTeam",
+    "MonitoringTeam": "allUser/getAllMonitoringTeam",
+    "Bouncers": "allUser/getAllBouncersTeam",
+    "Security": "allUser/getAllSecurityTeam",
+    "Digital Marketing": "allUser/getAllDigitalMarketingTeam",
+    TE: "allUser/getAllTE",
+    Logistic : "allUser/getAllLogistic",
+    Cashier: "allUser/getAllCashierTeam"
+  };
+
+  const endpoint = roleEndpointMap[value];
+
 
   useEffect(() => {
     const fetchAccountTeams = async () => {
       try {
-        const res = await axios.get(`${BASE_URL}/api/allUser/${value}`);
+        const res = await axios.get(`${BASE_URL}/api/${endpoint}`);
         setAccountTeams(res.data);
         setFilteredAccountTeams(res.data);
       } catch (error) {
@@ -101,7 +48,7 @@ const AccountTeamDetails = ({value}) => {
     };
 
     fetchAccountTeams();
-  }, []);
+  }, [value]);
 
   useEffect(() => {
     setFilteredAccountTeams(
@@ -148,11 +95,10 @@ const AccountTeamDetails = ({value}) => {
     }
   };
 
+ 
   return (
     <div className="flex flex-col h-[950px] overflow-y-auto w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
-    
-    <div className="relative mb-4 w-full flex items-center space-x-4">
-        
+      <div className="relative mb-4 w-full flex items-center space-x-4">
         <div className="relative flex-grow">
           <input
             type="text"
@@ -167,10 +113,11 @@ const AccountTeamDetails = ({value}) => {
           />
         </div>
         <button
-              className="bg-[#fc3b3b] hover:bg-red-700 text-white font-bold lg:text-xl text-xs rounded-xl h-12 px-3 "
-            onClick={handleDelete}>
-              Delete All  
-            </button> </div>
+          className="bg-[#fc3b3b] hover:bg-red-700 text-white font-bold lg:text-xl text-xs rounded-xl h-12 px-3 "
+          onClick={handleDelete}>
+          Delete All
+        </button>
+      </div>
 
       <ToastContainer />
       <div className="flex-1 overflow-x-auto overflow-y-hidden">
@@ -188,11 +135,9 @@ const AccountTeamDetails = ({value}) => {
                   Email
                 </th>
                 <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
-                Group
+                  Group
                 </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
-                  Grade
-                </th>
+                
                 <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
                   Actions
                 </th>
@@ -211,10 +156,12 @@ const AccountTeamDetails = ({value}) => {
                     {team?.email}
                   </td>
                   <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
-                    {team?.group}
-                  </td>
-                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
-                    {team?.grade}
+                    {team?.group.map((grp, idx) => (
+                      <div key={idx}>
+                        <p>{grp.name}-{grp.grade}</p>
+                       
+                      </div>
+                    ))}
                   </td>
                   
                   <td className="py-4 px-2 whitespace-nowrap sm:px-4 lex text-xs lg:text-sm ">
@@ -238,11 +185,12 @@ const AccountTeamDetails = ({value}) => {
         </div>
       </div>
       {selectedAccountTeam && (
-        <Modal
+        <UpdateModel
           show={showModal}
           onClose={() => setShowModal(false)}
           accountTeam={selectedAccountTeam}
           onUpdate={handleUpdate}
+          value={value}
         />
       )}
     </div>
@@ -250,6 +198,3 @@ const AccountTeamDetails = ({value}) => {
 };
 
 export default AccountTeamDetails;
-
-
-

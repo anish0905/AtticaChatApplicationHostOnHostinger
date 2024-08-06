@@ -1,16 +1,13 @@
 import React from 'react'
-import UserSidebar from '../AllUsers/UserSidebar'
 import ScrollingNavbar from '../admin/ScrollingNavbar'
-import AllUserGroupChat from './AllUserGroupChat'
-import { useParams } from 'react-router-dom'
+import BillingSidebar from './BillingSidebar'
+import BillingGroupChat from './BillingGroupChat'
 
-const GroupChat = () => {
-    const {department} = useParams()
-
+const BillingGroupHome = () => {
   return (
     <div className="flex flex-col lg:flex-row min-h-screen">
       <div className="flex-shrink-0 mt-20 lg:mt-0">
-        <UserSidebar />
+        <BillingSidebar />
       </div>
       <div className="flex flex-col lg:flex-1 bg-white ">
         <div className="fixed lg:static w-full z-10">
@@ -18,11 +15,11 @@ const GroupChat = () => {
 
         </div>
         <div className="flex-1 mt-16 lg:mt-20">
-          <AllUserGroupChat department={department} />
+          <BillingGroupChat department="Billing_Team" />
         </div>
       </div>
     </div>
   )
 }
 
-export default GroupChat
+export default BillingGroupHome

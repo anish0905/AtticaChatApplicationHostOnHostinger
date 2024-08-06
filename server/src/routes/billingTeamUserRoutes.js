@@ -12,6 +12,7 @@ const {
   accessUnblock,
   blockAllUser,
   deleteAllBillingTeam,
+  getUserGroup,
 } = require("../controllers/BillingTeamUserController");
 
 router
@@ -28,5 +29,6 @@ router.put("/access/unblock/:id", accessUnblock);
 router.put("/access/blockall", blockAllUser);
 // router.put("/access/unblock/all", authController.unblockAllUser);
 router.delete("/deleteAllBillingTeam", deleteAllBillingTeam);
+router.get("/groups/:id",getUserGroup)
 
 module.exports = router;

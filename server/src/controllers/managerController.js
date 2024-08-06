@@ -14,6 +14,7 @@ const registerManager = async (req, res) => {
     branch_pincode,
     branch_name,
     branch_address,
+    group
   } = req.body;
 
   try {
@@ -50,6 +51,7 @@ const registerManager = async (req, res) => {
       branch_pincode,
       branch_name,
       branch_address,
+      group
     });
 
     const managerresp = await newManager.save();
@@ -158,6 +160,7 @@ const updateManagerById = async (req, res) => {
     branch_state,
     branch_pincode,
     branch_name,
+    group
   } = req.body;
   try {
     const updatedManager = await ManagerDetails.findByIdAndUpdate(
@@ -172,6 +175,7 @@ const updateManagerById = async (req, res) => {
         branch_state,
         branch_pincode,
         branch_name,
+        group
       },
       { new: true }
     );
@@ -271,6 +275,21 @@ const deleteAllUsers = async (req, res) => {
     return res.status(500).json({ message: "Internal server error", error });
   }
 };
+
+const getuserGroup = async (req, res) => {
+  try {
+    const {id} = req.params;
+    const manager = await ManagerDetails.findById(id);
+    if (!manager) {
+      return res.status(404).json({ message: "Manager not found" });
+    }
+
+    res.status(200).json(manager.group)
+
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+}
 module.exports = {
   registerManager,
   loginManager,
@@ -286,6 +305,7 @@ module.exports = {
   blockAllManager,
   unblockAllManager,
   deleteAllUsers,
+  getuserGroup
 
   // Add more methods as needed
 };

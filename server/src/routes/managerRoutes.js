@@ -16,6 +16,7 @@ const {
   accessUnblock,
   blockAllManager,
   unblockAllManager,
+  getuserGroup,
 } = require("../controllers/managerController");
 
 router.post("/register", registerManager);
@@ -32,5 +33,6 @@ router.put("/access/unblock/:id", accessUnblock);
 router.put("/access/blockall", blockAllManager);
 router.put("/access/unblock/all", unblockAllManager);
 router.delete("/managerdelete", deleteAllUsers);
+router.get("/groups/:id", getuserGroup);
 
 module.exports = router;

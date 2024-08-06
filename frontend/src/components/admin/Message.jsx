@@ -1,52 +1,66 @@
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { IoMdSend } from "react-icons/io";
-import { IoMdDocument } from "react-icons/io";
-import UploadImageModal from "./Pages/UploadImageModal";
-import { useParams } from "react-router-dom";
+import { IoMdSend, IoMdDocument } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
 import { BASE_URL } from "../../constants";
-import { useNavigate } from "react-router-dom";
-import notificationTone from "../../assests/notification_ding.mp3";
+import { useNavigate, useParams } from "react-router-dom";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import UploadImageModal from "./Pages/UploadImageModal";
 
-const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade }) => {
+const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade, department: propsDepartment }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [showPrompt, setShowPrompt] = useState(false);
-  const [notification, setNotification] = useState(null);
   const [showPopSms, setShowPopSms] = useState(false);
   const [popSmsContent, setPopSmsContent] = useState({});
-  const [lastMessageCount, setLastMessageCount] = useState(0);
   const notificationSoundRef = useRef(null);
-  const adminId = localStorage.getItem("AdminId");
   const messagesEndRef = useRef(null);
 
   const navigate = useNavigate();
-  const { selectedGroupName: paramsGroupName, selectedGrade: paramsGrade } = useParams();
+  const { selectedGroupName: paramGroupName, selectedGrade: paramGrade, selectedDepartment: paramDepartment } = useParams();
 
-  const selectedGroupName = propsGroupName || paramsGroupName;
-  const selectedGrade = propsGrade || paramsGrade;
+  // Prefer prop values, fallback to params
+  const selectedGroupName = propsGroupName || paramGroupName;
+  const selectedGrade = propsGrade || paramGrade;
+  const departmentNew = propsDepartment || paramDepartment;
+
+  let department;
+
+  if(departmentNew==="Bouncers"){
+    department = "Bouncers/Driver";
+  }
+  else if(departmentNew==="Security"){
+    department = "Security/CCTV";
+  }
+  else{
+    department = departmentNew;
+  }
+
+
+  
+
+ 
+
+  const adminId = localStorage.getItem("AdminId") || localStorage.getItem("CurrentUserId");
 
   useEffect(() => {
     fetchMessages();
-  }, [selectedGroupName, selectedGrade]);
+  }, [selectedGroupName, selectedGrade, department]);
 
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
   useEffect(() => {
-    const interval = setInterval(checkForNewMessages, 1000); // Check for new messages every 1 second
+    const interval = setInterval(checkForNewMessages, 1000);
     return () => clearInterval(interval);
-  }, [messages]);
+  }, [messages, selectedGroupName, selectedGrade, department]);
 
   useEffect(() => {
-    const interval = setInterval(fetchPopSms, 3000); // Fetch pop sms every 3 seconds
+    const interval = setInterval(fetchPopSms, 3000);
     return () => clearInterval(interval);
   }, []);
 
-  // Request Notification permission on component mount
   useEffect(() => {
     if (Notification.permission !== "granted") {
       Notification.requestPermission();
@@ -57,46 +71,32 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
     if (selectedGroupName && selectedGrade) {
       try {
         const response = await axios.get(`${BASE_URL}/api/messages`, {
-          params: {
-            group: selectedGroupName,
-            grade: selectedGrade,
-          },
+          params: { group: selectedGroupName, grade: selectedGrade, department },
         });
-
-        const data = response.data;
-
-        if (data && data.messages) {
-          setMessages(data.messages);
-        } else {
-          setMessages([]);
-        }
-        setShowPrompt(false); // Hide the prompt when a group is selected
+        setMessages(response.data.messages || []);
+        setShowPrompt(false);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
     } else {
-      setShowPrompt(true); // Show the prompt when no group is selected
+      setShowPrompt(true);
     }
   };
 
   const sendMessage = async () => {
-    if (message.trim() === "") return; // Don't send empty messages
+    if (message.trim() === "") return;
 
     try {
       const newMessage = {
         employeeId: adminId,
-        message: message,
+        message,
         group: selectedGroupName,
         grade: selectedGrade,
+        department,
       };
-
       const response = await axios.post(`${BASE_URL}/api/messages`, newMessage);
-
       if (response.status === 201) {
-        // Update messages state with the new message
-        setMessages([...messages, newMessage]);
-
-        // Clear the input field after sending the message
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
         setMessage("");
       } else {
         console.error("Error sending message:", response.statusText);
@@ -109,25 +109,17 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
   const checkForNewMessages = async () => {
     try {
       const response = await axios.get(`${BASE_URL}/api/messages`, {
-        params: {
-          group: selectedGroupName,
-          grade: selectedGrade,
-        },
+        params: { group: selectedGroupName, grade: selectedGrade, department },
       });
-
-      const data = response.data;
-      if (data && data.messages && data.messages.length > messages.length) {
-        const newMessages = data.messages.slice(messages.length);
-        const foreignMessage = newMessages.find((msg) => msg.employeeId !== adminId);
-
-        if (foreignMessage) {
-          setNotification({
-            employeeId: foreignMessage.employeeId,
-            message: foreignMessage.message,
-          });
-          showNotifications(newMessages);
+      const newMessages = response.data.messages || [];
+      if (newMessages.length > messages.length) {
+        const foreignMessages = newMessages.slice(messages.length).filter(msg => msg.employeeId !== adminId);
+        if (foreignMessages.length > 0) {
+          setPopSmsContent(foreignMessages[0]);
+          setShowPopSms(true);
+          showNotifications(foreignMessages);
         }
-        setMessages(data.messages);
+        setMessages(newMessages);
       }
     } catch (error) {
       console.error("Error checking for new messages:", error);
@@ -138,13 +130,9 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
     try {
       const response = await axios.get(`${BASE_URL}/api/getNotificationId`);
       const data = response.data;
-
-      if (data && data.employeeId && data.message) {
-        setPopSmsContent({
-          employeeId: data.employeeId,
-          message: data.message,
-        });
-        setShowPopSms(true); // Show the popup message
+      if (data?.employeeId && data?.message) {
+        setPopSmsContent(data);
+        setShowPopSms(true);
       }
     } catch (error) {
       console.error("Error fetching pop sms:", error);
@@ -156,33 +144,20 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
   };
 
   const showNotifications = (newMessages) => {
+    if (!("Notification" in window)) return;
+
     if (Notification.permission === "granted") {
-      newMessages.forEach((message) => {
-        if (message.employeeId !== adminId) {
-          const notification = new Notification("New Message", {
-            body: `${message.employeeId}: ${message.message}`,
-          });
-          notification.onclick = () => {
-            window.focus();
-          };
-
-          // Play notification sound
-          playNotificationSound();
-        }
-      });
-    }
-  };
-
-  const playNotificationSound = () => {
-    if (notificationSoundRef.current) {
-      notificationSoundRef.current.play().catch((error) => {
-        console.error("Error playing notification sound:", error);
+      newMessages.forEach(message => {
+        const notification = new Notification("New Message", {
+          body: `${message.employeeId}: ${message.message}`,
+        });
+        notification.onclick = () => window.focus();
       });
     }
   };
 
   return (
-    <div className="flex flex-row  h-screen lg:w-[71vw] w-[100vw]">
+    <div className="flex flex-row h-screen lg:h-full lg:w-[100%] w-[100vw]">
       <div className="flex-1 flex flex-col w-full">
         <div className="flex flex-col flex-1 overflow-y-auto">
           {showPrompt && (
@@ -190,42 +165,32 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
               Please select a group and grade to message.
             </div>
           )}
-
           {selectedGroupName && selectedGrade && (
             <div className="flex flex-col flex-1 bg-[#f6f5fb]">
               <div className="text-[#ffffff] bg-[#5443c3] lg:text-2xl md:text-xl text-xl p-4 flex gap-2 items-center justify-between">
                 <span onClick={() => navigate(-1)} className="cursor-pointer text-[#ffffff]">
                   <IoArrowBack />
                 </span>
-                <div className="flex flex-row">
+                <div className="flex flex-row justify-between gap-5">
                   <h1>{selectedGroupName}</h1>
                   <p>(Grade: {selectedGrade})</p>
                 </div>
               </div>
-
-              <div
-                className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto lg:mb-0 mb-10"
-                style={{ maxHeight: "80vh" }}
-              >
+              <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto lg:mb-0 mb-10" style={{ maxHeight: "80vh" }}>
                 {messages.map((msg, index) => (
                   <div
                     key={index}
-                    className={` flex relative break-words whitespace-pre-wrap ${
-                      msg.employeeId === adminId ? "justify-end" : "justify-start"
-                    } mb-2`}
+                    className={`flex relative break-words whitespace-pre-wrap ${msg.employeeId === adminId ? "justify-end" : "justify-start"
+                      } mb-2`}
                   >
                     <div
-                      className={` lg:text-2xl md:text-xl text-sm font-bold ${
-                        msg.employeeId === adminId
-                          ? " self-end bg-[#9184e9] border border-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl "
+                      className={`lg:text-2xl md:text-xl text-sm font-bold ${msg.employeeId === adminId
+                          ? "self-end bg-[#9184e9] border border-[#5443c3] text-white rounded-tr-3xl rounded-bl-3xl"
                           : "self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-                      } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
+                        } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
                     >
-                      <p
-                        className={` lg:text-sm md:text-lg text-sm font-normal mb-2 ${
-                          msg.employeeId === adminId ? "text-green" : "text-[#5443c3]"
-                        }`}
-                      >
+                      <p className={`lg:text-sm md:text-lg text-sm font-normal mb-2 ${msg.employeeId === adminId ? "text-green" : "text-[#5443c3]"
+                        }`}>
                         {msg.employeeId}
                         <span> : </span>
                       </p>
@@ -238,11 +203,11 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
                         </div>
                       )}
                       {msg.video && (
-                        <div className="lrounded-lg h-auto w-auto my-2">
+                        <div className="rounded-lg h-auto w-auto my-2">
                           <video src={msg.video} controls></video>
                         </div>
                       )}
-                      {msg && msg.Image && (
+                      {msg.Image && (
                         <div>
                           <img src={msg.Image} alt="" className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32" />
                         </div>
@@ -255,47 +220,24 @@ const Message = ({ selectedGroupName: propsGroupName, selectedGrade: propsGrade 
             </div>
           )}
         </div>
-
-        <div className="mx-auto flex items-center p-4 sticky bottom-0  bg-[#f6f5fb] w-full">
+        <div className="mx-auto flex items-center p-4 sticky bottom-0 bg-[#f6f5fb] w-full">
           <input
             type="text"
             className="border border-[#5443c3] rounded px-4 py-2 mr-2 flex-1"
+            placeholder="Type your message"
             value={message}
             onChange={(e) => setMessage(e.target.value)}
-            placeholder="Type your message..."
           />
           <button
-           className="bg-[#5443c3] text-white rounded px-4 py-2 flex items-center justify-center"
+            className="bg-[#5443c3] text-white px-4 py-2 rounded-lg"
             onClick={sendMessage}
           >
             <IoMdSend />
           </button>
-          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
-          {/* <button
-           className="text-white bg-blue-500  rounded px-4 py-2 flex items-center justify-center mx-2"
-            onClick={() => setShowPopSms(true)}
-          >
-            <IoMdDocument />
-          </button> */}
-          <UploadImageModal selectedGroupName={selectedGroupName} selectedGrade={selectedGrade} />
+          <UploadImageModal isOpen={showPopSms} onClose={() => setShowPopSms(false)} content={popSmsContent} selectedGroupName={selectedGroupName} selectedGrade={selectedGrade} department={department} />
+          <ScrollToBottomButton onClick={scrollToBottom} />
         </div>
       </div>
-     
-
-      <audio ref={notificationSoundRef} src={notificationTone} preload="auto" />
-
-      {showPopSms && (
-        <div className="fixed bottom-0 right-0 mb-4 mr-4 bg-white p-4 rounded shadow-lg z-50">
-          <p className="font-bold">Employee ID: {popSmsContent.employeeId}</p>
-          <p>Message: {popSmsContent.message}</p>
-          <button
-            className="mt-2  bg-[#5443c3] text-white rounded"
-            onClick={() => setShowPopSms(false)}
-          >
-            Close
-          </button>
-        </div>
-      )}
     </div>
   );
 };

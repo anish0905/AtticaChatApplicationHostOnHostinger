@@ -54,6 +54,7 @@ const chatSchema = new mongoose.Schema({
       "Logistic",
       "Cashier"
     ],
+    
   },
   messages: [
     {
@@ -219,10 +220,10 @@ app.get("/api/messages", async (req, res) => {
 // API endpoint to create a new group
 app.post("/api/groups", async (req, res) => {
   try {
-    const { groupName, grade } = req.body;
+    const { groupName, grade,department } = req.body;
 
     // Check if the group name and grade are provided
-    if (!groupName || !grade) {
+    if (!groupName || !grade || !department) {
       return res
         .status(400)
         .json({ error: "Group name and grade are required" });
@@ -237,7 +238,7 @@ app.post("/api/groups", async (req, res) => {
     }
 
     // Create a new group with the provided group name and grade
-    const newGroup = new ChatModel({ group: groupName, grade, messages: [] });
+    const newGroup = new ChatModel({ group: groupName, grade,department, messages: [] });
 
     // Save the new group to the database
     await newGroup.save();
@@ -278,6 +279,7 @@ app.get("/api/groups", async (req, res) => {
           group: { $first: "$group" },
           grade: { $first: "$grade" },
           documentId: { $first: "$_id" },
+          department: { $first: "$department" },
         },
       },
       {
@@ -285,6 +287,7 @@ app.get("/api/groups", async (req, res) => {
           _id: "$documentId",
           group: 1,
           grade: 1,
+          department: 1,
         },
       },
     ]);

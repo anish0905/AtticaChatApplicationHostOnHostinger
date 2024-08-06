@@ -34,15 +34,17 @@ const employeeRegSchema = mongoose.Schema(
       type: String,
       default: "",
     },
-    grade: {
-      type: String,
-      
-    },
-    group: {
-      type: String,
+    group: [
+      {
+        name: {
+          type: String,
+        },
+        grade: {
+          type: String,
+        },
+      }
+    ],
     
-     
-    },
     isActive: {
       type: Boolean,
       default: false,

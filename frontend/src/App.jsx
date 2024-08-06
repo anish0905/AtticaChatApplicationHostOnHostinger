@@ -25,7 +25,6 @@ import BillingRegistrationModal from "./components/admin/BillingRegistrationModa
 import AtticDashboard from "./components/SuperAdmin/AtticDashboard";
 import EmpGroupChat from "./components/employee/EmpGroupChat";
 import AdmintoAdmin from "./components/admin/Pages/AdmintoAdmin";
-import SuperAdmin from "./components/SuperAdmin/SuperAdmin";
 import SuperAdminGroupList from "./components/SuperAdmin/SuperAdminGroupList";
 import SuperAdminLiveChat from "./components/SuperAdmin/SuperAdminLiveChat";
 import AdminDashboard from "./components/DashboardComponents/AdminDashboard";
@@ -33,11 +32,9 @@ import DigitalMarketingTeamLogin from "./components/digitalMarketing/DigitalMark
 import DigitalToDigitalTamChat from "./components/digitalMarketing/DigitalToDigitalTamChat";
 import DigitalMarketingToAdminChat from "./components/digitalMarketing/DigitalMarketingToAdminChat";
 import MonitoringTeamLogin from "./components/monitoringTeam/MonitoringTeamLogin";
-import MonitoringReg from "../src/components/admin/Pages/MonitoringReg";
 import AccountsLogin from "./components/accounts/AccountsLogin";
 import SoftwareLogin from "./components/software/SoftwareLogin";
 import HrLogin from "./components/Hr/HrLogin";
-import DigitalMarketingReg from "./components/admin/Pages/DigitalMarketingReg";
 import AccountsReg from "./components/admin/Pages/AcountsReg";
 import BouncerLogin from "./components/Bouncer/BouncerLogin";
 import MonitoringTeamChat from "./components/monitoringTeam/MonitoringTeamChat";
@@ -47,25 +44,20 @@ import BouncerToAdminChat from "./components/Bouncer/BouncerToAdminChat";
 import VirtualToVirtualTeamChat from "./components/VirtualTeam/VirtualToVirtualTeamChat";
 import VirtualTeamToAdminChat from "./components/VirtualTeam/VirtualTeamToAdminChat";
 
-import BouncerReg from "./components/admin/Pages/BouncerReg";
 import CallCenterLogin from "./components/CallCenter/CallCenterLogin";
-import VirtualTeamRegistration from "./components/VirtualTeam/VirtualTeamRegistration";
-import CallCenterRegister from "./components/CallCenter/CallCenterRegister";
 import CallCenterToCallCenterChat from "./components/CallCenter/CallCenterToCallCenterChat";
 import VirtualTeamLogin from "./components/VirtualTeam/VirtualTeamLogin";
 import CallCenterToAdminChat from "./components/CallCenter/CallCenterToAdminChat";
-import HrRegister from "./components/Hr/HrRegister";
+
 import HrToHrChat from "./components/Hr/HrToHrChat";
 import HrToAdmin from "./components/Hr/HrToAdmin";
 import AccountToAccountChat from "./components/accounts/AccountToAccountChat";
 import AccountToAdminChat from "./components/accounts/AccountToAdminChat";
 import SecurityLogin from "./components/security/SecurityLogin";
-import SoftwareReg from "./components/software/SoftwareReg";
 import SoftwareToSoftware from "./components/software/SoftwareToSoftwareChat";
 import SoftwareToAdminChat from "./components/software/SoftwareToAdminChat";
 
 import SecurityToSecurityChat from "./components/security/SecurityToSecurityChat";
-import SecurityRegister from "./components/security/SecurityRegister";
 import SecurityToAdmin from "./components/security/SecurityToAdmin";
 import Sidebar from "./components/AllUsers/UserSidebar";
 import BlockAccess from "./components/SuperAdmin/BlockAccess";
@@ -74,26 +66,25 @@ import TElogin from "./components/TE/TElogin";
 import TEChat from "./components/TE/TEChat";
 import TEChatToAdmin from "./components/TE/TEChatToAdmin";
 import LogisticLogin from "./components/Logistic/LogisticLogin";
-import LogisticReg from "./components/Logistic/LogisticReg";
 import LogisticChat from "./components/Logistic/LogisticChat";
 import LogisticToAdmin from "./components/Logistic/LogisticToAdmin";
 // import PopNotification from "./components/utility/PopNotification";
 // import Notification from "./components/utility/Notification";
 // import NotificationsComponent from "./components/utility/NotificationsComponent";
-import FetchApiComponent from "./components/utility/FetchApiComponent";
-import NotificationHandler from "../src/components/utility/GroupNotification";
+// import FetchApiComponent from "./components/utility/FetchApiComponent";
+// import NotificationHandler from "../src/components/utility/GroupNotification";
 import GroupNotification from "../src/components/utility/GroupNotification";
 import GlobalNotification from "./components/utility/GlobalNotification";
-import TEDashboard from "./components/SuperAdmin/TEDashboard";
+// import TEDashboard from "./components/SuperAdmin/TEDashboard";
 import AnnouncementByAdmin from "./components/admin/AnnouncementByAdmin";
 import FetchAllAnnouncement from "./components/admin/FetchAllAnnouncement";
 import SuperAdminDashboard from "./components/SuperAdmin/SuperAdminDashboard";
-import TeReg from "./components/TE/TeReg"
 import GroupChat from "./components/AllUsers/GroupChat";
 import CashierLogin from "./components/Cashier/CashierLogin";
 import CashierManagerChat from "./components/Cashier/CashierManagerChat";
 import ManagerCashier from "./components/manager/ManagerCashier";
-import CashierRegistration from "./components/Cashier/CashierRegistration";
+import ManagerGroupChat from "./components/manager/ManagerGroupChat";
+import BillingGroupHome from "./components/BillingTeam/BillingGroupHome";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -119,10 +110,9 @@ const App = () => {
           path="/DigitalMarketingToAdminChat"
           element={<DigitalMarketingToAdminChat />}
         />
-        <Route path="/DigitalMarketingReg" element={<DigitalMarketingReg />} />
-        <Route path="/AccountsReg" element={<AccountsReg />} />
-        <Route path="/MonitoringReg" element={<MonitoringReg />} />
-        <Route path="/BouncerReg" element={<BouncerReg />} />
+        <Route path="/AccountsReg/:role" element={<AccountsReg />} />
+
+
 
         {/* <Route path="/adminRegistration" element={<AdminRegistration/>}/> */}
         <Route element={<AuthRequired />}>
@@ -142,7 +132,9 @@ const App = () => {
           <Route
             path="/BillingTeamManagerLogin"
             element={<BillingTeamManagerLogin />}
+
           />
+          <Route path="/ManagerGroupchat" element={<ManagerGroupChat />} />
           <Route path="/BillingTeamChat" element={<BillingTeamChat />} />
           <Route path="/adminToadmin" element={<AdmintoAdmin />} />
           <Route path="/admindashboard" element={<AdminDashboard />} />
@@ -158,7 +150,6 @@ const App = () => {
             path="/MonitoringTeamToAdminChat"
             element={<MonitoringToAdminChat />}
           />
-          <Route path="/monitoringTeam" element={<MonitoringReg />} />
 
           <Route path="/bouncerLogin" element={<BouncerLogin />} />
           <Route path="/bouncerChat" element={<BouncerTeamChat />} />
@@ -172,7 +163,6 @@ const App = () => {
             path="/VirtualTeamToAdminChat"
             element={<VirtualTeamToAdminChat />}
           />
-          <Route path="/VirtualTeamReg" element={<VirtualTeamRegistration />} />
           <Route path="/virtualTeam" element={<VirtualTeamLogin />} />
 
           <Route
@@ -183,10 +173,7 @@ const App = () => {
             path="/CallCenterToAdminChat"
             element={<CallCenterToAdminChat />}
           />
-          <Route path="/CallCenterReg" element={<CallCenterRegister />} />
           <Route path="/callCenter" element={<CallCenterLogin />} />
-
-          <Route path="/HrReg" element={<HrRegister />} />
           <Route path="/HrLogin" element={<HrLogin />} />
           <Route path="/HrToHrChat" element={<HrToHrChat />} />
           <Route path="/HrToAdminChat" element={<HrToAdmin />} />
@@ -199,13 +186,11 @@ const App = () => {
           <Route path="/AccountToAdminChat" element={<AccountToAdminChat />} />
 
           <Route path="/te" element={<TElogin />} />
-    
-          <Route path="/TeReg" element={<TeReg />} />
+  
           
           <Route path="/TEChat" element={<TEChat />} />
           <Route path="/techattoadmin" element={<TEChatToAdmin />} />
 
-          <Route path="/SoftwareReg" element={<SoftwareReg />} />
           <Route path="/SoftwareLogin" element={<SoftwareLogin />} />
           <Route
             path="/SoftwareToSoftwareChat"
@@ -216,26 +201,23 @@ const App = () => {
             element={<SoftwareToAdminChat />}
           />
           <Route
-            path="/groupChat/:apiEndpoint"
+            path="/groupChat/:department"
             element={<GroupChat />}
           />
+          <Route path="/billingGroup" element={<BillingGroupHome />} />
           <Route path="/SecurityChat" element={<SecurityToSecurityChat />} />
           <Route path="/SecurityToAdminChat" element={<SecurityToAdmin />} />
-          <Route path="/SecurityReg" element={<SecurityRegister />} />
-
           <Route path="/Sidebar" element={<Sidebar />} />
 
           <Route path="/announcement" element={<AnnouncementByAdmin />} />
           <Route path="/fetchAllAnnouncement/:route" element={<FetchAllAnnouncement />} />
 
           <Route path="/LogisticLogin" element={<LogisticLogin />} />
-          <Route path="/LogisticReg" element={<LogisticReg />} />
           <Route path="/LogisticChat" element={<LogisticChat />} />
           <Route path="/LogisticToAdminChat" element={<LogisticToAdmin />} />
 
           <Route path="/CashierLogin" element={<CashierLogin />} />
           <Route path="/CashierManagerChat" element={<CashierManagerChat />} />
-          <Route path="/CashierReg" element={<CashierRegistration/>} />
 
           {isSuperAdminLoggedIn ? (
             <>
@@ -260,7 +242,7 @@ const App = () => {
             <Route path="/Groups" element={<Groups />} />
             <Route path="/livemesages" element={<LiveChatMessages />} />
             <Route
-              path="/message/:selectedGroupName/:selectedGrade"
+              path="/message/:selectedGroupName/:selectedGrade/:selectedDepartment"
               element={<Message />}
             />
           </Route>

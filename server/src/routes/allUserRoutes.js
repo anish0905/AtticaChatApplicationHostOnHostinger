@@ -85,4 +85,6 @@ router.delete("/logistic/:id", authController.deleteLogistic);
 
 router.delete("/users", authController.deleteUsersByRole);
 
+router.get("/groups/:id", authController.getUserGroup)
+
 module.exports = router;

@@ -6,7 +6,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { BASE_URL } from "../../constants";
-// $$$$$$$$$
+
 
 
 const GroupsList = () => {
@@ -21,6 +21,9 @@ const GroupsList = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [groupToDelete, setGroupToDelete] = useState(null);
 
+  const department = localStorage.getItem("department");
+  console.log(department);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,17 +32,23 @@ const GroupsList = () => {
         const response = await fetch(`${BASE_URL}/api/groups`);
         if (response.ok) {
           const data = await response.json();
-          setGroups(data);
+          console.log("Group list: ", data);
+          if (department === "Admin") {
+            setGroups(data);
+          } else {
+            const filteredGroups = data.filter(group => group.department === department);
+            setGroups(filteredGroups);
+          }
         } else {
           console.error("Failed to fetch groups");
         }
       } catch (error) {
-        console.error("Error:", error);
+        console.error("Error fetching groups:", error);
       }
     };
 
     fetchGroups();
-  }, []);
+  }, [department]);
 
   const handleGroupClick = (groupName, groupGrade) => {
     setSelectedGroupName(groupName);
@@ -49,7 +58,7 @@ const GroupsList = () => {
       navigate(
         `/message/${encodeURIComponent(groupName)}/${encodeURIComponent(
           groupGrade
-        )}`
+        )}/${encodeURIComponent(department)}`
       );
     }
   };
@@ -78,7 +87,7 @@ const GroupsList = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ groupName: newGroupName, grade }),
+          body: JSON.stringify({ groupName: newGroupName, grade,department }),
         });
 
         if (response.ok) {
@@ -240,6 +249,7 @@ const GroupsList = () => {
           <Message
             selectedGroupName={selectedGroupName}
             selectedGrade={selectedGrade}
+            department={department}
           />
         )}
       </div>

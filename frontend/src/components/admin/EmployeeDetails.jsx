@@ -8,10 +8,10 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AiOutlineSearch } from "react-icons/ai";
 
 const Modal = ({ show, onClose, employee, onUpdate }) => {
-  const [formData, setFormData] = useState({ ...employee });
+  const [formData, setFormData] = useState({ ...employee, group: employee.group || [] });
 
   useEffect(() => {
-    setFormData({ ...employee });
+    setFormData({ ...employee, group: employee.group || [] });
   }, [employee]);
 
   if (!show) return null;
@@ -24,13 +24,38 @@ const Modal = ({ show, onClose, employee, onUpdate }) => {
     });
   };
 
+  const handleGroupChange = (index, e) => {
+    const { name, value } = e.target;
+    const newGroup = [...formData.group];
+    newGroup[index][name] = value;
+    setFormData({
+      ...formData,
+      group: newGroup,
+    });
+  };
+
+  const addGroup = () => {
+    setFormData({
+      ...formData,
+      group: [...formData.group, { name: "", grade: "" }],
+    });
+  };
+
+  const removeGroup = (index) => {
+    const newGroup = formData.group.filter((_, i) => i !== index);
+    setFormData({
+      ...formData,
+      group: newGroup,
+    });
+  };
+
   const handleUpdate = () => {
     onUpdate(formData);
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
+    <div className="fixed inset-0 z-20 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
       <div className="bg-white p-6 rounded-lg shadow-lg w-[80%] max-w-md"> 
         <h2 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">Edit Employee Details</h2> 
         <form>
@@ -67,29 +92,47 @@ const Modal = ({ show, onClose, employee, onUpdate }) => {
               onChange={handleChange}
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-[#5443c3] text-sm font-bold mb-2">
-              Grade
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-              name="grade"
-              value={formData.grade}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-[#5443c3] text-sm font-bold mb-2">
-              Team Name
-            </label>
-            <input
-              className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
-              name="group"
-              value={formData.group}
-              onChange={handleChange}
-            />
-          </div>
-          <div className="flex justify-end">
+          {formData.group.map((group, index) => (
+            <div key={index} className="mb-4">
+              <div className="mb-2">
+                <label className="block text-[#5443c3] text-sm font-bold mb-2">
+                  Group Name
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                  name="name"
+                  value={group.name}
+                  onChange={(e) => handleGroupChange(index, e)}
+                />
+              </div>
+              <div className="mb-2">
+                <label className="block text-[#5443c3] text-sm font-bold mb-2">
+                  Grade
+                </label>
+                <input
+                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700"
+                  name="grade"
+                  value={group.grade}
+                  onChange={(e) => handleGroupChange(index, e)}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => removeGroup(index)}
+                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+              >
+                Remove Group
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={addGroup}
+            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Add Group
+          </button>
+          <div className="flex justify-end mt-4">
             <button
               type="button"
               onClick={handleUpdate}
@@ -177,7 +220,7 @@ const EmployeeDetails = () => {
   };
 
   return (
-    <div className="flex flex-col h-[950px] overflow-y-auto w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
+    <div className="flex flex-col h-[820px] overflow-y-auto w-full p-4 sm:p-6 bg-[#e8effe] rounded-lg shadow-md">
       <div className="relative mb-4 w-full flex items-center space-x-4">
         <div className="relative flex-grow">
           <input
@@ -203,63 +246,63 @@ const EmployeeDetails = () => {
       <ToastContainer />
       <div className="flex-1 overflow-x-auto overflow-y-hidden">
         <div className="h-[850px] overflow-y-auto">
-          <table className="min-w-full divide-y divide-gray-200 border border-gray-300">
-            <thead className="bg-[#5443c3] sticky top-0">
+          <table className="min-w-full divide-y divide-gray-200 border border-gray-300 shadow-lg">
+            <thead className="bg-[#5443c3] sticky top-0 z-10">
               <tr>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Employee ID
+                </th>
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Name
                 </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
-                  Emp ID
-                </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   State
                 </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Language
                 </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
-                  Grade
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
+                  Groups
                 </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
-                  Team Name
-                </th>
-                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider relative break-words whitespace-pre-wrap">
+                <th className="py-3 px-2 sm:px-4 text-left text-xs sm:text-sm font-medium text-white uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200 text-[#5443c3]">
+            <tbody className="bg-white divide-y divide-gray-200">
               {filteredEmployees.map((employee) => (
-                <tr key={employee._id}>
-                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">{employee.name}</td>
-                  <td className="py-4 px-2 sm:px-4  text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                <tr key={employee.employeeId}>
+                  <td className="py-2 sm:py-4 px-2 sm:px-4 text-xs sm:text-sm font-medium text-gray-900 whitespace-nowrap">
                     {employee.employeeId}
                   </td>
-                  <td className="py-4 px-2 sm:px-4 text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                  <td className="py-2 sm:py-4 px-2 sm:px-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">
+                    {employee.name}
+                  </td>
+                  <td className="py-2 sm:py-4 px-2 sm:px-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">
                     {employee.state}
                   </td>
-                  <td className="py-4 px-2 sm:px-4  text-xs lg:text-sm relative break-words whitespace-pre-wrap">
+                  <td className="py-2 sm:py-4 px-2 sm:px-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">
                     {employee.language}
                   </td>
-                  <td className="py-4 px-2 sm:px-4  text-xs lg:text-sm relative break-words whitespace-pre-wrap">
-                    {employee.grade}
+                  <td className="py-2 sm:py-4 px-2 sm:px-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">
+                    {employee.group.map((g, index) => (
+                      <div key={index}>
+                        <span>{g.name} - {g.grade}</span>
+                      </div>
+                    ))}
                   </td>
-                  <td className="py-4 px-2 sm:px-4  text-xs lg:text-sm relative break-words whitespace-pre-wrap">
-                    {employee.group}
-                  </td>
-                  <td className="py-4 px-2 whitespace-nowrap sm:px-4 lex text-xs lg:text-sm ">
+                  <td className="py-2 sm:py-4 px-2 sm:px-4 text-xs flex  items-center gap-5 sm:text-sm text-gray-700 whitespace-nowrap">
                     <button
+                      className="text-blue-500 hover:text-blue-700"
                       onClick={() => handleEdit(employee)}
-                      className="mr-2 bg-[#5443c3] hover:bg-blue-700 text-white font-bold py-2 px-2 sm:px-4 rounded mx-2"
                     >
-                      <FaEdit />
+                      <FaEdit  className="text-xl"/>
                     </button>
                     <button
+                      className="ml-2 text-red-500 hover:text-red-700"
                       onClick={() => handleDelete(employee.employeeId)}
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 sm:px-4 rounded"
                     >
-                      <RiDeleteBin5Line />
+                      <RiDeleteBin5Line className="text-xl" />
                     </button>
                   </td>
                 </tr>
@@ -268,7 +311,7 @@ const EmployeeDetails = () => {
           </table>
         </div>
       </div>
-      {selectedEmployee && (
+      {showModal && (
         <Modal
           show={showModal}
           onClose={() => setShowModal(false)}

@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { BASE_URL } from '../../constants';
 import axios from 'axios';
@@ -6,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom'; // Import useNavigate
 import Message from '../admin/Message';
 
-const EmpMessage = ({department}) => {
+const ManagerGroupSms = ({department}) => {
   const [groups, setGroups] = useState([]);
   const [selectedGroupName, setSelectedGroupName] = useState("");
   const [selectedGrade, setSelectedGrade] = useState("");
@@ -16,7 +17,7 @@ const EmpMessage = ({department}) => {
   useEffect(() => {
     const fetchGroups = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}/api/employee/groups/${userId}`);
+        const response = await axios.get(`${BASE_URL}/api/manager/groups/${userId}`);
         setGroups(response.data); // Set the fetched groups
         console.log("Groups:", response.data);  // For debugging
       } catch (error) {
@@ -75,4 +76,4 @@ const EmpMessage = ({department}) => {
   );
 };
 
-export default EmpMessage;
+export default ManagerGroupSms;

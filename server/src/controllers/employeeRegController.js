@@ -14,7 +14,6 @@ const registerEmployee = asyncHandler(async (req, res) => {
     employeeId,
     state,
     language,
-    grade,
     group,
   } = req.body;
 
@@ -270,6 +269,30 @@ const deleteAllEmp = async (req, res) => {
   }
 };
 
+
+const getEmployeeGroups = async (req, res) => {
+  try {
+    const { userId } = req.params; // Extract userId from request parameters
+
+    // Fetch employee data based on userId
+    const employee = await EmployeReg.findOne({ '_id': userId }).exec();
+
+    // Check if employee exists
+    if (!employee) {
+      return res.status(404).json({ message: 'Employee not found' });
+    }
+
+    // Send the groups data as a response
+    res.status(200).json(employee.group);
+  } catch (error) {
+    console.error('Error fetching employee groups:', error);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+
+
 module.exports = {
   registerEmployee,
   loginUser,
@@ -284,4 +307,5 @@ module.exports = {
   BolockAllEmployee,
   Unblocked,
   deleteAllEmp,
+  getEmployeeGroups
 };

@@ -30,6 +30,16 @@ const billingTeamSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    group: [
+      {
+        name: {
+          type: String,
+        },
+        grade: {
+          type: String,
+        },
+      }
+    ],
 
     access: {
       type: Boolean,
