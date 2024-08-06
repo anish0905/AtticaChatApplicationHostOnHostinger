@@ -328,11 +328,9 @@ function BillingTeamChat() {
    // Function to sort users based on unread message count
    const sortedUsers = users
    .filter((user) =>
-<<<<<<< HEAD
+
      user?.name?.toLowerCase().includes(userSearchQuery?.toLowerCase())
-=======
-     user.name?.toLowerCase().includes(userSearchQuery.toLowerCase())
->>>>>>> 59d284568f2a8658dad3f7b4ebf16f48941c42ec
+
    )
    .map((user) => ({
      ...user,

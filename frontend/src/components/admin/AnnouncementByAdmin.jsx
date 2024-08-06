@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Sidebar from "./Sidebar";
 import { BASE_URL } from "../../constants";
 import Swal from 'sweetalert2';
-
 
 function AnnouncementByAdmin() {
   const [messages, setMessages] = useState([]);
@@ -20,6 +19,8 @@ function AnnouncementByAdmin() {
   const [editedMessage, setEditedMessage] = useState("");
   const [editingMessageId, setEditingMessageId] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -112,7 +113,7 @@ function AnnouncementByAdmin() {
         setMessages(updatedMessages);
         setEditMode(false);
         setIsUpdating(false);
-        fetchData()
+        fetchData();
       })
       .catch((error) => {
         console.error("Error editing message:", error);
@@ -120,34 +121,35 @@ function AnnouncementByAdmin() {
       });
   };
 
- 
-  
-    const handleDeleteAllAnnouncements = () => {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "This action will delete all announcements. This cannot be undone!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Yes, delete all!",
-        cancelButtonText: "Cancel",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          axios
-            .delete(`${BASE_URL}/api/announce/deleteAnnounce/${loggedInUserId}`)
-            .then((response) => {
-              setMessages([]);
-              Swal.fire("Deleted!", "All announcements have been deleted.", "success");
-            })
-            .catch((error) => {
-              console.error("Error deleting all announcements:", error);
-              Swal.fire("Error", "Failed to delete announcements.", "error");
-            });
-        }
-      });
-    };
+  const handleDeleteAllAnnouncements = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This action will delete all announcements. This cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete all!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(`${BASE_URL}/api/announce/deleteAnnounce/${loggedInUserId}`)
+          .then((response) => {
+            setMessages([]);
+            Swal.fire("Deleted!", "All announcements have been deleted.", "success");
+          })
+          .catch((error) => {
+            console.error("Error deleting all announcements:", error);
+            Swal.fire("Error", "Failed to delete announcements.", "error");
+          });
+      }
+    });
+  };
 
+  const handleback = () => {
+    navigate("/admindashboard");
+  };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen relative">
@@ -156,22 +158,22 @@ function AnnouncementByAdmin() {
       <div className="flex-1 flex flex-col w-full lg:w-auto">
         <div className="flex flex-col flex-1 lg:bg-[#f6f5fb] lg:border-l lg:border-gray-200 lg:overflow-y-auto">
           <div className="flex items-center space-x-2">
-          <div className="lg:text-2xl font-bold p-4 flex justify-between items-center lg:text-[#ffffff] lg:bg-[#5443c3] text-[#5443c3] border border-[#5443c3] bg-[#ffffff] w-full ">
-            <Link to="/">
-              <FaArrowLeft className="lg:text-white text-[#5443c3] hover:text-[#5443c3]" />
-            </Link>
-            <h1 >
-              Announcement
-            </h1>
-            <button className="bg-[#ff3434] hover:bg-[#f06856] px-2 py-2 rounded-md shadow-md lg:text-xl" onClick={handleDeleteAllAnnouncements}>Delete All</button>
+            <div className="lg:text-2xl font-bold p-4 flex justify-between items-center lg:text-[#ffffff] lg:bg-[#5443c3] text-[#5443c3] border border-[#5443c3] bg-[#ffffff] w-full">
+              <div onClick={handleback}>
+                <FaArrowLeft className="lg:text-white text-[#5443c3] hover:text-[#5443c3]" />
+              </div>
+              <h1>Announcement</h1>
+              <h1>Announcement-(department)</h1>
+              <button className="bg-[#ff3434] hover:bg-[#f06856] px-2 py-2 rounded-md shadow-md lg:text-xl" onClick={handleDeleteAllAnnouncements}>Delete All</button>
             </div>
           </div>
 
-          <div className="flex flex-col flex-1 px-4 pt-4 overflow-y-auto">
-            {messages.map((message, index) => (
+            <div className="flex flex-wrap justify-start content-center items-center w-full">
+              <div className=" h-[82vh]  w-1/2 p-10">
+              {messages.map((message, index) => (
               <div
                 key={index}
-                className={`flex relative break-words whitespace-pre-wrap ${
+                className={`flex  w-[500px]relative break-words whitespace-pre-wrap ${
                   message.sender === loggedInUserId
                     ? "justify-end"
                     : "justify-start"
@@ -215,10 +217,14 @@ function AnnouncementByAdmin() {
                     </div>
                   )}
                 </div>
+                
               </div>
             ))}
-            <div ref={messagesEndRef} />
-          </div>
+
+              </div>
+              <div className=" h-[82vh] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500  w-1/2"></div>
+            </div>
+         
 
           {/* Edit message modal */}
           {editMode && (
@@ -243,40 +249,44 @@ function AnnouncementByAdmin() {
                       </div>
                     </div>
                   ) : (
-                    <button
-                      className="px-4 py-2 bg-[#5443c3] text-white rounded-md hover:bg-opacity-80"
-                      onClick={handleEditMessage}
-                    >
-                      Update
-                    </button>
+                    <>
+                      <button
+                        className="mr-2 px-4 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+                        onClick={() => setEditMode(false)}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="px-4 py-2 bg-[#5443c3] text-white rounded-lg hover:bg-[#322f81]"
+                        onClick={handleEditMessage}
+                      >
+                        Update
+                      </button>
+                    </>
                   )}
-                  <button
-                    className="px-4 py-2 ml-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
-                    onClick={() => setEditMode(false)}
-                  >
-                    Close
-                  </button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Send message input */}
-          {!editMode && (
-            <div className="flex items-center space-x-2 mt-4">
-              <input
-                type="text"
-                className="w-full h-10 rounded-lg border-2 border-[#5443c3] bg-white pl-4"
-                placeholder="Type a message..."
-                value={typedMessage}
-                onChange={(e) => setTypedMessage(e.target.value)}
-              />
-              <IoMdSend
-                className="text-[#5443c3] text-4xl hover:text-[#5443c3] cursor-pointer"
-                onClick={handleSendMessage}
-              />
-            </div>
-          )}
+          <form
+            className="flex items-center border-t border-gray-200 p-4"
+            onSubmit={handleSendMessage}
+          >
+            <input
+              type="text"
+              className="flex-1 h-10 rounded-lg border-2 border-[#5443c3] bg-white pl-4"
+              placeholder="Type a message..."
+              value={typedMessage}
+              onChange={(e) => setTypedMessage(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="ml-2 p-2 rounded-full bg-[#5443c3] text-white hover:bg-[#322f81]"
+            >
+              <IoMdSend size={20} />
+            </button>
+          </form>
         </div>
       </div>
     </div>

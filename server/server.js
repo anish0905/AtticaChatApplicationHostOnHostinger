@@ -19,6 +19,8 @@ const locationRoutes = require("./src/routes/locationRoute.js");
 const employeeRoute = require("./src/routes/employeeRegRoutes.js");
 const announceRoutes = require("./src/routes/announceRoutes.js");
 
+const  announcementDepartmentWiseRoutes = require("./src/routes/announcementDepartmentWise.js");
+
 const allUserRoutes = require("./src/routes/allUserRoutes.js");
 connectDb(); // Call the function to connect to the database
 
@@ -415,6 +417,7 @@ app.use("/api/location", locationRoutes);
 app.use("/api/employee", employeeRoute);
 app.use("/api/allUser", allUserRoutes);
 app.use("/api/announce",announceRoutes);
+app.use("/api/accouncement", announcementDepartmentWiseRoutes);
 
 // Start the server
 app.listen(port, () => {
