@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import './ScrollingNavbar.css';
 import fetchAnnounce from '../utility/fetchAnnounce';
 import { IoArrowBack } from "react-icons/io5";
+import LatestNewsTag from './LatestNewsTag';
 
 function ScrollingNavbar() {
   const { route } = useParams();
@@ -42,12 +43,12 @@ function ScrollingNavbar() {
   }, [containerRef, announcements]);
 
   return (
-    <div className=" top-0 left-0 right-0 bg-[#5443c3] z-10 lg:w-auto lg:ml-[4.8%] w-full fixed " >
+    <div className=" top-0 left-0 right-0 bg-blue-100 z-10 lg:w-auto lg:ml-[4.8%] w-full fixed " >
       <div className="flex-1 flex justify-center items-center p-4 gap-2">
         <span onClick={() => navigate(-1)} className="cursor-pointer text-[#ffffff]">
           {/* <IoArrowBack /> */}
         </span>
-        <h1 className="text-white items-center text-xs lg:text-2xl font-bold mx-2">Announcement</h1>
+        <h1 className="text-white items-center text-xs lg:text-2xl font-bold mx-2"><LatestNewsTag/></h1>
         <div ref={containerRef} className="scrolling-container overflow-hidden h-10 flex items-center lg:rounded-2xl lg:w-[80vw] w-[80%] text-xs">
           <div
             className="scrolling-content flex items-center"

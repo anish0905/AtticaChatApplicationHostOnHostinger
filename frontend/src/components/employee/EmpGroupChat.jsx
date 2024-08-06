@@ -13,8 +13,13 @@ const EmpGroupChat = () => {
         <div className="fixed lg:static w-full z-10">
           <ScrollingNavbar />
         </div>
+<<<<<<< HEAD
         <div className="flex-1 mt-16 lg:mt-20">
           <EmpMessage department="Employee" />
+=======
+        <div className="flex-1 lg:mt-20">
+          <EmpMessage />
+>>>>>>> 59d284568f2a8658dad3f7b4ebf16f48941c42ec
         </div>
       </div>
     </div>

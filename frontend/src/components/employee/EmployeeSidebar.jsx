@@ -32,6 +32,7 @@ const EmployeeSidebar = () => {
     navigate(`/fetchAllAnnouncement/${'empDashbord'}`);
   };
 
+  
   const isActive = (path) => location.pathname === path;
   useEffect(() => {
     const fetchData = async () => {
@@ -138,4 +139,22 @@ const EmployeeSidebar = () => {
   );
 };
 
-export default EmployeeSidebar;
+export default EmployeeSidebar;    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
