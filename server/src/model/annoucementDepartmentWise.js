@@ -23,7 +23,7 @@ const announceDepartmentWiseSchema = new mongoose.Schema({
           ],
     },
 
-    userId:{
+    sender:{
         type: String,
         required: true
     },
@@ -31,11 +31,13 @@ const announceDepartmentWiseSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    text:{
-        type: String,
-        required: true
+    content: {
+        text: {
+          type: String,
+          required: false,
+        },
     }
-},{timeseries: true})
+},{timestamps: true})
 
 module.exports = mongoose.model('AnnounceDepartmentWise', announceDepartmentWiseSchema);
 

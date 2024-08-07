@@ -2,17 +2,17 @@ const AnnounceDepartmentWise = require("../model/annoucementDepartmentWise")
 
 const postAnnouncement = async (req, res) => {
     try {
-        const {department,userId, name,text} = req.body
+        const {department,sender, name,text} = req.body
 
-        if(!department||!userId||!name||!text){
+        if(!department||!sender||!name||!text){
             return res.status(400).json({ message: "Please fill all the fields" });
         }
 
         const announcement = new AnnounceDepartmentWise({
             department,
-            userId,
+            sender,
             name,
-            text
+            content: { text },
         })
 
         await announcement.save()
@@ -47,7 +47,7 @@ const updateAnnouncement = async (req, res) => {
             return res.status(400).json({ message: "Please provide new announcement text" });
         }
         
-        const updatedAnnouncement = await AnnounceDepartmentWise.findByIdAndUpdate(id, { text }, { new: true })
+        const updatedAnnouncement = await AnnounceDepartmentWise.findByIdAndUpdate(id, { content:{text} }, { new: true })
         
         if(!updatedAnnouncement){
             return res.status(404).json({ message: "Announcement not found" });

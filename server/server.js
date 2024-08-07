@@ -417,7 +417,7 @@ app.use("/api/location", locationRoutes);
 app.use("/api/employee", employeeRoute);
 app.use("/api/allUser", allUserRoutes);
 app.use("/api/announce",announceRoutes);
-app.use("/api/accouncement", announcementDepartmentWiseRoutes);
+app.use("/api/announcement", announcementDepartmentWiseRoutes);
 
 // Start the server
 app.listen(port, () => {

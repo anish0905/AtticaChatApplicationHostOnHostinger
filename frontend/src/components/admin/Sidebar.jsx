@@ -31,14 +31,18 @@ const Sidebar = () => {
   const [activeRoute, setActiveRoute] = useState("/atticDashboard");
   const userAdmin = JSON.parse(localStorage.getItem('userAdmin'));
   const [userDetails, setUserDetails] = useState(null);
+  const [department, setDepartment] = useState(null);
 
   const userId = localStorage.getItem('CurrentUserId');
+
 
   const fetchUserDetails = async () => {
     try {
       const resp = await axios.get(`${BASE_URL}/api/admin/admin/${userId}`);
       setUserDetails(resp.data);
+      localStorage.setItem('userDetails',JSON.stringify(resp.data));
       localStorage.setItem('department', resp.data.department);
+      setDepartment(resp.data.department);
     } catch (error) {
       console.error("Fetch User Details Error:", error);
     }
@@ -147,6 +151,25 @@ const Sidebar = () => {
     }
   };
 
+  const handleannoument = async()=>{
+      
+    if(department === "Bouncers/Driver"){
+          navigate ("/announcement/Bouncers")
+    }
+    else if(department=== "Security/CCTV"){
+       navigate("/announcement/Security")
+
+    }
+    else if(department === "Admin"){
+       navigate("/announcement")
+    }
+    else{
+         navigate(`/announcement/${department}`)
+    }
+
+       setActiveRoute("/announcement")
+  }
+
   return (
     <div className="flex justify-evenly flex-row lg:flex-col h-[80px] lg:h-screen w-screen lg:w-[100px] left-0 bg-[#5443c3] border-b lg:border-r shadow-md lg:justify-between items-center py-[10px] lg:py-[20px] text-gray-500">
       <div className="w-16 md:w-20 lg:w-24 h-12 md:h-16 lg:h-20 mx-3 bg-[#fffefd] rounded-2xl flex items-center justify-center">
@@ -155,7 +178,7 @@ const Sidebar = () => {
 
       <div className="flex flex-row lg:flex-col gap-2 md:gap-3 lg:gap-5 relative">
         <div
-          onClick={() => handleNavigation("/announcement")}
+          onClick={handleannoument}
           className={`group relative flex items-center lg:rounded-full rounded-lg p-2 md:p-4 lg:p-5 z-50 cursor-pointer ${activeRoute === "/announcement"
             ? "bg-blue-500 text-white"
             : "bg-[#fffefd]"

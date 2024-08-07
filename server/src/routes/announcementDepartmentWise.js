@@ -4,10 +4,10 @@ const { postAnnouncement, getAnnouncementsByDepartment, updateAnnouncement, dele
 const router = express.Router();
 
 
-router.post = ("/announcements",postAnnouncement)
-router.get =("/announcements/:department",getAnnouncementsByDepartment)
-router.put =("/announcements/:id",updateAnnouncement)
-router.delete =("/announcements/:id",deleteAnnouncement)
+router.post ("/",postAnnouncement)
+router.get ("/:department",getAnnouncementsByDepartment)
+router.put ("/:id",updateAnnouncement)
+router.delete ("/:id",deleteAnnouncement)
 
 module.exports = router;
 

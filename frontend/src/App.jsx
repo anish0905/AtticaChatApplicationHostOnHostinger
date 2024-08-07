@@ -85,6 +85,7 @@ import CashierManagerChat from "./components/Cashier/CashierManagerChat";
 import ManagerCashier from "./components/manager/ManagerCashier";
 import ManagerGroupChat from "./components/manager/ManagerGroupChat";
 import BillingGroupHome from "./components/BillingTeam/BillingGroupHome";
+import DepartmentAdminAnnouncement from "./components/admin/Pages/DepartmentAdminAnnouncement";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -209,7 +210,8 @@ const App = () => {
           <Route path="/SecurityToAdminChat" element={<SecurityToAdmin />} />
           <Route path="/Sidebar" element={<Sidebar />} />
 
-          <Route path="/announcement" element={<AnnouncementByAdmin />} />
+          <Route path="/announcement/:department" element={<AnnouncementByAdmin />} />
+          <Route path="/announcement/" element={<DepartmentAdminAnnouncement />} />
           <Route path="/fetchAllAnnouncement/:route" element={<FetchAllAnnouncement />} />
 
           <Route path="/LogisticLogin" element={<LogisticLogin />} />
