@@ -19,62 +19,65 @@ const UserSidebar = ({ value, newNotificationCount }) => {
   const paths = {
     chat: {
       HR: "/HrToHrChat",
-      CALLCENTER: "/CallCenterToCallCenter",
-      ACCOUNT: "/AccountToAccountChat",
-      SOFTWARE: "/SoftwareToSoftwareChat",
-      BOUNCER: "/bouncerChat",
-      DIGITALMARKETING: "/DigitalMarketingChatToDigitalMarketing",
+      CallCenter: "/CallCenterToCallCenter",
+      Accountant: "/AccountToAccountChat",
+      Software: "/SoftwareToSoftwareChat",
+      "Bouncers/Driver": "/bouncerChat",
+      "Digital Marketing": "/DigitalMarketingChatToDigitalMarketing",
       MONITORING: "/monitoringTeamChat",
-      VIRTUAL: "/VirtualTeamToVirtualTeam",
-      SECURITY: "/SecurityChat",
+      VirtualTeam: "/VirtualTeamToVirtualTeam",
+      "Security/CCTV": "/SecurityChat",
       TE: "/TEChat",
-      LOGISTIC: "/LogisticChat",
+      Logistic: "/LogisticChat",
     },
     adminChat: {
       HR: "/HrToAdminChat",
-      CALLCENTER: "/CallCenterToAdminChat",
-      ACCOUNT: "/AccountToAdminChat",
-      SOFTWARE: "/SoftwareToAdminChat",
-      BOUNCER: "/BouncerToAdminChat",
-      DIGITALMARKETING: "/DigitalMarketingToAdminChat",
-      MONITORING: "/MonitoringTeamToAdminChat",
+      CallCenter: "/CallCenterToAdminChat",
+      Accountant: "/AccountToAdminChat",
+      Software: "/SoftwareToAdminChat",
+      "Bouncers/Driver": "/BouncerToAdminChat",
+      "Digital Marketing": "/DigitalMarketingToAdminChat",
+      MonitoringTeam: "/MonitoringTeamToAdminChat",
       VIRTUAL: "/VirtualTeamToAdminChat",
-      SECURITY: "/SecurityToAdminChat",
+      "Security/CCTV": "/SecurityToAdminChat",
       TE: "/techattoadmin",
-      LOGISTIC: "/LogisticToAdminChat",
+      Logistic: "/LogisticToAdminChat",
     },
     groupChat: {
       HR: "/groupChat/HR",
-      CALLCENTER: "/groupChat/CallCenter",
-      ACCOUNT: "/groupChat/Accountant",
-      SOFTWARE: "/groupChat/Software",
-      BOUNCER: "/groupChat/Bouncers",
-      DIGITALMARKETING: "/groupChat/Digital Marketing",
-      MONITORING: "/groupChat/MonitoringTeam",
-      VIRTUAL: "/groupChat/VirtualTeam",
-      SECURITY: "/groupChat/Security",
+      CallCenter: "/groupChat/CallCenter",
+      Accountant: "/groupChat/Accountant",
+      Software: "/groupChat/Software",
+      "Bouncers/Driver": "/groupChat/Bouncers",
+      "Digital Marketing": "/groupChat/Digital Marketing",
+      MonitoringTeam: "/groupChat/MonitoringTeam",
+      VirtualTeam: "/groupChat/VirtualTeam",
+      "Security/CCTV": "/groupChat/Security",
       TE: "/groupChat/TE",
-      LOGISTIC: "/groupChat/Logistic",
+      Logistic: "/groupChat/Logistic",
       Cashier: "/groupChat/Cashier",
     },
     announcements: {
       HR: "/fetchAllAnnouncement/HrToHrChat/HR",
-      CALLCENTER: "/fetchAllAnnouncement/CallCenterToCallCenter/CallCenter",
-      ACCOUNT: "/fetchAllAnnouncement/AccountToAccountChat/Accountant",
-      SOFTWARE: "/fetchAllAnnouncement/SoftwareToSoftwareChat/Software",
-      BOUNCER: "/fetchAllAnnouncement/getAllBouncersTeam/Bouncers",
-      DIGITALMARKETING: "/fetchAllAnnouncement/DigitalMarketingChatToDigitalMarketing/Digital Marketing",
-      MONITORING: "/fetchAllAnnouncement/monitoringTeamChat/MonitoringTeam",
-      VIRTUAL: "/fetchAllAnnouncement/VirtualTeamToVirtualTeam/VirtualTeam",
-      SECURITY: "/fetchAllAnnouncement/getAllSecurityTeam/Security",
+      CallCenter: "/fetchAllAnnouncement/CallCenterToCallCenter/CallCenter",
+      Accountant: "/fetchAllAnnouncement/AccountToAccountChat/Accountant",
+      Software: "/fetchAllAnnouncement/SoftwareToSoftwareChat/Software",
+      "Bouncers/Driver": "/fetchAllAnnouncement/getAllBouncersTeam/Bouncers",
+      "Digital Marketing": "/fetchAllAnnouncement/DigitalMarketingChatToDigitalMarketing/Digital Marketing",
+      MonitoringTeam: "/fetchAllAnnouncement/monitoringTeamChat/MonitoringTeam",
+      VirtualTeam: "/fetchAllAnnouncement/VirtualTeamToVirtualTeam/VirtualTeam",
+      "Security/CCTV": "/fetchAllAnnouncement/getAllSecurityTeam/Security",
       TE: "/fetchAllAnnouncement/getAllTE/TE",
-      LOGISTIC: "/fetchAllAnnouncement/getAllLogistic/Logistic",
+      Logistic: "/fetchAllAnnouncement/getAllLogistic/Logistic",
       Cashier: "/fetchAllAnnouncement/getAllDigitalCashier/Cashier",
     },
   };
 
   const handleNavigation = (type) => {
-    navigate(paths[type][value] || "/");
+    console.log("handleNavigation", type,userDetails.role);
+
+    navigate(paths[type][userDetails.role]);
+    // groupChat
   };
 
   const handleLogout = () => {
@@ -116,7 +119,7 @@ const UserSidebar = ({ value, newNotificationCount }) => {
             {announcements.length}
           </span>
         )}
-        <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 whitespace-nowrap z-50 bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <span className="absolute lg:bottom-auto lg:left-full mt-16 lg:ml-0 lg:mt-2 z-20 whitespace-nowrap  bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
           Announcement
         </span>
       </div>
@@ -129,7 +132,7 @@ const UserSidebar = ({ value, newNotificationCount }) => {
           }`}
         >
           <BsChatSquareDots />
-          <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute top-full lg:top-auto lg:left-full ml-2 z-20 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Chat
           </span>
         </div>
@@ -141,7 +144,7 @@ const UserSidebar = ({ value, newNotificationCount }) => {
           }`}
         >
           <RiContactsLine />
-          <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute top-full lg:top-auto lg:left-full ml-2 z-20  lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Admin
           </span>
         </div>
@@ -153,7 +156,7 @@ const UserSidebar = ({ value, newNotificationCount }) => {
           }`}
         >
           <GrChatOption />
-          <span className="absolute top-full lg:top-auto lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <span className="absolute top-full lg:top-auto z-20 lg:left-full ml-2 lg:ml-0 lg:mt-2 lg:mb-0 whitespace-nowrap bg-black text-white text-xs md:text-sm rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
             Group
           </span>
         </div>
@@ -169,7 +172,7 @@ const UserSidebar = ({ value, newNotificationCount }) => {
             >
               <CgProfile />
               {showTooltip && (
-                <div className="absolute top-full left-0 mt-5 p-4 bg-black text-white text-sm md:text-md rounded shadow-md z-10">
+                <div className="absolute top-full left-0 mt-5 p-4 bg-black text-white text-sm md:text-md rounded shadow-md z-20">
                   <p>Email: {userDetails.email}</p>
                   <p>Name: {userDetails.name}</p>
                   <p>Role: {userDetails.role}</p>
