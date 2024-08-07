@@ -36,7 +36,7 @@ function DepartmentAdminAnnouncement() {
     "Virtual Team": "VirtualTeam",
     "Monitoring Team": "MonitoringTeam",
     Bouncers: "Bouncers",
-    Security: "Security/CCTV",
+    Security: "Security",
     "Digital Marketing": "Digital Marketing",
     TE: "TE",
     Logistic: "Logistic",
@@ -59,7 +59,7 @@ function DepartmentAdminAnnouncement() {
 
   const fetchDataByDepartment = (department) => {
     axios
-      .get(`${BASE_URL}/api/announcement/${endpoint}`)
+      .get(`${BASE_URL}/api/announcements/${endpoint}`)
       .then((response) => {
         if (department === "Admin") {
           setAdminMessages(response.data);
@@ -206,23 +206,18 @@ function DepartmentAdminAnnouncement() {
                 <FaArrowLeft className="lg:text-white text-[#5443c3] hover:text-[#5443c3]" />
               </Link>
               <h1>Announcement-(Admin)</h1>
-              <h1>
-                <label
-                  htmlFor="userRoles"
-                  className="block font-medium bg-[#5443C3] px-4 py-4 rounded text-white text-xl"
-                >
-                 Announcement
-                </label>
+              <h1 className="flex items-center justify-center content-center">
+                
                 <select
                   id="userRoles"
                   name="userRoles"
                   value={selectedRole}
                   onChange={(event) => setSelectedRole(event.target.value)}
-                  className="ml-4 bg-[#5443C3] text-white px-4 py-2 rounded-md"
+                  className="ml-4 bg-[#5443C3] text-white px-1 py-2 rounded-md"
                 >
                   {Object.keys(roleEndpointMap).map((role) => (
                     <option key={role} value={role}>
-                      {role}
+                     Announcement-({role})
                     </option>
                   ))}
                 </select>

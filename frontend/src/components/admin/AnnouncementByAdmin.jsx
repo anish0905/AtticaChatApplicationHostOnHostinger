@@ -26,6 +26,8 @@ function AnnouncementByAdmin() {
   const { department } = useParams();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
+  console.log("messagesAdmin",messagesAdmin)
+
   let NewDepartment;
 
   if (department === "Bouncers") {
@@ -38,12 +40,22 @@ function AnnouncementByAdmin() {
 
   useEffect(() => {
     fetchData();
-    fetchAdminMessages();
+    
   }, []);
+
+  useEffect(() => {
+
+    const intervalId = setInterval(fetchAdminMessages, 5000); // Fetch every 5 seconds
+
+    return () => clearInterval(intervalId);
+   
+  }, []);
+
+  
 
   const fetchData = () => {
     axios
-      .get(`${BASE_URL}/api/announcement/${NewDepartment}`)
+      .get(`${BASE_URL}/api/announcements/${department}`)
       .then((response) => {
         setMessages(response.data);
         scrollToBottom();
@@ -55,7 +67,7 @@ function AnnouncementByAdmin() {
 
   const fetchAdminMessages = async () => {
     try {
-      const resp = await axios.get(`${BASE_URL}/api/announce/getAnnounceById/${loggedInUserId}`);
+      const resp = await axios.get(`${BASE_URL}/api/announce/getAllAnnounce`);
       setAdminMessages(resp.data);
     } catch (error) {
       console.error('Error fetching admin messages:', error);
@@ -77,7 +89,7 @@ function AnnouncementByAdmin() {
       name: userDetails.name,
     };
     axios
-      .post(`${BASE_URL}/api/announcement/`, messageData)
+      .post(`${BASE_URL}/api/announcements/announcements`, messageData)
       .then((response) => {
         setMessages([...messages, response.data]);
         setTypedMessage("");
@@ -90,7 +102,7 @@ function AnnouncementByAdmin() {
 
   const handleDelete = (message) => {
     axios
-      .delete(`${BASE_URL}/api/announcement/${message._id}`)
+      .delete(`${BASE_URL}/api/announcements/announcements/${message._id}`)
       .then((response) => {
         const updatedMessages = messages.filter((m) => m._id !== message._id);
         setMessages(updatedMessages);
@@ -128,7 +140,7 @@ function AnnouncementByAdmin() {
 
     axios
       .put(
-        `${BASE_URL}/api/announcement/${editingMessageId}`,
+        `${BASE_URL}/api/announcements/announcements/${editingMessageId}`,
         updatedMessage
       )
       .then((response) => {
@@ -161,7 +173,7 @@ function AnnouncementByAdmin() {
       }).then((result) => {
         if (result.isConfirmed) {
           axios
-            .delete(`${BASE_URL}/api/announcement/${loggedInUserId}`)
+            .delete(`${BASE_URL}/api/announcements/announcements/${loggedInUserId}`)
             .then((response) => {
               setMessages([]);
               Swal.fire("Deleted!", "All announcements have been deleted.", "success");

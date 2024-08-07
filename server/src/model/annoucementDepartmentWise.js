@@ -31,13 +31,13 @@ const announceDepartmentWiseSchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    content: {
+    content:{
         text: {
-          type: String,
-          required: false,
-        },
+            type: String,
+            required: false,
+          },
     }
-},{timestamps: true})
+},{timestamps: true })
 
 module.exports = mongoose.model('AnnounceDepartmentWise', announceDepartmentWiseSchema);
 

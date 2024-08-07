@@ -29,7 +29,18 @@ const postAnnouncement = async (req, res) => {
 const getAnnouncementsByDepartment = async (req, res) => {
     try {
         const { department } = req.params
-        const announcements = await AnnounceDepartmentWise.find({ department })
+
+        let NewDepartment = "";
+
+        if (department === "Bouncers") {
+            NewDepartment = "Bouncers/Driver";
+          } else if (department === "Security") {
+            NewDepartment = "Security/CCTV";
+          } else {
+            NewDepartment = department;
+          }
+
+        const announcements = await AnnounceDepartmentWise.find({ department:NewDepartment })
         res.json(announcements)
         
     } catch (error) {

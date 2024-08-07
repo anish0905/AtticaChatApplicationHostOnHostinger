@@ -212,7 +212,7 @@ const App = () => {
 
           <Route path="/announcement/:department" element={<AnnouncementByAdmin />} />
           <Route path="/announcement/" element={<DepartmentAdminAnnouncement />} />
-          <Route path="/fetchAllAnnouncement/:route" element={<FetchAllAnnouncement />} />
+          <Route path="/fetchAllAnnouncement/:route/:department" element={<FetchAllAnnouncement />} />
 
           <Route path="/LogisticLogin" element={<LogisticLogin />} />
           <Route path="/LogisticChat" element={<LogisticChat />} />
