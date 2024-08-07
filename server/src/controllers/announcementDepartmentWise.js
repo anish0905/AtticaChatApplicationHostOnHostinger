@@ -12,7 +12,7 @@ const postAnnouncement = async (req, res) => {
             department,
             userId,
             name,
-            text
+            content:text,
         })
 
         await announcement.save()

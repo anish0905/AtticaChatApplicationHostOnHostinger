@@ -210,7 +210,7 @@ const App = () => {
           <Route path="/Sidebar" element={<Sidebar />} />
 
           <Route path="/announcement" element={<AnnouncementByAdmin />} />
-          <Route path="/fetchAllAnnouncement/:route" element={<FetchAllAnnouncement />} />
+          <Route path="/fetchAllAnnouncement/:route/:department" element={<FetchAllAnnouncement />} />
 
           <Route path="/LogisticLogin" element={<LogisticLogin />} />
           <Route path="/LogisticChat" element={<LogisticChat />} />

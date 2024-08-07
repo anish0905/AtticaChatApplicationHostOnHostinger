@@ -29,7 +29,7 @@ const EmployeeSidebar = () => {
   };
 
   const handleAnnouncement = () => {
-    navigate(`/fetchAllAnnouncement/${'empDashbord'}`);
+    navigate(`/fetchAllAnnouncement/${'empDashbord'}/Employee`);
   };
 
   

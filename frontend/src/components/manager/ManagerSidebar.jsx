@@ -46,7 +46,7 @@ const ManagerSidebar = ({ value }) => {
       "LOGISTIC": "LogisticChat"
     };
 
-    navigate(`/fetchAllAnnouncement/${'managerChat'}`);
+    navigate(`/fetchAllAnnouncement/${'managerChat'}/Manager`);
   };
 
   useEffect(() => {

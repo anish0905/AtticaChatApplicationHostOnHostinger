@@ -48,7 +48,7 @@ const BillingSidebar = ({ value }) => {
     
     };
 
-    navigate(`/fetchAllAnnouncement/${'BillingTeamChat'}`);
+    navigate(`/fetchAllAnnouncement/${'BillingTeamChat'}/Billing_Team`);
   };
 
   useEffect(() => {
