@@ -19,6 +19,8 @@ import Camera from "../Camera/Camera";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 const senderName = localStorage.getItem('email');
+import { FaVideo } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 function AdminEmpChat() {
   const [messages, setMessages] = useState([]);
@@ -45,6 +47,8 @@ function AdminEmpChat() {
   const [showCamera, setShowCamera] = useState(false);
   const [showImageEditor, setShowImageEditor] = useState(false);
   const [imageForEditing, setImageForEditing] = useState('');
+
+  const navagite = useNavigate()
 
 
   // Debugging logs
@@ -218,6 +222,10 @@ function AdminEmpChat() {
       });
   };
 
+  const handleVideoCall= ()=>{
+    navagite(`/videoCall/${recipient}`)
+  }
+
   return (
     <div className="flex flex-col lg:flex-row h-screen relative">
 
@@ -245,6 +253,7 @@ function AdminEmpChat() {
                 </div>
               )}
               <h2 className="text-2xl font-semibold">{recipientName}</h2>
+              <FaVideo className="text-2xl" onClick={handleVideoCall}/>
             </div>
 
 

@@ -4,6 +4,8 @@ const socketIo = require("socket.io");
 const connectDb = require("./src/config/dbConnection");
 const dotenv = require("dotenv").config();
 const cors = require("cors");
+const bodyParser = require("body-parser");
+const { Server } = require("socket.io");
 const mongoose = require("mongoose");
 const multer = require("multer"); // Import multer for handling file uploads
 const { uploadOnCloudinary } = require("../server/src/utils/cloudinary.js");
@@ -18,17 +20,25 @@ const managerRoute = require("./src/routes/managerRoutes.js");
 const locationRoutes = require("./src/routes/locationRoute.js");
 const employeeRoute = require("./src/routes/employeeRegRoutes.js");
 const announceRoutes = require("./src/routes/announceRoutes.js");
-
-const  announcementDepartmentWiseRoutes = require("./src/routes/announcementDepartmentWise.js");
-
+const announcementDepartmentWiseRoutes = require("./src/routes/announcementDepartmentWise.js");
 const allUserRoutes = require("./src/routes/allUserRoutes.js");
+const videoCallRoute = require("./src/routes/videoCallIngRouter.js");
+
 connectDb(); // Call the function to connect to the database
 
 const app = express();
 
+
+
+app.use(bodyParser.json());
+
 app.use(cors()); // Allow Cross-Origin Resource Sharing (CORS)
 
-const port = process.env.PORT || 5002;
+const port = process.env.PORT || 5002; // Change this to a different port if needed
+
+
+
+
 
 app.use(express.json()); // Parse JSON bodies of incoming requests
 
@@ -40,7 +50,7 @@ const chatSchema = new mongoose.Schema({
     type: String,
     enum: [
       "Admin",
-      "Employee",       
+      "Employee",
       "Manager",
       "Billing_Team",
       "Accountant",
@@ -56,7 +66,6 @@ const chatSchema = new mongoose.Schema({
       "Logistic",
       "Cashier"
     ],
-    
   },
   messages: [
     {
@@ -73,7 +82,6 @@ const chatSchema = new mongoose.Schema({
 const ChatModel = mongoose.model("Chat", chatSchema);
 
 // Set up multer storage configuration for file uploads
-
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "./public/temp");
@@ -86,16 +94,15 @@ const storage = multer.diskStorage({
 // Set up multer upload configuration
 const upload = multer({ storage: storage });
 
-
 app.post(
   "/api/messages",
   upload.fields([{ name: "image" }, { name: "document" }, { name: "video" }]),
   async (req, res) => {
     try {
-      const { employeeId, message, group, grade , department} = req.body;
+      const { employeeId, message, group, grade, department } = req.body;
 
       // Find the chat room by group name and grade
-      let chatRoom = await ChatModel.findOne({ group, grade, department });              
+      let chatRoom = await ChatModel.findOne({ group, grade, department });
 
       if (!chatRoom) {
         return res.status(400).json({
@@ -153,15 +160,11 @@ app.post(
         }
       }
 
-      // console.log("11222222222221vidourl:",videoUploadResult.url);
-
       // Add the new message to the chat room
       const messageData = { employeeId, message };
       if (hasImage) {
         messageData.Image = imageUploadResult.url;
       }
-      //  console.log(messageData.Image);
-      //  console.log(hasImage)
       const imageUrl = messageData.Image;
       if (hasDocument) {
         messageData.Document = documentUploadResult.url;
@@ -171,7 +174,6 @@ app.post(
         messageData.video = videoUploadResult.url;
       }
       const videoUrl = messageData.video;
-      // console.log(videoUrl);
       chatRoom.messages.push(messageData);
 
       const liveChats = new liveChat({
@@ -183,12 +185,10 @@ app.post(
         video: videoUrl,
         document: documentUrl,
       });
-      // console.log(liveChats);
       await liveChats.save();
 
       // Save the updated chat room
       await chatRoom.save();
-      // console.log(chatRoom);
 
       res.status(201).json({ message: "Message sent successfully" });
     } catch (error) {
@@ -215,190 +215,67 @@ app.get("/api/messages", async (req, res) => {
     res.json(messages); // Send the messages as JSON response
   } catch (error) {
     console.error("Error fetching messages:", error);
-    res.status(500).json({ error: "Internal server error" }); // Send 500 status code in case of error
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-// API endpoint to create a new group
+// Route for creating a new chat room
 app.post("/api/groups", async (req, res) => {
   try {
-    const { groupName, grade,department } = req.body;
+    const { group, grade, department } = req.body;
 
-    // Check if the group name and grade are provided
-    if (!groupName || !grade || !department) {
-      return res
-        .status(400)
-        .json({ error: "Group name and grade are required" });
-    }
-
-    // Check if the group with the same name and grade already exists
-    const existingGroup = await ChatModel.findOne({ group: groupName, grade });
-    if (existingGroup) {
+    // Check if a chat room with the given group name and grade already exists
+    let chatRoom = await ChatModel.findOne({ group, grade, department });
+    if (chatRoom) {
       return res.status(400).json({
-        error: `Group with name "${group}" and grade "${grade}" already exists`,
+        error: `Chat room with group "${group}" and grade "${grade}"  and department "${department}" already exists`,
       });
     }
 
-    // Create a new group with the provided group name and grade
-    const newGroup = new ChatModel({ group: groupName, grade,department, messages: [] });
-
-    // Save the new group to the database
-    await newGroup.save();
-
-    res.status(201).json({ message: "Group created successfully" });
-  } catch (error) {
-    console.error("Error creating group:", error);
-    res.status(500).json({ error: "Internal server error" }); // Send 500 status code in case of error
-  }
-});
-
-app.delete("/api/groups/:groupName/:grade", async (req, res) => {
-  const { groupName, grade } = req.params;
-  try {
-    // Find and delete the group
-    const result = await ChatModel.deleteOne({
-      group: groupName,
-      grade: grade,
-    });
-    if (result.deletedCount === 1) {
-      res.json({ message: "Group deleted successfully" });
-    } else {
-      res.status(404).json({ error: "Group not found" });
-    }
-  } catch (error) {
-    console.error("Error deleting group:", error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-// API endpoint to fetch distinct group names and grades
-app.get("/api/groups", async (req, res) => {
-  try {
-    const groups = await ChatModel.aggregate([
-      {
-        $group: {
-          _id: { group: "$group", grade: "$grade" },
-          group: { $first: "$group" },
-          grade: { $first: "$grade" },
-          documentId: { $first: "$_id" },
-          department: { $first: "$department" },
-        },
-      },
-      {
-        $project: {
-          _id: "$documentId",
-          group: 1,
-          grade: 1,
-          department: 1,
-        },
-      },
-    ]);
-    res.json(groups); // Send the distinct group names and grades as JSON response
-  } catch (error) {
-    console.error("Error fetching groups:", error);
-    res.status(500).json({ error: "Internal server error" }); // Send 500 status code in case of error
-  }
-});
-app.get("/api/employeeDetails/:employeeId", async (req, res) => {
-  const { employeeId } = req.params;
-  try {
-    const employee = await EmployeeRegistration.findOne({ employeeId });
-    if (employee) {
-      res.json(employee);
-    } else {
-      res.status(404).json({ error: "Employee details not found" });
-    }
-  } catch (error) {
-    console.error("Error fetching employee details:", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-// Endpoint to fetch messages based on group and grade
-app.get("/api/Emessages", async (req, res) => {
-  let { teamName, grade } = req.query;
-  //   console.log("Received query:", teamName, grade);
-  try {
-    teamName = teamName.trim().toLowerCase();
-    grade = grade.trim().toLowerCase();
-    // console.log("Formatted query:", teamName, grade);
-
-    const result = await ChatModel.findOne({
-      group: { $regex: new RegExp("^" + teamName + "$", "i") },
-      grade: { $regex: new RegExp("^" + grade + "$", "i") },
+    // Create a new chat room
+    chatRoom = new ChatModel({
+      group,
+      grade,
+      department,
+      messages: [],
     });
 
-    // console.log("Query result:", result);
-    res.json(result ? result.messages : []);
-  } catch (error) {
-    console.error("Error fetching messages:", error.message);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-app.get("/api/messages/last-24-hours", async (req, res) => {
-  try {
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    // Save the new chat room to the database
+    await chatRoom.save();
 
-    const pipeline = [
-      {
-        $match: {
-          createdAt: {
-            $gte: today,
-            $lt: new Date(today.getTime() + 24 * 60 * 60 * 1000),
-          },
-        },
-      },
-    ];
-
-    const messages = await liveChat.aggregate(pipeline);
-    res.status(200).json(messages);
+    res.status(201).json({ message: "Chat room created successfully" });
   } catch (error) {
-    console.error("Error retrieving messages:", error);
+    console.error("Error creating chat room:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-app.get("/api/groups/mark-messages-read/:id", async (req, res) => {
-  const { id } = req.params;
+// Route to delete a chat room
+app.delete("/api/groups", async (req, res) => {
   try {
-    const result = await ChatModel.aggregate([
-      {
-        $match: {
-          _id: new mongoose.Types.ObjectId(id), // Match by group _id
-        },
-      },
-      {
-        $unwind: "$messages", // Unwind the messages array
-      },
-      {
-        $sort: {
-          "messages._id": -1, // Sort messages by their _id in descending order
-        },
-      },
-      {
-        $limit: 1, // Limit the result to one message
-      },
-      {
-        $project: {
-          _id: 0,
-          lastMessage: "$messages", // Project the last message
-        },
-      },
-    ]);
+    const { group, grade, department } = req.query;
 
-    if (result.length === 0) {
-      res.status(404).json({ message: "No messages found for this group." });
-    } else {
-      res.json(result[0].lastMessage);
+    // Delete the chat room from the database
+    const result = await ChatModel.findOneAndDelete({
+      group,
+      grade,
+      department,
+    });
+
+    if (!result) {
+      return res
+        .status(404)
+        .json({ error: "Chat room not found with the specified group" });
     }
+
+    res.json({ message: "Chat room deleted successfully" });
   } catch (error) {
-    console.error("Error occurred:", error);
+    console.error("Error deleting chat room:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
 
-// Mounting routes for admin and employee registration
+/// Mounting routes for admin and employee registration
 app.use("/api/employeeRegistration", require("./src/routes/employeeRegRoutes"));
 
 // one tp one chat
@@ -418,8 +295,11 @@ app.use("/api/employee", employeeRoute);
 app.use("/api/allUser", allUserRoutes);
 app.use("/api/announce",announceRoutes);
 app.use("/api/announcements", announcementDepartmentWiseRoutes);
+app.use("/api/videoCall", videoCallRoute);
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server running on port no ${port}`);
-});
+const server = app.listen(port, () =>
+  console.log(`Server running on port ${port}`)
+);
+
+
+

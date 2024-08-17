@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Router } from "react-router-dom";
 import "./App.css";
 import AuthRequired from "./components/authentication/AuthRequired";
 import Dashboard from "./components/admin/Dashboard";
@@ -86,10 +86,13 @@ import ManagerCashier from "./components/manager/ManagerCashier";
 import ManagerGroupChat from "./components/manager/ManagerGroupChat";
 import BillingGroupHome from "./components/BillingTeam/BillingGroupHome";
 import DepartmentAdminAnnouncement from "./components/admin/Pages/DepartmentAdminAnnouncement";
+import VideoCallIng from "./videoCall/VideoCallIng";
+import VideoNotification from "./videoCall/VideoNotification";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
   return (
+   
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<FirstPage />} />
@@ -220,6 +223,11 @@ const App = () => {
 
           <Route path="/CashierLogin" element={<CashierLogin />} />
           <Route path="/CashierManagerChat" element={<CashierManagerChat />} />
+          <Route path="/videoCall/:id" element={<VideoCallIng  />} />
+      
+        
+
+
 
           {isSuperAdminLoggedIn ? (
             <>
@@ -253,9 +261,13 @@ const App = () => {
       {/* <Notification/> */}
       {/* <PopNotification/> */}
        {/* <FetchApiComponent/>  */}
+       <VideoNotification/>
       <GroupNotification />
       <GlobalNotification />
+    
     </BrowserRouter>
+    
+    
   );
 };
 export default App;
