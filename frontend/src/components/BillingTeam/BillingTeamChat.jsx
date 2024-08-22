@@ -71,6 +71,7 @@ function BillingTeamChat() {
 
   const handleClick = (id, name) => {
     // Get the current count message and last user message counts from local storage
+    console.log('name   ',name)
     const currentCountMessage = JSON.parse(localStorage.getItem("currentCountMessage") || "[]");
     const lastUserMessageCounts = JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]");
 
@@ -135,15 +136,16 @@ function BillingTeamChat() {
       .get(`${BASE_URL}/api/manager/getAllManagers`)
       .then((response) => {
         const filteredUsers = response.data.filter(
-          (user) => user._id !== loggedInUserId
+          (user) => user._id != loggedInUserId
         );
+      
         setUsers(filteredUsers);
       })
       .catch((error) => {
         console.error(error);
       });
   }, [loggedInUserId]);
-
+ 
   useEffect(() => {
     const intervalId = setInterval(() => fetchMessages(sender, recipient), 2000);
     return () => clearInterval(intervalId);

@@ -3,7 +3,7 @@ import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import { FaVideo, FaImage, FaCamera } from "react-icons/fa";
+import { FaImage, FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../../constants";
 import { FaArrowLeft } from "react-icons/fa";
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
@@ -14,6 +14,9 @@ import Camera from "../Camera/Camera";
 import GPSTracker from "../manager/Gps";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import { FaVideo } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
 function TEChatToAdmin() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -38,13 +41,13 @@ function TEChatToAdmin() {
   const [selectedChatUserId, setSelectedChatUserId] = useState("");
   const [latitude, setLatitude] = useState(null);
   const [longitude, setLongitude] = useState(null);
-  const [showCamera, setShowCamera] = useState(false); 
+  const [showCamera, setShowCamera] = useState(false);
   const [showImageEditor, setShowImageEditor] = useState(false);
   const [imageForEditing, setImageForEditing] = useState('');
 
 
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
-
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -63,7 +66,7 @@ function TEChatToAdmin() {
     }
   }, []);
 
-  
+
   const [newAdminCountMessage, setNewAdminCountMessage] = useState(() => JSON.parse(localStorage.getItem("newAdminCountMessage") || "[]"));
   const [lastAdminMessageCounts, setLastAdminMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]"));
   const [currentAdminCountMessage, setCurrentAdminCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]"));
@@ -109,7 +112,7 @@ function TEChatToAdmin() {
   };
 
   const getUnreadCountForAdmin = (adminId) => {
-   
+
     const currentAdminCountMessage = JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]");
     const lastAdminMessageCounts = JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]");
 
@@ -159,7 +162,7 @@ function TEChatToAdmin() {
   }, [recipient]);
 
   // Automatically scroll to bottom when new messages are received
-   
+
 
   // Function to send a new message
   const handleSendMessage = () => {
@@ -336,25 +339,29 @@ function TEChatToAdmin() {
 
   const handleDelete = (message) => {
     axios
-     .delete(`${BASE_URL}/api/empadminsender/delmessages/${message._id}`)
-     .then((response) => {
-      
-        setMessages(messages.filter((m) => m._id!== message._id));
+      .delete(`${BASE_URL}/api/empadminsender/delmessages/${message._id}`)
+      .then((response) => {
+
+        setMessages(messages.filter((m) => m._id !== message._id));
         setShowDropdown("null")
       })
 
-     .catch((error) => {
+      .catch((error) => {
         console.error(error);
       });
   };
 
-  
+
   const sortedAdmins = filteredAdmins
     .map((admin) => ({
       ...admin,
       unreadCount: getUnreadCountForAdmin(admin._id),
     }))
     .sort((a, b) => b.unreadCount - a.unreadCount);
+
+  const handleVideoCall = () => {
+    navigate(`/videoCall/${recipient}`)
+  }
 
 
   return (
@@ -377,7 +384,7 @@ function TEChatToAdmin() {
           <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
         </div>
         <div className="h-5/6 overflow-y-auto">
-        {sortedAdmins.map((admin) => (
+          {sortedAdmins.map((admin) => (
             <div key={admin._id}>
               <div
                 className="w-full lg:text-xl md:text-2xl text-sm h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 flex justify-between items-center p-4 cursor-pointer"
@@ -398,15 +405,24 @@ function TEChatToAdmin() {
       {isChatSelected && (
         <div className="w-full lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb] sticky top-0 z-10">
           {isChatSelected && (
-            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] bg-white p-2 flex flex-row items-center justify-between">
+            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between border border-[#5443c3] lg:mt-20">
+
               <button
-                className="w-20  text-[#5443c3] sm:text-white md:text-white text-2xl  mt-2 "
+                className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg mt-2"
                 onClick={handleBackToUserList}
               >
                 <FaArrowLeft />
               </button>
 
-              <h1 className="text-2xl font-bold">Chat with {recipientName}</h1>
+
+              <h1 className="lg:text-2xl text-base font-bold flex-grow text-center">
+                Chat with {recipientName}
+              </h1>
+
+              <FaVideo
+                className="text-2xl ml-4" // Adds margin-left to create gap from the name
+                onClick={handleVideoCall}
+              />
               <Link
                 to={"/"}
                 className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
@@ -414,6 +430,7 @@ function TEChatToAdmin() {
                 {/* <BiLogOut /> */}
               </Link>
             </div>
+
           )}
 
           <div className="flex-grow overflow-y-auto p-4 flex flex-col relative">
@@ -463,13 +480,13 @@ function TEChatToAdmin() {
                       />
                     </>
                   )}
-                    {message.content && message.content. camera && (
-                  <img
-                    src={message.content.camera}
-                    alt="Image"
-                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
-                  />
-                )} 
+                  {message.content && message.content.camera && (
+                    <img
+                      src={message.content.camera}
+                      alt="Image"
+                      className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                    />
+                  )}
                   {message.content && message.content.document && (
                     <a
                       href={message.content.document}
@@ -498,40 +515,40 @@ function TEChatToAdmin() {
                         className="absolute top-2 right-2 cursor-pointer"
                         onClick={() => handleDropdownClick(index)}
                       />
-                                 {showDropdown === index && (
-                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleReply(message)}
-                      >
-                        Reply
-                      </button>
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleForward(message)}
-                      >
-                        Forward
-                      </button>
-                      {(message.content.image || message.content.camera) && (
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleEditImage(message)}
-                        >
-                          Edit Image
-                        </button>
+                      {showDropdown === index && (
+                        <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                          <button
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleReply(message)}
+                          >
+                            Reply
+                          </button>
+                          <button
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleForward(message)}
+                          >
+                            Forward
+                          </button>
+                          {(message.content.image || message.content.camera) && (
+                            <button
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              onClick={() => handleEditImage(message)}
+                            >
+                              Edit Image
+                            </button>
+                          )}
+                          {
+                            message.sender === loggedInUserId && (
+                              <button
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                onClick={() => handleDelete(message)}
+                              >
+                                delete
+                              </button>
+                            )
+                          }
+                        </div>
                       )}
-                       {
-                      message.sender === loggedInUserId && (
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleDelete(message)}
-                        >
-                          delete
-                        </button>
-                      )
-                    }
-                    </div>
-                  )}
                     </>
                   )}
                 </div>
@@ -558,7 +575,7 @@ function TEChatToAdmin() {
               className="hidden"
               id="file-upload"
             />
-             <button
+            <button
               onClick={() => setShowCamera(true)}
               className="mr-2 text-xl"
             >
@@ -580,7 +597,7 @@ function TEChatToAdmin() {
               longitude={longitude}
             />
           </div>
-          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef} />
         </div>
       )}
 

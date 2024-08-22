@@ -19,10 +19,12 @@ import { IoMdNotificationsOutline } from "react-icons/io";
 import fetchAnnounce from '../utility/fetchAnnounce';
 import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";  
-
+import { FaVideo } from "react-icons/fa6";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 import CashierSidebar from "./CashierSidebar";
+
+
 function CashierManagerChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -46,7 +48,7 @@ function CashierManagerChat() {
   const [showReplyModal, setShowReplyModal] = useState(false);
   const [showCamera, setShowCamera] = useState(false);
   const [announcements, setAnnouncements] = useState([])
-  const navigate = useNavigate();
+ 
   const [showImageEditor, setShowImageEditor] = useState(false);
   const [imageForEditing, setImageForEditing] = useState('');
 
@@ -58,7 +60,7 @@ function CashierManagerChat() {
   const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
 
  
- 
+  const navigate = useNavigate()
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -330,6 +332,10 @@ function CashierManagerChat() {
  .sort((a, b) => b.unreadCount - a.unreadCount);
 
 
+ const handleVideoCall = () => {
+  navigate(`/videoCall/${recipient}`)
+}
+
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
 
@@ -349,6 +355,7 @@ function CashierManagerChat() {
 
 
             <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
+            <FaVideo className="text-2xl" onClick={handleVideoCall}/>
 
 
 

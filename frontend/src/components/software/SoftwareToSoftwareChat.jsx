@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
@@ -15,6 +13,11 @@ import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import { FaVideo } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
+
+
 
 function SoftwareToSoftware() {
   const [messages, setMessages] = useState([]);
@@ -41,6 +44,7 @@ function SoftwareToSoftware() {
   const [imageForEditing, setImageForEditing] = useState('');
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
+  const navigate = useNavigate()
 
   // const handleClick = (id, name) => {
   //   setSender(loggedInUserId);
@@ -413,6 +417,10 @@ function SoftwareToSoftware() {
   }))
   .sort((a, b) => b.unreadCount - a.unreadCount);
   
+  const handleVideoCall= ()=>{
+    navigate(`/videoCall/${recipient}`)
+  }
+
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
 
@@ -431,6 +439,7 @@ function SoftwareToSoftware() {
             </button>
 
             <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
+            <FaVideo className="text-2xl" onClick={handleVideoCall}/>
 
           </div>
           <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] h-screen pr-20">

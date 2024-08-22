@@ -15,6 +15,9 @@ import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import { FaVideo } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
 function LogisticChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -47,8 +50,8 @@ function LogisticChat() {
   const [lastUserMessageCounts, setLastUserMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
   const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
 
- 
- 
+  const navigate = useNavigate()
+
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -287,20 +290,23 @@ function LogisticChat() {
       });
   };
   const sortedUsers = users
-  .filter((user) =>
-    user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
-  )
-  .map((user) => ({
-    ...user,
-    unreadCount: getUnreadCountForUser(user._id),
-  }))
-  .sort((a, b) => b.unreadCount - a.unreadCount);
+    .filter((user) =>
+      user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
+    )
+    .map((user) => ({
+      ...user,
+      unreadCount: getUnreadCountForUser(user._id),
+    }))
+    .sort((a, b) => b.unreadCount - a.unreadCount);
 
+  const handleVideoCall = () => {
+    navigate(`/videoCall/${recipient}`)
+  }
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
 
-    
+
       {!showChat && <span className="mt-20"><ScrollingNavbar /></span>}
       <UserSidebar value="LOGISTIC" />
 
@@ -309,12 +315,14 @@ function LogisticChat() {
           <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
             <button
               onClick={handleBackToEmployees}
-             className="lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
+              className="lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
             >
-              <FaArrowLeft  />
+              <FaArrowLeft />
             </button>
 
+
             <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
+            <FaVideo className="text-2xl" onClick={handleVideoCall} />
           </div>
           <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa]">
             {messages.map((message, index) => (
@@ -394,7 +402,7 @@ function LogisticChat() {
                     >
                       Forward
                     </button>
-                    {(message.content.image ||message.content.camera) && (
+                    {(message.content.image || message.content.camera) && (
                       <button
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                         onClick={() => handleEditImage(message)}
@@ -451,7 +459,7 @@ function LogisticChat() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
-          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef} />
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">

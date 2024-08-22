@@ -15,6 +15,9 @@ import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 import ManagerSidebar from "./ManagerSidebar";
+import { FaVideo } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
 function ManagerCashier() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -44,7 +47,7 @@ function ManagerCashier() {
   const [lastUserMessageCounts, setLastUserMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
   const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
 
- 
+  const navigate = useNavigate()
  
 
   useEffect(() => {
@@ -290,6 +293,11 @@ function ManagerCashier() {
     }))
     .sort((a, b) => b.unreadCount - a.unreadCount);
 
+
+    const handleVideoCall= ()=>{
+      navigate(`/videoCall/${recipient}`)
+    }
+
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
       
@@ -307,7 +315,8 @@ function ManagerCashier() {
             <FaArrowLeft />
             </button>
       
-              <h1  className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
+            <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
+            <FaVideo className="text-2xl" onClick={handleVideoCall}/>
           </div>
           
           <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] h-screen pr-20">

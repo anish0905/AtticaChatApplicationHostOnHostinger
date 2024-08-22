@@ -13,6 +13,10 @@ import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import { FaVideo } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
+
 function ChatPage() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -43,7 +47,7 @@ function ChatPage() {
   const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
 
 
-
+  const navigate = useNavigate()
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -303,6 +307,9 @@ function ChatPage() {
       });
   };
 
+  const handleVideoCall = () => {
+    navigate(`/videoCall/${recipient}`)
+  }
 
 
   return (
@@ -320,7 +327,14 @@ function ChatPage() {
               <FaArrowLeft />
             </button>
 
-            <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
+            <h1 className="lg:text-2xl text-base font-bold flex-grow text-center">
+              Chat with {recipientName}
+            </h1>
+
+            <FaVideo
+              className="text-2xl ml-4" // Adds margin-left to create gap from the name
+              onClick={handleVideoCall}
+            />
           </div>
           <div className="flex-grow overflow-y-auto p-4 flex flex-col h-screen bg-[#eef2fa]">
             {messages.map((message, index) => (

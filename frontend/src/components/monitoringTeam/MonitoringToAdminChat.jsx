@@ -4,7 +4,7 @@ import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { BiLogOut } from "react-icons/bi";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import { FaVideo, FaImage, FaCamera } from "react-icons/fa";
+import {  FaImage, FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../../constants";
 import Sidebar from "../AllUsers/UserSidebar"
 import ReplyModel from "../ReplyModel";//--------------->
@@ -16,6 +16,9 @@ import Camera from "../Camera/Camera";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 import ScrollingNavbar from "../admin/ScrollingNavbar";
+import { FaVideo } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
 
 function MonitoringAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -50,6 +53,7 @@ function MonitoringAdminChat() {
   const [lastAdminMessageCounts, setLastAdminMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]"));
   const [currentAdminCountMessage, setCurrentAdminCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]"));
 
+  const navigate = useNavigate()
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -335,6 +339,11 @@ function MonitoringAdminChat() {
   .sort((a, b) => b.unreadCount - a.unreadCount);
 
 
+  const handleVideoCall= ()=>{
+    navigate(`/videoCall/${recipient}`)
+  }
+
+
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden relative mt-20 lg:mt-0">
            <ScrollingNavbar />
@@ -377,9 +386,7 @@ function MonitoringAdminChat() {
 
         <div className="w-full h-screen lg:w-4/5 flex flex-col justify-between bg-[#f6f5fb]">
           {isChatSelected && (
-
-
-            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between">
+            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between border border-[#5443c3] lg:mt-20">
 
               <button
                 className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg mt-2"
@@ -388,15 +395,26 @@ function MonitoringAdminChat() {
                 <FaArrowLeft />
               </button>
 
-              <h1 className="lg:text-2xl text-base font-bold ml-auto">Chat with {recipientName}</h1>
+
+              <h1 className="lg:text-2xl text-base font-bold flex-grow text-center">
+                Chat with {recipientName}
+              </h1>
+
+              <FaVideo
+                className="text-2xl ml-4" // Adds margin-left to create gap from the name
+                onClick={handleVideoCall}
+              />
               <Link
                 to={"/"}
-                className="group relative flex items-center justify-end font-extrabold rounded-full p-3 md:p-5"
+                className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
               >
                 {/* <BiLogOut /> */}
               </Link>
             </div>
+
           )}
+
+
 
 
           <div className="flex flex-col flex-1 px-4 pt-4 relative overflow-y-auto" style={{ maxHeight: "80vh" }}>
