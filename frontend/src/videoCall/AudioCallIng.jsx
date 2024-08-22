@@ -6,7 +6,7 @@ import axios from "axios";
 import { FaArrowLeft } from "react-icons/fa"; // Import the icon
 import "./style.css";
 
-const VideoCallIng = () => {
+const AudioCallIng = () => {
   const { id } = useParams();
   const roomID = id;
   const receiverId = id;
@@ -19,11 +19,11 @@ const VideoCallIng = () => {
 
   const containerRef = useRef(null);
   const zpRef = useRef(null);
-  let link
+  let link;
 
-  const sendVideoCallRequest = async (senderId, receiverId, roomId, senderName, link) => {
+  const sendAudioCallRequest = async (senderId, receiverId, roomId, senderName, link) => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/videoCall/video-call/request`, {
+      const response = await axios.post(`${BASE_URL}/api/audioCall/audio-call/request`, {
         senderId,
         receiverId,
         roomId,
@@ -32,7 +32,7 @@ const VideoCallIng = () => {
       });
       return response.data;
     } catch (error) {
-      console.error("Error sending video call request:", error);
+      console.error("Error sending audio call request:", error);
       throw error;
     }
   };
@@ -48,18 +48,18 @@ const VideoCallIng = () => {
       setName
     );
 
-     link = `${window.location.protocol}//${window.location.host}${window.location.pathname}?roomID=${roomID}`;
+    link = `${window.location.protocol}//${window.location.host}${window.location.pathname}?roomID=${roomID}`;
 
     try {
-      await sendVideoCallRequest(userId, receiverId, roomID, setName, link);
+      await sendAudioCallRequest(userId, receiverId, roomID, setName, link);
     } catch (error) {
-      console.error("Failed to send video call request:", error);
+      console.error("Failed to send audio call request:", error);
     }
 
     const zp = ZegoUIKitPrebuilt.create(kitToken);
     zpRef.current = zp;
 
-    // Set the ringtone configuration with normal ringtone URLs
+    // Set the ringtone configuration with audio-specific ringtone URLs
     zp.setCallInvitationConfig({
       ringtoneConfig: {
         incomingCallUrl: 'https://example.com/normal-incoming.mp3', // Replace with your incoming ringtone URL
@@ -76,9 +76,8 @@ const VideoCallIng = () => {
         },
       ],
       scenario: {
-        mode: ZegoUIKitPrebuilt.OneONoneCall,
+        mode: ZegoUIKitPrebuilt.AudioCall,  // Use the AudioCall mode for audio-only calls
       },
-      
     });
   };
 
@@ -123,4 +122,4 @@ const VideoCallIng = () => {
   );
 };
 
-export default VideoCallIng;
+export default AudioCallIng;

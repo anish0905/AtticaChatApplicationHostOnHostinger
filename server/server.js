@@ -251,15 +251,14 @@ app.post("/api/groups", async (req, res) => {
 });
 
 // Route to delete a chat room
-app.delete("/api/groups", async (req, res) => {
+app.delete("/api/groups/:group/:grade", async (req, res) => {
   try {
-    const { group, grade, department } = req.query;
+    const { group, grade } = req.params;
 
     // Delete the chat room from the database
     const result = await ChatModel.findOneAndDelete({
       group,
-      grade,
-      department,
+      grade
     });
 
     if (!result) {
@@ -272,6 +271,35 @@ app.delete("/api/groups", async (req, res) => {
   } catch (error) {
     console.error("Error deleting chat room:", error);
     res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/api/groups", async (req, res) => {
+  try {
+    const groups = await ChatModel.aggregate([
+      {
+        $group: {
+          _id: { group: "$group", grade: "$grade" },
+          group: { $first: "$group" },
+          grade: { $first: "$grade" },
+          documentId: { $first: "$_id" },
+          department: { $first: "$department" },
+        },
+      },
+      {
+        $project: {
+          _id: "$documentId",
+          group: 1,
+          grade: 1,
+          department: 1,
+          
+        },
+      },
+    ]);
+    res.json(groups); // Send the distinct group names and grades as JSON response
+  } catch (error) {
+    console.error("Error fetching groups:", error);
+    res.status(500).json({ error: "Internal server error" }); // Send 500 status code in case of error
   }
 });
 

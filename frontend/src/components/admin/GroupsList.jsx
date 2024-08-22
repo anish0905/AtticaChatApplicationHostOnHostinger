@@ -22,7 +22,7 @@ const GroupsList = () => {
   const [groupToDelete, setGroupToDelete] = useState(null);
 
   const department = localStorage.getItem("department");
-  console.log(department);
+ 
 
   const navigate = useNavigate();
 
@@ -49,6 +49,8 @@ const GroupsList = () => {
 
     fetchGroups();
   }, [department]);
+
+  console.log("groups",groups)
 
   const handleGroupClick = (groupName, groupGrade) => {
     setSelectedGroupName(groupName);
@@ -87,7 +89,7 @@ const GroupsList = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ groupName: newGroupName, grade,department }),
+          body: JSON.stringify({ group: newGroupName, grade,department }),
         });
 
         if (response.ok) {
@@ -117,7 +119,7 @@ const GroupsList = () => {
       try {
         const { group, grade } = groupToDelete;
         const response = await fetch(
-          ` ${BASE_URL}/api/groups/${group}/${grade}`,
+          `${BASE_URL}/api/groups/${group}/${grade}`, // Ensure this matches the backend URL
           {
             method: "DELETE",
             headers: {
@@ -125,11 +127,11 @@ const GroupsList = () => {
             },
           }
         );
-
+  
         if (response.ok) {
           const result = await response.json();
           console.log(result.message);
-
+  
           setGroups(
             groups.filter((g) => !(g.group === group && g.grade === grade))
           );
@@ -147,6 +149,7 @@ const GroupsList = () => {
       }
     }
   };
+  
 
   useEffect(() => {
     if (groups.length > 0) {
@@ -182,9 +185,9 @@ const GroupsList = () => {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-screen">
+    <div className="flex flex-col lg:flex-row h-screen w-full">
       <ToastContainer />
-      <div className="flex flex-col w-full lg:w-[24vw] bg-[#ffffff] text-[#5443c3] lg:border shadow lg:shadow-blue-500/65">
+      <div className="flex flex-col w-auto lg:w-[24vw] bg-[#ffffff] text-[#5443c3] lg:border shadow lg:shadow-blue-500/65">
         <div className="p-4 flex justify-between items-center">
           <h1 className="lg:text-3xl md:text-2xl text-xl font-bold">Groups</h1>
           <button
@@ -244,7 +247,7 @@ const GroupsList = () => {
         </div>
       </div>
 
-      <div className="lg:flex-1 hidden lg:block">
+      <div className="lg:flex-1 hidden lg:block w-full">
         {selectedGroupName && selectedGrade && (
           <Message
             selectedGroupName={selectedGroupName}

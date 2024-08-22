@@ -88,6 +88,7 @@ import BillingGroupHome from "./components/BillingTeam/BillingGroupHome";
 import DepartmentAdminAnnouncement from "./components/admin/Pages/DepartmentAdminAnnouncement";
 import VideoCallIng from "./videoCall/VideoCallIng";
 import VideoNotification from "./videoCall/VideoNotification";
+import AudioCallIng from "./videoCall/AudioCallIng.jsx";
 
 const App = () => {
   const isSuperAdminLoggedIn = localStorage.getItem("login");
@@ -224,6 +225,7 @@ const App = () => {
           <Route path="/CashierLogin" element={<CashierLogin />} />
           <Route path="/CashierManagerChat" element={<CashierManagerChat />} />
           <Route path="/videoCall/:id" element={<VideoCallIng  />} />
+          <Route path="/AudioCallIng/:id" element={<AudioCallIng />} />
       
         
 
@@ -264,6 +266,7 @@ const App = () => {
        <VideoNotification/>
       <GroupNotification />
       <GlobalNotification />
+
     
     </BrowserRouter>
     

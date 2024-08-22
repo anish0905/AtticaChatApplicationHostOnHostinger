@@ -7,17 +7,17 @@ import "./style.css";
 const VideoNotification = () => {
     const [requests, setRequests] = useState([]);
     const [hasPlayedRingtone, setHasPlayedRingtone] = useState(false);
-    const receiverId = localStorage.getItem("CurrentUserId");
+    const userId = localStorage.getItem("CurrentUserId");
     const ringtone = new Audio(ringtoneFile);
 
     useEffect(() => {
         const fetchRequests = async () => {
             try {
-                const data = await getVideoCallRequests(receiverId);
+                const data = await getVideoCallRequests(userId);
 
                 // Filter out duplicate requests from the same sender
                 const newRequests = data.videoCallRequests.filter((request, index, self) =>
-                    index === self.findIndex(r => r.senderName === request.senderName)
+                    index === self.findIndex(r => r.receiverId === request.userId)
                 );
 
                 // Play ringtone only once when new requests arrive
@@ -43,7 +43,7 @@ const VideoNotification = () => {
         // Fetch requests periodically to check for new calls
         const interval = setInterval(fetchRequests, 5000); // Adjust the interval as needed
         return () => clearInterval(interval);
-    }, [receiverId, hasPlayedRingtone]);
+    }, [userId, hasPlayedRingtone]);
 
     const handleAccept = async (id, link) => {
         try {
