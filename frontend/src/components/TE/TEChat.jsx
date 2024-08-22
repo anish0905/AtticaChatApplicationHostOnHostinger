@@ -15,6 +15,9 @@ import Camera from "../Camera/Camera";
 import ScrollingNavbar from "../admin/ScrollingNavbar";  
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import { FaVideo } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
 function TEChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -47,7 +50,7 @@ function TEChat() {
   const [lastUserMessageCounts, setLastUserMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
   const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
 
- 
+  const navigate = useNavigate()
  
 
   useEffect(() => {
@@ -295,6 +298,9 @@ function TEChat() {
   }))
   .sort((a, b) => b.unreadCount - a.unreadCount);
 
+  const handleVideoCall = () => {
+    navigate(`/videoCall/${recipient}`)
+  }
 
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
@@ -313,6 +319,7 @@ function TEChat() {
             </button>
 
             <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
+            <FaVideo className="text-2xl" onClick={handleVideoCall}/>
           </div>
           <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa]">
             {messages.map((message, index) => (

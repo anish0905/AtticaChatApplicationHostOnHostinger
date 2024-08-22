@@ -20,6 +20,7 @@ const ManagerDetails = () => {
       try {
         const res = await axios.get(`${BASE_URL}/api/manager/getAllManagers`);
         setManagers(res.data);
+        console.log("managerdetails   ",res.data)
       } catch (error) {
         console.error("Error fetching managers", error);
       }

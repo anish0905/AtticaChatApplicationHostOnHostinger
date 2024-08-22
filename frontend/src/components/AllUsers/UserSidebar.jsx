@@ -38,7 +38,7 @@ const UserSidebar = ({ value, newNotificationCount }) => {
       "Bouncers/Driver": "/BouncerToAdminChat",
       "Digital Marketing": "/DigitalMarketingToAdminChat",
       MonitoringTeam: "/MonitoringTeamToAdminChat",
-      VIRTUAL: "/VirtualTeamToAdminChat",
+      VirtualTeam: "/VirtualTeamToAdminChat",
       "Security/CCTV": "/SecurityToAdminChat",
       TE: "/techattoadmin",
       Logistic: "/LogisticToAdminChat",

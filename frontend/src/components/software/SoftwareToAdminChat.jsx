@@ -3,7 +3,7 @@ import axios from "axios";
 import { AiOutlineSearch, AiOutlineDown } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { IoIosDocument } from "react-icons/io";
-import { FaVideo, FaImage, FaCamera } from "react-icons/fa";
+import { FaImage, FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../../constants";
 import { FaArrowLeft } from "react-icons/fa";
 import ForwardMsgAllUsersToAdmin from "../AllUsers/ForwardMsgAllUsersToAdmin";
@@ -15,6 +15,8 @@ import Camera from "../Camera/Camera";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
 import ScrollingNavbar from "../admin/ScrollingNavbar";
+import { FaVideo } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 function SoftwareToAdminChat() {
   const [messages, setMessages] = useState([]);
@@ -48,7 +50,7 @@ function SoftwareToAdminChat() {
   const [lastAdminMessageCounts, setLastAdminMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]"));
   const [currentAdminCountMessage, setCurrentAdminCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]"));
 
-
+  const navagite = useNavigate()
   useEffect(() => {
     const intervalId = setInterval(() => {
       setLastAdminMessageCounts(JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]"));
@@ -89,7 +91,7 @@ function SoftwareToAdminChat() {
   };
 
   const getUnreadCountForAdmin = (adminId) => {
-   
+
     const currentAdminCountMessage = JSON.parse(localStorage.getItem("currentAdminCountMessage") || "[]");
     const lastAdminMessageCounts = JSON.parse(localStorage.getItem("lastAdminMessageCounts") || "[]");
 
@@ -135,7 +137,7 @@ function SoftwareToAdminChat() {
 
 
   // Automatically scroll to bottom when new messages are received
-   
+
 
   // Function to send a new message
   const handleSendMessage = () => {
@@ -315,29 +317,32 @@ function SoftwareToAdminChat() {
 
   const handleDelete = (message) => {
     axios
-     .delete(`${BASE_URL}/api/empadminsender/delmessages/${message._id}`)
-     .then((response) => {
-      
-        setMessages(messages.filter((m) => m._id!== message._id));
+      .delete(`${BASE_URL}/api/empadminsender/delmessages/${message._id}`)
+      .then((response) => {
+
+        setMessages(messages.filter((m) => m._id !== message._id));
         setShowDropdown("null")
       })
 
-     .catch((error) => {
+      .catch((error) => {
         console.error(error);
       });
   };
 
   const sortedAdmins = filteredAdmins
-  .map((admin) => ({
-    ...admin,
-    unreadCount: getUnreadCountForAdmin(admin._id),
-  }))
-  .sort((a, b) => b.unreadCount - a.unreadCount);
+    .map((admin) => ({
+      ...admin,
+      unreadCount: getUnreadCountForAdmin(admin._id),
+    }))
+    .sort((a, b) => b.unreadCount - a.unreadCount);
 
 
+  const handleVideoCall = () => {
+    navagite(`/videoCall/${recipient}`)
+  }
   return (
     <div className="flex flex-col lg:flex-row h-screen overflow-hidden relative mt-20 lg:mt-0">
-       <ScrollingNavbar />
+      <ScrollingNavbar />
       <Sidebar value="SOFTWARE" />
 
       <div className={`sticky top-0 bg-white  z-10 w-full lg:w-1/4 p-4 overflow-y-auto  lg:mt-20 border border-purple-100 flex flex-col  text-black shadow ${isChatSelected ? 'hidden lg:flex' : 'flex'}`}>
@@ -353,7 +358,7 @@ function SoftwareToAdminChat() {
           <AiOutlineSearch className="absolute top-3 left-3 text-gray-500 text-2xl" />
         </div>
         <div className="h-5/6 overflow-y-auto">
-        {sortedAdmins.map((admin) => (
+          {sortedAdmins.map((admin) => (
             <div key={admin._id}>
               <div
                 className="w-full lg:text-xl md:text-2xl text-sm h-auto font-medium rounded-md bg-[#eef2fa] text-[#5443c3] mb-4 flex justify-between items-center p-4 cursor-pointer"
@@ -379,17 +384,24 @@ function SoftwareToAdminChat() {
 
 
           {isChatSelected && (
+            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between border border-[#5443c3] lg:mt-20">
 
-            <div className="text-[#5443c3] sm:text-white sm:bg-[#5443c3] md:text-white md:bg-[#5443c3] h-12 bg-white p-2 flex flex-row justify-between">
-
-              <button className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg mt-2"
+              <button
+                className="text-[#5443c3] sm:text-white md:text-white lg:text-2xl text-lg mt-2"
                 onClick={handleBackToUserList}
               >
                 <FaArrowLeft />
               </button>
 
 
-              <h1 className="lg:text-2xl text-base font-bold ml-auto">Chat with {recipientName}</h1>
+              <h1 className="lg:text-2xl text-base font-bold flex-grow text-center">
+                Chat with {recipientName}
+              </h1>
+
+              <FaVideo
+                className="text-2xl ml-4" // Adds margin-left to create gap from the name
+                onClick={handleVideoCall}
+              />
               <Link
                 to={"/"}
                 className="group relative flex items-center justify-end font-extrabold text-2xl rounded-full p-3 md:p-5"
@@ -440,13 +452,13 @@ function SoftwareToAdminChat() {
                       <IoIosDocument className="text-9xl" />
                     </a>
                   )}
-                  {message.content && message.content. camera && (
-                  <img
-                    src={message.content.camera}
-                    alt="Image"
-                    className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
-                  />
-                )}
+                  {message.content && message.content.camera && (
+                    <img
+                      src={message.content.camera}
+                      alt="Image"
+                      className="rounded-lg lg:h-96 lg:w-72 md:h-96 md:w-64 h-40 w-32"
+                    />
+                  )}
                   {message.content && message.content.video && (
                     <video controls className="max-w-xs text-orange-600 hover:underline">
                       <source src={message.content.video} type="video/mp4" />
@@ -463,40 +475,40 @@ function SoftwareToAdminChat() {
                         className="absolute top-2 right-2 cursor-pointer"
                         onClick={() => handleDropdownClick(index)}
                       />
-                                {showDropdown === index && (
-                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleReply(message)}
-                      >
-                        Reply
-                      </button>
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleForward(message)}
-                      >
-                        Forward
-                      </button>
-                      {(message.content.image || message.content.camera) && (
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleEditImage(message)}
-                        >
-                          Edit Image
-                        </button>
+                      {showDropdown === index && (
+                        <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                          <button
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleReply(message)}
+                          >
+                            Reply
+                          </button>
+                          <button
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleForward(message)}
+                          >
+                            Forward
+                          </button>
+                          {(message.content.image || message.content.camera) && (
+                            <button
+                              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                              onClick={() => handleEditImage(message)}
+                            >
+                              Edit Image
+                            </button>
+                          )}
+                          {
+                            message.sender === loggedInUserId && (
+                              <button
+                                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                                onClick={() => handleDelete(message)}
+                              >
+                                delete
+                              </button>
+                            )
+                          }
+                        </div>
                       )}
-                      {
-                      message.sender === loggedInUserId && (
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleDelete(message)}
-                        >
-                          delete
-                        </button>
-                      )
-                    }
-                    </div>
-                  )}
                     </>
                   }
                 </div>
@@ -523,7 +535,7 @@ function SoftwareToAdminChat() {
               className="hidden"
               id="file-upload"
             />
-             <button
+            <button
               onClick={() => setShowCamera(true)}
               className="mr-2 text-xl"
             >
@@ -538,7 +550,7 @@ function SoftwareToAdminChat() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} admin={"admin"} senderName={userDetails.name} />
           </div>
-          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef} />
         </div>
       )}
 

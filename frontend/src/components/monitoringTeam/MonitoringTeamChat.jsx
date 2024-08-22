@@ -10,9 +10,12 @@ import Sidebar from "../AllUsers/UserSidebar";
 import { FaArrowLeft, FaCamera } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Camera from "../Camera/Camera";
-import ScrollingNavbar from "../admin/ScrollingNavbar"; 
+import ScrollingNavbar from "../admin/ScrollingNavbar";
 import EditModel from "../utility/EditModel";
 import ScrollToBottomButton from "../utility/ScrollToBottomButton";
+import { FaVideo } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
+
 function MonitoringTeamChat() {
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
@@ -43,8 +46,8 @@ function MonitoringTeamChat() {
   const [lastUserMessageCounts, setLastUserMessageCounts] = useState(() => JSON.parse(localStorage.getItem("lastUserMessageCounts") || "[]"));
   const [currentCountMessage, setCurrentCountMessage] = useState(() => JSON.parse(localStorage.getItem("currentCountMessage") || "[]"));
 
- 
- 
+
+  const navigate = useNavigate()
 
   useEffect(() => {
     const intervalId = setInterval(() => {
@@ -104,7 +107,7 @@ function MonitoringTeamChat() {
     return currentCount - lastCount;
   };
 
-  
+
   const fetchMessages = (sender, recipient) => {
     axios
       .get(`${BASE_URL}/api/getmessages/${recipient}/${sender}`)
@@ -193,7 +196,7 @@ function MonitoringTeamChat() {
         }
       };
       fetchUnreadMessages();
-     
+
     }
   }, [users]);
 
@@ -275,48 +278,53 @@ function MonitoringTeamChat() {
 
   const handleDelete = (message) => {
     axios
-     .delete(`${BASE_URL}/api/delmessages/${message._id}`)
-     .then((response) => {
-      
-        setMessages(messages.filter((m) => m._id!== message._id));
+      .delete(`${BASE_URL}/api/delmessages/${message._id}`)
+      .then((response) => {
+
+        setMessages(messages.filter((m) => m._id !== message._id));
         setShowDropdown("null")
       })
 
-     .catch((error) => {
+      .catch((error) => {
         console.error(error);
       });
   };
-  
-  const sortedUsers = users
-  .filter((user) =>
-    user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
-  )
-  .map((user) => ({
-    ...user,
-    unreadCount: getUnreadCountForUser(user._id),
-  }))
-  .sort((a, b) => b.unreadCount - a.unreadCount);
 
+  const sortedUsers = users
+    .filter((user) =>
+      user.name.toLowerCase().includes(userSearchQuery.toLowerCase())
+    )
+    .map((user) => ({
+      ...user,
+      unreadCount: getUnreadCountForUser(user._id),
+    }))
+    .sort((a, b) => b.unreadCount - a.unreadCount);
+
+
+  const handleVideoCall = () => {
+    navigate(`/videoCall/${recipient}`)
+  }
 
   return (
-    <div  className="flex flex-col lg:flex-row h-screen overflow-hidden ">
-     
-      {!showChat && <span className="mt-20"><ScrollingNavbar  /></span>}
-      
+    <div className="flex flex-col lg:flex-row h-screen overflow-hidden ">
+
+      {!showChat && <span className="mt-20"><ScrollingNavbar /></span>}
+
       <Sidebar value="MONITORING" />
 
       {showChat ? (
         <div className="w-full mb-20 lg:mb-0 flex flex-col justify-between overflow-hidden">
-          <div  className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
+          <div className="flex items-center justify-between p-4 lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white sticky top-0 z-10 border border-[#5443c3]">
 
             <button
               onClick={handleBackToEmployees}
               className="lg:text-2xl p-2 rounded-md lg:bg-[#5443c3] lg:text-white text-[#5443c3] bg-white"
             >
-              <FaArrowLeft/>
+              <FaArrowLeft />
             </button>
 
             <h1 className="lg:text-2xl text-xl font-bold">{recipientName}</h1>
+            <FaVideo className="text-2xl" onClick={handleVideoCall} />
 
           </div>
           <div className="flex-grow overflow-y-auto p-4 flex flex-col bg-[#eef2fa] mb-20 lg:mb-0 h-screen">
@@ -324,8 +332,8 @@ function MonitoringTeamChat() {
               <div
                 key={message._id}
                 className={`mb-4 p-4 rounded-lg max-w-[50%] relative break-words whitespace-pre-wrap ${message.sender === loggedInUserId
-                    ? " self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-                    : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                  ? " self-end bg-[#9184e9] text-white border-2 border-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+                  : "self-start bg-[#ffffff] text-[#5443c3] border-2 border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
                   }`}
 
                 onMouseEnter={() => handleHover(index)}
@@ -382,29 +390,29 @@ function MonitoringTeamChat() {
                   />
                 )}
 
-{showDropdown === index && (
-                    <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                {showDropdown === index && (
+                  <div className="absolute top-8 right-2 bg-white border rounded shadow-lg z-10">
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleReply(message)}
+                    >
+                      Reply
+                    </button>
+                    <button
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => handleForward(message)}
+                    >
+                      Forward
+                    </button>
+                    {(message.content.image || message.content.camera) && (
                       <button
                         className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleReply(message)}
+                        onClick={() => handleEditImage(message)}
                       >
-                        Reply
+                        Edit Image
                       </button>
-                      <button
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        onClick={() => handleForward(message)}
-                      >
-                        Forward
-                      </button>
-                      {(message.content.image || message.content.camera) && (
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleEditImage(message)}
-                        >
-                          Edit Image
-                        </button>
-                      )}
-                      {
+                    )}
+                    {
                       message.sender === loggedInUserId && (
                         <button
                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
@@ -414,14 +422,14 @@ function MonitoringTeamChat() {
                         </button>
                       )
                     }
-                    </div>
-                  )}
+                  </div>
+                )}
               </div>
             ))}
             <div ref={messagesEndRef} />
             {showCamera && (
               <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75">
-                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient}  />
+                <Camera onCapture={handleCapture} onClose={handleCloseCamera} loggedInUserId={loggedInUserId} recipient={recipient} />
               </div>
             )}
           </div>
@@ -439,7 +447,7 @@ function MonitoringTeamChat() {
               className="hidden"
               id="file-upload"
             />
-             <button
+            <button
               onClick={() => setShowCamera(true)}
               className="mr-2 text-xl"
             >
@@ -453,7 +461,7 @@ function MonitoringTeamChat() {
             </button>
             <AllUsersFileModel sender={loggedInUserId} recipient={recipient} senderName={userDetails.name} />
           </div>
-          <ScrollToBottomButton messagesEndRef={messagesEndRef}/>
+          <ScrollToBottomButton messagesEndRef={messagesEndRef} />
         </div>
       ) : (
         <div className="w-full lg:w-1/4 bg-white p-4 overflow-y-auto sticky lg:mt-20 border border-purple-100 top-0  z-10">
@@ -512,12 +520,12 @@ function MonitoringTeamChat() {
 
         />
       )}
-         {showImageEditor && (
+      {showImageEditor && (
         <EditModel
           imageUrl={imageForEditing}
           handleModalClose={handleModalClose}
           recipient={recipient}
-         
+
         />
       )}
     </div>
