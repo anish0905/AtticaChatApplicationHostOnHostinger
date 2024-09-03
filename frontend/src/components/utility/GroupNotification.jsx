@@ -4,7 +4,7 @@ import notificationTone from "../../assests/notification_ding.mp3";
 import { BASE_URL } from "../../constants";
 
 const GroupNotification = () => {
-  const [employees, setEmployees] = useState([]);
+  const [employees, setEmployees] = useState([]); // Ensure initial state is an empty array
   const [messages, setMessages] = useState([]);
   const [currentUserName, setCurrentUserName] = useState(""); // Assuming the current user is "AMMU BABU"
   const [newMessage, setNewMessage] = useState("");
@@ -13,7 +13,6 @@ const GroupNotification = () => {
   const [initialLoad, setInitialLoad] = useState(true); // Track if it's the initial load
   const messagesEndRef = useRef(null);
   const notificationSoundRef = useRef(null);
-  
 
   // Fetch user details from local storage and set the grade
   useEffect(() => {
@@ -30,7 +29,11 @@ const GroupNotification = () => {
     const fetchEmployees = async () => {
       try {
         const response = await axios.get(`${BASE_URL}/api/employee/`);
-        setEmployees(response.data);
+        if (Array.isArray(response.data)) {
+          setEmployees(response.data);
+        } else {
+          console.error("Expected an array of employees from the API.");
+        }
       } catch (error) {
         console.error("Error fetching employees:", error);
       }
@@ -43,7 +46,9 @@ const GroupNotification = () => {
   useEffect(() => {
     const currentUserId = localStorage.getItem("CurrentUserId");
     if (employees.length > 0 && currentUserId) {
-      const selectedEmployee = employees.find((emp) => emp._id === currentUserId);
+      const selectedEmployee = employees.find(
+        (emp) => emp._id === currentUserId
+      );
       if (selectedEmployee) {
         const fetchMessages = async () => {
           try {
@@ -64,7 +69,6 @@ const GroupNotification = () => {
                 const newMessagesToShow = newMessages.slice(-newMessagesCount);
                 showNotifications(newMessagesToShow);
                 setLastMessageCount(newMessages.length);
-                console.log(lastMessageCount)
               }
             }
 
@@ -136,14 +140,16 @@ const GroupNotification = () => {
         return;
       }
 
-      const selectedEmployee = employees.find((emp) => emp._id === currentUserId);
+      const selectedEmployee = employees.find(
+        (emp) => emp._id === currentUserId
+      );
       if (!selectedEmployee) {
         console.error("No employee found for current user.");
         return;
       }
 
       await axios.post(`${BASE_URL}/api/messages`, {
-        employeeId: selectedEmployee.name, // Use _id of the employee
+        employeeId: selectedEmployee.name, // Use employee name
         message: newMessage,
         group: selectedEmployee.group,
         grade: selectedEmployee.grade,
@@ -156,9 +162,9 @@ const GroupNotification = () => {
   };
 
   return (
-    <div >
-    
+    <div>
       <audio ref={notificationSoundRef} src={notificationTone} />
+      {/* Add UI elements like input fields, buttons, message display, etc. */}
     </div>
   );
 };
