@@ -28,17 +28,11 @@ connectDb(); // Call the function to connect to the database
 
 const app = express();
 
-
-
 app.use(bodyParser.json());
 
 app.use(cors()); // Allow Cross-Origin Resource Sharing (CORS)
 
 const port = process.env.PORT || 5002; // Change this to a different port if needed
-
-
-
-
 
 app.use(express.json()); // Parse JSON bodies of incoming requests
 
@@ -64,7 +58,7 @@ const chatSchema = new mongoose.Schema({
       "Digital Marketing",
       "TE",
       "Logistic",
-      "Cashier"
+      "Cashier",
     ],
   },
   messages: [
@@ -258,7 +252,7 @@ app.delete("/api/groups/:group/:grade", async (req, res) => {
     // Delete the chat room from the database
     const result = await ChatModel.findOneAndDelete({
       group,
-      grade
+      grade,
     });
 
     if (!result) {
@@ -292,7 +286,6 @@ app.get("/api/groups", async (req, res) => {
           group: 1,
           grade: 1,
           department: 1,
-          
         },
       },
     ]);
@@ -321,13 +314,56 @@ app.use("/api/manager", managerRoute);
 app.use("/api/location", locationRoutes);
 app.use("/api/employee", employeeRoute);
 app.use("/api/allUser", allUserRoutes);
-app.use("/api/announce",announceRoutes);
+app.use("/api/announce", announceRoutes);
 app.use("/api/announcements", announcementDepartmentWiseRoutes);
 app.use("/api/videoCall", videoCallRoute);
 
-const server = app.listen(port, () =>
-  console.log(`Server running on port ${port}`)
-);
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Adjust the origin to your frontend URL in production
+    methods: ["GET", "POST"],
+  },
+});
 
+io.on("connection", (socket) => {
+  console.log(`User connected: ${socket.id}`);
 
+  // Handle joining a room by user ID (can be email or a unique identifier)
+  socket.on("join-room", (userId) => {
+    socket.join(userId);
+    console.log(`${socket.id} joined room: ${userId}`);
+  });
 
+  // Handle initiating a call from AdminId to User1
+  socket.on("call-user", ({ to, offer }) => {
+    console.log(`Calling user: ${to} from ${socket.id}`);
+    io.to(to).emit("incoming-call", { from: socket.id, offer });
+  });
+
+  // Handle answering the call by User1
+  socket.on("answer-call", ({ to, answer }) => {
+    console.log(`Answering call from ${to}`);
+    io.to(to).emit("call-answered", { answer });
+  });
+
+  // Handle rejecting the call
+  socket.on("reject-call", ({ to }) => {
+    console.log(`Call rejected by ${socket.id}`);
+    io.to(to).emit("call-rejected");
+  });
+
+  // Handle disconnection
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.id}`);
+  });
+});
+
+// Start the server
+server.listen(port, () => {
+  console.log("Signaling server running on port 5000");
+});
+
+// const server = app.listen(port, () =>
+//   console.log(`Server running on port ${port}`)
+// );

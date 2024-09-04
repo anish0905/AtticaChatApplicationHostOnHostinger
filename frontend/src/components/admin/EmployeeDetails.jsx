@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { BASE_URL } from "../../constants";
+// import { BASE_URL } from "../../constants";
 import { FaEdit } from "react-icons/fa";
 import { RiDeleteBin5Line } from "react-icons/ri";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { AiOutlineSearch } from "react-icons/ai";
 
 const Modal = ({ show, onClose, employee, onUpdate }) => {
-  const [formData, setFormData] = useState({ ...employee, group: employee.group || [] });
+  const [formData, setFormData] = useState({
+    ...employee,
+    group: employee.group || [],
+  });
 
   useEffect(() => {
     setFormData({ ...employee, group: employee.group || [] });
@@ -56,8 +59,10 @@ const Modal = ({ show, onClose, employee, onUpdate }) => {
 
   return (
     <div className="fixed inset-0 z-20 bg-gray-500 bg-opacity-75 flex items-center justify-center p-4 sm:p-6">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-[80%] max-w-md"> 
-        <h2 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">Edit Employee Details</h2> 
+      <div className="bg-white p-6 rounded-lg shadow-lg w-[80%] max-w-md">
+        <h2 className="lg:text-2xl text-xl font-bold mb-4 text-[#5443c3]">
+          Edit Employee Details
+        </h2>
         <form>
           <div className="mb-4">
             <label className="block text-[#5443c3] text-sm font-bold mb-2">
@@ -155,11 +160,13 @@ const Modal = ({ show, onClose, employee, onUpdate }) => {
 };
 
 const EmployeeDetails = () => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
+
   const [employees, setEmployees] = useState([]);
   const [filteredEmployees, setFilteredEmployees] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchEmployees = async () => {
@@ -176,7 +183,7 @@ const EmployeeDetails = () => {
   }, []);
 
   useEffect(() => {
-    const results = employees.filter(employee =>
+    const results = employees.filter((employee) =>
       employee.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
     setFilteredEmployees(results);
@@ -191,13 +198,15 @@ const EmployeeDetails = () => {
     try {
       alert("Are you sure? The data will be deleted permanently.");
       await axios.delete(`${BASE_URL}/api/employeeRegistration/${employeeId}`);
-      const updatedEmployees = employees.filter((employee) => employee.employeeId !== employeeId);
+      const updatedEmployees = employees.filter(
+        (employee) => employee.employeeId !== employeeId
+      );
       setEmployees(updatedEmployees);
       setFilteredEmployees(updatedEmployees);
-      toast.success('Employee deleted successfully');
+      toast.success("Employee deleted successfully");
     } catch (error) {
       console.error("Error deleting employee", error);
-      toast.error('Failed to delete employee');
+      toast.error("Failed to delete employee");
     }
   };
 
@@ -208,14 +217,16 @@ const EmployeeDetails = () => {
         updatedEmployee
       );
       const updatedEmployees = employees.map((employee) =>
-        employee.employeeId === updatedEmployee.employeeId ? res.data.updatedEmployee : employee
+        employee.employeeId === updatedEmployee.employeeId
+          ? res.data.updatedEmployee
+          : employee
       );
       setEmployees(updatedEmployees);
       setFilteredEmployees(updatedEmployees);
-      toast.success('Employee details updated successfully');
+      toast.success("Employee details updated successfully");
     } catch (error) {
       console.error("Error updating employee", error);
-      toast.error('Failed to update employee');
+      toast.error("Failed to update employee");
     }
   };
 
@@ -287,7 +298,9 @@ const EmployeeDetails = () => {
                   <td className="py-2 sm:py-4 px-2 sm:px-4 text-xs sm:text-sm text-gray-700 whitespace-nowrap">
                     {employee.group.map((g, index) => (
                       <div key={index}>
-                        <span>{g.name} - {g.grade}</span>
+                        <span>
+                          {g.name} - {g.grade}
+                        </span>
                       </div>
                     ))}
                   </td>
@@ -296,7 +309,7 @@ const EmployeeDetails = () => {
                       className="text-blue-500 hover:text-blue-700"
                       onClick={() => handleEdit(employee)}
                     >
-                      <FaEdit  className="text-xl"/>
+                      <FaEdit className="text-xl" />
                     </button>
                     <button
                       className="ml-2 text-red-500 hover:text-red-700"

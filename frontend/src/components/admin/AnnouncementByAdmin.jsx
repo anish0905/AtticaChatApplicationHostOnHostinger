@@ -4,11 +4,12 @@ import { Link, useParams } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { IoMdSend } from "react-icons/io";
 import Sidebar from "./Sidebar";
-import { BASE_URL } from "../../constants";
-import Swal from 'sweetalert2';
-
+// import { BASE_URL } from "../../constants";
+import Swal from "sweetalert2";
 
 function AnnouncementByAdmin() {
+  const BASE_URL = import.meta.env.VITE_API_URL;
+
   const [messages, setMessages] = useState([]);
   const [messagesAdmin, setAdminMessages] = useState([]);
   const [typedMessage, setTypedMessage] = useState("");
@@ -22,11 +23,10 @@ function AnnouncementByAdmin() {
   const [editingMessageId, setEditingMessageId] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
 
-
   const { department } = useParams();
   const userDetails = JSON.parse(localStorage.getItem("userDetails"));
 
-  console.log("messagesAdmin",messagesAdmin)
+  console.log("messagesAdmin", messagesAdmin);
 
   let NewDepartment;
 
@@ -40,18 +40,13 @@ function AnnouncementByAdmin() {
 
   useEffect(() => {
     fetchData();
-    
   }, []);
 
   useEffect(() => {
-
     const intervalId = setInterval(fetchAdminMessages, 5000); // Fetch every 5 seconds
 
     return () => clearInterval(intervalId);
-   
   }, []);
-
-  
 
   const fetchData = () => {
     axios
@@ -70,7 +65,7 @@ function AnnouncementByAdmin() {
       const resp = await axios.get(`${BASE_URL}/api/announce/getAllAnnounce`);
       setAdminMessages(resp.data);
     } catch (error) {
-      console.error('Error fetching admin messages:', error);
+      console.error("Error fetching admin messages:", error);
     }
   };
 
@@ -150,7 +145,7 @@ function AnnouncementByAdmin() {
         setMessages(updatedMessages);
         setEditMode(false);
         setIsUpdating(false);
-        fetchData()
+        fetchData();
       })
       .catch((error) => {
         console.error("Error editing message:", error);
@@ -158,34 +153,37 @@ function AnnouncementByAdmin() {
       });
   };
 
- 
-  
-    const handleDeleteAllAnnouncements = () => {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "This action will delete all announcements. This cannot be undone!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#d33",
-        cancelButtonColor: "#3085d6",
-        confirmButtonText: "Yes, delete all!",
-        cancelButtonText: "Cancel",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          axios
-            .delete(`${BASE_URL}/api/announcements/announcements/${loggedInUserId}`)
-            .then((response) => {
-              setMessages([]);
-              Swal.fire("Deleted!", "All announcements have been deleted.", "success");
-            })
-            .catch((error) => {
-              console.error("Error deleting all announcements:", error);
-              Swal.fire("Error", "Failed to delete announcements.", "error");
-            });
-        }
-      });
-    };
-
+  const handleDeleteAllAnnouncements = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "This action will delete all announcements. This cannot be undone!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete all!",
+      cancelButtonText: "Cancel",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios
+          .delete(
+            `${BASE_URL}/api/announcements/announcements/${loggedInUserId}`
+          )
+          .then((response) => {
+            setMessages([]);
+            Swal.fire(
+              "Deleted!",
+              "All announcements have been deleted.",
+              "success"
+            );
+          })
+          .catch((error) => {
+            console.error("Error deleting all announcements:", error);
+            Swal.fire("Error", "Failed to delete announcements.", "error");
+          });
+      }
+    });
+  };
 
   return (
     <div className="flex flex-col lg:flex-row h-screen relative">
@@ -194,101 +192,97 @@ function AnnouncementByAdmin() {
       <div className="flex-1 flex flex-col w-full lg:w-auto">
         <div className="flex flex-col flex-1 lg:bg-[#f6f5fb] lg:border-l lg:border-gray-200 lg:overflow-y-auto">
           <div className="flex items-center space-x-2">
-          <div className="lg:text-2xl font-bold p-4 flex justify-between items-center lg:text-[#ffffff] lg:bg-[#5443c3] text-[#5443c3] border border-[#5443c3] bg-[#ffffff] w-full ">
-            <Link to="/admindashboard">
-              <FaArrowLeft className="lg:text-white text-[#5443c3] hover:text-[#5443c3]" />
-            </Link>
-            <h1 >
-              Announcement-({NewDepartment})
-            </h1>
-            <h1 >
-              Announcement
-            </h1>
-            <button className="bg-[#ff3434] hover:bg-[#f06856] px-2 py-2 rounded-md shadow-md lg:text-xl" onClick={handleDeleteAllAnnouncements}>Delete All</button>
+            <div className="lg:text-2xl font-bold p-4 flex justify-between items-center lg:text-[#ffffff] lg:bg-[#5443c3] text-[#5443c3] border border-[#5443c3] bg-[#ffffff] w-full ">
+              <Link to="/admindashboard">
+                <FaArrowLeft className="lg:text-white text-[#5443c3] hover:text-[#5443c3]" />
+              </Link>
+              <h1>Announcement-({NewDepartment})</h1>
+              <h1>Announcement</h1>
+              <button
+                className="bg-[#ff3434] hover:bg-[#f06856] px-2 py-2 rounded-md shadow-md lg:text-xl"
+                onClick={handleDeleteAllAnnouncements}
+              >
+                Delete All
+              </button>
             </div>
           </div>
 
           <div className="flex flex-wrap flex-1  overflow-y-auto">
-           <div  className="h-[82vh] w-1/2 p-10">
-           {messages?.map((message, index) => (
-              <div
-                key={index}
-                className={`flex relative break-words whitespace-pre-wrap ${
-                  message.sender === loggedInUserId
-                    ? "justify-end"
-                    : "justify-start"
-                } mb-2`}
-                onMouseEnter={() => handleMouseEnter(index)}
-                onMouseLeave={handleMouseLeave}
-              >
+            <div className="h-[82vh] w-1/2 p-10">
+              {messages?.map((message, index) => (
                 <div
-                  className={`relative lg:text-3xl md:text-xl text-sm font-bold ${
+                  key={index}
+                  className={`flex relative break-words whitespace-pre-wrap ${
                     message.sender === loggedInUserId
-                      ? "self-end bg-[#e1dff3] border border-[#5443c3] text-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-                      : "self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-                  } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
+                      ? "justify-end"
+                      : "justify-start"
+                  } mb-2`}
+                  onMouseEnter={() => handleMouseEnter(index)}
+                  onMouseLeave={handleMouseLeave}
                 >
-                  {/* Render message content */}
-                  {message.content && message.content.text && (
-                    <p className="text-sm">{message.content.text}</p>
-                  )}
+                  <div
+                    className={`relative lg:text-3xl md:text-xl text-sm font-bold ${
+                      message.sender === loggedInUserId
+                        ? "self-end bg-[#e1dff3] border border-[#5443c3] text-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+                        : "self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                    } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
+                  >
+                    {/* Render message content */}
+                    {message.content && message.content.text && (
+                      <p className="text-sm">{message.content.text}</p>
+                    )}
 
-                  {/* Show options when message is hovered */}
-                  {hoveredMessage === index && (
-                    <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
-                      {/* Show edit button only if sender is logged in user */}
-                      {message.sender === loggedInUserId && (
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => toggleEditMode(message)}
-                        >
-                          Edit
-                        </button>
-                      )}
-                      {/* Show delete button only if sender is logged in user */}
-                      {message.sender === loggedInUserId && (
-                        <button
-                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                          onClick={() => handleDelete(message)}
-                        >
-                          Delete
-                        </button>
-                      )}
-                    </div>
-                  )}
+                    {/* Show options when message is hovered */}
+                    {hoveredMessage === index && (
+                      <div className="absolute top-2 right-2 bg-white border rounded shadow-lg z-10">
+                        {/* Show edit button only if sender is logged in user */}
+                        {message.sender === loggedInUserId && (
+                          <button
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => toggleEditMode(message)}
+                          >
+                            Edit
+                          </button>
+                        )}
+                        {/* Show delete button only if sender is logged in user */}
+                        {message.sender === loggedInUserId && (
+                          <button
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                            onClick={() => handleDelete(message)}
+                          >
+                            Delete
+                          </button>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-           </div>
-           <div className="h-[82vh] w-1/2 p-10 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500" >
-
-           {messagesAdmin?.map((message, index) => (
-              <div
-                key={index}
-                className={`flex relative break-words whitespace-pre-wrap ${
-                  message.sender === loggedInUserId
-                    ? "justify-end"
-                    : "justify-start"
-                } mb-2`}
-              
-              >
+              ))}
+            </div>
+            <div className="h-[82vh] w-1/2 p-10 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500">
+              {messagesAdmin?.map((message, index) => (
                 <div
-                  className={`relative lg:text-3xl md:text-xl text-sm font-bold ${
+                  key={index}
+                  className={`flex relative break-words whitespace-pre-wrap ${
                     message.sender === loggedInUserId
-                      ? "self-end bg-[#e1dff3] border border-[#5443c3] text-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
-                      : "self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
-                  } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
+                      ? "justify-end"
+                      : "justify-start"
+                  } mb-2`}
                 >
-                  {message.content && message.content.text && (
-                    <p className="text-sm">{message.content.text}</p>
-                  )}
-
-                  
+                  <div
+                    className={`relative lg:text-3xl md:text-xl text-sm font-bold ${
+                      message.sender === loggedInUserId
+                        ? "self-end bg-[#e1dff3] border border-[#5443c3] text-[#5443c3] rounded-tr-3xl rounded-bl-3xl"
+                        : "self-start bg-[#ffffff] text-[#5443c3] border border-[#5443c3] rounded-tl-3xl rounded-br-3xl"
+                    } py-2 px-4 rounded-lg lg:max-w-2xl max-w-[50%]`}
+                  >
+                    {message.content && message.content.text && (
+                      <p className="text-sm">{message.content.text}</p>
+                    )}
+                  </div>
                 </div>
-              </div>
-            ))}
-
-           </div>
+              ))}
+            </div>
             <div ref={messagesEndRef} />
           </div>
 

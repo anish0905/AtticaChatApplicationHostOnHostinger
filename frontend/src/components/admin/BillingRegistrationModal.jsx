@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import BillingTeamDetails from "../BillingTeam/BillingTeamDetails";
-import { BASE_URL } from "../../constants";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import CsvFileUpload from '../utility/CsvFileUpload';
+// import { BASE_URL } from "../../constants";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import CsvFileUpload from "../utility/CsvFileUpload";
 import axios from "axios";
 import Swal from "sweetalert2";
 
 const BillingRegistrationModal = () => {
+  const BASE_URL = import.meta.env.VITE_API_URL;
+
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
@@ -80,27 +82,29 @@ const BillingRegistrationModal = () => {
   const handleDelete = async () => {
     try {
       const result = await Swal.fire({
-        title: 'Are you sure?',
-        text: 'Do you want to delete users with the Logistic role?',
-        icon: 'warning',
+        title: "Are you sure?",
+        text: "Do you want to delete users with the Logistic role?",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonText: 'Yes, delete it!',
-        cancelButtonText: 'No, cancel!',
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "No, cancel!",
       });
-  
+
       if (result.isConfirmed) {
-        const response = await axios.delete(`${BASE_URL}/api/billingTeam/deleteAllBillingTeam`);
-  
+        const response = await axios.delete(
+          `${BASE_URL}/api/billingTeam/deleteAllBillingTeam`
+        );
+
         if (response) {
-          Swal.fire('Deleted!', 'Users have been deleted.', 'success');
+          Swal.fire("Deleted!", "Users have been deleted.", "success");
           window.location.reload();
         } else {
           const errorData = response.data;
-          Swal.fire('Failed!', errorData.message || 'Deletion failed', 'error');
+          Swal.fire("Failed!", errorData.message || "Deletion failed", "error");
         }
       }
     } catch (error) {
-      Swal.fire('Error!', 'An error occurred: ' + error.message, 'error');
+      Swal.fire("Error!", "An error occurred: " + error.message, "error");
     }
   };
 
@@ -109,8 +113,10 @@ const BillingRegistrationModal = () => {
       <Sidebar />
       <div className="flex-1 p-6">
         <div className="flex justify-between mb-4 flex-col lg:flex-row">
-          <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">Billing Team Details</h1>
-          <div className='flex justify-center items-center content-center'>
+          <h1 className="text-xl sm:text-2xl font-bold text-[#5443c3]">
+            Billing Team Details
+          </h1>
+          <div className="flex justify-center items-center content-center">
             <button
               onClick={() => setIsModalOpen(true)}
               className="bg-[#5443c3] hover:bg-blue-700 text-white font-bold lg:px-4 py-1 px-2 lg:text-xl text-xs lg:rounded-full w-full h-12 mr-2 mt-4 lg:mt-0"
@@ -138,7 +144,11 @@ const BillingRegistrationModal = () => {
                   { label: "Branch Name", name: "branch_name", type: "text" },
                   { label: "Branch State", name: "branch_state", type: "text" },
                   { label: "Branch City", name: "branch_city", type: "text" },
-                  { label: "Branch Pincode", name: "branch_pincode", type: "text" },
+                  {
+                    label: "Branch Pincode",
+                    name: "branch_pincode",
+                    type: "text",
+                  },
                 ].map((field, index) => (
                   <div className="lg:mb-4 mb-2" key={index}>
                     <label
@@ -157,12 +167,17 @@ const BillingRegistrationModal = () => {
                     />
                   </div>
                 ))}
-                <h3 className="text-[#5443c3] text-lg font-bold mt-4">Group Information</h3>
+                <h3 className="text-[#5443c3] text-lg font-bold mt-4">
+                  Group Information
+                </h3>
                 {group.map((item, index) => (
                   <div key={index} className="mb-4">
                     <div className="flex mb-2">
                       <div className="w-1/2 pr-2">
-                        <label className="block text-[#5443c3] text-sm font-bold mb-2" htmlFor={`group-name-${index}`}>
+                        <label
+                          className="block text-[#5443c3] text-sm font-bold mb-2"
+                          htmlFor={`group-name-${index}`}
+                        >
                           Group Name
                         </label>
                         <input
@@ -175,7 +190,10 @@ const BillingRegistrationModal = () => {
                         />
                       </div>
                       <div className="w-1/2 pl-2">
-                        <label className="block text-[#5443c3] text-sm font-bold mb-2" htmlFor={`group-grade-${index}`}>
+                        <label
+                          className="block text-[#5443c3] text-sm font-bold mb-2"
+                          htmlFor={`group-grade-${index}`}
+                        >
                           Group Grade
                         </label>
                         <input
@@ -224,7 +242,16 @@ const BillingRegistrationModal = () => {
           </div>
         )}
       </div>
-      <ToastContainer autoClose={3000} hideProgressBar={false} newestOnTop closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
+      <ToastContainer
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };
