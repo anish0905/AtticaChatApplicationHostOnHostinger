@@ -19,17 +19,26 @@ const VideoCallIng = () => {
 
   const containerRef = useRef(null);
   const zpRef = useRef(null);
-  let link
+  let link;
 
-  const sendVideoCallRequest = async (senderId, receiverId, roomId, senderName, link) => {
+  const sendVideoCallRequest = async (
+    senderId,
+    receiverId,
+    roomId,
+    senderName,
+    link
+  ) => {
     try {
-      const response = await axios.post(`${BASE_URL}/api/videoCall/video-call/request`, {
-        senderId,
-        receiverId,
-        roomId,
-        senderName,
-        link,
-      });
+      const response = await axios.post(
+        `${BASE_URL}/api/videoCall/video-call/request`,
+        {
+          senderId,
+          receiverId,
+          roomId,
+          senderName,
+          link,
+        }
+      );
       return response.data;
     } catch (error) {
       console.error("Error sending video call request:", error);
@@ -38,8 +47,10 @@ const VideoCallIng = () => {
   };
 
   const myMeeting = async (element) => {
-    const appID = APP_ID;
+    const appID = Number(APP_ID); // Ensure appID is a number
     const serverSecret = SERVER_SECRET;
+
+    // Generate the Kit Token
     const kitToken = ZegoUIKitPrebuilt.generateKitTokenForTest(
       appID,
       serverSecret,
@@ -48,7 +59,7 @@ const VideoCallIng = () => {
       setName
     );
 
-     link = `${window.location.protocol}//${window.location.host}${window.location.pathname}?roomID=${roomID}`;
+    link = `${window.location.protocol}//${window.location.host}${window.location.pathname}?roomID=${roomID}`;
 
     try {
       await sendVideoCallRequest(userId, receiverId, roomID, setName, link);
@@ -56,17 +67,23 @@ const VideoCallIng = () => {
       console.error("Failed to send video call request:", error);
     }
 
+    // Create the ZegoUIKitPrebuilt instance
     const zp = ZegoUIKitPrebuilt.create(kitToken);
+    if (!zp) {
+      console.error("Failed to initialize ZegoUIKitPrebuilt.");
+      return;
+    }
     zpRef.current = zp;
 
     // Set the ringtone configuration with normal ringtone URLs
     zp.setCallInvitationConfig({
       ringtoneConfig: {
-        incomingCallUrl: 'https://example.com/normal-incoming.mp3', // Replace with your incoming ringtone URL
-        outgoingCallUrl: 'https://example.com/normal-outgoing.mp3'  // Replace with your outgoing ringtone URL
-      }
+        incomingCallUrl: "https://example.com/normal-incoming.mp3", // Replace with your incoming ringtone URL
+        outgoingCallUrl: "https://example.com/normal-outgoing.mp3", // Replace with your outgoing ringtone URL
+      },
     });
 
+    // Join the room
     zp.joinRoom({
       container: element,
       sharedLinks: [
@@ -78,7 +95,6 @@ const VideoCallIng = () => {
       scenario: {
         mode: ZegoUIKitPrebuilt.OneONoneCall,
       },
-      
     });
   };
 
@@ -93,7 +109,7 @@ const VideoCallIng = () => {
         console.warn("No suitable method to leave or destroy the room.");
       }
     }
-    navigate(-1);  // Navigate back to the previous page
+    navigate(-1); // Navigate back to the previous page
   };
 
   useEffect(() => {
@@ -104,16 +120,16 @@ const VideoCallIng = () => {
 
   return (
     <div>
-      <button 
+      <button
         onClick={handleBackButtonClick}
         style={{
-          position: 'absolute',
-          top: '10px',
-          left: '10px',
-          background: 'transparent',
-          border: 'none',
-          cursor: 'pointer',
-          color: 'blueviolet', // Change color as needed
+          position: "absolute",
+          top: "10px",
+          left: "10px",
+          background: "transparent",
+          border: "none",
+          cursor: "pointer",
+          color: "blueviolet", // Change color as needed
         }}
       >
         <FaArrowLeft size={24} /> {/* Adjust size as needed */}
