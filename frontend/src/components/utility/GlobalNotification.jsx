@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import { BASE_URL } from "../../constants";
+import React, { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import { BASE_URL } from '../../constants';
 import Notification_tone from "../../assests/notification_ding.mp3";
 
 const GlobalNotification = () => {
@@ -13,21 +13,13 @@ const GlobalNotification = () => {
   const [lastAdminMessageCounts, setLastAdminMessageCounts] = useState([]);
   const [currentAdminCountMessage, setCurrentAdminCountMessage] = useState([]);
 
-  const prevMessageCount = useRef(
-    parseInt(localStorage.getItem("prevMessageCount")) || 0
-  );
-  const prevAdminMessageCount = useRef(
-    parseInt(localStorage.getItem("prevAdminMessageCount")) || 0
-  );
+  const prevMessageCount = useRef(parseInt(localStorage.getItem('prevMessageCount')) || 0);
+  const prevAdminMessageCount = useRef(parseInt(localStorage.getItem('prevAdminMessageCount')) || 0);
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const response = await axios.get(
-          `${BASE_URL}/api/messages/user/${localStorage.getItem(
-            "CurrentUserId"
-          )}`
-        );
+        const response = await axios.get(`${BASE_URL}/api/messages/user/${localStorage.getItem('CurrentUserId')}`);
         const fetchedMessages = response.data;
         setMessages(fetchedMessages);
         setMessageCount(fetchedMessages.length);
@@ -35,32 +27,22 @@ const GlobalNotification = () => {
         // Update current message counts
         const updatedCounts = updateMessageCounts(fetchedMessages);
         setCurrentCountMessage(updatedCounts);
-        localStorage.setItem(
-          "currentCountMessage",
-          JSON.stringify(updatedCounts)
-        );
+        localStorage.setItem('currentCountMessage', JSON.stringify(updatedCounts));
 
         // Initialize last user message counts if not set
-        if (!localStorage.getItem("lastUserMessageCounts")) {
+        if (!localStorage.getItem('lastUserMessageCounts')) {
           const initialCounts = updatedCounts;
           setLastUserMessageCounts(initialCounts);
-          localStorage.setItem(
-            "lastUserMessageCounts",
-            JSON.stringify(initialCounts)
-          );
+          localStorage.setItem('lastUserMessageCounts', JSON.stringify(initialCounts));
         }
       } catch (error) {
-        console.error("Error fetching messages:", error);
+        console.error('Error fetching messages:', error);
       }
     };
 
     const fetchAdminMessages = async () => {
       try {
-        const response = await axios.get(
-          `${BASE_URL}/api/empadminsender/messages/user/${localStorage.getItem(
-            "CurrentUserId"
-          )}`
-        );
+        const response = await axios.get(`${BASE_URL}/api/empadminsender/messages/user/${localStorage.getItem('CurrentUserId')}`);
         const fetchedAdminMessages = response.data;
         setAdminMessages(fetchedAdminMessages);
         setAdminMessageCount(fetchedAdminMessages.length);
@@ -68,22 +50,16 @@ const GlobalNotification = () => {
         // Update current admin message counts
         const adminUpdatedCounts = updateMessageCounts(fetchedAdminMessages);
         setCurrentAdminCountMessage(adminUpdatedCounts);
-        localStorage.setItem(
-          "currentAdminCountMessage",
-          JSON.stringify(adminUpdatedCounts)
-        );
+        localStorage.setItem('currentAdminCountMessage', JSON.stringify(adminUpdatedCounts));
 
         // Initialize last admin message counts if not set
-        if (!localStorage.getItem("lastAdminMessageCounts")) {
+        if (!localStorage.getItem('lastAdminMessageCounts')) {
           const initialAdminCounts = adminUpdatedCounts;
           setLastAdminMessageCounts(initialAdminCounts);
-          localStorage.setItem(
-            "lastAdminMessageCounts",
-            JSON.stringify(initialAdminCounts)
-          );
+          localStorage.setItem('lastAdminMessageCounts', JSON.stringify(initialAdminCounts));
         }
       } catch (error) {
-        console.error("Error fetching admin messages:", error);
+        console.error('Error fetching admin messages:', error);
       }
     };
 
@@ -99,24 +75,22 @@ const GlobalNotification = () => {
 
   useEffect(() => {
     if (Notification.permission !== "granted") {
-      Notification.requestPermission()
-        .then((permission) => {
-          if (permission === "granted") {
-            console.log("Notification permission granted");
-          }
-        })
-        .catch((error) => {
-          console.error("Error requesting notification permission:", error);
-        });
+      Notification.requestPermission().then((permission) => {
+        if (permission === "granted") {
+          console.log("Notification permission granted");
+        }
+      }).catch((error) => {
+        console.error("Error requesting notification permission:", error);
+      });
     }
   }, []);
 
   useEffect(() => {
     if (messageCount > prevMessageCount.current) {
       const newMessages = messages.slice(prevMessageCount.current);
-      newMessages.forEach((message) => showNotification(message));
+      newMessages.forEach(message => showNotification(message));
       prevMessageCount.current = messageCount;
-      localStorage.setItem("prevMessageCount", messageCount.toString());
+      localStorage.setItem('prevMessageCount', messageCount.toString());
 
       // Calculate and store new message counts
       updateAndStoreNewMessageCounts();
@@ -125,15 +99,10 @@ const GlobalNotification = () => {
 
   useEffect(() => {
     if (adminMessageCount > prevAdminMessageCount.current) {
-      const newAdminMessages = adminMessages.slice(
-        prevAdminMessageCount.current
-      );
-      newAdminMessages.forEach((message) => showNotification(message));
+      const newAdminMessages = adminMessages.slice(prevAdminMessageCount.current);
+      newAdminMessages.forEach(message => showNotification(message));
       prevAdminMessageCount.current = adminMessageCount;
-      localStorage.setItem(
-        "prevAdminMessageCount",
-        adminMessageCount.toString()
-      );
+      localStorage.setItem('prevAdminMessageCount', adminMessageCount.toString());
 
       // Calculate and store new admin message counts
       updateAndStoreNewAdminMessageCounts();
@@ -143,7 +112,7 @@ const GlobalNotification = () => {
   const showNotification = (message) => {
     if (Notification.permission === "granted") {
       const notification = new Notification("New Message", {
-        body: `${message.senderName}: ${message.content?.text || ""}`,
+        body: `${message.senderName}: ${message.content?.text || ''}`,
       });
       notification.onclick = () => {
         window.focus();
@@ -160,24 +129,18 @@ const GlobalNotification = () => {
 
   const updateMessageCounts = (messages) => {
     const counts = {};
-    messages.forEach((message) => {
+    messages.forEach(message => {
       counts[message.sender] = (counts[message.sender] || 0) + 1;
     });
     return Object.entries(counts).map(([userId, count]) => ({ userId, count }));
   };
 
   const updateAndStoreNewMessageCounts = () => {
-    const lastCounts =
-      JSON.parse(localStorage.getItem("lastUserMessageCounts")) || [];
-    const currentCounts =
-      JSON.parse(localStorage.getItem("currentCountMessage")) || [];
+    const lastCounts = JSON.parse(localStorage.getItem('lastUserMessageCounts')) || [];
+    const currentCounts = JSON.parse(localStorage.getItem('currentCountMessage')) || [];
 
-    const lastCountsMap = new Map(
-      lastCounts.map(({ userId, count }) => [userId, count])
-    );
-    const currentCountsMap = new Map(
-      currentCounts.map(({ userId, count }) => [userId, count])
-    );
+    const lastCountsMap = new Map(lastCounts.map(({ userId, count }) => [userId, count]));
+    const currentCountsMap = new Map(currentCounts.map(({ userId, count }) => [userId, count]));
 
     const newCounts = [];
 
@@ -194,21 +157,15 @@ const GlobalNotification = () => {
       }
     });
 
-    localStorage.setItem("newCountMessage", JSON.stringify(newCounts));
+    localStorage.setItem('newCountMessage', JSON.stringify(newCounts));
   };
 
   const updateAndStoreNewAdminMessageCounts = () => {
-    const lastAdminCounts =
-      JSON.parse(localStorage.getItem("lastAdminMessageCounts")) || [];
-    const currentAdminCounts =
-      JSON.parse(localStorage.getItem("currentAdminCountMessage")) || [];
+    const lastAdminCounts = JSON.parse(localStorage.getItem('lastAdminMessageCounts')) || [];
+    const currentAdminCounts = JSON.parse(localStorage.getItem('currentAdminCountMessage')) || [];
 
-    const lastAdminCountsMap = new Map(
-      lastAdminCounts.map(({ userId, count }) => [userId, count])
-    );
-    const currentAdminCountsMap = new Map(
-      currentAdminCounts.map(({ userId, count }) => [userId, count])
-    );
+    const lastAdminCountsMap = new Map(lastAdminCounts.map(({ userId, count }) => [userId, count]));
+    const currentAdminCountsMap = new Map(currentAdminCounts.map(({ userId, count }) => [userId, count]));
 
     const newAdminCounts = [];
 
@@ -225,10 +182,7 @@ const GlobalNotification = () => {
       }
     });
 
-    localStorage.setItem(
-      "newAdminCountMessage",
-      JSON.stringify(newAdminCounts)
-    );
+    localStorage.setItem('newAdminCountMessage', JSON.stringify(newAdminCounts));
   };
 
   return (

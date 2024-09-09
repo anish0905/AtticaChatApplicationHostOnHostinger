@@ -5,11 +5,9 @@ import logo from "../../assests/logo.png";
 import back3 from "../../assests/back3.png"; // Keep this import if you need to reference the image path directly elsewhere
 
 import { useNavigate } from "react-router-dom";
-// import { BASE_URL } from "../../constants";
+import { BASE_URL } from "../../constants";
 // lkgk
 const AdminLogin = () => {
-  const BASE_URL = import.meta.env.VITE_API_URL;
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -34,17 +32,15 @@ const AdminLogin = () => {
       localStorage.setItem("token", response.data.accessToken);
       localStorage.setItem("AdminId", email);
       localStorage.setItem("CurrentUserId", response.data.data._id);
-      localStorage.setItem(
-        "userAdmin",
-        JSON.stringify(response.data.data.email)
-      );
-
+      localStorage.setItem('userAdmin',JSON.stringify(response.data.data.email))
+      
       navigate("/admindashboard");
     } catch (err) {
       setLoading(false);
       setError(err.response?.data?.message || "Login failed");
     }
   };
+  
 
   return (
     <div
@@ -59,6 +55,8 @@ const AdminLogin = () => {
             className="object-cover w-full max-w-md h-auto rounded-full"
           />
         </div>
+
+
 
         <div className="w-full lg:w-1/2 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8">
           <div className="text-center mb-6">
@@ -124,3 +122,6 @@ const AdminLogin = () => {
 };
 
 export default AdminLogin;
+
+
+
